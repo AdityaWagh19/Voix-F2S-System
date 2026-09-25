@@ -1,13 +1,16 @@
-oxceleb2:
+voxceleb2:
   target_speakers: 2000
   utterances_per_speaker: 50
   audio_sample_rate: 16000
   face_size: 112
+  min_audio_sec: 2.5
+  max_audio_sec: 12.0
+  frame_sample_step: 5
 
 facemesh:
   num_ratios: 32
-  pose_yaw_threshold: 10.0
-  pose_pitch_threshold: 10.0
+  pose_yaw_threshold: 25.0
+  pose_pitch_threshold: 25.0
   ioc_landmark_left: 33
   ioc_landmark_right: 263
 
@@ -16,6 +19,14 @@ demographics:
   age_bins: 8
 
 storage:
+  train_h5: "data/processed/voxceleb2_train.h5"
+  val_h5:   "data/processed/voxceleb2_val.h5"
+  index_csv: "data/processed/curated_index.csv"
   h5_chunk_size: 1000
   compression: "gzip"
   compression_opts: 4
+
+extraction:
+  batch_size: 500
+  num_workers: 0
+  device: "cuda"

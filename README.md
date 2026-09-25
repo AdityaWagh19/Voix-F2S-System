@@ -1,4 +1,8 @@
-﻿# VOIX: Probabilistic Face-to-Voice Generation Through Cross-Modal Identity Modeling
+# VOIX: Probabilistic Face-to-Voice Generation Through Cross-Modal Identity Modeling
+
+<p align="center">
+  <img src="docs/voix_banner.jpg" alt="VOIX: Probabilistic Face-to-Voice System" width="900" style="max-width:100%" />
+</p>
 
 **VOIX** is a research system for probabilistic face-to-speech synthesis. Given a single face image and a text input, it generates a *distribution* over plausible speaker voices rather than a single deterministic output. The core hypothesis is that facial appearance provides evidence about voice—not an exact specification—and the correct computational formulation is a learned conditional probability distribution, not a deterministic regression.
 
