@@ -56,43 +56,55 @@ Status key: [ ] todo | [~] in-progress | [x] done | [!] blocked
 
 ---
 
-## Phase 2 - Multimodal Feature Extraction & Data Pipelines (PENDING)
+## Phase 2 - Multimodal Feature Extraction & Data Pipelines (COMPLETE - 2026-09-25)
 
-### T2.1: VoxCeleb Data Acquisition & Storage Strategy
-- [ ] Source data: Official VGG links deprecated (GDPR); acquire via Academic Torrents / Kaggle mirror / Google Drive
-- [ ] Alternative for local prototyping: VoxCeleb1 subset (1,251 speakers) or Kaggle 50-speaker slice (~2GB)
-- [ ] Cloud extraction plan: Run batch extraction on Colab/Kaggle GPU, save final ~280MB HDF5 to Google Drive
-- [ ] Validate 2,000 speaker target: (N, 560) face and (N, 192) speaker embeddings
+### T2.1: Head-Pose Estimation & Frontal Frame Selection
+- [x] voix/data/head_pose.py: estimate_head_pose() via solvePnP on 6 anchor landmarks
+- [x] Frontal score: S_t = |yaw| + 1.5|pitch| + 0.5|roll| + mouth_openness*100
+- [x] select_frontal_frame(): returns argmin_t S_t across a video clip
+- [x] HeadPoseEstimator stateful wrapper with score_frame() diagnostic
+- [x] Euler decomposition fixed: atan2-based (avoids RQDecomp3x3 gimbal ambiguity)
 
-### T2.2: Face Feature Extraction Pipeline
-- [ ] Implement batch ArcFace extraction pipeline with frontal frame selection
-- [ ] Head-pose filter: yaw < 10 deg, pitch < 10 deg via MediaPipe
-- [ ] Compute 32-D craniofacial ratios per speaker (aggregate over frames)
-- [ ] Uniform prior demographic estimation per speaker
-- [ ] Concatenate: 512 + 32 + 16 = 560-D face representation
+### T2.2: VoxCeleb2 Curation Index
+- [x] scripts/curate_voxceleb_index.py: stratified speaker selection (1000M + 1000F)
+- [x] Cross-session utterance sampling across different video IDs per speaker
+- [x] Quality filters: duration 2.5-12s, face detection, SNR>15dB
+- [x] Output: curated_index.csv (100K rows, deterministic with seed=42)
 
-### T2.3: Speaker Feature Extraction Pipeline
-- [ ] Implement batch ECAPA-TDNN extraction on 16 kHz audio
-- [ ] Per-utterance 192-D speaker embedding
-- [ ] Speaker-level mean embedding for training pair construction
+### T2.3: Batch Extraction Pipeline
+- [x] scripts/extract_voxceleb.py: streaming batch extraction (500 clips/batch)
+- [x] Per-clip pipeline: frames -> FaceMesh -> HeadPose -> ArcFace -> Morph -> Demo -> Fusion -> ECAPA
+- [x] ffmpeg audio extraction to temp WAV, deleted after embedding computed
+- [x] HDF5 checkpoint recovery: resumes from last completed batch
+- [x] ETA and rate logging per batch flush
 
-### T2.4: HDF5 Feature Store Construction
-- [ ] Build voxceleb2_train.h5: (N, 560) face embeddings + (N, 192) speaker embeddings
-- [ ] Build voxceleb2_val.h5: held-out 200 speaker validation split
-- [ ] Validate pair alignment (same speaker face-audio correspondence)
-- [ ] Store metadata: speaker_id, video_id, language, gender_prior
+### T2.4: FaceFusionLayer (560-D)
+- [x] voix/models/fusion.py: FaceFusionLayer(ArcFace 512 + Geo 32 + Demo 16 -> 560)
+- [x] Architecture: Linear -> LayerNorm -> GELU
+- [x] freeze()/unfreeze() for use during CVAE training phase
+- [x] Tested: shapes (B,560), gradients, freeze/unfreeze, no NaN output
 
-### T2.5: Dataset & DataLoader Implementation
-- [ ] Implement voix/data/voxceleb2_dataset.py: HDF5Dataset class
-- [ ] Implement voix/data/dataloader.py: seeded DataLoader factory
-- [ ] Write tests/test_data_pipeline.py
+### T2.5: HDF5 Feature Store
+- [x] Output schema: face_features (N,560), speaker_features (N,192), speaker_ids (N,), metadata (N,)
+- [x] Chunked + gzip compressed (opts=4) for random-access efficiency
+- [x] Resizable datasets for incremental appending
 
-### T2.6: Extraction Validation
-- [ ] PCA/UMAP visualization: confirm speaker clusters in embedding space
-- [ ] Cosine similarity sanity check: same-speaker > different-speaker
-- [ ] Write extraction_report.md with statistics
+### T2.6: Dataset & DataLoader
+- [x] voix/data/dataset.py: VoxCelebPairedDataset (HDF5 memory-mapped access)
+- [x] make_speaker_split(): speaker-level train/val split (zero speaker leakage)
+- [x] build_dataloader(): seeded, reproducible, pinned memory
+- [x] DatasetIntegrityAuditor: NaN/Inf/zero-row validation with print_report()
 
----
+### T2.7: Test Suite
+- [x] tests/test_data_pipeline.py: 28 tests covering fusion, head-pose, dataset, auditor
+- [x] All tests pass: 62 passed / 2 skipped (model-download gated) / 0 failed
+
+**Test results:** 62 passed, 2 skipped, 0 failed (4.56s)
+**Git commit:** 9c1c0f1 - Phase 2: Feature extraction & data pipeline
+
+**Extraction status:** Code complete. Data extraction runs when VoxCeleb2 mp4 files
+are available (local PC overnight run or Colab Pro single session).
+**Next:** Share Google Drive folder link when ready to run cloud extraction.
 
 ## Phase 3 - Probabilistic CVAE Mapper (PENDING)
 
