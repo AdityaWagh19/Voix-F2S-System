@@ -58,10 +58,11 @@ Status key: [ ] todo | [~] in-progress | [x] done | [!] blocked
 
 ## Phase 2 - Multimodal Feature Extraction & Data Pipelines (PENDING)
 
-### T2.1: VoxCeleb2 Subset Acquisition
-- [ ] Mount Google Drive containing VoxCeleb2 subset on Colab or download locally
-- [ ] Verify HDF5 structure: (n_speakers, n_utterances) with face/audio pairs
-- [ ] Validate 2000 speaker x 50 utterance target: ~100K clips
+### T2.1: VoxCeleb Data Acquisition & Storage Strategy
+- [ ] Source data: Official VGG links deprecated (GDPR); acquire via Academic Torrents / Kaggle mirror / Google Drive
+- [ ] Alternative for local prototyping: VoxCeleb1 subset (1,251 speakers) or Kaggle 50-speaker slice (~2GB)
+- [ ] Cloud extraction plan: Run batch extraction on Colab/Kaggle GPU, save final ~280MB HDF5 to Google Drive
+- [ ] Validate 2,000 speaker target: (N, 560) face and (N, 192) speaker embeddings
 
 ### T2.2: Face Feature Extraction Pipeline
 - [ ] Implement batch ArcFace extraction pipeline with frontal frame selection

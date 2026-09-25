@@ -1,4 +1,4 @@
-﻿# Phase 2: Feature Extraction & Data Pipelines
+# Phase 2: Feature Extraction & Data Pipelines
 
 > **Phase Identifier:** `PHASE-2`  
 > **Target Duration:** Weeks 2–3  
@@ -48,6 +48,13 @@ Design, implement, and validate the offline multimodal feature extraction pipeli
 ### 3.4 Data Format: HDF5 / Safetensors
 - **Decision:** Store extracted embedding arrays in `.h5` or `.safetensors` files indexed by `(speaker_id, utterance_id)` alongside a unified `metadata.parquet`.
 - **Rationale:** Parsing 100,000 small files on disk causes catastrophic I/O bottlenecks and Windows NTFS slowdowns. Memory-mapped HDF5 provides $>1,500$ samples/sec throughput during training.
+
+### 3.5 Dataset Sourcing & Cloud Extraction Architecture
+- **Context:** Official direct download links on Oxford VGG's website are deprecated due to privacy/GDPR compliance.
+- **Sourcing Strategy:**
+  1. *Academic Torrents / Kaggle / OpenSLR:* Active mirrors host VoxCeleb1 and VoxCeleb2 data/metadata.
+  2. *Cloud-Native Batch Extraction:* Rather than downloading 300+ GB of raw videos locally to an entry-level GPU (GTX 1650), batch extraction is packaged as a Google Colab / Kaggle script that ingests the raw videos in cloud ephemeral storage and saves the final compact `~280 MB` HDF5 file directly to Google Drive.
+  3. *Local Prototyping:* A compact 50–100 speaker slice (or VoxCeleb1 subset) is used for rapid local verification.
 
 ---
 
