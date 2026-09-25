@@ -1,0 +1,25 @@
+ptimizer:
+  type: "AdamW"
+  lr: 1.0e-4
+  weight_decay: 1.0e-5
+
+scheduler:
+  type: "cosine"
+  T_max: 50
+
+training:
+  epochs: 50
+  batch_size: 32
+  grad_clip_norm: 1.0
+
+loss:
+  lambda_fb: 0.5
+  beta_max: 0.5
+  kl_warmup_fraction: 0.30
+  lambda_adapt: 0.5
+
+checkpointing:
+  save_every_n_epochs: 5
+  keep_top_k: 3
+  metric: "val_cosine_sim"
+  mode: "max"

@@ -1,0 +1,23 @@
+seed: 42
+device: "cuda"
+checkpoint_dir: "./checkpoints"
+cache_dir: "./checkpoints/hf_cache"
+
+paths:
+  arcface_model: "buffalo_l"
+  ecapa_model: "speechbrain/spkrec-ecapa-voxceleb"
+  whisper_model: "openai/whisper-large-v3"
+  styletts2_checkpoint: "./checkpoints/styletts2"
+  audioseal_generator: "audioseal_wm_16bits"
+  audioseal_detector: "audioseal_detector_16bits"
+  indiclid_model: "./checkpoints/indiclid"
+
+training:
+  batch_size: 32
+  num_workers: 4
+  pin_memory: true
+
+hardware:
+  max_vram_gb: 4.0
+  gtx1650_batch_size_cvae: 32
+  rtx4050_batch_size_cvae: 64

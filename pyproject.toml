@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "voix-f2s"
+version = "0.1.0"
+description = "Probabilistic Face-to-Voice Generation Through Cross-Modal Identity Modeling"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Aditya Wagh" }]
+license = { text = "MIT" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "torch>=2.1.0",
+    "torchvision>=0.16.0",
+    "torchaudio>=2.1.0",
+    "numpy>=1.26.0",
+    "scipy>=1.13.0",
+    "pyyaml>=6.0.1",
+    "h5py>=3.10.0",
+    "safetensors>=0.4.3",
+    "tqdm>=4.66.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2.0",
+    "pytest-cov>=5.0.0",
+]
+backbones = [
+    "insightface>=0.7.3",
+    "onnxruntime>=1.17.1",
+    "speechbrain>=1.0.0",
+    "mediapipe>=0.10.14",
+    "transformers>=4.40.0",
+    "accelerate>=0.30.0",
+    "librosa>=0.10.2",
+    "soundfile>=0.12.1",
+    "opencv-python-headless>=4.9.0",
+    "huggingface-hub>=0.23.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["voix*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.black]
+line-length = 99
+target-version = ["py310", "py311", "py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 99

@@ -1,4 +1,9 @@
-﻿# Python
+ Virtual environment
+.venv/
+venv/
+env/
+
+# Python
 __pycache__/
 *.py[cod]
 *.pyo
@@ -7,48 +12,37 @@ __pycache__/
 *.egg-info/
 dist/
 build/
-.eggs/
-*.egg
-venv/
-env/
-.venv/
-pip-log.txt
 
-# Jupyter
-.ipynb_checkpoints/
+# Checkpoints and model weights (large binary files)
+checkpoints/*.pt
+checkpoints/*.pth
+checkpoints/*.bin
+checkpoints/*.onnx
+checkpoints/hf_cache/
+checkpoints/speechbrain/
+checkpoints/styletts2/
 
-# Data & Models (large files)
-*.pt
-*.pth
-*.ckpt
-*.bin
-*.safetensors
-*.h5
-*.pkl
-*.npy
-*.npz
-data/raw/
-data/processed/
-checkpoints/
-outputs/
+# Dataset archives (never commit raw data)
+data/processed/*.h5
+data/processed/*.safetensors
+data/india_benchmark/audio/
+data/india_benchmark/video/
+*.wav
+*.mp4
+*.mp3
 
-# OS
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# IDEs
-.vscode/
-.idea/
-*.suo
-*.user
-
-# Logs
-*.log
-logs/
-runs/
+# Experiment outputs
+artifacts/*.png
+artifacts/*.jpg
+artifacts/samples/
+artifacts/reproducibility_audit.json
 wandb/
 
-# Environment
-.env
-.env.local
+# System
+.DS_Store
+Thumbs.db
+*.log
+
+# Cache
+.cache/
+D:/temp/
