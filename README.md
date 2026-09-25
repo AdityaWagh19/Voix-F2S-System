@@ -391,4 +391,5 @@ Soft demographic attributes are treated strictly as probabilistic conditioning v
 
 ## Status
 
-Pre-implementation. Architecture, mathematical formulation, and data pipelines finalized. Implementation commences Phase 1.
+Pre-implementation. The 25-paper literature survey is complete (archived in [Initial Docs/voix_lit_survey_outline.md](Initial%20Docs/voix_lit_survey_outline.md), [Initial Docs/Voix F2S lit survey.csv](Initial%20Docs/Voix%20F2S%20lit%20survey.csv), and synthesized in [project-context/research.md](project-context/research.md)). Architecture, mathematical formulation, and data pipelines are finalized. Implementation commences Phase 1.
+
