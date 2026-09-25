@@ -1,0 +1,54 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+venv/
+env/
+.venv/
+pip-log.txt
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data & Models (large files)
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.safetensors
+*.h5
+*.pkl
+*.npy
+*.npz
+data/raw/
+data/processed/
+checkpoints/
+outputs/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Logs
+*.log
+logs/
+runs/
+wandb/
+
+# Environment
+.env
+.env.local
