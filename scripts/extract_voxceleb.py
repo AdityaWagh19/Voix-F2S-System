@@ -217,17 +217,26 @@ def run_extraction(
     videos_root: str,
     output_path: str,
     device: str = "cuda",
-    batch_size: int = 500,
+    batch_size: int = 200,
+    session_max_hours: float = 11.0,
+    progress_callback=None,
 ) -> None:
-    """Main extraction loop with checkpoint recovery.
+    """Main extraction loop with checkpoint recovery and session-aware stopping.
 
     Args:
-        index_path:  Path to curated_index.csv.
-        videos_root: Root directory containing VoxCeleb2 mp4 files.
-                     Expected structure: videos_root/speaker_id/video_id/utterance_id.mp4
-        output_path: Output HDF5 file path.
-        device:      PyTorch device ('cuda' or 'cpu').
-        batch_size:  Number of clips to process before flushing to HDF5.
+        index_path:         Path to curated_index.csv.
+        videos_root:        Root directory containing VoxCeleb2 mp4 files.
+                            Expected structure: videos_root/spk_id/vid_id/utt_id.mp4
+        output_path:        Output HDF5 file path (can be a Google Drive path).
+        device:             PyTorch device ('cuda' or 'cpu').
+        batch_size:         Clips per batch before flushing to HDF5.
+                            Default 200 (T4: ~12 min per checkpoint).
+        session_max_hours:  Stop extraction this many hours after function call.
+                            Allows safe session timeout management in Colab.
+                            Default 11.0 h (30 min safety margin for 12h sessions).
+        progress_callback:  Optional callable(n_done: int, last_key: str).
+                            Called after every batch flush. Use to update a
+                            progress.json file on Google Drive.
     """
     import h5py
     import torch
@@ -317,8 +326,23 @@ def run_extraction(
     n_success = 0
     n_failed  = 0
     t_start   = time.time()
+    t_keepalive = time.time()
+    KEEPALIVE_INTERVAL = 300  # print status every 5 min to prevent idle disconnect
 
     for i, row in enumerate(pending):
+        # Session time limit check (T4 Colab session safety)
+        elapsed_h = (time.time() - t_start) / 3600
+        if elapsed_h >= session_max_hours:
+            print(f"\n[SESSION LIMIT] {elapsed_h:.1f}h elapsed >= {session_max_hours}h limit.")
+            print(f"  Stopping safely. Re-run Cell 6 in a new session to continue.")
+            break
+
+        # Keepalive print (prevents Colab idle disconnect)
+        if time.time() - t_keepalive > KEEPALIVE_INTERVAL:
+            total_done = n_success + N_existing
+            print(f"  [keepalive] {elapsed_h:.1f}h | {total_done:,} done | "
+                  f"{n_success/elapsed_h:.0f} clips/h")
+            t_keepalive = time.time()
         spk_id = row["speaker_id"]
         vid_id = row["video_id"]
         utt_id = row["utterance_id"]
@@ -357,7 +381,7 @@ def run_extraction(
         batch_meta.append(f"{spk_id}/{vid_id}/{utt_id}")
         n_success += 1
 
-        # Flush batch to HDF5
+        # Flush batch to HDF5 (if output is on Drive, this writes directly to Drive)
         if len(batch_face) >= batch_size:
             _flush_batch(h5_file, batch_face, batch_speaker, batch_spk_ids, batch_meta)
             batch_face.clear()
@@ -366,14 +390,24 @@ def run_extraction(
             batch_meta.clear()
 
             elapsed = time.time() - t_start
-            rate = n_success / elapsed
+            rate = n_success / max(elapsed, 1)
+            total_done = n_success + N_existing
             remaining = len(pending) - i - 1
-            eta_sec = remaining / rate if rate > 0 else 0
+            eta_h = (remaining / rate) / 3600 if rate > 0 else 0
+            elapsed_h = elapsed / 3600
             print(
                 f"  [{i+1}/{len(pending)}] "
-                f"success={n_success} failed={n_failed} "
-                f"rate={rate:.1f}/s ETA={eta_sec/3600:.1f}h"
+                f"done={total_done:,} failed={n_failed} "
+                f"rate={rate:.1f}/s elapsed={elapsed_h:.1f}h ETA={eta_h:.1f}h"
             )
+
+            # Call progress callback (e.g. write progress.json to Drive)
+            if progress_callback is not None:
+                last_k = batch_meta[-1] if batch_meta else None
+                try:
+                    progress_callback(total_done, last_k)
+                except Exception:
+                    pass  # Never let callback failure interrupt extraction
 
     # Flush remaining
     if batch_face:
