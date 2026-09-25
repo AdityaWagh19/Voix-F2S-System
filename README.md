@@ -1,8 +1,8 @@
 ﻿# VOIX: Probabilistic Face-to-Voice Generation Through Cross-Modal Identity Modeling
 
-**VOIX** is a research system for probabilistic face-to-speech synthesis. Given a single face image and a text input, it generates a *distribution* over plausible speaker voices rather than a single deterministic output. The core claim is that facial appearance provides evidence about voice — not a specification of it — and the correct computational treatment is a learned conditional probability distribution, not a regression function.
+**VOIX** is a research system for probabilistic face-to-speech synthesis. Given a single face image and a text input, it generates a *distribution* over plausible speaker voices rather than a single deterministic output. The core hypothesis is that facial appearance provides evidence about voice—not an exact specification—and the correct computational formulation is a learned conditional probability distribution, not a deterministic regression.
 
-The system makes three contributions: (1) a Conditional VAE mapper predicting Gaussian parameters over ECAPA-TDNN speaker embeddings conditioned on a multi-feature facial representation, (2) an India-specific face-to-speech benchmark dataset covering five Indian languages with 25% code-switching, and (3) a systematic ablation establishing which facial features actually contribute predictive information about voice.
+The system makes three contributions: (1) a Conditional VAE mapper predicting Gaussian parameters over ECAPA-TDNN speaker embeddings conditioned on an asymmetric multi-feature facial representation, (2) an India-specific face-to-speech benchmark dataset covering five Indian languages with 25% code-switching, and (3) a systematic ablation establishing the empirical predictive contribution of craniofacial morphology versus biometric identity.
 
 ---
 
@@ -15,175 +15,206 @@ The system makes three contributions: (1) a Conditional VAE mapper predicting Ga
 - [Evaluation](#evaluation)
 - [Repository Structure](#repository-structure)
 - [Documentation](#documentation)
-- [Literature Survey](#literature-survey)
 - [Infrastructure](#infrastructure)
-- [Publication Target](#publication-target)
+- [Reproducibility](#reproducibility)
+- [Ethical Statement](#ethical-statement)
 
 ---
 
 ## Motivation
 
-Every prior face-to-voice system treats the mapping as a deterministic function:
+Existing face-to-voice architectures formulate synthesis as a deterministic mapping:
 
 ```
 f : Face Image  ->  Single Speaker Embedding  ->  Single Voice
 ```
 
-This formulation is computationally convenient but scientifically incorrect. The human voice is determined by two fundamentally different categories of factors:
+This formulation is computationally convenient but physically ill-posed. The human voice is determined by two fundamentally distinct categories of factors:
 
 | Category | Examples | Observable from Face |
 |---|---|---|
 | Physiological | Vocal tract length, jaw structure, laryngeal anatomy, subglottal resonance | Partially (correlated with craniofacial geometry) |
 | Learned and environmental | Accent, dialect, prosody, code-switching habits, vocal fry, breathiness | Not at all |
 
-The vocal tract length correlates with body height at r = 0.926 and with log body mass at r = 0.941 (Fitch and Giedd, JASA 1999). Jaw length correlates with fundamental frequency at r = -0.528 to -0.577 (Macari et al., Journal of Voice 2014). These are moderate correlations — not deterministic mappings. A face *constrains* the plausible voice space; it does not uniquely determine a voice.
+Craniofacial allometry partially constrains acoustic resonance: vocal tract length correlates with body height at r = 0.926 and log body mass at r = 0.941 (Fitch and Giedd, JASA 1999). Mandibular dimensions correlate with fundamental frequency at r = -0.528 to -0.577 (Macari et al., Journal of Voice 2014). These anatomical relationships establish statistical boundaries on the voice space rather than an injective mapping. A face *constrains* the plausible voice space; it cannot uniquely determine a voice.
 
-The correct formulation is a conditional distribution:
+Consequently, VOIX models face-to-voice generation as an explicit conditional probability distribution:
 
 ```
 P(voice | face) : Face Image  ->  Distribution over Speaker Embeddings  ->  K Plausible Voices
 ```
 
-Additionally, every established face-to-voice dataset (VoxCeleb1/2, LRS3, AVSpeech) is Western-centric and contains no representation of Indian linguistic diversity — a population of 1.4 billion speakers with markedly different craniofacial morphology distributions, retroflex phoneme patterns, tonal prosody structures, and endemic code-switching between Indian languages and English.
+Furthermore, standard audio-visual corpora (VoxCeleb, LRS3, AVSpeech) are culturally and phonetically Western-centric. They fail to represent Indian linguistic diversity, where 1.4 billion speakers exhibit distinct craniofacial morphology distributions, retroflex phonological structures, and endemic code-switching between regional languages and English.
 
 ---
 
 ## Problem Formulation
 
-Given a face image **I** and optional text **T**, learn a generative model:
+Given a face image **I** and a text prompt **T**, the objective is to learn a conditional generative model:
 
 ```
-P(e_s | e_f)  :  Speaker Embedding Distribution conditioned on Face Embedding
+P(e_s | e_f)  :  Distribution over Speaker Embeddings conditioned on Face Representation
 ```
 
 Where:
-- `e_f` in R^560 — fused face representation: ArcFace identity (512-D) + FaceMesh craniofacial ratios (32-D) + soft demographic indicators (16-D)
-- `e_s` in R^192 — speaker embedding in ECAPA-TDNN space
-- `P(e_s | e_f) = N(mu_theta(e_f), sigma_theta^2(e_f))` — predicted Gaussian over speaker embedding space
+- `e_f` in R^560 is a fused face representation: ArcFace identity (512-D) + MediaPipe FaceMesh craniofacial ratios (32-D) + soft demographic priors (16-D).
+- `e_s` in R^192 is the target speaker embedding residing in ECAPA-TDNN acoustic space.
+- `P(e_s | e_f) = N(mu_theta(e_f), diag(sigma_theta^2(e_f)))` is the predicted Gaussian distribution over speaker embeddings.
 
-At inference, K plausible voices are sampled:
+During inference, K candidate voice styles are sampled from the posterior predictive distribution:
 
 ```
-z_k ~ N(mu_theta(e_f), sigma_theta^2(e_f)),   k = 1,...,K
-Speech_k = StyleTTS2(text=T, style=P_adapter(z_k))
+z_k ~ N(mu_theta(e_f), diag(sigma_theta^2(e_f))),   k = 1, ..., K
+Speech_k = StyleTTS2(text=T, style=P_adapt(z_k))
 ```
 
 ### Research Questions
 
-**RQ1 (Probabilistic Modeling):** Can a CVAE-based mapper learn a meaningful distribution over speaker embeddings conditioned on facial appearance, such that sampled voices are both perceptually plausible and mutually diverse?
-
-**RQ2 (Feature Contribution):** Does incorporating craniofacial morphological features from MediaPipe FaceMesh alongside ArcFace identity embeddings improve face-to-voice prediction over identity embeddings alone?
-
-**RQ3 (Demographic Generalization):** Do F2V models trained on Western data exhibit measurable performance degradation on Indian faces and voices, and does fine-tuning on an India-specific benchmark recover this gap?
+- **RQ1 (Probabilistic Modeling):** Can a CVAE-based mapper learn a well-calibrated distribution over speaker embeddings conditioned on facial appearance such that sampled voices are simultaneously perceptually natural, identity-consistent, and mutually diverse?
+- **RQ2 (Feature Disentanglement):** Does augmenting facial identity embeddings (ArcFace) with explicit craniofacial geometric ratios (FaceMesh) yield statistically significant improvements in voice prediction accuracy over identity representations alone?
+- **RQ3 (Demographic Generalization):** What is the empirical performance degradation of Western-trained F2V models when evaluated on Indian speakers, and does domain adaptation on an India-specific benchmark close this cross-modal distribution gap?
 
 ---
 
 ## System Architecture
 
-### End-to-End Pipeline
+The architecture consists of three core components: an asymmetric feature extraction and fusion pipeline, a conditional variational latent mapper, and a zero-shot acoustic generator.
+
+### 1. End-to-End Inference Pipeline
 
 ```mermaid
 flowchart TD
-    A[Face Image] --> B[ArcFace\nResNet-50, frozen\n512-D identity embedding]
-    A --> C[MediaPipe FaceMesh\n468 landmarks\n32-D craniofacial ratios]
-    A --> D[Soft Demographic Estimator\nage + sex distributions\n16-D]
+    subgraph INPUT["Multimodal Input"]
+        IMG["Face Image I"]
+        TXT["Text Prompt T"]
+    end
 
-    B --> E[Feature Fusion\nLinear + LayerNorm + GELU\n560-D]
-    C --> E
-    D --> E
+    subgraph ENCODING["Asymmetric Feature Extraction"]
+        AF["ArcFace ResNet-50 (Frozen)<br/>Identity Embedding: e_id in R^512"]
+        FM["MediaPipe FaceMesh (468 Points)<br/>Craniofacial Geometric Ratios: e_geo in R^32"]
+        SD["Soft Demographic Prior<br/>Age & Sex Distributions: e_demo in R^16"]
+    end
 
-    E --> F[CVAE Encoder\n560 -> 512 -> 384 -> 256\noutputs mu 192-D + log-sigma^2 192-D]
+    IMG --> AF
+    IMG --> FM
+    IMG --> SD
 
-    F --> G[Reparameterization\nz = mu + sigma * epsilon\nepsilon ~ N 0, I]
+    subgraph FUSION["Multimodal Conditioning"]
+        CAT["Concatenate [e_id || e_geo || e_demo] in R^560"]
+        PROJ["Linear Projection + LayerNorm + GELU<br/>Unified Face Representation: e_f in R^560"]
+        CAT --> PROJ
+    end
 
-    G --> H[CVAE Decoder\n192 -> 256 -> 192\nreconstructed speaker embedding]
+    AF --> CAT
+    FM --> CAT
+    SD --> CAT
 
-    H --> I[Style Projection Adapter\n3-layer MLP, trainable\n192-D ECAPA -> StyleTTS2 style dim]
+    subgraph CVAE_GEN["Probabilistic Mapping (CVAE)"]
+        DEC["Conditional Latent Sampler<br/>z_k ~ N(mu_theta(e_f), diag(sigma_theta^2(e_f)))<br/>z_k in R^192, k = 1,...,K"]
+        DEC_OUT["Latent-to-Speaker Decoder<br/>Predicted ECAPA-TDNN Embedding: e_s_hat in R^192"]
+        DEC --> DEC_OUT
+    end
 
-    I --> J[StyleTTS2\nfrozen\nText + Style -> Waveform]
+    PROJ --> DEC
 
-    J --> K[Voice 1]
-    J --> L[Voice 2]
-    J --> M[Voice K]
+    subgraph SYNTHESIS["Acoustic Synthesis (StyleTTS 2)"]
+        ADAPT["Style Projection Adapter P_adapt<br/>Learned 3-Layer MLP<br/>e_s_hat -> Style Vector s_hat"]
+        TTS["StyleTTS 2 Generator (Frozen)<br/>Text T + Style s_hat -> Neural Codec / Vocoder"]
+        ADAPT --> TTS
+    end
+
+    DEC_OUT --> ADAPT
+    TXT --> TTS
+
+    subgraph OUTPUT["Stochastic Output Distribution"]
+        V1["Sampled Voice 1"]
+        V2["Sampled Voice 2"]
+        VK["Sampled Voice K"]
+    end
+
+    TTS --> V1
+    TTS --> V2
+    TTS --> VK
 ```
 
-### CVAE Probabilistic Mapper
+### 2. CVAE Architecture and Composite Training Objective
 
 ```mermaid
 flowchart LR
-    EF[Face Embedding\n560-D] --> ENC
-
-    subgraph ENC [Encoder q_phi z given e_f]
-        L1[Linear 560->512\nBatchNorm + GELU]
-        L2[Linear 512->384\nBatchNorm + GELU]
-        L3[Linear 384->256\nBatchNorm + GELU]
-        MU[mu head\nLinear 256->192]
-        LS[log-sigma^2 head\nLinear 256->192]
-        L1 --> L2 --> L3
-        L3 --> MU
-        L3 --> LS
+    subgraph TRAIN_IN["Paired Inputs"]
+        EF["Face Feature e_f in R^560"]
+        ES["Ground-Truth ECAPA e_s in R^192"]
     end
 
-    MU --> R[Reparameterization\nz = mu + exp 0.5 * log-sigma^2 * epsilon]
-    LS --> R
-
-    R --> DEC
-
-    subgraph DEC [Decoder p_theta e_s given z]
-        D1[Linear 192->256\nBatchNorm + GELU]
-        D2[Linear 256->192\nSpeaker Embedding]
-        D1 --> D2
+    subgraph CVAE["Conditional Variational Autoencoder"]
+        ENC["Recognition Encoder q_phi(z | e_s, e_f)<br/>Linear(752->512->384->256)"]
+        REP["Reparameterization<br/>z = mu + sigma * epsilon, epsilon ~ N(0, I)"]
+        DEC["Generative Decoder p_theta(e_s | z, e_f)<br/>Linear(384->256->192)"]
+        
+        ENC --> REP
+        REP --> DEC
     end
+
+    EF --> ENC
+    ES --> ENC
+    EF --> DEC
+
+    subgraph LOSSES["Composite Training Loss Formulation"]
+        L_REC["Reconstruction Loss L_recon<br/>1 - cosine_similarity(e_s_hat, e_s)"]
+        L_KL["KL Divergence with Free Bits L_KL<br/>sum_d max(lambda_fb, D_KL(q_phi || p_theta))"]
+        L_STY["Style Consistency Loss L_style<br/>1 - cosine_sim(ECAPA(StyleTTS(T, e_s_hat)), e_s)"]
+        
+        TOTAL["Total Loss L_total = L_recon + beta(t) * L_KL + lambda_adapt * L_style"]
+    end
+
+    DEC -->|Predicted e_s_hat| L_REC
+    ES --> L_REC
+    REP --> L_KL
+    DEC -->|Predicted e_s_hat| L_STY
+    ES --> L_STY
+
+    L_REC --> TOTAL
+    L_KL --> TOTAL
+    L_STY --> TOTAL
 ```
 
-### Training Loss Structure
+### 3. Multimodal Benchmark Data Curation Pipeline
 
 ```mermaid
 flowchart TD
-    PAIR[Training Pair\ne_face 560-D, e_speaker 192-D] --> CVAE[CVAE Forward Pass]
-    CVAE --> RECON[L_recon\n1 - cosine_sim e_s_hat, e_s_gt]
-    CVAE --> KL[L_KL with free bits\nsum_d max lambda_fb, KL q_phi or p\nlambda_fb = 0.5 nats]
-    KL --> ANNEAL[Beta annealing\nbeta t = beta_max * min 1, t / t_warmup\nwarmup = 30% of steps]
+    subgraph INGESTION["Raw Stream Processing"]
+        SRC["Raw Audiovisual Stream (NPTEL / AI4Bharat / CC-BY)"]
+        YTDL["yt-dlp Non-Persistent Stream Extraction"]
+        MEM["Volatile Memory Ring Buffer"]
+        SRC --> YTDL --> MEM
+    end
 
-    CVAE --> ADAPT[Style Adapter\ne_s_hat -> s_hat]
-    ADAPT --> STYLETTS[StyleTTS2 frozen\nText + s_hat -> Speech]
-    STYLETTS --> LSTYLE[L_style\nSECS synthesized speech vs reference ECAPA]
+    subgraph EXTRACTION["Demuxing & Alignment"]
+        AUD["Audio Demux: 16kHz Mono PCM WAV"]
+        VID["Visual Demux: Face Detection via RetinaFace (224x224)"]
+        MEM --> AUD
+        MEM --> VID
+    end
 
-    RECON --> TOTAL[L_total = L_recon + beta * L_KL + lambda_adapt * L_style]
-    ANNEAL --> TOTAL
-    LSTYLE --> TOTAL
-```
+    subgraph VERIFICATION["Multimodal Quality Verification"]
+        SYNC["Active Speaker Detection (SyncNet)<br/>Audio-Visual Synchronization Score > 4.5"]
+        IDV["Identity Consistency<br/>ArcFace Cosine Purity across Segment Frames"]
+        ASR["Transcription & Segmentation<br/>OpenAI Whisper large-v3"]
+        LID["Language Identification<br/>IndicLID: Target Language Confirmation + Code-Switching Tag"]
+        FILT["Signal Quality Filtering<br/>WADA-SNR > 20 dB, Duration 3-10s, No Background Music"]
 
-### Feature Fusion Detail
+        AUD --> SYNC
+        VID --> SYNC
+        SYNC -->|Concordant| IDV
+        SYNC -->|Discordant| DIS["Discard Clip"]
+        IDV --> ASR --> LID --> FILT
+    end
 
-```mermaid
-flowchart LR
-    AF[ArcFace\n512-D identity] --> CAT
-    FM[FaceMesh Ratios\n32-D craniofacial] --> CAT
-    SD[Soft Demographics\n16-D age + sex] --> CAT
-    CAT[Concatenate\n560-D] --> LN[Linear Projection\nLayerNorm\nGELU]
-    LN --> OUT[Unified Face\nRepresentation\n560-D]
-```
-
-### Indian Benchmark Data Collection Pipeline
-
-```mermaid
-flowchart TD
-    SRC[Source Video\nNPTEL / AI4Bharat / YouTube stream] --> DL[yt-dlp\nstreaming mode - no full download]
-    DL --> SPLIT[OpenCV memory buffer]
-    SPLIT --> AUD[Audio demux\nffmpeg 16kHz mono WAV]
-    SPLIT --> VID[Face detection\nRetinaFace 224x224 crop]
-    AUD --> ASD[Active Speaker Detection\nSyncNet threshold > 4.5]
-    VID --> ASD
-    ASD -->|Pass| IDV[Identity Verification\nArcFace cosine purity across frames]
-    ASD -->|Fail| DISC[Discard from memory]
-    IDV --> ASR[ASR Transcript\nWhisper large-v3]
-    ASR --> LID[Language ID\nIndicLID per 3-second segment]
-    LID --> QF[Quality Filters\nSNR > 20dB, duration 3-10s\nno background music]
-    QF -->|Pass| SAVE[Save to Google Drive\nface_crops / audio / transcripts]
-    QF -->|Fail| DISC
-    SAVE --> EMB[Embedding Extraction\nArcFace + ECAPA + FaceMesh]
-    EMB --> REL[Public Release\nembeddings only - no raw A/V]
+    subgraph STORAGE["Standardized Dataset Release"]
+        DATA["India F2S Benchmark (HuggingFace Datasets)<br/>Embeddings & Metadata Only (ArcFace + ECAPA + IndicLID Tags)<br/>No Raw Audio / Video Redistributed"]
+        FILT -->|Pass| DATA
+        FILT -->|Fail| DIS
+    end
 ```
 
 ---
@@ -192,33 +223,31 @@ flowchart TD
 
 ### Training: VoxCeleb2
 
-| Attribute | Value |
+| Attribute | Specification |
 |---|---|
 | Identities | 6,112 speakers |
-| Utterances | 1.1 million clips |
-| Duration | 2,442 hours |
-| Training subset | 2,000 speakers x 50 utterances = 100K pairs |
-| Usage | ArcFace + ECAPA + FaceMesh extraction; CVAE adapter training |
+| Utterances | 1.1 million clips (2,442 hours) |
+| Curated Training Subset | 2,000 speakers x 50 utterances = 100,000 paired samples |
+| Representation | Pre-extracted offline: ArcFace (512-D), ECAPA-TDNN (192-D), FaceMesh ratios (32-D) |
 
 ### In-Domain Evaluation: VoxCeleb1
 
-| Attribute | Value |
+| Attribute | Specification |
 |---|---|
 | Identities | 1,251 speakers |
 | Utterances | 153,000 clips |
-| Usage | Recall@K, SECS, speaker generalization |
+| Evaluation Protocol | Closed-set identification (Recall@K), speaker embedding cosine similarity (SECS) |
 
-### Out-of-Domain Evaluation: India F2S Benchmark (Contribution)
+### Out-of-Domain Evaluation: India F2S Benchmark
 
-| Attribute | Target |
+| Attribute | Specification |
 |---|---|
-| Duration | 20 hours |
-| Speakers | 40-60 |
+| Target Duration | 20 hours (40-60 verified identities) |
 | Languages | Hindi, Tamil, Telugu, Bengali, Marathi |
-| Code-switching proportion | 25% of clips |
-| Gender ratio | 50:50 |
-| Primary sources | NPTEL (CC-licensed), AI4Bharat, IndicTTS |
-| Public release format | Embeddings only (ArcFace + ECAPA + metadata) via HuggingFace Datasets |
+| Phonetic Diversity | 25% verified code-switched utterances (Indic-English) |
+| Gender Balance | 50:50 verified demographic split |
+| Primary Sources | NPTEL (CC-BY licensed), AI4Bharat, IndicTTS public archives |
+| Distribution Format | Embedding features and metadata manifest only via HuggingFace Datasets |
 
 ---
 
@@ -226,59 +255,55 @@ flowchart TD
 
 ### Objective Metrics
 
-| Metric | Formula | Measures |
+| Metric | Formulation | Measured Property |
 |---|---|---|
-| SECS | Mean cosine_sim(ECAPA(Speech_k), e_s_gt) over K=3 | Speaker identity similarity |
-| Recall@K | Fraction correct retrievals at K from N-candidate pool | Identity retrieval accuracy |
-| Diversity Score (DS) | Mean pairwise cosine distance between K sampled embeddings | Voice diversity from single face |
-| ECE | Sum of |P_predicted - P_actual| coverage calibration | Uncertainty calibration quality |
-| FSD | Frechet distance between predicted and real embedding distributions | Distribution-level quality |
+| SECS | Mean cosine similarity between ECAPA(Speech_k) and ground-truth e_s over K=3 | Acoustic identity preservation |
+| Recall@K | Fraction of correct ground-truth identity retrievals within top-K candidates | Cross-modal retrieval precision |
+| Diversity Score (DS) | Mean pairwise cosine distance between K sampled latent embeddings | Inter-sample variance from identical face conditioning |
+| ECE | Expected Calibration Error over empirical predictive confidence intervals | Posterior uncertainty calibration |
+| FSD | Frechet Speaker Distance between predicted and empirical ECAPA distributions | Global distribution-level fidelity |
 
-Diversity Score is reported jointly with SECS. High DS with low SECS indicates diverse but incorrect voice generation.
+Diversity Score is evaluated jointly with SECS. High DS with low SECS indicates degenerate random generation rather than calibrated multimodal ambiguity.
 
-### Subjective Metrics
+### Subjective Evaluation
 
-| Metric | Scale | Protocol |
+| Metric | Scale / Methodology | Evaluator Pool |
 |---|---|---|
-| MOS naturalness | 1-5 (ITU-T P.808) | 20-25 evaluators via Prolific |
-| Face-voice consistency MOS | 1-5 | Same evaluator pool, independent rating |
-| A/B preference test | Win / Loss / Tie % | VOIX vs. deterministic baseline B3 |
-| Diversity preference test | % natural vs. random | 3 voices from same face |
+| MOS Naturalness | 1-5 scale (ITU-T P.808 standard) | 20-25 independent evaluators |
+| Face-Voice Consistency MOS | 1-5 scale (Perceived physiological congruence) | Matched evaluator pool, randomized pairs |
+| A/B Preference Test | Pairwise Forced Choice (% Preference vs. Deterministic Baseline) | Blinded comparative evaluation |
 
-### Ablation Studies
+### Ablation Matrix
 
-**Feature ablation (RQ2):**
+**Feature Ablation (RQ2):**
 
-| Experiment | Input | Dimensions |
+| ID | Input Feature Set | Dimension | Target Hypothesis |
+|---|---|---|---|
+| A1 | ArcFace identity only | 512-D | Baseline biometrics |
+| A2 | FaceMesh geometry only | 32-D | Pure morphological signal |
+| A3 | Soft demographics only | 16-D | Demographic prior baseline |
+| A4 | ArcFace + FaceMesh | 544-D | Combined identity and morphology |
+| A5 | ArcFace + Demographics | 528-D | Standard biometrics with demographic conditioning |
+| A6 | Full Multimodal Fusion | 560-D | Complete VOIX feature space |
+
+SHAP (SHapley Additive exPlanations) values are computed across all 32 craniofacial ratio dimensions to isolate specific facial proportions that drive fundamental frequency (F0) and formant structure predictions.
+
+**Architecture Ablation:**
+
+| ID | Configuration | Purpose |
 |---|---|---|
-| A1 | ArcFace only | 512-D |
-| A2 | FaceMesh only | 32-D |
-| A3 | Demographics only | 16-D |
-| A4 | ArcFace + FaceMesh | 544-D |
-| A5 | ArcFace + Demographics | 528-D |
-| A6 | Full (all features) | 560-D |
+| B1 | beta = 0 (Deterministic MLP regression) | Validates necessity of probabilistic modeling |
+| B2 | Standard CVAE (No free-bits threshold) | Quantifies impact of posterior collapse |
+| B3 | CVAE without beta annealing schedule | Measures optimization stability |
+| B4 | Full CVAE (Free bits + Cyclical beta annealing) | Proposed architecture |
 
-SHAP feature attribution is computed on the best model to identify which craniofacial ratio dimensions carry predictive signal.
+### Comparative Baselines
 
-**Architecture ablation:**
-
-| Experiment | Modification |
-|---|---|
-| B1 | beta = 0 throughout (deterministic) |
-| B2 | KL without free bits |
-| B3 | KL without beta annealing |
-| B4 | Full CVAE (proposed) |
-
-### Baselines
-
-| ID | Description | Purpose |
-|---|---|---|
-| B1 | Random ECAPA embedding | Lower bound |
-| B2 | Nearest-neighbor face retrieval | Non-generative strong baseline |
-| B3 | Deterministic mapper (beta=0) | Tests value of probabilistic component |
-| B4 | ArcFace-only CVAE | Feature ablation reference |
-| B5 | Zero-Shot F2S (arXiv 2026) | Closest prior work |
-| B6 | GMM-style implicit generation | Implicit probabilistic comparison |
+- **B1 (Uniform Random):** Random speaker embedding sampled from empirical unit sphere (empirical lower bound).
+- **B2 (Nearest-Neighbor Retrieval):** Direct cosine retrieval of closest face embedding in training corpus.
+- **B3 (Deterministic Regression):** MLP mapping face features directly to point estimate e_s.
+- **B4 (ArcFace-Only CVAE):** Standard identity-conditioned variational autoencoder without geometric features.
+- **B5 (Zero-Shot F2S):** Direct reproduction of state-of-the-art deterministic cross-modal baseline.
 
 ---
 
@@ -287,65 +312,47 @@ SHAP feature attribution is computed on the best model to identify which craniof
 ```
 Voix-F2S-System/
 |
-|-- project-context/           # Project documentation
-|   |-- context.md             # Problem definition, research questions, objectives
-|   |-- architecture.md        # Full system design, modules, design decisions
-|   |-- research.md            # Literature survey in engineering-useful form
-|   |-- mvp.md                 # Scope, phased deliverables, validation gates
-|   |-- tasks.md               # Week-by-week implementation checklist
+|-- project-context/           # Canonical engineering and scientific specifications
+|   |-- context.md             # Theoretical foundation, formal problem definition, hypotheses
+|   |-- architecture.md        # Mathematical formulation, layer-by-layer specs, interface contracts
+|   |-- research.md            # Literature synthesis mapped to implementation decisions
+|   |-- mvp.md                 # Scope boundaries, phased deliverables, contingency plans
+|   |-- tasks.md               # Phased implementation schedule and milestone checklists
 |
-|-- Initial Docs/              # Pre-implementation reference documents
+|-- Initial Docs/              # Pre-implementation reference documents and exploratory notes
 |   |-- voix_master_document.md
 |   |-- voix_lit_survey_outline.md
 |   |-- Voix F2S lit survey.csv
 |   |-- Voix F2S lit survey.pdf
 |
-|-- Papers/                    # All 25 surveyed papers as PDF
+|-- Papers/                    # Archive of surveyed literature
 |
 |-- README.md
 |-- .gitignore
 ```
 
-Implementation directories (to be created):
+Core source code modules to be populated across implementation phases:
 ```
-|-- data/                      # Extraction and dataset pipeline scripts
-|-- models/                    # CVAE mapper, fusion layer, adapter definitions
-|-- training/                  # Training loop, loss functions, schedulers
-|-- evaluation/                # SECS, Recall@K, DS, ECE, FSD computation
-|-- scripts/                   # Extraction, preprocessing, inference scripts
+|-- data/                      # Stream extraction, filtering, and embedding pipelines
+|-- models/                    # CVAE mapper, fusion layers, and StyleTTS adapter networks
+|-- training/                  # Optimization loops, loss modules, and learning rate schedulers
+|-- evaluation/                # Evaluation suite: SECS, Recall@K, DS, ECE, and FSD
+|-- scripts/                   # Batch extraction, preprocessing, and inference routines
 ```
 
 ---
 
 ## Documentation
 
+Comprehensive project documentation is maintained under [`project-context/`](project-context/):
+
 | Document | Purpose |
 |---|---|
-| [context.md](project-context/context.md) | What VOIX is, why it exists, hypotheses, success criteria |
-| [architecture.md](project-context/architecture.md) | Full system design — every module, interface, and design decision |
-| [research.md](project-context/research.md) | 25-paper literature survey distilled into implementation decisions |
-| [mvp.md](project-context/mvp.md) | Scope boundaries, phased deliverables, fallback positions |
-| [tasks.md](project-context/tasks.md) | Week-by-week implementation checklist |
-
-Reading order for new contributors: `context.md` -> `architecture.md` -> `research.md` -> `mvp.md` -> `tasks.md`
-
----
-
-## Literature Survey
-
-The repository includes a 25-paper survey organized across six research buckets, each mapped to a system module:
-
-| Bucket | Domain | Papers | Key Works |
-|---|---|---|---|
-| 1 | Cross-modal biometric matching and synthesis | 1-4 | Speech2Face, Seeing Voices, ImageBind, Imaginary Voice |
-| 2 | Visual biometrics and 3D craniofacial geometry | 5-8 | ArcFace, FLAME, DECA, EMOCA |
-| 3 | Speaker embeddings, neural codecs, zero-shot TTS | 9-12 | ECAPA-TDNN, DAC, StyleTTS 2, NaturalSpeech 3 |
-| 4 | Probabilistic generative modeling | 13-16 | CVAE, beta-VAE, Flow Matching, Latent Diffusion |
-| 5 | Craniofacial biomechanics and vocal tract physics | 17-19 | Fitch and Giedd 1999, Macari et al. 2014, Li et al. ACM MM 2023 |
-| 6 | Audiovisual corpora, fairness, and audio forensics | 20-25 | Learnable PINs, VoxCeleb2, AVSpeech, Fenu and Marras 2022, SVARAH, AudioSeal |
-
-Full survey: [Initial Docs/voix_lit_survey_outline.md](Initial%20Docs/voix_lit_survey_outline.md)
-Detailed matrix: [Initial Docs/Voix F2S lit survey.csv](Initial%20Docs/Voix%20F2S%20lit%20survey.csv)
+| [`context.md`](project-context/context.md) | Theoretical background, research questions, formal hypotheses, and project boundaries |
+| [`architecture.md`](project-context/architecture.md) | Component contracts, neural network dimensions, tensor shapes, and loss formulations |
+| [`research.md`](project-context/research.md) | Synthesis of 25 literature foundations translated into concrete architectural choices |
+| [`mvp.md`](project-context/mvp.md) | Target deliverables, validation gates, compute constraints, and fallback plans |
+| [`tasks.md`](project-context/tasks.md) | Phased work packages, tracking checklists, and milestone gates |
 
 ---
 
@@ -353,47 +360,35 @@ Detailed matrix: [Initial Docs/Voix F2S lit survey.csv](Initial%20Docs/Voix%20F2
 
 | Component | Specification |
 |---|---|
-| Deep Learning | PyTorch 2.x |
-| Face Detection | RetinaFace (pytorch) |
-| Face Embedding | ArcFace via InsightFace |
-| Landmark Extraction | MediaPipe 0.10.x |
-| Speaker Embedding | ECAPA-TDNN via SpeechBrain |
-| Speech Synthesis | StyleTTS2 (frozen) |
-| Active Speaker Detection | SyncNet (VGG implementation) |
-| ASR | OpenAI Whisper large-v3 |
+| Core Framework | PyTorch 2.x |
+| Face Detection | RetinaFace (PyTorch implementation) |
+| Identity Encoding | ArcFace (InsightFace ResNet-50) |
+| Craniofacial Landmark Tracking | MediaPipe 0.10.x |
+| Acoustic Speaker Encoding | ECAPA-TDNN (SpeechBrain) |
+| Acoustic Speech Synthesis | StyleTTS 2 (Frozen pretrained checkpoint) |
+| Active Speaker Synchronization | SyncNet (VGG Audio-Visual architecture) |
+| Automated Speech Recognition | OpenAI Whisper large-v3 |
 | Language Identification | IndicLID (AI4Bharat) |
-| Experiment Tracking | Weights and Biases (free tier) |
-| Model Hosting | HuggingFace Hub |
-| Primary GPU | RTX 4050 (6GB VRAM) |
-| Backup GPU | Google Colab T4 (15GB VRAM) |
+| Experiment Tracking | Weights and Biases |
+| Primary Compute Environment | NVIDIA RTX 4050 GPU (6 GB VRAM) |
+| Auxiliary Compute Environment | Google Colab NVIDIA T4 GPU (15 GB VRAM) |
 
 ---
 
 ## Reproducibility
 
-All results are reported as mean +/- standard deviation over 3 independent seeds (torch.manual_seed(42) base, +1, +2). All hyperparameters are logged to Weights and Biases run configs and exported to JSON. Model checkpoints will be released on HuggingFace Hub. The India F2S benchmark will be released as an embedding-only package (ArcFace + ECAPA embeddings + metadata.csv) via HuggingFace Datasets. Raw audio and video will not be redistributed. VoxCeleb2 embedding extraction scripts will be released in place of the derived embeddings.
+All experiments are conducted across three fixed random seeds (`torch.manual_seed(42)`, `43`, `44`). Model checkpoints, training configurations, and loss trajectories are logged to Weights and Biases and preserved as JSON manifests. Model weights will be made available via the HuggingFace Hub. The India F2S benchmark will be published as pre-computed embedding vectors and metadata manifests via HuggingFace Datasets; raw media streams are not redistributed.
 
 ---
 
 ## Ethical Statement
 
-All synthesized audio generated by VOIX is watermarked using AudioSeal (San Roman et al., 2024) — a proactive localized neural watermarking system achieving AUC 0.97 and sample-level IoU 0.99, operating at 485x the detection speed of prior methods. Every VOIX output is verifiably attributable as AI-generated.
+All speech synthesized by VOIX is cryptographically attributed using AudioSeal (San Roman et al., 2024), a proactive localized neural watermarking framework achieving an AUC of 0.97 and sample-level IoU of 0.99 with negligible perceptual distortion. Every generated audio waveform contains embedded, tamper-evident provenance metadata verifying synthetic generation.
 
-Soft demographic indicators (age, sex) are used as probability distributions conditioning the generative prior, not as hard demographic classifiers. The India F2S benchmark includes only public figures and NPTEL/AI4Bharat-licensed content. Explicit data ethics declarations will accompany the paper submission per venue requirements.
-
----
-
-## Publication Target
-
-**Primary target:** INTERSPEECH (next available deadline post 16-week implementation window)
-**Alternative targets:** ICASSP (model contribution), NeurIPS Datasets and Benchmarks track (if Indian benchmark is the primary contribution)
+Soft demographic attributes are treated strictly as probabilistic conditioning vectors over acoustic space, not as discrete demographic classification labels. The India F2S benchmark curates content solely from Creative Commons and educational public archives (NPTEL, AI4Bharat) and adheres strictly to fair use and ethical data governance standards.
 
 ---
 
 ## Status
 
-Pre-implementation. Literature survey complete. System design finalized. Implementation begins Week 1.
-
----
-
-*Solo researcher project. Contact via GitHub Issues.*
+Pre-implementation. Architecture, mathematical formulation, and data pipelines finalized. Implementation commences Phase 1.
