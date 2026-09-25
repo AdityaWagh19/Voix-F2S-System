@@ -1,6 +1,6 @@
-﻿# Engineering Implementation Plan Overview
+# Engineering Implementation Plan Overview
 
-> **Project:** VOIX — Probabilistic Face-to-Voice Generation Through Cross-Modal Identity Modeling  
+> **Project:** VOIX � Probabilistic Face-to-Voice Generation Through Cross-Modal Identity Modeling  
 > **Repository:** `AdityaWagh19/Voix-F2S-System`  
 > **Status:** Definitive Engineering Blueprint
 
@@ -11,7 +11,7 @@
 The implementation plan decomposes the VOIX research system into seven sequential, independently testable phases. The architectural principle governing this breakdown is **strict incremental verification**: each phase produces a functional, validated subsystem before subsequent modules introduce additional complexity.
 
 ```
-Phase 1: Environment & Backbones      -> Verified model loading, CUDA determinism, tests
+Phase 1: Environment & Backbones      -> COMPLETE (commit 2802626, 35 tests passed), CUDA determinism, tests
 Phase 2: Multimodal Feature Pipelines  -> Pre-extracted 100K paired representations (560-D face, 192-D voice)
 Phase 3: Probabilistic CVAE Mapper     -> Calibrated P(e_s | e_f) distribution, anti-collapse loss
 Phase 4: Acoustic Synthesis & Adapter  -> End-to-end waveform generation, AudioSeal watermarking
@@ -67,12 +67,12 @@ flowchart TD
 | Phase | Specification Document | Primary Scope | Primary Deliverables | Target Timeline |
 |---|---|---|---|---|
 | **Phase 1** | [`phase-1-environment-and-pretrained-backbones.md`](phase-1-environment-and-pretrained-backbones.md) | Compute configuration, dependency isolation, pretrained backbone test suite | Environment manifest, test fixtures, scaffolding | Week 1 |
-| **Phase 2** | [`phase-2-feature-extraction-and-data-pipelines.md`](phase-2-feature-extraction-and-data-pipelines.md) | Frontal frame selection, 32-D FaceMesh ratios, demographic priors, VoxCeleb2 extraction | 100K cached pairs, serialization pipelines | Weeks 2–3 |
-| **Phase 3** | [`phase-3-probabilistic-cvae-mapper.md`](phase-3-probabilistic-cvae-mapper.md) | CVAE architecture, reparameterization, free-bits KL, cyclical beta annealing | Trained CVAE checkpoint, loss curves, clustering | Weeks 4–6 |
-| **Phase 4** | [`phase-4-acoustic-synthesis-and-style-adapter.md`](phase-4-acoustic-synthesis-and-style-adapter.md) | StyleTTS 2 adapter MLP, SECS acoustic loss, AudioSeal watermarking, end-to-end inference | Working inference pipeline, watermarked audio | Weeks 7–8 |
-| **Phase 5** | [`phase-5-indian-f2s-benchmark-curation.md`](phase-5-indian-f2s-benchmark-curation.md) | Non-persistent stream ingestion, SyncNet ASD, ArcFace purity, Whisper ASR, IndicLID | 20-hour verified benchmark, metadata manifest | Weeks 9–11 |
-| **Phase 6** | [`phase-6-baselines-ablations-and-evaluation.md`](phase-6-baselines-ablations-and-evaluation.md) | Baselines B1–B6, ablations A1–A6 & B1–B4, zero-shot vs fine-tuning, SHAP, MOS study | Evaluation tables, ablation results, statistical tests | Weeks 12–14 |
-| **Phase 7** | [`phase-7-production-hardening-and-reproducibility.md`](phase-7-production-hardening-and-reproducibility.md) | 3-seed reproducibility audit, HuggingFace Hub publishing, inference CLI, documentation | Turnkey CLI, HuggingFace release, camera-ready code | Weeks 15–16 |
+| **Phase 2** | [`phase-2-feature-extraction-and-data-pipelines.md`](phase-2-feature-extraction-and-data-pipelines.md) | Frontal frame selection, 32-D FaceMesh ratios, demographic priors, VoxCeleb2 extraction | 100K cached pairs, serialization pipelines | Weeks 2�3 |
+| **Phase 3** | [`phase-3-probabilistic-cvae-mapper.md`](phase-3-probabilistic-cvae-mapper.md) | CVAE architecture, reparameterization, free-bits KL, cyclical beta annealing | Trained CVAE checkpoint, loss curves, clustering | Weeks 4�6 |
+| **Phase 4** | [`phase-4-acoustic-synthesis-and-style-adapter.md`](phase-4-acoustic-synthesis-and-style-adapter.md) | StyleTTS 2 adapter MLP, SECS acoustic loss, AudioSeal watermarking, end-to-end inference | Working inference pipeline, watermarked audio | Weeks 7�8 |
+| **Phase 5** | [`phase-5-indian-f2s-benchmark-curation.md`](phase-5-indian-f2s-benchmark-curation.md) | Non-persistent stream ingestion, SyncNet ASD, ArcFace purity, Whisper ASR, IndicLID | 20-hour verified benchmark, metadata manifest | Weeks 9�11 |
+| **Phase 6** | [`phase-6-baselines-ablations-and-evaluation.md`](phase-6-baselines-ablations-and-evaluation.md) | Baselines B1�B6, ablations A1�A6 & B1�B4, zero-shot vs fine-tuning, SHAP, MOS study | Evaluation tables, ablation results, statistical tests | Weeks 12�14 |
+| **Phase 7** | [`phase-7-production-hardening-and-reproducibility.md`](phase-7-production-hardening-and-reproducibility.md) | 3-seed reproducibility audit, HuggingFace Hub publishing, inference CLI, documentation | Turnkey CLI, HuggingFace release, camera-ready code | Weeks 15�16 |
 
 ---
 
@@ -106,71 +106,71 @@ The repository will be populated according to the following layout across the ph
 
 ```
 Voix-F2S-System/
-├── plans/                                # Engineering implementation plans
-│   ├── overview.md                       # This document
-│   ├── phase-1-environment-and-pretrained-backbones.md
-│   ├── phase-2-feature-extraction-and-data-pipelines.md
-│   ├── phase-3-probabilistic-cvae-mapper.md
-│   ├── phase-4-acoustic-synthesis-and-style-adapter.md
-│   ├── phase-5-indian-f2s-benchmark-curation.md
-│   ├── phase-6-baselines-ablations-and-evaluation.md
-│   └── phase-7-production-hardening-and-reproducibility.md
-├── project-context/                      # Canonical design documentation
-│   ├── context.md
-│   ├── architecture.md
-│   ├── research.md
-│   ├── mvp.md
-│   └── tasks.md
-├── configs/                              # Centralized configuration files (YAML)
-│   ├── environment.yaml
-│   ├── data_extraction.yaml
-│   ├── cvae_training.yaml
-│   ├── adapter_training.yaml
-│   ├── benchmark_curation.yaml
-│   └── evaluation.yaml
-├── voix/                                 # Primary Python source package
-│   ├── __init__.py
-│   ├── data/                             # Dataset extraction & loading
-│   │   ├── __init__.py
-│   │   ├── face_extractor.py             # ArcFace, FaceMesh, demographics
-│   │   ├── speaker_extractor.py          # SpeechBrain ECAPA-TDNN
-│   │   ├── dataset.py                    # PyTorch Dataset for cached pairs
-│   │   └── stream_curator.py             # yt-dlp, SyncNet, Whisper, IndicLID
-│   ├── models/                           # Neural network modules
-│   │   ├── __init__.py
-│   │   ├── fusion.py                     # 560-D Linear + LayerNorm + GELU
-│   │   ├── cvae.py                       # Probabilistic CVAE Encoder & Decoder
-│   │   ├── adapter.py                    # 3-layer MLP Style Adapter
-│   │   └── watermarking.py               # AudioSeal integration wrapper
-│   ├── training/                         # Optimization pipelines
-│   │   ├── __init__.py
-│   │   ├── losses.py                     # L_recon, L_KL (free bits), L_style
-│   │   ├── trainer_cvae.py               # CVAE training loop with W&B
-│   │   └── trainer_adapter.py            # StyleTTS2 adapter alignment loop
-│   ├── evaluation/                       # Metric computation suite
-│   │   ├── __init__.py
-│   │   ├── metrics.py                    # SECS, Recall@K, DS, ECE, FSD
-│   │   ├── baselines.py                  # B1 to B6 baseline implementations
-│   │   ├── ablations.py                  # Feature & architecture ablation harnesses
-│   │   └── shap_analysis.py              # SHAP craniofacial feature attribution
-│   └── inference/                        # End-to-end inference APIs
-│       ├── __init__.py
-│       └── pipeline.py                   # Face + Text -> K Voice generation
-├── tests/                                # Automated verification test suite
-│   ├── test_backbones.py
-│   ├── test_features.py
-│   ├── test_cvae.py
-│   ├── test_adapter.py
-│   └── test_end_to_end.py
-├── scripts/                              # Batch operational CLI scripts
-│   ├── extract_voxceleb.py
-│   ├── curate_indian_benchmark.py
-│   ├── run_training.py
-│   ├── run_evaluation.py
-│   └── voix_cli.py
-├── README.md
-├── requirements.txt
-└── .gitignore
++-- plans/                                # Engineering implementation plans
+�   +-- overview.md                       # This document
+�   +-- phase-1-environment-and-pretrained-backbones.md
+�   +-- phase-2-feature-extraction-and-data-pipelines.md
+�   +-- phase-3-probabilistic-cvae-mapper.md
+�   +-- phase-4-acoustic-synthesis-and-style-adapter.md
+�   +-- phase-5-indian-f2s-benchmark-curation.md
+�   +-- phase-6-baselines-ablations-and-evaluation.md
+�   +-- phase-7-production-hardening-and-reproducibility.md
++-- project-context/                      # Canonical design documentation
+�   +-- context.md
+�   +-- architecture.md
+�   +-- research.md
+�   +-- mvp.md
+�   +-- tasks.md
++-- configs/                              # Centralized configuration files (YAML)
+�   +-- environment.yaml
+�   +-- data_extraction.yaml
+�   +-- cvae_training.yaml
+�   +-- adapter_training.yaml
+�   +-- benchmark_curation.yaml
+�   +-- evaluation.yaml
++-- voix/                                 # Primary Python source package
+�   +-- __init__.py
+�   +-- data/                             # Dataset extraction & loading
+�   �   +-- __init__.py
+�   �   +-- face_extractor.py             # ArcFace, FaceMesh, demographics
+�   �   +-- speaker_extractor.py          # SpeechBrain ECAPA-TDNN
+�   �   +-- dataset.py                    # PyTorch Dataset for cached pairs
+�   �   +-- stream_curator.py             # yt-dlp, SyncNet, Whisper, IndicLID
+�   +-- models/                           # Neural network modules
+�   �   +-- __init__.py
+�   �   +-- fusion.py                     # 560-D Linear + LayerNorm + GELU
+�   �   +-- cvae.py                       # Probabilistic CVAE Encoder & Decoder
+�   �   +-- adapter.py                    # 3-layer MLP Style Adapter
+�   �   +-- watermarking.py               # AudioSeal integration wrapper
+�   +-- training/                         # Optimization pipelines
+�   �   +-- __init__.py
+�   �   +-- losses.py                     # L_recon, L_KL (free bits), L_style
+�   �   +-- trainer_cvae.py               # CVAE training loop with W&B
+�   �   +-- trainer_adapter.py            # StyleTTS2 adapter alignment loop
+�   +-- evaluation/                       # Metric computation suite
+�   �   +-- __init__.py
+�   �   +-- metrics.py                    # SECS, Recall@K, DS, ECE, FSD
+�   �   +-- baselines.py                  # B1 to B6 baseline implementations
+�   �   +-- ablations.py                  # Feature & architecture ablation harnesses
+�   �   +-- shap_analysis.py              # SHAP craniofacial feature attribution
+�   +-- inference/                        # End-to-end inference APIs
+�       +-- __init__.py
+�       +-- pipeline.py                   # Face + Text -> K Voice generation
++-- tests/                                # Automated verification test suite
+�   +-- test_backbones.py
+�   +-- test_features.py
+�   +-- test_cvae.py
+�   +-- test_adapter.py
+�   +-- test_end_to_end.py
++-- scripts/                              # Batch operational CLI scripts
+�   +-- extract_voxceleb.py
+�   +-- curate_indian_benchmark.py
+�   +-- run_training.py
+�   +-- run_evaluation.py
+�   +-- voix_cli.py
++-- README.md
++-- requirements.txt
++-- .gitignore
 ```
 
 ---
@@ -181,6 +181,6 @@ Upon completion of Phase 7, VOIX will deliver:
 
 1. **A Trained CVAE Probabilistic Model:** Checkpoints capable of sampling $K$ plausible, diverse speaker embeddings conditioned on a 560-D fused face representation.
 2. **A Trained Style Adapter:** Weight checkpoints mapping predicted ECAPA embeddings into StyleTTS 2 style space for high-fidelity 24 kHz waveform synthesis.
-3. **An India-Specific Audio-Visual Benchmark:** A published dataset of 40–60 speakers across 5 regional languages, featuring 25% code-switching, released as embedding vectors and metadata manifests on HuggingFace Datasets.
+3. **An India-Specific Audio-Visual Benchmark:** A published dataset of 40�60 speakers across 5 regional languages, featuring 25% code-switching, released as embedding vectors and metadata manifests on HuggingFace Datasets.
 4. **An Empirical Evaluation Suite:** Comprehensive metrics (SECS, Recall@K, Diversity Score, ECE, FSD, MOS) validating hypotheses H1, H2, and H3 against 6 baseline architectures.
 5. **A Reproducible Research Codebase:** Fully documented code, 3-seed verification logs, and an open-source inference CLI.
