@@ -76,10 +76,45 @@ PREFETCH_QUEUE: int = 2  # 8 GB RAM: each slot ~14 MB raw frames, 2 slots = ~28 
 # IO helpers
 # ---------------------------------------------------------------------------
 
+def _get_ffmpeg_exe() -> str:
+    """Return path to ffmpeg binary.
+
+    Priority:
+      1. imageio_ffmpeg bundled binary (pip-installed, no PATH needed)
+      2. System ffmpeg on PATH (fallback)
+    """
+    try:
+        import imageio_ffmpeg
+        return imageio_ffmpeg.get_ffmpeg_exe()
+    except ImportError:
+        pass
+    # Fallback: system ffmpeg
+    import shutil
+    ffmpeg = shutil.which("ffmpeg")
+    if ffmpeg:
+        return ffmpeg
+    raise RuntimeError(
+        "ffmpeg not found. Install via: pip install imageio-ffmpeg\n"
+        "Or download from https://ffmpeg.org and add to PATH."
+    )
+
+
+# Cache the ffmpeg path once at module load time
+_FFMPEG_EXE: str | None = None
+
+
 def _ffmpeg_extract_audio(video_path: str, wav_path: str) -> bool:
-    """Extract 16 kHz mono WAV. Uses DEVNULL (not capture_output) to avoid per-call RAM buffers on 8 GB systems."""
+    """Extract 16 kHz mono WAV. Uses DEVNULL to avoid per-call RAM buffers on 8 GB systems.
+
+    Uses imageio_ffmpeg bundled binary if available (no PATH setup required),
+    falls back to system ffmpeg on PATH.
+    """
+    global _FFMPEG_EXE
+    if _FFMPEG_EXE is None:
+        _FFMPEG_EXE = _get_ffmpeg_exe()
+
     cmd = [
-        "ffmpeg", "-y", "-loglevel", "quiet",
+        _FFMPEG_EXE, "-y", "-loglevel", "quiet",
         "-i", video_path,
         "-ar", "16000", "-ac", "1", "-f", "wav",
         wav_path,
