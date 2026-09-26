@@ -41,9 +41,15 @@ OUTPUT_H5     = VOIX_ROOT / "data" / "processed" / "voxceleb2_train.h5"
 PROGRESS_JSON = VOIX_ROOT / "data" / "processed" / "extraction_progress.json"
 LOG_FILE      = VOIX_ROOT / "data" / "processed" / "extraction.log"
 
-# GTX 1650: 4 GB VRAM -- models use ~500 MB, rest is free for tensors.
-# batch_size=50  -> HDF5 flush every ~2.5 min (safe checkpoint interval)
-# N_ECAPA_BATCH=8 -> 8 audio clips per SpeechBrain forward pass
+# GTX 1650 (TU117, 896 CUDA cores, CUDA 7.5, 4.29 GB VRAM):
+#   - Display driver uses ~855 MB permanently -> 3.46 GB free
+#   - Models (ArcFace + ECAPA + FusionLayer) ~500 MB -> ~2.1 GB working room
+#   - N_ECAPA_BATCH=4 and N_FACE_BATCH=4 are set in extract_voxceleb.py
+#   - batch_size=50 -> HDF5 flush every ~2.5 min on GTX 1650
+# i5-11320H: 4 cores / 8 threads. Prefetch thread uses 1 thread, leaving
+#   7 for Python + OS. PREFETCH_QUEUE=2 in extract_voxceleb.py (RAM-safe).
+# RAM: 8 GB single-channel. CLOSE CHROME AND UNNECESSARY APPS BEFORE RUNNING.
+#   Python + models need ~3-4 GB free RAM. See RAM warning at startup.
 BATCH_SIZE  = 50
 DEVICE      = "cuda"
 # ---------------------------------------------------------------------------
@@ -143,6 +149,22 @@ def main() -> None:
         print("Run first:  python scripts/download_voxceleb.py")
         sys.exit(1)
 
+    # RAM check
+    import psutil
+    ram = psutil.virtual_memory()
+    print(f"  RAM free    : {ram.available/1e9:.1f} GB / {ram.total/1e9:.1f} GB ({ram.percent:.0f}% used)")
+    if ram.available < 3.5e9:
+        print()
+        print("  [WARNING] Less than 3.5 GB RAM free.")
+        print("  Close Chrome, other browsers, and background apps before proceeding.")
+        print("  SpeechBrain + MediaPipe need ~2-3 GB RAM. Low RAM will cause swap and slow down extraction 5-10x.")
+        print("  Press Enter to continue anyway, or Ctrl+C to exit and free RAM first.")
+        try:
+            input("  > ")
+        except KeyboardInterrupt:
+            print("\nExiting. Free RAM and re-run.")
+            sys.exit(0)
+
     # Load previous progress
     prog = _load_progress()
     prog["run"] = prog.get("run", 0) + 1
@@ -156,6 +178,19 @@ def main() -> None:
     _prevent_sleep()
 
     from scripts.extract_voxceleb import run_extraction
+
+    # CUDA tuning for GTX 1650
+    import torch
+    torch.backends.cudnn.benchmark     = True   # profile fastest kernels (+10-20%)
+    torch.backends.cudnn.deterministic = False
+    # Pre-warm CUDA context (avoids slow first-batch kernel JIT compilation)
+    _dummy = torch.zeros(1, device=DEVICE)
+    del _dummy
+    torch.cuda.empty_cache()
+    free_vram, total_vram = torch.cuda.mem_get_info(0)
+    print(f"  VRAM free   : {free_vram/1e6:.0f} MB / {total_vram/1e6:.0f} MB")
+    if free_vram < 2.0e9:
+        print("  [WARN] Less than 2 GB VRAM free. Consider closing other GPU apps.")
 
     try:
         run_extraction(

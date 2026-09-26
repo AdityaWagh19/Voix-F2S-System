@@ -65,11 +65,11 @@ GOOD_SCORE_THRESHOLD: float = 15.0
 # ECAPA and ArcFace inference batch sizes.
 # ECAPA batch 8: pads audio to max length in batch.
 # ArcFace batch 8: stacks (N, 3, 112, 112) face crops.
-N_ECAPA_BATCH: int = 8
-N_FACE_BATCH:  int = 8
+N_ECAPA_BATCH: int = 4  # GTX 1650: 3.46 GB free VRAM, batch 4 is safe
+N_FACE_BATCH:  int = 4
 
 # Prefetch queue depth: how many clips to buffer ahead of GPU processing.
-PREFETCH_QUEUE: int = 4
+PREFETCH_QUEUE: int = 2  # 8 GB RAM: each slot ~14 MB raw frames, 2 slots = ~28 MB safe
 
 
 # ---------------------------------------------------------------------------
@@ -77,14 +77,18 @@ PREFETCH_QUEUE: int = 4
 # ---------------------------------------------------------------------------
 
 def _ffmpeg_extract_audio(video_path: str, wav_path: str) -> bool:
-    """Extract 16 kHz mono WAV from a video file using ffmpeg (no output)."""
+    """Extract 16 kHz mono WAV. Uses DEVNULL (not capture_output) to avoid per-call RAM buffers on 8 GB systems."""
     cmd = [
-        "ffmpeg", "-y", "-loglevel", "error",
+        "ffmpeg", "-y", "-loglevel", "quiet",
         "-i", video_path,
         "-ar", "16000", "-ac", "1", "-f", "wav",
         wav_path,
     ]
-    result = subprocess.run(cmd, capture_output=True)
+    result = subprocess.run(
+        cmd,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
     return result.returncode == 0 and os.path.exists(wav_path)
 
 
