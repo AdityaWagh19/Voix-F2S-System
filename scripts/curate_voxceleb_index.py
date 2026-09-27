@@ -152,7 +152,7 @@ def cross_session_sample(
 
 def curate_index(
     meta_path: str,
-    txt_dir: str,
+    txt_dir: str,        # txt/ dir OR mp4 dev/ dir (same structure, auto-detected)
     output_path: str,
     seed: int = 42,
     target_speakers: int = 2000,
@@ -239,16 +239,35 @@ def main() -> None:
         description="Curate VoxCeleb2 training index (cross-session, stratified)."
     )
     parser.add_argument("--meta",        required=True, help="Path to vox2_meta.csv")
-    parser.add_argument("--txt",         required=True, help="Path to vox2 txt/ directory")
+    parser.add_argument("--txt",         default=None,
+                        help="Path to vox2 txt/ directory (OR use --mp4 instead)")
+    parser.add_argument("--mp4",         default=None,
+                        help="Path to vox2 dev/mp4/ directory (preferred -- no txt download needed)")
     parser.add_argument("--output",      default="data/processed/curated_index.csv")
     parser.add_argument("--seed",        type=int, default=42)
     parser.add_argument("--speakers",    type=int, default=2000)
     parser.add_argument("--utterances",  type=int, default=50)
     args = parser.parse_args()
 
+    scan_dir = args.mp4 or args.txt
+    if scan_dir is None:
+        # Auto-detect: try mp4 dir first, then txt dir
+        default_mp4 = r"D:\voix\data\raw\voxceleb2\dev\mp4"
+        default_txt = r"D:\voix\data\raw\voxceleb2\txt"
+        import os
+        if os.path.isdir(default_mp4):
+            scan_dir = default_mp4
+            print(f"Auto-detected mp4 dir: {scan_dir}")
+        elif os.path.isdir(default_txt):
+            scan_dir = default_txt
+            print(f"Auto-detected txt dir: {scan_dir}")
+        else:
+            print("ERROR: specify --mp4 or --txt")
+            raise SystemExit(1)
+
     total = curate_index(
         meta_path=args.meta,
-        txt_dir=args.txt,
+        txt_dir=scan_dir,
         output_path=args.output,
         seed=args.seed,
         target_speakers=args.speakers,

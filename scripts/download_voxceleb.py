@@ -36,11 +36,16 @@ def _hf_download(repo_id: str, filename: str, local_dir: str) -> str:
     )
 
 
-def download_metadata(out_root: Path, hf_repo: str) -> None:
-    """Download vox2_meta.csv and txt/ annotation files in parallel."""
+def download_metadata(out_root: Path, hf_repo: str, download_txt: bool = False) -> None:
+    """Download vox2_meta.csv and optionally txt/ annotation files.
+
+    txt/ files are NOT required for extraction -- the mp4 directory has the
+    same structure. Pass download_txt=True only if you specifically need them.
+    HuggingFace rate-limits parallel txt requests heavily (HTTP 429).
+    """
     from huggingface_hub import list_repo_files
 
-    # Speaker metadata CSV
+    # Speaker metadata CSV (small, always download)
     meta_dst = out_root / "vox2_meta.csv"
     if meta_dst.exists():
         print(f"vox2_meta.csv already present ({meta_dst.stat().st_size // 1024} KB) -- skipping")
@@ -51,7 +56,12 @@ def download_metadata(out_root: Path, hf_repo: str) -> None:
             shutil.copy(local, meta_dst)
         print(f"  -> {meta_dst}")
 
-    # Utterance txt annotations
+    if not download_txt:
+        print("Skipping txt annotations (not needed -- use --mp4 flag in curate_voxceleb_index.py)")
+        print("Pass --with-txt to download them anyway.")
+        return
+
+    # Utterance txt annotations (optional, rate-limited)
     txt_dir = out_root / "txt"
     txt_dir.mkdir(parents=True, exist_ok=True)
     existing = len(list(txt_dir.rglob("*.txt")))
@@ -59,25 +69,37 @@ def download_metadata(out_root: Path, hf_repo: str) -> None:
         print(f"txt annotations already present ({existing} files) -- skipping")
         return
 
-    print("Fetching txt annotation file list from HuggingFace...")
+    print("Fetching txt annotation file list from HuggingFace (this is slow)...")
     all_files = list(list_repo_files(hf_repo, repo_type="dataset"))
     txt_files = [f for f in all_files if f.startswith("txt/") and f.endswith(".txt")]
-    print(f"Downloading {len(txt_files)} txt files with 32 parallel workers...")
+    print(f"Downloading {len(txt_files)} txt files with 2 workers (rate-limit safe)...")
 
+    import time
     done = 0
-    def _dl(fname):
-        try:
-            _hf_download(hf_repo, fname, str(out_root))
-            return True
-        except Exception:
-            return False
+    errors = 0
 
-    with ThreadPoolExecutor(max_workers=32) as pool:
+    def _dl(fname):
+        import time
+        for attempt in range(5):
+            try:
+                _hf_download(hf_repo, fname, str(out_root))
+                return True
+            except Exception as e:
+                if "429" in str(e):
+                    time.sleep(30 * (attempt + 1))
+                else:
+                    return False
+        return False
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
         futures = {pool.submit(_dl, f): f for f in txt_files}
         for fut in as_completed(futures):
+            ok = fut.result()
             done += 1
-            if done % 500 == 0:
-                print(f"  {done}/{len(txt_files)}")
+            if not ok:
+                errors += 1
+            if done % 200 == 0:
+                print(f"  {done}/{len(txt_files)} ({errors} errors)")
 
     total = len(list(txt_dir.rglob("*.txt")))
     print(f"txt annotations done: {total} files in {txt_dir}")
@@ -165,6 +187,8 @@ def main() -> None:
                         help="Parallel workers for archive downloads")
     parser.add_argument("--skip-videos", action="store_true",
                         help="Download only metadata, skip mp4 archives")
+    parser.add_argument("--with-txt", action="store_true",
+                        help="Also download txt annotations (slow, rate-limited -- not needed for extraction)")
     args = parser.parse_args()
 
     HF_REPO  = "Reverb/voxceleb2"
@@ -176,7 +200,7 @@ def main() -> None:
     print(f"mp4 target  : {mp4_dir}")
     print()
 
-    download_metadata(out_root, HF_REPO)
+    download_metadata(out_root, HF_REPO, download_txt=args.with_txt)
     print()
 
     if not args.skip_videos:
