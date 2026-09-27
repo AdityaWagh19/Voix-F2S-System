@@ -153,21 +153,69 @@ def download_part(part_name: str, archive_dir: Path) -> Path:
 # ---------------------------------------------------------------------------
 
 def extract_part(part_path: Path, mp4_dir: Path) -> int:
+    import zlib
     mp4_dir.mkdir(parents=True, exist_ok=True)
     n_before = _count_mp4s(mp4_dir)
-    print(f"  Streaming {part_path.name} -> tar -> {mp4_dir.name}/")
-    tar = subprocess.Popen(
-        ["tar", "-x", "--ignore-failed-read", "--warning=no-all", "-C", str(mp4_dir)],
-        stdin=subprocess.PIPE,
-    )
-    try:
-        with open(part_path, "rb") as f:
-            shutil.copyfileobj(f, tar.stdin, length=8 * 1024 * 1024)
-        tar.stdin.close()
-        tar.wait()
-    except Exception as e:
-        tar.kill()
-        print(f"  [WARN] tar: {e}")
+    print(f"  Streaming {part_path.name} -> raw ZIP extractor -> {mp4_dir.name}/")
+    
+    SIGNATURE = b"PK\x03\x04"
+    buffer_size = 1024 * 1024 * 16  # 16 MB chunks
+    
+    with open(part_path, "rb") as f:
+        search_buf = b""
+        while True:
+            chunk = f.read(buffer_size)
+            if not chunk:
+                break
+            search_buf += chunk
+            
+            while True:
+                idx = search_buf.find(SIGNATURE)
+                if idx == -1:
+                    search_buf = search_buf[-3:]
+                    break
+                
+                if len(search_buf) < idx + 30:
+                    break
+                
+                header = search_buf[idx:idx+30]
+                method = int.from_bytes(header[8:10], "little")
+                name_len = int.from_bytes(header[26:28], "little")
+                extra_len = int.from_bytes(header[28:30], "little")
+                comp_size = int.from_bytes(header[18:22], "little")
+                
+                total_entry_size = 30 + name_len + extra_len + comp_size
+                
+                if len(search_buf) < idx + total_entry_size:
+                    needed = idx + total_entry_size - len(search_buf)
+                    extra_data = f.read(max(needed, buffer_size))
+                    if not extra_data:
+                        search_buf = b""
+                        break
+                    search_buf += extra_data
+                    continue
+                
+                name = search_buf[idx+30 : idx+30+name_len].decode("utf-8", "replace")
+                
+                if name.endswith(".mp4"):
+                    file_data = search_buf[idx+30+name_len+extra_len : idx+total_entry_size]
+                    
+                    if method == 8:  # Deflated
+                        file_data = zlib.decompress(file_data, -15)
+                        
+                    clean_name = name
+                    if clean_name.startswith("dev/mp4/"):
+                        clean_name = clean_name[len("dev/mp4/"):]
+                    elif clean_name.startswith("mp4/"):
+                        clean_name = clean_name[len("mp4/"):]
+                        
+                    out_path = mp4_dir / Path(clean_name)
+                    out_path.parent.mkdir(parents=True, exist_ok=True)
+                    with open(out_path, "wb") as out_f:
+                        out_f.write(file_data)
+                
+                search_buf = search_buf[idx+total_entry_size:]
+
     extracted = _count_mp4s(mp4_dir) - n_before
     print(f"  Extracted {extracted:,} clips  (total on disk: {_count_mp4s(mp4_dir):,})")
     return extracted
