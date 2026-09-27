@@ -530,18 +530,22 @@ def main() -> None:
             print(f"  HDF5 total so far : {_hdf5_info(hdf5_path)[0]:,} clips")
             print(f"{'='*62}")
 
-            # [1] Download
-            print("\n[1/5] Download archive part")
-            part_path = download_part(part_name, archive_dir)
+            n_existing_mp4s = _count_mp4s(mp4_dir)
+            if n_existing_mp4s > 50_000:
+                print(f"\n[1-3/5] Skipping download/extract: {n_existing_mp4s:,} mp4s already on disk from previous interrupted run.")
+            else:
+                # [1] Download
+                print("\n[1/5] Download archive part")
+                part_path = download_part(part_name, archive_dir)
 
-            # [2] Extract mp4s
-            print("\n[2/5] Extract mp4s (streaming, no combined.tar)")
-            extract_part(part_path, mp4_dir)
+                # [2] Extract mp4s
+                print("\n[2/5] Extract mp4s (streaming, no raw ZIP extractor)")
+                extract_part(part_path, mp4_dir)
 
-            # [3] Delete archive
-            print("\n[3/5] Delete archive to free disk")
-            part_path.unlink(missing_ok=True)
-            print(f"  Deleted {part_path.name}")
+                # [3] Delete archive
+                print("\n[3/5] Delete archive to free disk")
+                part_path.unlink(missing_ok=True)
+                print(f"  Deleted {part_path.name}")
 
             # [4] Per-speaker quota index
             print("\n[4/5] Build per-speaker quota index")
