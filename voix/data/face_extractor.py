@@ -141,7 +141,7 @@ class FaceMeshExtractor:
             base_options=base_options,
             num_faces=self.num_faces,
             min_face_detection_confidence=self.min_detection_confidence,
-            min_face_presence_score=self.min_detection_confidence,
+            min_face_presence_confidence=self.min_detection_confidence,
             min_tracking_confidence=0.5,
         )
         self._landmarker = mp_vision.FaceLandmarker.create_from_options(options)
