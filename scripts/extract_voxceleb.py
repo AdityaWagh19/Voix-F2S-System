@@ -463,7 +463,8 @@ def run_extraction(
 
     # --- Load models (lazy, frozen) -----------------------------------------
     print("Loading models...")
-    face_ext   = ArcFaceExtractor(device=device)
+    device_id = 0 if device.startswith("cuda") else -1
+    face_ext   = ArcFaceExtractor(device_id=device_id)
     mesh_ext   = FaceMeshExtractor()
     spk_ext    = ECAPAExtractor(device=device)
     demo_est   = SoftDemographicEstimator(device=device)
