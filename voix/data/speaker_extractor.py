@@ -44,19 +44,42 @@ class ECAPAExtractor:
         self._loaded = False
 
     def _load(self) -> None:
-        """Lazy-load SpeechBrain ECAPA-TDNN model on first use."""
-        import os
-        # Windows: symlinks require admin/dev-mode; force copy strategy instead
-        os.environ.setdefault("SPEECHBRAIN_FETCH_STRATEGY", "copy")
-        import torch
-        from speechbrain.pretrained import EncoderClassifier
+        """Lazy-load SpeechBrain ECAPA-TDNN model on first use.
 
+        On Windows, SpeechBrain creates symlinks from the HuggingFace cache
+        into savedir, which fails without admin/Developer Mode.
+        Workaround: use huggingface_hub.snapshot_download() to get the local
+        snapshot path, copy all files into savedir ourselves, then load from
+        that local directory so SpeechBrain does no further fetching.
+        """
+        import os, shutil
+        import torch
+        from pathlib import Path as _Path
+        from huggingface_hub import snapshot_download
+
+        savedir = _Path(self.savedir)
+
+        if not savedir.exists() or not any(savedir.iterdir()):
+            hf_token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
+            snapshot_path = _Path(snapshot_download(
+                repo_id=self.model_source,
+                token=hf_token,
+            ))
+            savedir.mkdir(parents=True, exist_ok=True)
+            for src_file in snapshot_path.rglob("*"):
+                if src_file.is_file():
+                    rel = src_file.relative_to(snapshot_path)
+                    dst = savedir / rel
+                    dst.parent.mkdir(parents=True, exist_ok=True)
+                    if not dst.exists():
+                        shutil.copy2(str(src_file), str(dst))
+
+        from speechbrain.inference import EncoderClassifier
         self._classifier = EncoderClassifier.from_hparams(
-            source=self.model_source,
-            savedir=self.savedir,
+            source=str(savedir),
+            savedir=str(savedir),
             run_opts={"device": self.device},
         )
-        # Freeze all parameters
         for param in self._classifier.parameters():
             param.requires_grad = False
         self._classifier.eval()
