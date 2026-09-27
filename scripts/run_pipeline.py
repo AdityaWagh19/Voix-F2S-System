@@ -391,7 +391,12 @@ def main() -> None:
     parser.add_argument("--min-clips",         type=int, default=DEFAULT_MIN_CLIPS)
     parser.add_argument("--speakers",          type=int, default=DEFAULT_SPEAKERS_TOTAL,
                         help="Final training set: total speakers (half male, half female)")
-    parser.add_argument("--parts",             type=int, default=9)
+    parser.add_argument("--parts",             type=int, default=9,
+                        help="Total parts to process across all runs (default: 9)")
+    parser.add_argument("--one-shot",          action="store_true", default=True,
+                        help="Stop after ONE chunk per run (default: True). Re-run to advance.")
+    parser.add_argument("--all",               action="store_true", default=False,
+                        help="Process all parts in one run (overrides --one-shot)")
     parser.add_argument("--device",            default="cuda")
     parser.add_argument("--seed",              type=int, default=DEFAULT_SEED)
     parser.add_argument("--skip-delete",       action="store_true",
@@ -427,12 +432,37 @@ def main() -> None:
     meta = _load_meta(meta_path)
     print(f"Loaded metadata: {len(meta)} dev speakers\n")
 
+    # Track progress via a simple state file
+    state_file = out_root / ".pipeline_state.txt"
+    def _read_state() -> int:
+        """Return index (1-based) of next part to process."""
+        if state_file.exists():
+            try: return int(state_file.read_text().strip())
+            except: pass
+        return 1
+
+    def _write_state(next_part: int) -> None:
+        state_file.write_text(str(next_part))
+
+    one_shot = args.one_shot and not args.all
+
     if not args.finalize_only:
         parts = _list_parts()[:args.parts]
         n_total, done_ids = _hdf5_info(hdf5_path)
-        print(f"HDF5 starting state: {n_total:,} clips already extracted\n")
+        next_part_idx = _read_state()
 
-        for i, part_name in enumerate(parts, 1):
+        print(f"HDF5 starting state: {n_total:,} clips already extracted")
+        print(f"Resuming from part  : {next_part_idx}/{len(parts)}")
+        if one_shot:
+            print(f"Mode                : one-shot (will stop after 1 chunk, re-run to continue)")
+        print()
+
+        if next_part_idx > len(parts):
+            print("All parts already processed. Running final selection only.")
+        else:
+            for i, part_name in enumerate(parts, 1):
+                if i < next_part_idx:
+                    continue   # already done in a previous run
             print()
             print(f"{'='*62}")
             print(f"  Part {i}/{len(parts)}: {Path(part_name).name}")
