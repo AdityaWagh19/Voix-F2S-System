@@ -53,7 +53,7 @@ class ArcFaceExtractor:
             root=self.cache_dir,
             providers=["CUDAExecutionProvider", "CPUExecutionProvider"],
         )
-        self._app.prepare(ctx_id=self.device_id, det_size=(112, 112))
+        self._app.prepare(ctx_id=self.device_id, det_size=(640, 640))
         self._loaded = True
 
     def extract(self, image_bgr: np.ndarray) -> Optional[np.ndarray]:
