@@ -46,40 +46,42 @@ class ECAPAExtractor:
     def _load(self) -> None:
         """Lazy-load SpeechBrain ECAPA-TDNN model on first use.
 
-        On Windows, SpeechBrain creates symlinks from the HuggingFace cache
-        into savedir, which fails without admin/Developer Mode.
-        Workaround: use huggingface_hub.snapshot_download() to get the local
-        snapshot path, copy all files into savedir ourselves, then load from
-        that local directory so SpeechBrain does no further fetching.
+        On Windows, SpeechBrain (and huggingface_hub) use symlinks internally
+        which require admin/Developer Mode. We monkey-patch os.symlink to fall
+        back to shutil.copy2 on failure so it works on any Windows account.
         """
         import os, shutil
         import torch
-        from pathlib import Path as _Path
-        from huggingface_hub import snapshot_download
 
-        savedir = _Path(self.savedir)
-
-        if not savedir.exists() or not any(savedir.iterdir()):
-            hf_token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
-            snapshot_path = _Path(snapshot_download(
-                repo_id=self.model_source,
-                token=hf_token,
-            ))
-            savedir.mkdir(parents=True, exist_ok=True)
-            for src_file in snapshot_path.rglob("*"):
-                if src_file.is_file():
-                    rel = src_file.relative_to(snapshot_path)
-                    dst = savedir / rel
-                    dst.parent.mkdir(parents=True, exist_ok=True)
-                    if not dst.exists():
-                        shutil.copy2(str(src_file), str(dst))
+        # --- Monkey-patch os.symlink to copy-on-failure (Windows safe) -------
+        _orig_symlink = os.symlink
+        def _safe_symlink(src, dst, target_is_directory=False, dir_fd=None):
+            try:
+                _orig_symlink(src, dst, target_is_directory=target_is_directory,
+                              dir_fd=dir_fd)
+            except (OSError, NotImplementedError):
+                # symlink not permitted (Windows without Developer Mode)
+                src_path = os.path.realpath(str(src))
+                dst_path = str(dst)
+                if os.path.isdir(src_path):
+                    if not os.path.exists(dst_path):
+                        shutil.copytree(src_path, dst_path)
+                else:
+                    os.makedirs(os.path.dirname(dst_path), exist_ok=True)
+                    shutil.copy2(src_path, dst_path)
+        os.symlink = _safe_symlink
+        # -----------------------------------------------------------------------
 
         from speechbrain.inference import EncoderClassifier
         self._classifier = EncoderClassifier.from_hparams(
-            source=str(savedir),
-            savedir=str(savedir),
+            source=self.model_source,
+            savedir=self.savedir,
             run_opts={"device": self.device},
         )
+
+        # Restore original symlink
+        os.symlink = _orig_symlink
+
         for param in self._classifier.parameters():
             param.requires_grad = False
         self._classifier.eval()
