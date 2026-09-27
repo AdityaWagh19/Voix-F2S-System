@@ -350,11 +350,14 @@ def _ecapa_batch(
     padded = padded.to(device)
 
     with torch.inference_mode():
+        # Ensure model is loaded (lazy init)
+        if not speaker_extractor._loaded:
+            speaker_extractor._load()
         if device.startswith("cuda"):
             with torch.cuda.amp.autocast():
-                embs = speaker_extractor.model.encode_batch(padded)  # (N, 1, 192)
+                embs = speaker_extractor._classifier.encode_batch(padded)  # (N, 1, 192)
         else:
-            embs = speaker_extractor.model.encode_batch(padded)
+            embs = speaker_extractor._classifier.encode_batch(padded)
 
     embs_np = embs.squeeze(1).cpu().float().numpy()  # (N, 192)
     return [embs_np[i].astype(np.float32) for i in range(len(waves))]
