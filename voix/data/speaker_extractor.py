@@ -45,6 +45,9 @@ class ECAPAExtractor:
 
     def _load(self) -> None:
         """Lazy-load SpeechBrain ECAPA-TDNN model on first use."""
+        import os
+        # Windows: symlinks require admin/dev-mode; force copy strategy instead
+        os.environ.setdefault("SPEECHBRAIN_FETCH_STRATEGY", "copy")
         import torch
         from speechbrain.pretrained import EncoderClassifier
 
