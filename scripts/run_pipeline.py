@@ -389,20 +389,16 @@ def main() -> None:
     parser.add_argument("--training-csv",      default=r"D:\voix\data\processed\training_index.csv")
     parser.add_argument("--clips-per-speaker", type=int, default=DEFAULT_CLIPS_PER_SPEAKER)
     parser.add_argument("--min-clips",         type=int, default=DEFAULT_MIN_CLIPS)
-    parser.add_argument("--speakers",          type=int, default=DEFAULT_SPEAKERS_TOTAL,
-                        help="Final training set: total speakers (half male, half female)")
+    parser.add_argument("--speakers",          type=int, default=DEFAULT_SPEAKERS_TOTAL)
     parser.add_argument("--parts",             type=int, default=9,
-                        help="Total parts to process across all runs (default: 9)")
-    parser.add_argument("--one-shot",          action="store_true", default=True,
-                        help="Stop after ONE chunk per run (default: True). Re-run to advance.")
+                        help="Total archive parts to process across all runs (default: 9)")
     parser.add_argument("--all",               action="store_true", default=False,
-                        help="Process all parts in one run (overrides --one-shot)")
+                        help="Process ALL parts in one run (default: stop after 1)")
     parser.add_argument("--device",            default="cuda")
     parser.add_argument("--seed",              type=int, default=DEFAULT_SEED)
-    parser.add_argument("--skip-delete",       action="store_true",
-                        help="Keep mp4s after extraction (for debugging)")
+    parser.add_argument("--skip-delete",       action="store_true")
     parser.add_argument("--finalize-only",     action="store_true",
-                        help="Skip extraction, only run final gender-stratified selection")
+                        help="Skip extraction, only build final gender-balanced training index")
     args = parser.parse_args()
 
     out_root    = Path(args.out)
@@ -411,9 +407,22 @@ def main() -> None:
     hdf5_path   = Path(args.hdf5)
     train_csv   = Path(args.training_csv)
     meta_path   = out_root / "vox2_meta.csv"
+    state_file  = out_root / ".pipeline_state.txt"
 
     for d in [out_root, archive_dir, hdf5_path.parent]:
         d.mkdir(parents=True, exist_ok=True)
+
+    # -- Read state (which part to process next) --
+    def _read_state() -> int:
+        if state_file.exists():
+            try:
+                return int(state_file.read_text().strip())
+            except Exception:
+                pass
+        return 1
+
+    def _write_state(next_idx: int) -> None:
+        state_file.write_text(str(next_idx))
 
     print("=" * 62)
     print("  VOIX Per-Chunk Extraction Pipeline (bias-free)")
@@ -425,95 +434,106 @@ def main() -> None:
     print(f"  HDF5              : {hdf5_path}")
     print("=" * 62)
 
-    # Load speaker metadata
+    # -- Load speaker metadata --
     if not meta_path.exists():
         print("Downloading vox2_meta.csv...")
         _hf_download("vox2_meta.csv", out_root)
     meta = _load_meta(meta_path)
     print(f"Loaded metadata: {len(meta)} dev speakers\n")
 
-    # Track progress via a simple state file
-    state_file = out_root / ".pipeline_state.txt"
-    def _read_state() -> int:
-        """Return index (1-based) of next part to process."""
-        if state_file.exists():
-            try: return int(state_file.read_text().strip())
-            except: pass
-        return 1
-
-    def _write_state(next_part: int) -> None:
-        state_file.write_text(str(next_part))
-
-    one_shot = args.one_shot and not args.all
-
     if not args.finalize_only:
-        parts = _list_parts()[:args.parts]
-        n_total, done_ids = _hdf5_info(hdf5_path)
-        next_part_idx = _read_state()
+        # Ordered list of all archive parts
+        all_parts = [
+            "vox2_dev_mp4_partaa", "vox2_dev_mp4_partab", "vox2_dev_mp4_partac",
+            "vox2_dev_mp4_partad", "vox2_dev_mp4_partae", "vox2_dev_mp4_partaf",
+            "vox2_dev_mp4_partag", "vox2_dev_mp4_partah", "vox2_dev_mp4_partai",
+        ]
+        parts = all_parts[:args.parts]
 
-        print(f"HDF5 starting state: {n_total:,} clips already extracted")
-        print(f"Resuming from part  : {next_part_idx}/{len(parts)}")
-        if one_shot:
-            print(f"Mode                : one-shot (will stop after 1 chunk, re-run to continue)")
+        n_total, _ = _hdf5_info(hdf5_path)
+        next_part_idx = _read_state()   # 1-based index of next part to run
+
+        print(f"HDF5 starting state : {n_total:,} clips")
+        print(f"Next part to run    : {next_part_idx}/{len(parts)}")
+        mode = "ALL parts in one run" if args.all else "ONE chunk per run (re-run to advance)"
+        print(f"Mode                : {mode}")
         print()
 
         if next_part_idx > len(parts):
-            print("All parts already processed. Running final selection only.")
+            print("All parts already processed. Running final selection.")
         else:
-            for i, part_name in enumerate(parts, 1):
-                if i < next_part_idx:
-                    continue   # already done in a previous run
-            print()
+            # Find the next part to process (1-based -> 0-based index)
+            part_name = parts[next_part_idx - 1]
+
             print(f"{'='*62}")
-            print(f"  Part {i}/{len(parts)}: {Path(part_name).name}")
+            print(f"  Processing part {next_part_idx}/{len(parts)}: {part_name}")
             print(f"  HDF5 total so far : {_hdf5_info(hdf5_path)[0]:,} clips")
             print(f"{'='*62}")
 
-            # 1. Download
+            # [1] Download
             print("\n[1/5] Download archive part")
             part_path = download_part(part_name, archive_dir)
 
-            # 2. Extract mp4s
+            # [2] Extract mp4s
             print("\n[2/5] Extract mp4s (streaming, no combined.tar)")
             extract_part(part_path, mp4_dir)
 
-            # 3. Delete archive immediately
-            print("\n[3/5] Delete archive")
+            # [3] Delete archive
+            print("\n[3/5] Delete archive to free disk")
             part_path.unlink(missing_ok=True)
             print(f"  Deleted {part_path.name}")
 
-            # 4. Build per-speaker quota index
+            # [4] Per-speaker quota index
             print("\n[4/5] Build per-speaker quota index")
             _, done_ids = _hdf5_info(hdf5_path)
             rows = build_speaker_quota_index(
                 mp4_dir, meta, done_ids,
                 clips_per_speaker=args.clips_per_speaker,
                 min_clips=args.min_clips,
-                seed=args.seed + i,
+                seed=args.seed + next_part_idx,
             )
-            if not rows:
-                print("  No new speakers -- skipping extraction for this part")
-            else:
+            if rows:
                 index_path = out_root / ".part_index.csv"
                 write_index(rows, index_path)
 
-                # 5. Run extraction
+                # [5] Feature extraction
                 print("\n[5/5] Feature extraction -> HDF5")
                 n_new = run_extraction(index_path, mp4_dir, hdf5_path, args.device)
                 print(f"  Extracted {n_new:,} clips this part")
                 index_path.unlink(missing_ok=True)
+            else:
+                print("  No new speakers in this part -- nothing to extract")
 
-            # 6. Delete mp4s
+            # Cleanup mp4s
             if not args.skip_delete:
                 print("\n[+] Cleanup mp4s")
                 delete_mp4s(mp4_dir)
+
+            # Advance state
+            _write_state(next_part_idx + 1)
+            print(f"\n  Part {next_part_idx} complete.")
+
+            # If --all, loop over remaining parts recursively
+            if args.all and next_part_idx < len(parts):
+                import subprocess as _sp
+                remaining_args = sys.argv[:]
+                _sp.run([sys.executable] + remaining_args)
+                return   # let the recursive call handle finalize
+
+            if next_part_idx < len(parts):
+                print()
+                print("=" * 62)
+                print(f"  Stopping after part {next_part_idx}/{len(parts)}.")
+                print(f"  Re-run to process part {next_part_idx + 1}: python scripts/run_pipeline.py")
+                print("=" * 62)
+                return   # don't run finalize yet -- more parts pending
 
     # Final: gender-stratified speaker selection
     n_total, _ = _hdf5_info(hdf5_path)
     print()
     print("=" * 62)
     print(f"  All parts done. HDF5 total: {n_total:,} clips")
-    print(f"  Final gender-stratified speaker selection...")
+    print(f"  Running final gender-stratified speaker selection...")
     print("=" * 62)
     finalize_training_index(
         hdf5_path, meta, train_csv,
