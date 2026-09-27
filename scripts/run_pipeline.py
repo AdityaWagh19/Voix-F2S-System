@@ -184,6 +184,14 @@ def extract_part(part_path: Path, mp4_dir: Path) -> int:
                 extra_len = int.from_bytes(header[28:30], "little")
                 comp_size = int.from_bytes(header[18:22], "little")
                 
+                # --- Validation against false positives ---
+                # A random PK\x03\x04 in compressed data will yield garbage sizes,
+                # causing a MemoryError if we try to read gigabytes into RAM.
+                if method not in (0, 8) or name_len == 0 or name_len > 1024 or comp_size > 50_000_000:
+                    # False positive, skip this signature
+                    search_buf = search_buf[idx+4:]
+                    continue
+                
                 total_entry_size = 30 + name_len + extra_len + comp_size
                 
                 if len(search_buf) < idx + total_entry_size:
@@ -201,8 +209,12 @@ def extract_part(part_path: Path, mp4_dir: Path) -> int:
                     file_data = search_buf[idx+30+name_len+extra_len : idx+total_entry_size]
                     
                     if method == 8:  # Deflated
-                        file_data = zlib.decompress(file_data, -15)
-                        
+                        try:
+                            file_data = zlib.decompress(file_data, -15)
+                        except zlib.error:
+                            search_buf = search_buf[idx+4:]
+                            continue
+                            
                     clean_name = name
                     if clean_name.startswith("dev/mp4/"):
                         clean_name = clean_name[len("dev/mp4/"):]
