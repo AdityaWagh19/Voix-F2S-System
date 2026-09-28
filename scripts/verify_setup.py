@@ -118,30 +118,43 @@ check("huggingface_hub", _check_hf)
 # ── ffmpeg ───────────────────────────────────────────────────
 print("\n-- ffmpeg --")
 def _check_ffmpeg():
-    r = subprocess.run(["ffmpeg", "-version"], capture_output=True, text=True)
-    assert r.returncode == 0, "ffmpeg not found on PATH"
-    line = r.stdout.split('\n')[0]
-    return line[:60]
-check("ffmpeg on PATH", _check_ffmpeg)
+    # Prefer imageio_ffmpeg bundled binary (no PATH needed)
+    try:
+        import imageio_ffmpeg
+        exe = imageio_ffmpeg.get_ffmpeg_exe()
+        return f"imageio_ffmpeg bundled: {exe.split(chr(92))[-1]}"
+    except ImportError:
+        pass
+    # Fallback: system PATH
+    import shutil
+    exe = shutil.which("ffmpeg")
+    assert exe, "ffmpeg not found. Run: pip install imageio-ffmpeg"
+    return f"system PATH: {exe}"
+check("ffmpeg (imageio_ffmpeg or PATH)", _check_ffmpeg)
 
 def _check_ffmpeg_encode():
-    import tempfile, numpy as np
-    # Write a tiny silent wav, check ffmpeg can read it
-    import soundfile as sf
+    import tempfile, numpy as np, soundfile as sf
+    try:
+        import imageio_ffmpeg
+        exe = imageio_ffmpeg.get_ffmpeg_exe()
+    except ImportError:
+        import shutil
+        exe = shutil.which("ffmpeg")
+    assert exe, "ffmpeg not found"
     with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
         wav_in = f.name
     with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
         wav_out = f.name
     sf.write(wav_in, np.zeros(16000, dtype=np.float32), 16000)
     r = subprocess.run(
-        ["ffmpeg", "-y", "-loglevel", "quiet", "-i", wav_in,
+        [exe, "-y", "-loglevel", "quiet", "-i", wav_in,
          "-ar", "16000", "-ac", "1", "-f", "wav", wav_out],
         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
     )
     ok = r.returncode == 0 and os.path.exists(wav_out)
     os.unlink(wav_in)
     if os.path.exists(wav_out): os.unlink(wav_out)
-    assert ok, "ffmpeg failed to process a test wav file"
+    assert ok, "ffmpeg encode test failed"
     return "encode test passed"
 check("ffmpeg wav encode test", _check_ffmpeg_encode)
 
@@ -162,9 +175,17 @@ def _check_voix_modules():
 check("voix.data + voix.models", _check_voix_modules)
 
 def _check_extract_script():
-    from scripts.extract_voxceleb import run_extraction, _ffmpeg_extract_audio
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "extract_voxceleb",
+        str(VOIX_ROOT / "scripts" / "extract_voxceleb.py")
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    assert hasattr(mod, "run_extraction"), "run_extraction not found"
+    assert hasattr(mod, "_ffmpeg_extract_audio"), "_ffmpeg_extract_audio not found"
     return "extract_voxceleb importable"
-check("scripts.extract_voxceleb", _check_extract_script)
+check("scripts/extract_voxceleb.py", _check_extract_script)
 
 # ── Paths & Disk ─────────────────────────────────────────────
 print("\n-- Paths & Disk --")

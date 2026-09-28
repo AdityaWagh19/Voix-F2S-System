@@ -123,10 +123,10 @@ def _hdf5_info(hdf5_path: Path) -> tuple[int, set[str]]:
         with h5py.File(str(hdf5_path), "r") as f:
             n = f["face_features"].shape[0] if "face_features" in f else 0
             ids: set[str] = set()
-            if "clip_ids" in f:
+            if "metadata" in f:
                 ids = set(
                     cid.decode() if isinstance(cid, bytes) else cid
-                    for cid in f["clip_ids"][:]
+                    for cid in f["metadata"][:]
                 )
             return n, ids
     except Exception:
@@ -381,12 +381,12 @@ def finalize_training_index(
     n_per_gender = speakers_total // 2
 
     with h5py.File(str(hdf5_path), "r") as f:
-        if "clip_ids" not in f:
-            print("[WARN] HDF5 has no clip_ids -- skipping final selection")
+        if "metadata" not in f:
+            print("[WARN] HDF5 has no metadata key -- skipping final selection")
             return 0
         clip_ids = [
             (cid.decode() if isinstance(cid, bytes) else cid)
-            for cid in f["clip_ids"][:]
+            for cid in f["metadata"][:]
         ]
 
     # Collect all speakers present in HDF5

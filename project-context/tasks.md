@@ -108,13 +108,15 @@ are available (local PC overnight run or Colab Pro single session).
 
 ## Phase 3 - Probabilistic CVAE Mapper (PENDING)
 
-### Week 5: CVAE Implementation
-- [ ] Implement encoder q_phi(z|e_f): 4-layer MLP with mu + log_sigma^2 heads
-- [ ] Implement decoder p_theta(e_s_hat|z): 2-layer MLP reconstruction head
-- [ ] Implement reparameterization trick
-- [ ] Implement KL loss with free bits (lambda_fb=0.5 nats)
-- [ ] Implement beta annealing schedule (linear warmup, 30% of steps)
-- [ ] Unit test: KL=0 during warmup, gradient through reparameterization
+### Week 5: CVAE Implementation (COMPLETE - 2026-09-28)
+- [x] Implement encoder q_phi(z|e_f): 4-layer MLP with mu + log_sigma^2 heads
+- [x] Implement decoder p_theta(e_s_hat|z): 2-layer MLP reconstruction head
+- [x] Implement reparameterization trick with numerical clamp
+- [x] Implement KL loss with free bits (lambda_fb=0.5 nats/dim)
+- [x] Implement beta annealing schedule (linear warmup over steps)
+- [x] Unit test: 8/8 tests passed in tests/test_cvae.py
+- [x] Full 50-epoch training on GTX 1650: cvae_best.pt saved
+- [x] Multi-voice candidate inference generator: scripts/generate_voices.py
 
 ### Week 6: StyleTTS2 Integration + Adapter
 - [ ] Install StyleTTS2 and verify inference pipeline locally or on Colab

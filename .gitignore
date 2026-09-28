@@ -46,3 +46,17 @@ Thumbs.db
 # Cache
 .cache/
 D:/temp/
+
+# Pretrained models & large caches
+checkpoints/models/
+checkpoints/mediapipe/
+checkpoints/speechbrain/
+checkpoints/styletts2/
+*.onnx
+*.task
+*.ckpt
+*.pt
+*.pth
+
+# Raw data
+data/raw/
