@@ -77,6 +77,76 @@ class VoixPipeline:
         # 5. Load Watermarker
         self.watermarker = AudioSealWatermarker(sample_rate=24000, device=str(self.device))
 
+        # 6. Lazy extractors for raw face image input
+        self._arcface = None
+        self._facemesh = None
+        self._demog = None
+        self._fusion = None
+
+    def extract_face_features(self, image_input: Union[str, Path, np.ndarray]) -> torch.Tensor:
+        """Extract and fuse facial features (ArcFace 512 + FaceMesh 32 + Demographics 16 -> 560-D) from an image.
+
+        Args:
+            image_input: File path to image or BGR numpy array.
+
+        Returns:
+            torch.Tensor: Fused 560-D face representation of shape (1, 560) on self.device.
+        """
+        import cv2
+        from voix.data.face_extractor import ArcFaceExtractor, FaceMeshExtractor
+        from voix.data.morphology import compute_craniofacial_ratios
+        from voix.data.demographics import SoftDemographicEstimator
+        from voix.models.fusion import FaceFusionLayer
+
+        if self._arcface is None:
+            self._arcface = ArcFaceExtractor(
+                device_id=0 if self.device.type == "cuda" else -1,
+                cache_dir="D:/voix/checkpoints",
+            )
+        if self._facemesh is None:
+            task_path = "D:/voix/checkpoints/mediapipe/face_landmarker.task"
+            self._facemesh = FaceMeshExtractor(
+                model_path=task_path if os.path.exists(task_path) else None,
+            )
+        if self._demog is None:
+            self._demog = SoftDemographicEstimator()
+        if self._fusion is None:
+            self._fusion = FaceFusionLayer().to(self.device)
+
+        if isinstance(image_input, (str, Path)):
+            img_bgr = cv2.imread(str(image_input))
+            if img_bgr is None:
+                raise FileNotFoundError(f"Failed to read image at {image_input}")
+        elif isinstance(image_input, np.ndarray):
+            img_bgr = image_input
+        else:
+            raise TypeError("image_input must be a file path or numpy array")
+
+        # 1. ArcFace 512-D identity
+        e_id = self._arcface.extract(img_bgr)
+        if e_id is None:
+            raise ValueError(f"No face detected in image: {image_input}")
+
+        # 2. FaceMesh 32-D morphology
+        img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+        landmarks = self._facemesh.extract(img_rgb)
+        if landmarks is not None:
+            e_geo = compute_craniofacial_ratios(landmarks)
+        else:
+            e_geo = np.zeros(32, dtype=np.float32)
+
+        # 3. Soft Demographics 16-D
+        e_demo = self._demog.estimate(e_id)
+
+        # 4. Fusion 560-D
+        with torch.no_grad():
+            e_id_t = torch.from_numpy(e_id).unsqueeze(0).to(self.device)
+            e_geo_t = torch.from_numpy(e_geo).unsqueeze(0).to(self.device)
+            e_demo_t = torch.from_numpy(e_demo).unsqueeze(0).to(self.device)
+            e_f = self._fusion(e_id_t, e_geo_t, e_demo_t)
+
+        return e_f
+
     @torch.no_grad()
     def generate(
         self,
@@ -108,17 +178,27 @@ class VoixPipeline:
             watermark = self.enable_watermarking
 
         # Process face input into 560-D normalized tensor
-        if isinstance(face_input, np.ndarray):
-            e_f = torch.from_numpy(face_input).float()
+        if isinstance(face_input, (str, Path)):
+            e_f = self.extract_face_features(str(face_input))
+            if self.scaler is not None:
+                e_f = (e_f - self.face_mean) / self.face_std
+        elif isinstance(face_input, np.ndarray):
+            if face_input.ndim == 3:  # HxWx3 image
+                e_f = self.extract_face_features(face_input)
+                if self.scaler is not None:
+                    e_f = (e_f - self.face_mean) / self.face_std
+            else:
+                e_f = torch.from_numpy(face_input).float()
+                if e_f.dim() == 1:
+                    e_f = e_f.unsqueeze(0)
+                e_f = e_f.to(self.device)
         elif isinstance(face_input, torch.Tensor):
             e_f = face_input.float()
+            if e_f.dim() == 1:
+                e_f = e_f.unsqueeze(0)
+            e_f = e_f.to(self.device)
         else:
-            raise TypeError("face_input must be a 560-D tensor or numpy array")
-
-        if e_f.dim() == 1:
-            e_f = e_f.unsqueeze(0)  # (1, 560)
-
-        e_f = e_f.to(self.device)
+            raise TypeError("face_input must be an image path, 560-D tensor, or numpy array")
 
         # 1. Generate K candidate speaker embeddings via CVAE
         e_s_candidates_norm = self.cvae.sample_voices(
