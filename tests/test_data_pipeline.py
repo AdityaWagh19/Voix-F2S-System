@@ -57,7 +57,7 @@ def _make_h5(path: str, n: int = 200, n_spk: int = 10) -> None:
     face  = rng.standard_normal((n, 560)).astype(np.float32)
     spk   = rng.standard_normal((n, 192)).astype(np.float32)
     ids   = np.repeat(np.arange(n_spk), n // n_spk).astype(np.int32)[:n]
-    meta  = np.array([f"id{i:05d}/vid/utt" for i in range(n)])
+    meta  = np.array([f"id{ids[i]:05d}/vid{i:05d}/utt{i:05d}" for i in range(n)])
     with h5py.File(path, "w") as f:
         f.create_dataset("face_features",    data=face)
         f.create_dataset("speaker_features", data=spk)

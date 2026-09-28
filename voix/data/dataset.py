@@ -414,3 +414,32 @@ class DatasetIntegrityAuditor:
         status = "PASS" if results["passed"] else "FAIL"
         print(f"\n  Overall: {status}")
         print("=" * 34)
+
+def make_speaker_split(
+    dataset: VoxCelebPairedDataset,
+    val_fraction: float = 0.2,
+    seed: int = 42,
+):
+    """Speaker-disjoint dataset splitter for backward compatibility."""
+    import random
+    from collections import defaultdict
+    from torch.utils.data import Subset
+
+    spk_to_indices = defaultdict(list)
+    for idx in range(len(dataset)):
+        _, _, spk_id = dataset[idx]
+        spk_to_indices[spk_id].append(idx)
+
+    unique_spks = sorted(spk_to_indices.keys())
+    rng = random.Random(seed)
+    rng.shuffle(unique_spks)
+
+    n_spk = len(unique_spks)
+    n_val = max(1, int(n_spk * val_fraction))
+    val_spks = set(unique_spks[:n_val])
+    train_spks = set(unique_spks[n_val:])
+
+    train_idx = [i for s in train_spks for i in spk_to_indices[s]]
+    val_idx   = [i for s in val_spks for i in spk_to_indices[s]]
+
+    return Subset(dataset, train_idx), Subset(dataset, val_idx)

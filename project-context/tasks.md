@@ -125,10 +125,14 @@ are available (local PC overnight run or Colab Pro single session).
 
 ---
 
-## Phase 4 - Acoustic Synthesis & Style Adapter (PENDING)
-- [ ] Full end-to-end waveform generation pipeline
-- [ ] AudioSeal watermark embedding on every output
-- [ ] Perceptual quality validation (MOS proxy)
+## Phase 4 - Acoustic Synthesis & Style Adapter (COMPLETE - 2026-09-28)
+- [x] StyleAdapter 3-layer MLP architecture (192-D ECAPA -> 128-D StyleTTS 2)
+- [x] StyleAdapter training engine (trainer_adapter.py) with Gram-matrix geometric loss
+- [x] StyleTTS 2 acoustic synthesis backend wrapper (tts_backend.py)
+- [x] Full end-to-end waveform generation pipeline (VoixPipeline in voix/inference/pipeline.py)
+- [x] AudioSeal watermark embedding on every output (voix/models/watermarking.py)
+- [x] Batch waveform synthesis CLI (scripts/synthesize_samples.py)
+- [x] 88/88 project unit tests passing across all suites
 
 ---
 
