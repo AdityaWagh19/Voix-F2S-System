@@ -58,3 +58,14 @@ class TestVoixPipeline:
             data, sr = sf.read(path)
             assert sr == 24000
             assert len(data) > 0
+    def test_generate_watermarked(self, pipeline):
+        face = torch.randn(560)
+        results = pipeline.generate(
+            face_input=face,
+            text="Watermarked audio test.",
+            num_voices=1,
+            watermark=True,
+        )
+        assert len(results) == 1
+        assert results[0]["is_watermarked"] is True
+        assert results[0]["waveform"].dim() == 2

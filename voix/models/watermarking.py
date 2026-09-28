@@ -41,6 +41,10 @@ class AudioSealWatermarker:
 
     def _load(self) -> None:
         """Lazy-load AudioSeal generator and detector models."""
+        import torch
+        import torch._dynamo
+        # Disable dynamo compile on Windows to avoid unicode escape path bugs in inductor
+        torch._dynamo.config.disable = True
         from audioseal import AudioSeal
 
         self._generator = AudioSeal.load_generator("audioseal_wm_16bits")

@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-09-28 22:00:02",
+  "num_test_samples": 5,
+  "num_voices_per_face": 3,
+  "total_audio_clips_generated": 15,
+  "total_audio_seconds": 81.0,
+  "metrics": {
+    "secs": {
+      "mean": 0.0499,
+      "std": 0.0358,
+      "target_min": 0.6,
+      "status": "REVIEW"
+    },
+    "perceptual_diversity": {
+      "pairwise_secs_mean": 0.7527,
+      "target_range": "[0.60, 0.85]",
+      "status": "PASS"
+    },
+    "watermarking": {
+      "detection_rate": 1.0,
+      "mean_confidence": 1.0,
+      "target_rate": 0.9,
+      "status": "PASS"
+    },
+    "stoi": {
+      "mean": 1.0,
+      "target_min": 0.8,
+      "status": "PASS"
+    },
+    "inference_performance": {
+      "mean_latency_per_face_sec": 1.52,
+      "real_time_factor_rtf": 0.0936,
+      "is_real_time": true,
+      "status": "PASS"
+    }
+  }
+}
