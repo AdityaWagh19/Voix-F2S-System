@@ -42,6 +42,7 @@ class StyleTTS2Backend(nn.Module):
     STYLE_DIM: int = 128
     SAMPLE_RATE: int = 24000
     _SHARED_MODEL = None
+    _BASE_REF = None
 
     def __init__(
         self,
@@ -85,11 +86,15 @@ class StyleTTS2Backend(nn.Module):
                 self._model = StyleTTS2Backend._SHARED_MODEL
             else:
                 from styletts2 import tts
+                from cached_path import cached_path
                 StyleTTS2Backend._SHARED_MODEL = tts.StyleTTS2(
                     model_checkpoint_path=self.checkpoint_path,
                     config_path=self.config_path,
                 )
                 self._model = StyleTTS2Backend._SHARED_MODEL
+                target_path = cached_path(tts.DEFAULT_TARGET_VOICE_URL)
+                StyleTTS2Backend._BASE_REF = self._model.compute_style(target_path)
+
             self._use_fallback = False
         except (ImportError, Exception):
             # Fallback to internal formant synthesis for test/offline environments
@@ -104,6 +109,7 @@ class StyleTTS2Backend(nn.Module):
         alpha: float = 0.3,
         beta: float = 0.7,
         duration_scale: float = 1.0,
+        diffusion_steps: int = 10,
     ) -> torch.Tensor:
         """Synthesize 24 kHz speech waveform from text and style vector.
 
@@ -132,22 +138,49 @@ class StyleTTS2Backend(nn.Module):
 
         if not self._use_fallback and self._model is not None:
             try:
-                # Expand 128-D style into 256-D style + predictor conditioning
-                ref_s = torch.cat([style, style], dim=-1).to(self._model.device)
+                # Modulate the 128-D timbre channel with the predicted style while preserving prosody
+                if StyleTTS2Backend._BASE_REF is None:
+                    from styletts2 import tts
+                    from cached_path import cached_path
+                    target_path = cached_path(tts.DEFAULT_TARGET_VOICE_URL)
+                    StyleTTS2Backend._BASE_REF = self._model.compute_style(target_path)
+
+                ref_s = StyleTTS2Backend._BASE_REF.clone().to(self._model.device)
+                style_proj = style.to(self._model.device)
+                if style_proj.dim() == 1:
+                    style_proj = style_proj.unsqueeze(0)
+                ref_s[:, :128] = style_proj
+
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+
                 with torch.no_grad():
                     wav = self._model.inference(
                         text,
                         ref_s=ref_s,
                         alpha=alpha,
                         beta=beta,
+                        diffusion_steps=diffusion_steps,
                     )
-                    if not isinstance(wav, torch.Tensor):
-                        wav = torch.from_numpy(wav)
-                    if wav.dim() == 1:
-                        wav = wav.unsqueeze(0)
-                    return wav.to(self.device).float()
-            except Exception:
-                pass
+
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+
+                if not isinstance(wav, torch.Tensor):
+                    wav = torch.from_numpy(wav)
+                if wav.dim() == 1:
+                    wav = wav.unsqueeze(0)
+
+                # Peak-normalize to 0.90 for clear, loud, studio-quality listening volume
+                peak = wav.abs().max()
+                if peak > 1e-4:
+                    wav = (wav / peak) * 0.90
+
+                return wav.to(self.device).float()
+            except Exception as e:
+                import traceback
+                print(f"[StyleTTS2Backend] Neural vocoder error: {e}")
+                traceback.print_exc()
 
         # Deterministic acoustic waveform synthesizer fallback
         return self._synthesize_fallback(text, style, duration_scale)

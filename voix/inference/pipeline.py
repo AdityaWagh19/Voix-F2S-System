@@ -215,8 +215,14 @@ class VoixPipeline:
 
         results = []
 
+        # Free cached VRAM from feature extraction
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
         # 2. For each candidate voice, project style and synthesize speech
         for k in range(num_voices):
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
             e_s_k = e_s_candidates_norm[k].unsqueeze(0)  # (1, 192)
             e_s_raw_k = e_s_candidates_raw[k]
 
