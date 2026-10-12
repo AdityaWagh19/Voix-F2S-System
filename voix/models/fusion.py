@@ -18,12 +18,21 @@ Design decisions (from Phase 2 plan, Section 3):
     craniofacial ratios: range ~0.5-5.0; demographics: range 0.0-1.0).
   - GELU activation (not ReLU) preserves small negative activations,
     which carry meaningful information in normalized embedding spaces.
+  - Weights are NOT auto-loaded at import time. Call load_canonical_weights()
+    explicitly to load a saved checkpoint.
 """
 
 from __future__ import annotations
 
+import os
+from pathlib import Path
+from typing import Optional
+
 import torch
 import torch.nn as nn
+from voix.utils.seed import set_global_seed
+
+DEFAULT_FUSION_CHECKPOINT = Path("D:/voix/checkpoints/face_fusion.pt")
 
 
 class FaceFusionLayer(nn.Module):
@@ -34,19 +43,6 @@ class FaceFusionLayer(nn.Module):
         geo_dim:  Dimensionality of craniofacial ratio vector.  Default: 32.
         demo_dim: Dimensionality of demographic prior vector.   Default: 16.
         out_dim:  Output dimensionality. Default: 560 (= id_dim + geo_dim + demo_dim).
-
-    Shape:
-        - e_id:   (B, 512) or (512,) for single-sample inference
-        - e_geo:  (B, 32)  or (32,)
-        - e_demo: (B, 16)  or (16,)
-        - output: (B, 560) or (560,)
-
-    Example::
-        fusion = FaceFusionLayer()
-        e_id   = torch.randn(8, 512)
-        e_geo  = torch.randn(8, 32)
-        e_demo = torch.randn(8, 16)
-        out    = fusion(e_id, e_geo, e_demo)  # (8, 560)
     """
 
     ID_DIM:   int = 512
@@ -63,13 +59,36 @@ class FaceFusionLayer(nn.Module):
     ) -> None:
         super().__init__()
         in_dim = id_dim + geo_dim + demo_dim
+
+        # Ensure deterministic canonical initialization
+        set_global_seed(42)
         self.proj = nn.Linear(in_dim, out_dim, bias=True)
         self.norm = nn.LayerNorm(out_dim)
         self.act  = nn.GELU()
 
-        # Freeze flag — set True during CVAE training to prevent
-        # gradients from flowing back into the fusion layer weights
+        # NOTE: Weights are intentionally NOT auto-loaded here.
+        # Callers must explicitly call load_canonical_weights(path) to load
+        # a saved checkpoint. This prevents import-time filesystem side effects.
         self._frozen = False
+
+    def load_canonical_weights(self, path: str | None = None) -> None:
+        """Explicitly load saved canonical weights from a checkpoint file.
+
+        Args:
+            path: Path to the .pt file containing state_dict.
+                  If None, uses DEFAULT_FUSION_CHECKPOINT.
+
+        Raises:
+            FileNotFoundError: If the checkpoint file does not exist.
+        """
+        ckpt_path = path or str(DEFAULT_FUSION_CHECKPOINT)
+        if not os.path.exists(ckpt_path):
+            raise FileNotFoundError(
+                f"FaceFusionLayer checkpoint not found: {ckpt_path}. "
+                "Run the fusion pre-training step or provide a valid path."
+            )
+        state = torch.load(ckpt_path, map_location="cpu", weights_only=True)
+        self.load_state_dict(state)
 
     def forward(
         self,
@@ -80,9 +99,9 @@ class FaceFusionLayer(nn.Module):
         """Fuse three face representations into a single 560-D vector.
 
         Args:
-            e_id:   ArcFace identity embedding.
-            e_geo:  Craniofacial morphological ratio vector.
-            e_demo: Soft demographic prior distribution.
+            e_id:   ArcFace identity embedding (..., 512).
+            e_geo:  Craniofacial morphological ratio vector (..., 32).
+            e_demo: Soft demographic prior distribution (..., 16).
 
         Returns:
             Fused face representation of shape (..., out_dim).

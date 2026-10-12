@@ -1,0 +1,22 @@
+{
+  "name": "A_baseline",
+  "checkpoint": "results/checkpoints/A_baseline_best.pt",
+  "model_type": "regressor",
+  "face_type": "morphology",
+  "n_params": 634432,
+  "timestamp": "2026-10-12 19:11:06",
+  "elapsed_s": 178.0,
+  "metrics": {
+    "val_cos": 0.13722,
+    "recall_at_1": 0.001,
+    "recall_at_3": 0.0025,
+    "recall_at_10": 0.005,
+    "gender_accuracy": 0.62645,
+    "secs": 0.02069,
+    "secs_std": 0.06725,
+    "n_synthesized": 10,
+    "wer": -1.0,
+    "fad": -1.0,
+    "mos_n": -1.0
+  }
+}

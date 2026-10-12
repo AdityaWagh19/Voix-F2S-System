@@ -150,8 +150,10 @@ def compute_craniofacial_ratios(landmarks: np.ndarray) -> np.ndarray:
     # 6: Nose bridge length / IOC
     features[6] = _dist(landmarks, BROW_LEFT, NOSE_TIP) / ioc
 
-    # 7: Inter-ocular distance / IOC (sanity check = 1.0)
-    features[7] = ioc / ioc  # == 1.0 always
+    # 7: Bizygomatic (cheek-to-cheek) width / IOC -- replaces constant IOC/IOC
+    # Bizygomatic width predicts vocal tract size better than a constant (cf. Feinberg 2005)
+    bizygomatic = _dist(landmarks, LEFT_CHEEK, RIGHT_CHEEK)
+    features[7] = bizygomatic / (ioc + 1e-9)
 
     # 8: Inner eye separation / IOC
     features[8] = _dist(landmarks, EYE_LEFT_INNER, EYE_RIGHT_INNER) / ioc
@@ -228,3 +230,4 @@ def compute_craniofacial_ratios(landmarks: np.ndarray) -> np.ndarray:
     features[31] = float(landmarks[NOSE_TIP][2]) - float(landmarks[NOSE_BRIDGE][2])
 
     return features.astype(np.float32)
+

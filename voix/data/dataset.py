@@ -156,6 +156,12 @@ class VoxCelebPairedDataset(Dataset):
         split_indices: dict[str, list[int]] = defaultdict(list)
         spk_set: set[str] = set()
 
+        # Phase 2: prefer clean_index.csv (misaligned clips removed) over training_index.csv
+        import os as _os
+        _clean = _os.path.join(_os.path.dirname(index_csv), "clean_index.csv")
+        if _os.path.exists(_clean) and index_csv.endswith("training_index.csv"):
+            print(f"[VoxCelebPairedDataset] Using clean_index.csv (misaligned clips removed)")
+            index_csv = _clean
         with open(index_csv, newline="", encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 split_indices[row["split"]].append(int(row["hdf5_index"]))
@@ -305,6 +311,85 @@ class VoxCelebPairedDataset(Dataset):
 # ---------------------------------------------------------------------------
 # Dataloader factory
 # ---------------------------------------------------------------------------
+
+
+
+class WeightedSpeakerSampler(torch.utils.data.Sampler):
+    """Balanced per-speaker sampler for CVAE training.
+
+    Caps each speaker at max_per_speaker clips per epoch and upsamples
+    speakers below min_per_speaker to ensure all identities contribute
+    meaningful gradients. This directly addresses the training imbalance
+    where speakers with 47 clips dominate speakers with 10 clips.
+
+    Args:
+        dataset: A VoxCelebPairedDataset instance.
+        max_per_speaker: Maximum clips sampled per speaker per epoch. Default: 20.
+        min_per_speaker: Speakers below this are upsampled by repetition. Default: 5.
+        seed: Random seed for reproducibility.
+    """
+
+    def __init__(
+        self,
+        dataset: "VoxCelebPairedDataset",
+        max_per_speaker: int = 20,
+        min_per_speaker: int = 5,
+        seed: int = 42,
+    ) -> None:
+        self.dataset = dataset
+        self.max_per_speaker = max_per_speaker
+        self.min_per_speaker = min_per_speaker
+        self._rng = np.random.default_rng(seed)
+
+        # Build per-speaker index lists from dataset.
+        # Use _spk_ids (integer per-sample speaker labels) — always populated
+        # in both in_memory and lazy-load modes of VoxCelebPairedDataset.
+        self._speaker_to_indices: dict[str, list[int]] = defaultdict(list)
+        spk_ids = getattr(dataset, '_spk_ids', None)
+        if spk_ids is not None and len(spk_ids) == len(dataset):
+            # Primary path: use integer speaker IDs (always available)
+            for local_i, spk_id in enumerate(spk_ids):
+                self._speaker_to_indices[str(spk_id)].append(local_i)
+        else:
+            # Fallback: use _row_spk with global H5 index mapping (lazy mode)
+            row_spk = getattr(dataset, '_row_spk', [])
+            _indices = getattr(dataset, '_indices', None)
+            for local_i in range(len(dataset)):
+                global_i = _indices[local_i] if _indices is not None else local_i
+                spk_id = row_spk[global_i] if global_i < len(row_spk) else str(local_i)
+                self._speaker_to_indices[spk_id].append(local_i)
+
+    def __iter__(self):
+        indices = []
+        for spk_id, spk_indices in self._speaker_to_indices.items():
+            n = len(spk_indices)
+            if n > self.max_per_speaker:
+                # Randomly downsample to max_per_speaker
+                chosen = self._rng.choice(spk_indices, size=self.max_per_speaker, replace=False).tolist()
+            elif n < self.min_per_speaker:
+                # Upsample by repeating (with random ordering)
+                repeats = int(np.ceil(self.min_per_speaker / n))
+                pool = (spk_indices * repeats)[:self.min_per_speaker]
+                chosen = self._rng.permutation(pool).tolist()
+            else:
+                chosen = self._rng.permutation(spk_indices).tolist()
+            indices.extend(chosen)
+
+        # Shuffle globally so speakers interleave across batches
+        self._rng.shuffle(indices)
+        return iter(indices)
+
+    def __len__(self) -> int:
+        total = 0
+        for spk_indices in self._speaker_to_indices.values():
+            n = len(spk_indices)
+            if n > self.max_per_speaker:
+                total += self.max_per_speaker
+            elif n < self.min_per_speaker:
+                total += self.min_per_speaker
+            else:
+                total += n
+        return total
 
 def build_dataloader(
     dataset,

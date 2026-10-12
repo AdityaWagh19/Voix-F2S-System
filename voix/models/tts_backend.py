@@ -1,4 +1,4 @@
-"""StyleTTS 2 Acoustic Synthesis Backend for VOIX (Phase 4).
+﻿"""StyleTTS 2 Acoustic Synthesis Backend for VOIX (Phase 4).
 
 Wraps the frozen StyleTTS 2 neural text-to-speech synthesis model.
 Receives text prompt and a predicted 128-D style conditioning vector s_hat
@@ -27,6 +27,43 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
+
+def _lufs_normalize(wav: "torch.Tensor", sample_rate: int, target_lufs: float = -23.0) -> "torch.Tensor":
+    """Normalize audio to target integrated loudness (EBU R128 / ITU-R BS.1770-4).
+
+    Replaces destructive peak normalization. Preserves voice dynamics while
+    ensuring consistent perceptual loudness across all generated voices.
+    Falls back to soft peak normalization if pyloudnorm is not installed.
+
+    Args:
+        wav: Float32 tensor of shape (1, T) or (T,).
+        sample_rate: Audio sample rate in Hz.
+        target_lufs: Target loudness in LUFS. -23.0 is the EBU R128 broadcast standard.
+
+    Returns:
+        Loudness-normalized float32 tensor of same shape as input.
+    """
+    import numpy as _np
+    wav_np = wav.squeeze().cpu().numpy().astype(_np.float64)
+    try:
+        import pyloudnorm as pyln
+        meter = pyln.Meter(sample_rate)
+        loudness = meter.integrated_loudness(wav_np)
+        if not _np.isfinite(loudness) or loudness < -70.0:
+            # Signal too quiet to measure (near-silence) — use peak fallback
+            peak = float(_np.abs(wav_np).max())
+            if peak > 1e-4:
+                wav_np = wav_np / peak * 0.85
+        else:
+            wav_np = pyln.normalize.loudness(wav_np, loudness, target_lufs)
+            wav_np = _np.clip(wav_np, -1.0, 1.0)
+    except ImportError:
+        # pyloudnorm not installed — soft peak normalization as fallback
+        peak = float(_np.abs(wav_np).max())
+        if peak > 1e-4:
+            wav_np = wav_np / peak * 0.85
+    return torch.from_numpy(wav_np.astype(_np.float32)).unsqueeze(0)
+
 class StyleTTS2Backend(nn.Module):
     """Frozen StyleTTS 2 text-to-speech synthesis wrapper.
 
@@ -43,6 +80,12 @@ class StyleTTS2Backend(nn.Module):
     SAMPLE_RATE: int = 24000
     _SHARED_MODEL = None
     _BASE_REF = None
+    _MALE_REF = None
+    _FEMALE_REF = None
+    # Anchor paths loaded from configs/environment.yaml via load_anchors_from_config().
+    # Never hardcoded — call that classmethod before first synthesize().
+    _MALE_REF_PATH: str | None = None
+    _FEMALE_REF_PATH: str | None = None
 
     def __init__(
         self,
@@ -71,6 +114,25 @@ class StyleTTS2Backend(nn.Module):
         self._loaded: bool = False
         self._use_fallback: bool = not self.use_neural
 
+    @classmethod
+    def load_anchors_from_config(cls, config: dict | None = None) -> None:
+        """Populate anchor paths from configs/environment.yaml.
+
+        Must be called once before the first synthesize() call if you want
+        demographic-matched reference anchors. Safe to call multiple times.
+        The pipeline calls this automatically during __init__.
+        """
+        if config is None:
+            from voix.utils.config import load_config
+            config = load_config()
+        librispeech_root = config.get("paths", {}).get("librispeech_root", "")
+        anchors = config.get("anchors", {})
+        male_rel   = anchors.get("male_mid", "")
+        female_rel = anchors.get("female_young", "")
+        cls._MALE_REF_PATH   = os.path.join(librispeech_root, male_rel)   if male_rel   else None
+        cls._FEMALE_REF_PATH = os.path.join(librispeech_root, female_rel) if female_rel else None
+
+
     def load(self) -> None:
         """Load pretrained StyleTTS 2 checkpoint and freeze all parameters."""
         if self._loaded:
@@ -87,11 +149,27 @@ class StyleTTS2Backend(nn.Module):
             else:
                 from styletts2 import tts
                 from cached_path import cached_path
-                StyleTTS2Backend._SHARED_MODEL = tts.StyleTTS2(
-                    model_checkpoint_path=self.checkpoint_path,
-                    config_path=self.config_path,
-                )
+                if self.device.type == "cpu":
+                    orig_is_avail = torch.cuda.is_available
+                    torch.cuda.is_available = lambda: False
+                    try:
+                        StyleTTS2Backend._SHARED_MODEL = tts.StyleTTS2(
+                            model_checkpoint_path=self.checkpoint_path,
+                            config_path=self.config_path,
+                        )
+                    finally:
+                        torch.cuda.is_available = orig_is_avail
+                else:
+                    StyleTTS2Backend._SHARED_MODEL = tts.StyleTTS2(
+                        model_checkpoint_path=self.checkpoint_path,
+                        config_path=self.config_path,
+                    )
                 self._model = StyleTTS2Backend._SHARED_MODEL
+                import os
+                if os.path.exists(StyleTTS2Backend._MALE_REF_PATH):
+                    StyleTTS2Backend._MALE_REF = self._model.compute_style(StyleTTS2Backend._MALE_REF_PATH)
+                if os.path.exists(StyleTTS2Backend._FEMALE_REF_PATH):
+                    StyleTTS2Backend._FEMALE_REF = self._model.compute_style(StyleTTS2Backend._FEMALE_REF_PATH)
                 target_path = cached_path(tts.DEFAULT_TARGET_VOICE_URL)
                 StyleTTS2Backend._BASE_REF = self._model.compute_style(target_path)
 
@@ -106,16 +184,22 @@ class StyleTTS2Backend(nn.Module):
         self,
         text: str,
         style: torch.Tensor,
-        alpha: float = 0.3,
-        beta: float = 0.7,
+        gender: int = 1,
+        blend_weight: float = 0.75,
+        alpha: float = 0.70,
+        beta: float = 0.30,
         duration_scale: float = 1.0,
-        diffusion_steps: int = 10,
+        diffusion_steps: int = 20,
+        anchor_path: str | None = None,
+        loudness_lufs: float = -23.0,
     ) -> torch.Tensor:
         """Synthesize 24 kHz speech waveform from text and style vector.
 
         Args:
             text: Phoneme string or text prompt to speak.
             style: 128-D style conditioning vector (128,) or (1, 128).
+            gender: Demographic gender (1 = Male ~125 Hz, 0 = Female ~215 Hz).
+            blend_weight: Face biometric timbre modulation weight (default: 0.35).
             alpha: Style diffusion weight factor (default: 0.3).
             beta: Prosody transfer factor (default: 0.7).
             duration_scale: Speech pace multiplier.
@@ -138,18 +222,31 @@ class StyleTTS2Backend(nn.Module):
 
         if not self._use_fallback and self._model is not None:
             try:
-                # Modulate the 128-D timbre channel with the predicted style while preserving prosody
-                if StyleTTS2Backend._BASE_REF is None:
-                    from styletts2 import tts
-                    from cached_path import cached_path
-                    target_path = cached_path(tts.DEFAULT_TARGET_VOICE_URL)
-                    StyleTTS2Backend._BASE_REF = self._model.compute_style(target_path)
+                # Select reference anchor. Priority:
+                # 1. Explicit anchor_path param (age-aware selection from pipeline)
+                # 2. Config-loaded gender anchor (male_mid / female_young)
+                # 3. StyleTTS2 default base reference
+                if anchor_path and os.path.exists(anchor_path):
+                    anchor = self._model.compute_style(anchor_path)
+                elif gender == 1 and StyleTTS2Backend._MALE_REF is not None:
+                    anchor = StyleTTS2Backend._MALE_REF
+                elif gender == 0 and StyleTTS2Backend._FEMALE_REF is not None:
+                    anchor = StyleTTS2Backend._FEMALE_REF
+                else:
+                    if StyleTTS2Backend._BASE_REF is None:
+                        from styletts2 import tts
+                        from cached_path import cached_path
+                        target_path = cached_path(tts.DEFAULT_TARGET_VOICE_URL)
+                        StyleTTS2Backend._BASE_REF = self._model.compute_style(target_path)
+                    anchor = StyleTTS2Backend._BASE_REF
 
-                ref_s = StyleTTS2Backend._BASE_REF.clone().to(self._model.device)
+                ref_s = anchor.clone().to(self._model.device)
                 style_proj = style.to(self._model.device)
                 if style_proj.dim() == 1:
                     style_proj = style_proj.unsqueeze(0)
-                ref_s[:, :128] = style_proj
+
+                # Smoothly blend face biometric style into demographic acoustic manifold
+                ref_s[:, :128] = (1.0 - blend_weight) * anchor[:, :128].to(self._model.device) + blend_weight * style_proj
 
                 if torch.cuda.is_available():
                     torch.cuda.empty_cache()
@@ -171,10 +268,9 @@ class StyleTTS2Backend(nn.Module):
                 if wav.dim() == 1:
                     wav = wav.unsqueeze(0)
 
-                # Peak-normalize to 0.90 for clear, loud, studio-quality listening volume
-                peak = wav.abs().max()
-                if peak > 1e-4:
-                    wav = (wav / peak) * 0.90
+                # EBU R128 loudness normalization — replaces peak normalization.
+                # Peak-norm amplifies noise floor; LUFS preserves dynamics.
+                wav = _lufs_normalize(wav, self.sample_rate, target_lufs=loudness_lufs)
 
                 return wav.to(self.device).float()
             except Exception as e:
@@ -231,3 +327,4 @@ class StyleTTS2Backend(nn.Module):
             waveform = (waveform / peak) * 0.85
 
         return waveform.unsqueeze(0).float()
+

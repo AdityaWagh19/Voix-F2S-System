@@ -20,8 +20,8 @@ class TestCVAEArchitecture:
         assert total_params > 500_000, f"Expected >500k parameters, got {total_params}"
 
         # Verify encoder heads
-        assert model.encoder.fc_mu.out_features == 192
-        assert model.encoder.fc_logvar.out_features == 192
+        assert model.prior_net.fc_mu.out_features == 192
+        assert model.prior_net.fc_logvar.out_features == 192
 
     def test_forward_pass_training_mode(self):
         model = CVAE(face_dim=560, speaker_dim=192, latent_dim=192)
@@ -29,16 +29,24 @@ class TestCVAEArchitecture:
 
         B = 16
         e_f = torch.randn(B, 560)
-        out = model(e_f)
+        e_s = torch.randn(B, 192)
 
-        assert isinstance(out, CVAEOutput)
-        assert out.e_s_hat.shape == (B, 192)
-        assert out.mu.shape == (B, 192)
-        assert out.logvar.shape == (B, 192)
-        assert out.z.shape == (B, 192)
+        # Prior-only forward
+        out_prior = model(e_f)
+        assert isinstance(out_prior, CVAEOutput)
+        assert out_prior.e_s_hat.shape == (B, 192)
+        assert out_prior.mu.shape == (B, 192)
+        assert out_prior.logvar.shape == (B, 192)
+        assert out_prior.z.shape == (B, 192)
+        assert not torch.allclose(out_prior.z, out_prior.mu, atol=1e-5)
 
-        # Reparameterization noise should be present during training
-        assert not torch.allclose(out.z, out.mu, atol=1e-5)
+        # Joint posterior forward (True CVAE training)
+        out_joint = model(e_f, e_s=e_s)
+        assert isinstance(out_joint, CVAEOutput)
+        assert out_joint.e_s_hat.shape == (B, 192)
+        assert out_joint.mu.shape == (B, 192)
+        assert out_joint.prior_mu.shape == (B, 192)
+        assert not torch.allclose(out_joint.z, out_joint.mu, atol=1e-5)
 
     def test_forward_pass_deterministic_mode(self):
         model = CVAE(face_dim=560, speaker_dim=192, latent_dim=192)
@@ -78,9 +86,13 @@ class TestCVAEArchitecture:
         e_f = torch.randn(B, 560, requires_grad=True)
         e_s_gt = torch.randn(B, 192)
 
-        out = model(e_f)
+        out = model(e_f, e_s=e_s_gt)
         recon_loss = 1.0 - torch.nn.functional.cosine_similarity(out.e_s_hat, e_s_gt).mean()
-        kl_loss = -0.5 * torch.mean(1 + out.logvar - out.mu.pow(2) - out.logvar.exp())
+        kl_loss = 0.5 * torch.mean(
+            out.prior_logvar - out.logvar
+            + (out.logvar.exp() + (out.mu - out.prior_mu).pow(2)) / out.prior_logvar.exp()
+            - 1.0
+        )
         loss = recon_loss + kl_loss
 
         loss.backward()
@@ -104,7 +116,6 @@ class TestCVAEArchitecture:
 
         # Candidates must be distinct
         pairwise_diffs = torch.cdist(candidates, candidates)
-        # Upper triangle without diagonal
         mask = torch.triu(torch.ones(K, K, dtype=torch.bool), diagonal=1)
         min_dist = pairwise_diffs[mask].min().item()
         assert min_dist > 0.05, f"Candidate voices collapsed! Min dist: {min_dist}"
@@ -130,12 +141,14 @@ class TestCVAEArchitecture:
         e_f = torch.randn(B, 560)
         e_s = torch.randn(B, 192)
 
-        out = model(e_f)
+        out = model(e_f, e_s=e_s)
         total_loss, metrics = cvae_loss_fn(
             e_s_hat=out.e_s_hat,
             e_s=e_s,
             mu=out.mu,
             logvar=out.logvar,
+            prior_mu=out.prior_mu,
+            prior_logvar=out.prior_logvar,
             step=500,
         )
 

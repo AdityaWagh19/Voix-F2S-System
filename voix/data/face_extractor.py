@@ -56,26 +56,35 @@ class ArcFaceExtractor:
         self._app.prepare(ctx_id=self.device_id, det_size=(640, 640))
         self._loaded = True
 
-    def extract(self, image_bgr: np.ndarray) -> Optional[np.ndarray]:
-        """Extract 512-D L2-normalized identity embedding from a BGR image.
+    def extract_full(
+        self,
+        image_bgr: np.ndarray,
+    ) -> tuple[Optional[np.ndarray], Optional[int], Optional[float]]:
+        """Extract 512-D embedding, gender (0=F, 1=M), and age (years) from a BGR image.
 
         Args:
-            image_bgr: HxWx3 uint8 BGR numpy array (OpenCV convention).
+            image_bgr: HxWx3 uint8 BGR numpy array.
 
         Returns:
-            Float32 array of shape (512,) with L2 norm == 1.0,
-            or None if no face is detected in the image.
+            Tuple of (embedding, gender, age) or (None, None, None) if no face detected.
         """
         if not self._loaded:
             self._load()
 
         faces = self._app.get(image_bgr)
         if not faces:
-            return None
+            return None, None, None
 
         face = max(faces, key=lambda f: (f.bbox[2] - f.bbox[0]) * (f.bbox[3] - f.bbox[1]))
         embedding = face.normed_embedding.astype(np.float32)
-        return embedding
+        gender = int(face.gender) if hasattr(face, "gender") else None
+        age = float(face.age) if hasattr(face, "age") else None
+        return embedding, gender, age
+
+    def extract(self, image_bgr: np.ndarray) -> Optional[np.ndarray]:
+        """Extract 512-D L2-normalized identity embedding from a BGR image."""
+        emb, _, _ = self.extract_full(image_bgr)
+        return emb
 
     def extract_batch(self, images_bgr: list[np.ndarray]) -> list[Optional[np.ndarray]]:
         """Extract embeddings from a list of BGR images."""

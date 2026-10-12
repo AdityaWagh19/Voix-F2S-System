@@ -1,0 +1,152 @@
+[
+  {
+    "ep": 1,
+    "train_cos": 0.13892,
+    "val_cos": 0.13655
+  },
+  {
+    "ep": 2,
+    "train_cos": 0.14579,
+    "val_cos": 0.13579
+  },
+  {
+    "ep": 3,
+    "train_cos": 0.14654,
+    "val_cos": 0.13588
+  },
+  {
+    "ep": 4,
+    "train_cos": 0.14682,
+    "val_cos": 0.13586
+  },
+  {
+    "ep": 5,
+    "train_cos": 0.147,
+    "val_cos": 0.13538
+  },
+  {
+    "ep": 6,
+    "train_cos": 0.14709,
+    "val_cos": 0.13593
+  },
+  {
+    "ep": 7,
+    "train_cos": 0.14728,
+    "val_cos": 0.136
+  },
+  {
+    "ep": 8,
+    "train_cos": 0.14739,
+    "val_cos": 0.13567
+  },
+  {
+    "ep": 9,
+    "train_cos": 0.14747,
+    "val_cos": 0.13572
+  },
+  {
+    "ep": 10,
+    "train_cos": 0.14751,
+    "val_cos": 0.13527
+  },
+  {
+    "ep": 11,
+    "train_cos": 0.14758,
+    "val_cos": 0.13555
+  },
+  {
+    "ep": 12,
+    "train_cos": 0.14765,
+    "val_cos": 0.13576
+  },
+  {
+    "ep": 13,
+    "train_cos": 0.14768,
+    "val_cos": 0.13564
+  },
+  {
+    "ep": 14,
+    "train_cos": 0.14778,
+    "val_cos": 0.13515
+  },
+  {
+    "ep": 15,
+    "train_cos": 0.14779,
+    "val_cos": 0.13524
+  },
+  {
+    "ep": 16,
+    "train_cos": 0.14782,
+    "val_cos": 0.13512
+  },
+  {
+    "ep": 17,
+    "train_cos": 0.14788,
+    "val_cos": 0.13562
+  },
+  {
+    "ep": 18,
+    "train_cos": 0.1479,
+    "val_cos": 0.13549
+  },
+  {
+    "ep": 19,
+    "train_cos": 0.14796,
+    "val_cos": 0.13564
+  },
+  {
+    "ep": 20,
+    "train_cos": 0.14801,
+    "val_cos": 0.13534
+  },
+  {
+    "ep": 21,
+    "train_cos": 0.14807,
+    "val_cos": 0.13508
+  },
+  {
+    "ep": 22,
+    "train_cos": 0.14813,
+    "val_cos": 0.13544
+  },
+  {
+    "ep": 23,
+    "train_cos": 0.14815,
+    "val_cos": 0.13517
+  },
+  {
+    "ep": 24,
+    "train_cos": 0.14818,
+    "val_cos": 0.13539
+  },
+  {
+    "ep": 25,
+    "train_cos": 0.14824,
+    "val_cos": 0.13535
+  },
+  {
+    "ep": 26,
+    "train_cos": 0.14823,
+    "val_cos": 0.13532
+  },
+  {
+    "ep": 27,
+    "train_cos": 0.14828,
+    "val_cos": 0.13525
+  },
+  {
+    "ep": 28,
+    "train_cos": 0.14828,
+    "val_cos": 0.13523
+  },
+  {
+    "ep": 29,
+    "train_cos": 0.14832,
+    "val_cos": 0.13525
+  },
+  {
+    "ep": 30,
+    "train_cos": 0.14835,
+    "val_cos": 0.13525
+  }
+]

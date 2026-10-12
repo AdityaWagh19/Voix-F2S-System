@@ -1,0 +1,19 @@
+{
+  "name": "E_retrieval_k5_opt",
+  "model_type": "retrieval_K5_alpha0.0",
+  "k": 5,
+  "alpha": 0.0,
+  "metrics": {
+    "val_cos": 0.06417,
+    "recall_at_1": 0.0015,
+    "recall_at_3": 0.002,
+    "recall_at_10": 0.0095,
+    "gender_accuracy": 1.0,
+    "secs": 0.01766,
+    "secs_std": 0.05044,
+    "n_synthesized": 20,
+    "wer": -1.0,
+    "fad": -1.0,
+    "mos_n": -1.0
+  }
+}

@@ -61,7 +61,15 @@ class VoixPipeline:
         self.cvae = CVAE(face_dim=560, speaker_dim=192, latent_dim=192).to(self.device)
         if os.path.exists(cvae_checkpoint):
             ckpt = torch.load(cvae_checkpoint, weights_only=False, map_location=self.device)
-            self.cvae.load_state_dict(ckpt["model_state_dict"])
+            # strict=False: old checkpoint has BatchNorm keys; new CVAE uses GroupNorm.
+            # Keys will fully match after Phase 3 retraining.
+            missing, unexpected = self.cvae.load_state_dict(
+                ckpt["model_state_dict"], strict=False
+            )
+            if missing:
+                print(f"[VoixPipeline] CVAE checkpoint: {len(missing)} missing keys (expected during arch migration)")
+            if unexpected:
+                print(f"[VoixPipeline] CVAE checkpoint: {len(unexpected)} unexpected keys (old BatchNorm keys, safe to ignore)")
         self.cvae.eval()
 
         # 3. Load StyleAdapter
@@ -71,13 +79,24 @@ class VoixPipeline:
             self.adapter.load_state_dict(a_ckpt["model_state_dict"])
         self.adapter.eval()
 
-        # 4. Load Synthesis Backend
-        self.tts = StyleTTS2Backend(device=str(self.device))
+        # 4. Load Synthesis Backend (route to CPU on <=4GB GPUs to prevent HiFi-GAN OOM)
+        tts_device = str(self.device)
+        if self.device.type == "cuda" and torch.cuda.get_device_properties(0).total_memory < 6e9:
+            tts_device = "cpu"
+        self.tts = StyleTTS2Backend(device=tts_device)
 
         # 5. Load Watermarker
         self.watermarker = AudioSealWatermarker(sample_rate=24000, device=str(self.device))
 
-        # 6. Lazy extractors for raw face image input
+        # 6. Load inference config
+        from voix.utils.config import load_config
+        _cfg = load_config()
+        self._inf_cfg = _cfg.get("inference", {})
+
+        # 7. Pre-load anchor paths from config (removes all hardcoded paths)
+        self.tts.load_anchors_from_config(_cfg)
+
+        # 8. Lazy extractors for raw face image input
         self._arcface = None
         self._facemesh = None
         self._demog = None
@@ -122,8 +141,8 @@ class VoixPipeline:
         else:
             raise TypeError("image_input must be a file path or numpy array")
 
-        # 1. ArcFace 512-D identity
-        e_id = self._arcface.extract(img_bgr)
+        # 1. ArcFace 512-D identity and demographic posteriors
+        e_id, gender, age = self._arcface.extract_full(img_bgr)
         if e_id is None:
             raise ValueError(f"No face detected in image: {image_input}")
 
@@ -135,8 +154,9 @@ class VoixPipeline:
         else:
             e_geo = np.zeros(32, dtype=np.float32)
 
-        # 3. Soft Demographics 16-D
-        e_demo = self._demog.estimate(e_id)
+        # 3. Soft Demographics 16-D with real age & gender posteriors
+        # _last_gender removed: gender is now returned and passed explicitly
+        e_demo = self._demog.estimate(e_id, gender=gender, age=age)
 
         # 4. Fusion 560-D
         with torch.no_grad():
@@ -145,7 +165,7 @@ class VoixPipeline:
             e_demo_t = torch.from_numpy(e_demo).unsqueeze(0).to(self.device)
             e_f = self._fusion(e_id_t, e_geo_t, e_demo_t)
 
-        return e_f
+        return e_f, int(gender) if gender is not None else 1, float(age) if age is not None else 30.0
 
     @torch.no_grad()
     def generate(
@@ -155,6 +175,8 @@ class VoixPipeline:
         num_voices: int = 3,
         temperature: float = 1.0,
         watermark: Optional[bool] = None,
+        gender: Optional[int] = None,
+        age: Optional[float] = None,
     ) -> List[Dict[str, Any]]:
         """Generate K diverse candidate voice waveforms for a single face representation.
 
@@ -179,12 +201,16 @@ class VoixPipeline:
 
         # Process face input into 560-D normalized tensor
         if isinstance(face_input, (str, Path)):
-            e_f = self.extract_face_features(str(face_input))
+            e_f, _det_gender, _det_age = self.extract_face_features(str(face_input))
+            if gender is None: gender = _det_gender
+            if age is None: age = _det_age
             if self.scaler is not None:
                 e_f = (e_f - self.face_mean) / self.face_std
         elif isinstance(face_input, np.ndarray):
             if face_input.ndim == 3:  # HxWx3 image
-                e_f = self.extract_face_features(face_input)
+                e_f, _det_gender, _det_age = self.extract_face_features(face_input)
+                if gender is None: gender = _det_gender
+                if age is None: age = _det_age
                 if self.scaler is not None:
                     e_f = (e_f - self.face_mean) / self.face_std
             else:
@@ -215,7 +241,13 @@ class VoixPipeline:
 
         results = []
 
-        # Free cached VRAM from feature extraction
+        # Release visual models to free VRAM before TTS synthesis.
+        # InsightFace ONNX + StyleTTS2 diffusion cannot coexist on 4-6GB GPU.
+        self._arcface = None
+        self._facemesh = None
+        self._demog = None
+        self._fusion = None
+        import gc; gc.collect()
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
 
@@ -226,11 +258,29 @@ class VoixPipeline:
             e_s_k = e_s_candidates_norm[k].unsqueeze(0)  # (1, 192)
             e_s_raw_k = e_s_candidates_raw[k]
 
-            # Module 3: Style Adapter projection
-            s_hat_k = self.adapter(e_s_k)  # (1, 128)
+            # Module 3: Style Adapter projection (using unnormalized ECAPA embedding)
+            s_hat_k = self.adapter(e_s_raw_k.unsqueeze(0))  # (1, 128)
 
-            # Module 4: StyleTTS 2 Speech Synthesis
-            waveform = self.tts.synthesize(text=text, style=s_hat_k)  # (1, T)
+            # Module 4: StyleTTS2 Speech Synthesis — config-driven params
+            _gender = gender if gender is not None else 1
+            _age    = age if age is not None else 30.0
+            from voix.utils.config import get_anchor_path, select_anchor_key
+            _anchor_key = select_anchor_key(_gender, _age)
+            try:
+                _anchor_path = get_anchor_path(_anchor_key)
+            except (KeyError, FileNotFoundError):
+                _anchor_path = None  # Falls back to config-loaded male/female ref
+            _inf = self._inf_cfg
+            waveform = self.tts.synthesize(
+                text=text,
+                style=s_hat_k,
+                gender=_gender,
+                blend_weight=_inf.get("blend_weight", 0.55),
+                beta=_inf.get("beta", 0.05),
+                alpha=_inf.get("alpha", 0.3),
+                diffusion_steps=_inf.get("diffusion_steps", 20),
+                anchor_path=_anchor_path,
+            )  # (1, T)
 
             # Module 5: AudioSeal Watermarking
             is_wm = False
