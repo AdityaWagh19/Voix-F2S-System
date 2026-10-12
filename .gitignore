@@ -60,3 +60,6 @@ checkpoints/styletts2/
 
 # Raw data
 data/raw/
+
+# Test cache
+.pytest_cache/
