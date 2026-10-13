@@ -16,21 +16,40 @@
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [The Scientific Premise](#the-scientific-premise)
-- [System Architecture](#system-architecture)
-- [Mathematical Formulation](#mathematical-formulation)
-- [Empirical Benchmarks & Ablation Analysis](#empirical-benchmarks--ablation-analysis)
-- [Scientific Insights: Deconstructing the Results](#scientific-insights-deconstructing-the-results)
-- [Cross-Demographic Benchmark (India F2S)](#cross-demographic-benchmark-india-f2s)
-- [Repository Structure](#repository-structure)
-- [Quickstart & Python API](#quickstart--python-api)
-- [Ethical Statement & Audio Provenance](#ethical-statement--audio-provenance)
-- [Citation](#citation)
+- [1. Overview](#1-overview)
+- [2. The Scientific Premise](#2-the-scientific-premise)
+  - [2.1 Why Deterministic Regression Fails](#21-why-deterministic-regression-fails)
+  - [2.2 Biomechanical Coupling of Face and Voice](#22-biomechanical-coupling-of-face-and-voice)
+- [3. System Architecture](#3-system-architecture)
+- [4. Mathematical Formulation](#4-mathematical-formulation)
+  - [4.1 Unified Facial Representation](#41-unified-facial-representation)
+  - [4.2 Speaker Centroid Targets](#42-speaker-centroid-targets)
+  - [4.3 Supervised InfoNCE Loss](#43-supervised-infonce-loss)
+  - [4.4 Auxiliary Demographic Disentanglement](#44-auxiliary-demographic-disentanglement)
+  - [4.5 Exemplar Manifold Blending](#45-exemplar-manifold-blending)
+  - [4.6 Vocoder Style Bridge](#46-vocoder-style-bridge)
+- [5. Empirical Benchmarks & Ablation Analysis](#5-empirical-benchmarks--ablation-analysis)
+  - [5.1 Evaluation Setup](#51-evaluation-setup)
+  - [5.2 Ablation Paradigm Trajectory](#52-ablation-paradigm-trajectory)
+  - [5.3 Quantitative Results](#53-quantitative-results)
+- [6. Scientific Insights: Deconstructing the Results](#6-scientific-insights-deconstructing-the-results)
+  - [6.1 The Variance Collapse Problem (Models A & B)](#61-the-variance-collapse-problem-models-a--b)
+  - [6.2 InfoNCE Breaks the Plateau (Model D)](#62-infonce-breaks-the-plateau-model-d)
+  - [6.3 The Demographic Realism Jump (Model E)](#63-the-demographic-realism-jump-model-e)
+  - [6.4 The Hybrid Pareto Frontier (Model F)](#64-the-hybrid-pareto-frontier-model-f)
+- [7. Cross-Demographic Benchmark (India F2S)](#7-cross-demographic-benchmark-india-f2s)
+- [8. Repository Structure](#8-repository-structure)
+- [9. Quickstart & Python API](#9-quickstart--python-api)
+  - [9.1 Installation](#91-installation)
+  - [9.2 End-to-End Inference](#92-end-to-end-inference)
+  - [9.3 Verification Suite](#93-verification-suite)
+- [10. Ethical Statement & Audio Provenance](#10-ethical-statement--audio-provenance)
+- [11. Citation](#11-citation)
+- [12. License](#12-license)
 
 ---
 
-## Overview
+## 1. Overview
 
 **VOIX** is a research framework for **cross-modal bio-acoustic synthesis**. Given a single unconstrained frontal face image and a text prompt, the system predicts a **conditional distribution over plausible speaker voice manifolds** and synthesizes studio-grade 24 kHz speech waveforms.
 
@@ -38,9 +57,9 @@ Rather than making a single deterministic voice prediction (which collapses to t
 
 ---
 
-## The Scientific Premise
+## 2. The Scientific Premise
 
-### Why Deterministic Regression Fails
+### 2.1 Why Deterministic Regression Fails
 
 Formulating Face-to-Voice as a point-mapping $f: \text{Face} \to \text{Single Voice}$ is acoustically ill-posed. Hundreds of distinct acoustic identities share overlapping facial phenotypes. Minimizing MSE or cosine loss forces the network to output $\mathbb{E}[\mathbf{e}_s \mid \mathbf{e}_f]$ — the acoustic centroid of the training corpus — producing muffled, monotone speech.
 
@@ -51,7 +70,7 @@ flowchart LR
     MEAN --> OUT["Muffled, Monotone Speech<br/>(Variance Collapsed)"]
 ```
 
-### Biomechanical Coupling of Face and Voice
+### 2.2 Biomechanical Coupling of Face and Voice
 
 VOIX grounds cross-modal generation in established craniofacial allometry. Facial geometry physically constrains — but does not uniquely determine — vocal characteristics:
 
@@ -77,7 +96,7 @@ flowchart LR
 
 ---
 
-## System Architecture
+## 3. System Architecture
 
 The end-to-end pipeline integrates five stages: visual feature extraction, feature fusion, dual-branch metric mapping, manifold blending, and neural vocoder synthesis.
 
@@ -139,9 +158,9 @@ flowchart TD
 
 ---
 
-## Mathematical Formulation
+## 4. Mathematical Formulation
 
-### 1. Unified Facial Representation
+### 4.1 Unified Facial Representation
 
 The three feature streams are concatenated and normalized by a fitted `StandardScaler`:
 
@@ -157,19 +176,19 @@ The 32 morphological ratios are normalized by the outer inter-ocular distance $d
 
 $$r_i = \frac{\|\mathbf{p}_a - \mathbf{p}_b\|_2}{d_{\text{ocular}}}, \quad i = 1, \dots, 32$$
 
-### 2. Speaker Centroid Targets
+### 4.2 Speaker Centroid Targets
 
 Targets are $\ell_2$-normalized speaker centroids — one per identity — eliminating single-utterance acoustic noise:
 
 $$\mathbf{c}_y = \frac{\sum_{u \in \mathcal{U}_y} \mathbf{e}_{s,u}}{\left\|\sum_{u \in \mathcal{U}_y} \mathbf{e}_{s,u}\right\|_2} \in \mathbb{S}^{191}$$
 
-### 3. Supervised InfoNCE Loss
+### 4.3 Supervised InfoNCE Loss
 
 The mapper predicts $\hat{\mathbf{e}}_s = M_\theta(\mathbf{e}_f) / \|M_\theta(\mathbf{e}_f)\|_2$ and is optimized via Supervised InfoNCE with temperature $\tau = 0.07$:
 
 $$\mathcal{L}_{\text{InfoNCE}} = -\frac{1}{B} \sum_{i=1}^{B} \log \frac{\exp\!\left(\hat{\mathbf{e}}_{s,i} \cdot \mathbf{c}_{y_i} \,/\, \tau\right)}{\sum_{j=1}^{C} \exp\!\left(\hat{\mathbf{e}}_{s,i} \cdot \mathbf{c}_j \,/\, \tau\right)}$$
 
-### 4. Auxiliary Demographic Disentanglement
+### 4.4 Auxiliary Demographic Disentanglement
 
 A binary cross-entropy head on the Layer 3 ($\mathbb{R}^{256}$) representation enforces linear separability of gender in the latent space:
 
@@ -179,13 +198,13 @@ The joint training objective:
 
 $$\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{InfoNCE}} + \lambda_{\text{gender}}\, \mathcal{L}_{\text{gender}}, \quad \lambda_{\text{gender}} = 0.50$$
 
-### 5. Exemplar Manifold Blending
+### 4.5 Exemplar Manifold Blending
 
 The parametric prediction and gallery-retrieved centroids are fused via a convex blend, with retrieval weights $w_k$ proportional to cosine similarity:
 
 $$\mathbf{e}_{s,\text{hybrid}} = \alpha\, \hat{\mathbf{e}}_s + (1 - \alpha) \sum_{k=1}^{K} w_k\, \mathbf{c}_{(k)}, \quad \alpha = 0.70,\; K = 10$$
 
-### 6. Vocoder Style Bridge
+### 4.6 Vocoder Style Bridge
 
 The blended embedding is conditioned into the frozen StyleTTS 2 vocoder via interpolation with a demographic reference anchor:
 
@@ -193,9 +212,9 @@ $$\mathbf{s}_{\text{target}} = \beta\, \mathcal{P}_{\text{adapt}}(\mathbf{e}_{s,
 
 ---
 
-## Empirical Benchmarks & Ablation Analysis
+## 5. Empirical Benchmarks & Ablation Analysis
 
-### Evaluation Setup
+### 5.1 Evaluation Setup
 
 All results are from **strictly unseen zero-shot validation speakers** from VoxCeleb2:
 
@@ -209,7 +228,7 @@ All results are from **strictly unseen zero-shot validation speakers** from VoxC
 | **Gender Acc.** | Agreement between synthesized vocal register and subject biological sex |
 | **GPU Latency** | Forward-pass wall-clock time on an NVIDIA GPU |
 
-### Ablation Paradigm Trajectory
+### 5.2 Ablation Paradigm Trajectory
 
 ```mermaid
 flowchart LR
@@ -225,7 +244,7 @@ flowchart LR
     E -->|"Gallery Fusion"| F
 ```
 
-### Quantitative Results
+### 5.3 Quantitative Results
 
 > Source: [`results/benchmarks/summary.csv`](results/benchmarks/summary.csv) — all values verified.
 
@@ -242,21 +261,21 @@ flowchart LR
 
 ---
 
-## Scientific Insights: Deconstructing the Results
+## 6. Scientific Insights: Deconstructing the Results
 
-### 1. The Variance Collapse Problem (Models A & B)
+### 6.1 The Variance Collapse Problem (Models A & B)
 
 Both models converge near Val Cosine ~0.137 despite different loss formulations. This plateau is the **acoustic Frechet mean** — the expected value $\mathbb{E}[\mathbf{e}_s \mid \mathbf{e}_f]$. The 62.6% gender accuracy matches the VoxCeleb2 majority-class prior, confirming the model predicts nothing useful about gender.
 
-### 2. InfoNCE Breaks the Plateau (Model D)
+### 6.2 InfoNCE Breaks the Plateau (Model D)
 
 Supervised InfoNCE with centroid targets directly optimizes **angular alignment** on $\mathbb{S}^{191}$ rather than Euclidean proximity, pushing predictions toward the correct centroid and repelling all other identities in the batch. This produces a significantly more discriminative latent space (Val Cos: 0.1288), enabling stronger downstream fusion.
 
-### 3. The Demographic Realism Jump (Model E)
+### 6.3 The Demographic Realism Jump (Model E)
 
 Pure exemplar retrieval achieves a categorical jump to **100.0% gender accuracy** by enforcing sex-filtered gallery lookup as a hard constraint. Synthesized speech is drawn from real studio-quality speakers rather than regressed acoustic centroids, driving SECS to 0.0252.
 
-### 4. The Hybrid Pareto Frontier (Model F)
+### 6.4 The Hybrid Pareto Frontier (Model F)
 
 Model F fuses the discriminative projection of $M_\theta$ with the demographic realism of gallery retrieval:
 
@@ -272,7 +291,7 @@ Results:
 
 ---
 
-## Cross-Demographic Benchmark (India F2S)
+## 7. Cross-Demographic Benchmark (India F2S)
 
 Standard benchmarks (VoxCeleb 1/2, LRS 2/3) exhibit heavy Anglo-American demographic bias. VOIX curates the **India Face-to-Speech (F2S) Benchmark** to evaluate out-of-domain cross-demographic robustness:
 
@@ -287,7 +306,7 @@ Standard benchmarks (VoxCeleb 1/2, LRS 2/3) exhibit heavy Anglo-American demogra
 
 ---
 
-## Repository Structure
+## 8. Repository Structure
 
 ```
 voix/
@@ -333,9 +352,9 @@ voix/
 
 ---
 
-## Quickstart & Python API
+## 9. Quickstart & Python API
 
-### 1. Installation
+### 9.1 Installation
 
 ```bash
 git clone https://github.com/AdityaWagh19/Voix-F2S-System.git
@@ -348,7 +367,7 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-### 2. End-to-End Inference
+### 9.2 End-to-End Inference
 
 ```python
 from voix.inference.pipeline import VoixPipeline
@@ -374,7 +393,7 @@ print(f"Primary Voice: {results[0]['audio_path']}")
 print(f"Sample Rate: 24,000 Hz | Watermarked: {results[0]['watermarked']}")
 ```
 
-### 3. Verification Suite
+### 9.3 Verification Suite
 
 ```bash
 pytest tests/ -v
@@ -383,7 +402,7 @@ pytest tests/ -v
 
 ---
 
-## Ethical Statement & Audio Provenance
+## 10. Ethical Statement & Audio Provenance
 
 VOIX models the statistical relationship between physical appearance and voice. Because cross-modal identity generation carries dual-use risks, three strict safeguards are enforced:
 
@@ -395,7 +414,7 @@ VOIX models the statistical relationship between physical appearance and voice. 
 
 ---
 
-## Citation
+## 11. Citation
 
 ```bibtex
 @article{wagh2026voix,
@@ -408,6 +427,6 @@ VOIX models the statistical relationship between physical appearance and voice. 
 
 ---
 
-## License
+## 12. License
 
 Apache 2.0. See [LICENSE](LICENSE) for details.
