@@ -50,14 +50,21 @@ Conduct an exhaustive empirical evaluation of the VOIX research system. Implemen
 
 Evaluated across 400 held-out zero-shot identities ($N=10,000$ validation pairs) and recorded in `results/benchmarks/summary.csv`:
 
-| Model Paradigm | Val Cosine | SECS (Mean) | SECS (Peak) | R@1 | R@5 | R@10 | Gender Acc | Latency |
-|---|---|---|---|---|---|---|---|---|
-| **A: Baseline Cosine Regression** | 0.0526 | 0.0076 | 0.0812 | 0.0003 | 0.0016 | 0.0028 | 51.5% | 2.1 ms |
-| **B: SpkAvg + Gender Loss** | 0.0886 | 0.0089 | 0.1245 | 0.0007 | 0.0034 | 0.0062 | 68.3% | 2.1 ms |
-| **C: Metric Contrastive (Utterances)** | 0.0914 | 0.0092 | 0.1410 | 0.0008 | 0.0038 | 0.0071 | 64.2% | 2.3 ms |
-| **D: Joint InfoNCE Centroids (Best pt)** | 0.1288 | 0.0101 | 0.1877 | 0.0009 | 0.0041 | 0.0055 | 62.6% | 2.3 ms |
-| **E: Exemplar Retrieval (k=5)** | 0.0642 | 0.0177 | 0.1208 | 0.0012 | 0.0050 | 0.0095 | **100.0%** | 3.8 ms |
-| **F: Hybrid Retrieval-Contrastive (k=10)** | **0.1299** | **0.0324** | **0.1889** | 0.0010 | 0.0045 | 0.0085 | **100.0%** | 11.2 ms |
+> **[DATA NOTICE -- 2026-10-13]** The values below for Models A, B, C are from an earlier evaluation
+> run and differ from 
+esults/benchmarks/summary.csv (which was computed with n_synthesized=10).
+> The CSV uses columns: val_cos, recall_at_1, recall_at_3, recall_at_10 (NOT recall_at_5 / SECS Peak).
+> Verified values from summary.csv are used in project-context/architecture.md.
+> Models A, B, C values below should be treated as narrative references, not precise benchmarks.
+
+| Model Paradigm | Val Cosine | SECS (Mean) | R@1 | R@3 | R@10 | Gender Acc | Source |
+|---|---|---|---|---|---|---|---|
+| **A: Baseline Cosine Regression** | 0.1372 | 0.0207 | 0.0010 | 0.0025 | 0.0050 | 62.6% | summary.csv (verified) |
+| **B: SpkAvg + Gender Loss** | 0.1370 | 0.0171 | 0.0005 | 0.0020 | 0.0050 | 62.6% | summary.csv (verified) |
+| **C: Metric Contrastive (Utterances)** | -- | -- | -- | -- | -- | -- | Not in summary.csv |
+| **D: Joint InfoNCE Centroids** | 0.1288 | 0.0177 | 0.0010 | 0.0020 | 0.0060 | 62.6% | summary.csv (verified) |
+| **E: Exemplar Retrieval (k=5)** | 0.0642 | 0.0252 | 0.0010 | 0.0020 | 0.0060 | **100.0%** | summary.csv (verified) |
+| **F: Hybrid k=10 (n=20)** | **0.1299** | **0.0324** | 0.0010 | 0.0040 | 0.0085 | **100.0%** | summary.csv (verified) |
 
 ---
 

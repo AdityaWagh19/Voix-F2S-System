@@ -1,4 +1,4 @@
-# VOIX: Probabilistic Face-to-Voice Generation Through Cross-Modal Identity Modeling
+﻿# VOIX: Probabilistic Face-to-Voice Generation Through Cross-Modal Identity Modeling
 
 <p align="center">
   <img src="docs/voix_banner.jpg" alt="VOIX: Probabilistic Face-to-Voice System" width="550" style="max-width:100%" />
@@ -298,6 +298,7 @@ voix/
 |   +-- environment.yaml                  # Backbone checkpoints, paths, device configuration
 |   +-- cvae_training.yaml                # Optimizer, learning rate, loss hyperparameters
 |   +-- data_extraction.yaml              # Visual, acoustic, and FaceMesh extraction configs
+|   +-- hardware.yaml                     # Universal hardware auto-configuration (5 profiles, all OS/GPU)
 +-- data/
 |   +-- processed/
 |   |   +-- voxceleb2_features.h5         # Indexed HDF5 store (75,720 pairs, 3,029 identities)
@@ -422,3 +423,4 @@ If you use VOIX or the India F2S benchmark in your research, please cite:
 ## License
 
 This project is licensed under the Apache 2.0 License. See the [LICENSE](LICENSE) file for details.
+

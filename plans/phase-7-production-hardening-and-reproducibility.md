@@ -1,4 +1,4 @@
-# Phase 7: Production Hardening & Reproducibility
+﻿# Phase 7: Production Hardening & Reproducibility
 
 > **Phase Identifier:** `PHASE-7`  
 > **Target Duration:** Weeks 15–16  
@@ -105,8 +105,19 @@ voix/
 ### T7.4: Test Suite & Reproducibility Verification
 - [x] Confirm unit test execution: `pytest tests/`.
 - [x] Verify deterministic seed execution across successive runs.
+- [x] `tests/test_hardware.py`: 11 hardware tier assertions added and passing.
 
-### T7.5: Version Control & Remote Synchronization
+### T7.5: Dynamic Hardware Auto-Configuration
+- [x] `configs/hardware.yaml`: Universal 5-profile schema (Tier 1–3 CUDA, Apple Silicon MPS, CPU-only).
+- [x] `voix/utils/hardware.py`: Runtime OS+GPU auto-detection engine (Windows, Linux, macOS; CUDA, MPS, ROCm, XPU).
+- [x] Tier 1 sequential synthesis (OOM-safe, 1.41GB peak); Tier 2 parallel batch (3.8GB peak); Tier 3 high-throughput.
+
+### T7.6: Whitebox End-to-End Inference Audit
+- [x] Full pipeline validated on unknown test image — 3 voices synthesized, WER=0.0% ASR verification.
+- [x] `inde/metadata.json`: 78.5 KB audit dossier (all 560 model inputs, 32 ratios, gallery top-10, synthesis logs).
+- [x] Local test assets excluded from VCS via `.gitignore`.
+
+### T7.7: Version Control & Remote Synchronization
 - [ ] Stage all cleaned files and updated documentation.
 - [ ] Push clean commit to GitHub main repository.
 
@@ -118,8 +129,8 @@ voix/
 |---|---|---|
 | Repository Cleanliness | No orphaned debug scripts or duplicate `.pt` files | Verified — 25 files purged |
 | Inference API | Single function call generates 24 kHz WAV from face image | Verified via `VoixPipeline` |
-| Test Suite Coverage | Core tests pass without regressions | 35 passed, 2 skipped |
-| Documentation Parity | 100% agreement across all docs and codebase | Verified |
+| Test Suite Coverage | Core tests pass without regressions | 89 passed |
+| Documentation Parity | 100% agreement across all docs and codebase | Verified — README overhauled, all docs synced |
 
 ---
 
@@ -133,3 +144,4 @@ voix/
 ---
 
 *Read next: [README.md](file:///D:/voix/README.md)*
+

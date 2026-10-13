@@ -63,3 +63,7 @@ data/raw/
 
 # Test cache
 .pytest_cache/
+
+# Local test assets
+inde/
+inde.jpeg

@@ -1,316 +1,500 @@
-# architecture.md
+﻿# architecture.md
 > Full system design — modules, data flow, component interfaces, mathematical formulations, and engineering decisions.
+> Last updated: 2026-10-13. All claims verified against source code in `voix/`.
+
+---
+
+## Status Legend
+
+| Symbol | Meaning |
+|---|---|
+| **Implemented & Verified** | Code exists; unit tests pass; empirically measured |
+| **Implemented; under-evaluated** | Code exists; limited or no formal benchmark yet |
+| **Planned** | Specification written; code not yet committed |
+| **Known Gap / Mismatch** | Discrepancy between doc and code flagged explicitly |
 
 ---
 
 ## System Pipeline (End-to-End)
 
 ```
-Face Image
+Face Image + Text Prompt
     |
-    +-- ArcFace (frozen, InsightFace Buffalo_L)  --> 512-D identity embedding
-    +-- MediaPipe FaceMesh (468 landmarks)       --> 32-D craniofacial ratio features
-    +-- Soft Demographic Estimator               --> 16-D soft age / sex distributions
-    |
-    v
-Feature Fusion Layer (Linear + LayerNorm + GELU) --> 560-D Unified Face Representation (e_f)
-    |
-    +-------------------------------------------------------------+
-    |                                                             |
-    v                                                             v
-Metric Contrastive Mapper (Parametric)           Exemplar Retrieval Gallery (Non-Parametric)
-    |  Backbone: 560 -> 512 -> 384 -> 256           |  Precomputed gallery: 3,029 speaker centroids
-    |  L2 Normalization Head: 256 -> 192-D          |  Cosine distance search over gender partition
-    |  Gender Auxiliary Head: 256 -> 1-D            |  Top-K nearest speaker centroids (k=5, 10)
-    |                                               |
-    v                                               v
-Predicted Unit Embedding (e_s_hat)               Exemplar Centroid Cluster (c_k)
-    |                                               |
-    +------------------------------+----------------+
-                                   |
-                                   v
-             Hybrid Manifold Blending (alpha = 0.70, 0.75)
-             e_s_hybrid = alpha * e_s_hat + (1 - alpha) * sum(w_k * c_k)
-                                   |
-                                   v
-             Vocoder Style Bridge (beta = 0.30, blend = 0.75)
-             StyleTTS2 Reference Style Conditioning (s_target)
-                                   |
-                                   v
-             StyleTTS2 (Frozen Synthesis Backend)
-             Inputs: Text Prompt (Phonemes) + Synthesized Style Vector
-                                   |
-                                   v
-             Synthesized 24 kHz Speech Waveform (Voice 1, Voice 2, ..., Voice K)
+    +-- ArcFace ResNet-50 (frozen, InsightFace Buffalo_L)   --> 512-D identity embedding (e_id)
+    +-- MediaPipe FaceMesh (468 3D landmarks)               --> 32-D craniofacial ratios  (e_geo)
+    +-- Soft Demographic Estimator                          --> 16-D age/sex posteriors   (e_demo)
+                                    |
+                    FaceFusionLayer  (Linear 560->560 + LayerNorm + GELU)
+                                    |
+                             560-D  e_f
+                     +--------------+------------------------------+
+                     |                                            |
+                     v                                            v
+          CVAE Conditional Prior                    Exemplar Retrieval Gallery
+          p_psi(z | e_f)  -->  sample z in R^192    3,029 speaker centroids (192-D)
+          CVAEDecoder  p_theta(e_s | z)              Gender-conditioned kNN (k=5 or k=10)
+                     |                                            |
+                     +--------------+------------------------------+
+                                    |  Hybrid Blending
+                                    |  e_s_hybrid = alpha*e_s_hat + (1-alpha)*sum(w_k*c_k)
+                                    |  (alpha = 0.70 by default)
+                                    v
+                          StyleAdapter (MLP 192->256->256->128)
+                          Projects ECAPA space --> StyleTTS 2 style space (128-D)
+                                    |
+                          VocoderStyleBridge
+                          s_target = beta*s_hat + (1-beta)*s_anchor  (beta = 0.30)
+                                    |
+                          StyleTTS 2 (frozen)
+                          Inputs: phoneme tokens + style vector s_target (128-D)
+                                    |
+                          AudioSeal Watermarker (16-bit neural watermark)
+                                    |
+                          24 kHz Speech Waveforms (Voice 1, Voice 2, ..., Voice K)
 ```
 
 ---
 
-## Module 1: Face Representation
+## Module 1: Face Representation  [IMPLEMENTED & VERIFIED]
 
 ### 1a. ArcFace Identity Embedding (512-D)
-- **Model:** Pretrained ArcFace ResNet-50 (`buffalo_l` model pack from InsightFace) — completely frozen throughout extraction and training.
-- **Input:** Single face image — frontal frame selected via MediaPipe head pose angles ($|\text{pitch}| < 15^\circ, |\text{yaw}| < 15^\circ$).
-- **Output:** L2-normalized 512-D identity vector $\mathbf{e}_{\text{arcface}} \in \mathbb{S}^{511}$.
-- **Representation:** Encodes discriminative biometric geometry invariant to illumination, pose, and background.
+- **Model:** Pretrained ArcFace ResNet-50 (`buffalo_l`, InsightFace) -- completely frozen.
+- **Input:** Single frontal face image; pose-filtered frames (|pitch| < 15 deg, |yaw| < 15 deg).
+- **Output:** L2-normalized 512-D identity vector e_id in S^511.
+- **Source:** `voix/data/face_extractor.py` -- `ArcFaceExtractor.extract_full()` returns `(e_id, gender, age)`.
 
-### 1b. Craniofacial Ratio Features (32-D)
-- **Source:** MediaPipe FaceMesh (468-point 3D landmark mesh).
-- **Processing:** Normalized to canonical face space by dividing by the inter-ocular distance (outer eye corner distance) to eliminate camera perspective and subject distance scale artifacts.
-- **Anatomical Correlate Hypotheses (32 dimensions):**
+### 1b. Craniofacial Ratio Features (32-D)  [IMPLEMENTED]
+- **Source:** `voix/data/morphology.py` -- `compute_craniofacial_ratios(landmarks)`.
+- **Landmarks:** MediaPipe FaceMesh 468-point 3D mesh.
+- **Normalization:** All distances divided by inter-ocular distance (IOC, landmarks 33 <-> 263) to remove camera scale.
 
-| Feature | Landmarks / Formula | Vocal Correlate Hypothesis |
+Key landmark constants (canonical MediaPipe indices):
+
+| Constant | Index | Anatomical Point |
 |---|---|---|
-| Face height / width ratio | `(chin - forehead) / bizygomatic` | Head volume $\to$ overall vocal tract resonance scale |
-| Jaw width | Mandibular gonion-to-gonion | Mandibular resonance cavity volume |
-| Jaw angle | Mandibular gonial angle | Oral cavity volume and acoustic radiation impedance |
-| Cheekbone width | Bizygomatic distance | Facial skeletal width $\to$ pharyngeal cavity width proxy |
-| Forehead height ratio | `trichion_to_glabella / face_height` | Upper skull cranial resonance |
-| Chin length | `subnasale_to_gnathion / face_height` | Subglottal and laryngeal position proxy |
-| Nose width | Alar base width | Nasal resonance aperture |
-| Nose height | Nasion to subnasale | Nasal airway path length |
-| Eye separation ratio | Inter-pupillary / inter-ocular | Craniofacial width proportion |
-| Lower face ratio | `subnasale_to_menton / face_height` | Oral articulation cavity volume |
-| Mandible width ratio | Mandible width / bizygomatic | Jaw acoustic coupling |
-| Philtrum length | Subnasale to labiale superius | Lip articulation range |
-| Upper lip height | Labiale superius to stomion | Lip protrusion and acoustic aperture |
-| Lower lip height | Stomion to labiale inferius | Lower lip mobility and resonance length |
-| Lip width | Cheilion-to-cheilion | Oral radiation aperture width |
-| Neck width proxy | Lower jaw perimeter proxy | Pharyngeal resonance tube circumference |
+| IOC_LEFT | 33 | Left eye outer canthus |
+| IOC_RIGHT | 263 | Right eye outer canthus |
+| FOREHEAD_TOP | 10 | Trichion |
+| CHIN_BOTTOM | 152 | Gnathion / menton |
+| JAW_LEFT / RIGHT | 172 / 397 | Mandibular gonion |
+| NOSE_TIP | 4 | Pronasale |
+| NOSE_BRIDGE | 6 | Nasion |
+| UPPER_LIP_TOP | 13 | Labiale superius |
 
-> *Biomechanical Note:* Craniofacial ratios represent explicit physiological hypotheses (RQ2). While ArcFace captures latent identity, FaceMesh ratios directly quantify skeletal resonance proportions.
+Selected anatomical hypotheses (32 features total):
 
-### 1c. Soft Demographic Indicators (16-D)
-- **Variables:** Apparent age distribution (Gaussian parameterized mean and variance), apparent biological sex (softmax 2-D probability vector), and age cohort bins.
-- **Key constraint:** Modeled strictly as continuous soft probability distributions — never discrete hard labels.
-- **Representation:** 16-D vector $\mathbf{e}_{\text{demog}} \in [0, 1]^{16}$.
+| Feature | Vocal Correlate Hypothesis |
+|---|---|
+| Face height/width ratio | Head volume -> overall vocal tract resonance scale |
+| Jaw width (IOC-normalized) | Mandibular resonance cavity volume |
+| Jaw gonial angle | Oral cavity volume and acoustic radiation impedance |
+| Bizygomatic width | Pharyngeal cavity width proxy |
+| Nose width / height | Nasal resonance aperture and airway path length |
+| Lower face ratio | Oral articulation cavity volume |
+| Philtrum length | Lip articulation range |
+| Lip width / height | Oral radiation aperture |
 
-### 1d. Feature Fusion (`FaceFusionLayer`)
+> [KNOWN GAP] Biomechanical Note (RQ2): Craniofacial ratio-to-voice correlations are hypotheses grounded in published allometry literature. Their incremental contribution over ArcFace identity alone has not yet been formally ablated in this codebase.
+
+### 1c. Soft Demographic Indicators (16-D)  [IMPLEMENTED]
+- **Source:** `voix/data/demographics.py` -- `SoftDemographicEstimator.estimate_from_attributes()`.
+- **Output vector layout (16-D):**
+  - [0:8]   -- Age bin soft distribution (8 bins: ~0-10, 11-20, ..., 71+), Gaussian centered at detected age (sigma=7.0 yr).
+  - [8:10]  -- Biological sex posterior [p_male, p_female] from InsightFace genderage detector.
+  - [10:14] -- Vocal age grouping [child, young, adult, senior] -- Gaussian over vocal centers [8, 22, 42, 68] yr.
+  - [14:16] -- Apparent build proxy [slender, broad] -- sigmoid on face aspect ratio (threshold ~1.35).
+- If InsightFace gender/age is unavailable, falls back to ArcFace embedding projection heuristic.
+
+### 1d. Feature Fusion (FaceFusionLayer)  [IMPLEMENTED]
+- **Source:** `voix/models/fusion.py` -- `FaceFusionLayer`.
+
 ```
-ArcFace Identity          512-D
-FaceMesh Ratios            32-D
-Soft Demographics          16-D
--------------------------------
+ArcFace Identity          512-D  (e_id,   L2-normalized, in S^511)
+FaceMesh Ratios            32-D  (e_geo,  IOC-normalized ratios)
+Soft Demographics          16-D  (e_demo, probability distributions in [0,1]^16)
+-------------------------------------------
 Concatenated              560-D
           |
-    Linear(560 -> 560)
+    Linear(560 -> 560, bias=True)
           |
-      LayerNorm
+      LayerNorm(560)
           |
         GELU
           |
-Unified Face Representation (560-D)
+Unified Face Representation e_f (560-D)
 ```
-- **Implementation:** `voix/models/face_fusion.py`.
-- **Design Rationale:** A compact linear projection with LayerNorm and GELU preserves feature boundaries without overparameterizing on modest dataset sizes.
+
+- **Design:** Uses LayerNorm (not BatchNorm/GroupNorm) for training stability across heterogeneous scale ranges.
+- **Weights:** NOT auto-loaded on import. Call `load_canonical_weights(path)` explicitly.
+- **Mathematical formulation:**
+  e_f = GELU( LayerNorm( W_f * [e_id || e_geo || e_demo] + b_f ) )
 
 ---
 
 ## Module 2: Mapper Architecture
 
-### The Acoustic Collapse Discovery & Architecture Selection
-In early experiments, training standard CVAEs or direct regression networks with MSE / Cosine distance directly on single-utterance acoustic targets caused severe **acoustic collapse**:
-1. Single speakers exhibit high intra-speaker variance across utterances (prosody, microphone noise, recording conditions).
-2. Minimizing regression loss against single utterances causes the network to output the global acoustic mean of the dataset.
-3. Decoded voices from the acoustic mean sound robotic, muffled, and lose identity distinctiveness.
+### 2a. CVAE v2 Conditional Generative Mapper  [IMPLEMENTED -- Production Model]
+- **Source:** `voix/models/cvae.py`
+- **Status:** Primary generative model used in inference pipeline (`pipeline.py`).
 
-To solve this, VOIX implements two complementary mapper designs:
-1. **Parametric Metric Contrastive Mapper (InfoNCE over Centroids):** Projects facial features onto the unit hypersphere $\mathbb{S}^{191}$ aligned directly with clean speaker centroids.
-2. **Non-Parametric Exemplar Retrieval Gallery:** Uses precomputed speaker centroids ($\mathcal{G} \in \mathbb{R}^{3029 \times 192}$) with demographic partitioning to ground predictions on real human speech manifolds.
+> [IMPORTANT CORRECTION] Earlier architecture.md versions described a MetricContrastiveMapper (MLP + InfoNCE) as the primary network. The actual production pipeline uses the CVAE v2 with a StyleAdapter. The contrastive mapper was a training/evaluation paradigm (ablation Models A-F), not the deployed inference architecture.
 
-### 2a. Metric Contrastive Mapper (`voix/models/cvae.py`)
+#### CVAE v2 Components
+
+**Prior Network p_psi(z | e_f) -- CVAEPriorNetwork:**
 ```
-Input: 560-D Fused Face Vector (e_f)
+Input: e_f (560-D)
   |
-  v
-Layer 1: Linear(560 -> 512) + BatchNorm1d + GELU + Dropout(0.1)
-  |
-  v
-Layer 2: Linear(512 -> 384) + BatchNorm1d + GELU + Dropout(0.1)
-  |
-  v
-Layer 3: Linear(384 -> 256) + BatchNorm1d + GELU + Dropout(0.1)
-  |
-  +-------------------------------+
-  |                               |
-  v                               v
-Projection Head (Acoustic)      Gender Auxiliary Head
-Linear(256 -> 192)              Linear(256 -> 1)
-  |                               |
-L2 Normalization                Sigmoid
-  |                               |
-Predicted Unit Embedding        Predicted Gender Probability
-e_s_hat in S^191                y_gender_hat in [0, 1]
+  +-- Linear(560->512) + GroupNorm + GELU
+  +-- Linear(512->384) + GroupNorm + GELU
+  +-- Linear(384->256) + GroupNorm + GELU
+       |              |
+  fc_mu(256->192)  fc_logvar(256->192)  [clamped in [-10, 10]]
+       |              |
+  mu_prior         log_sigma2_prior   (both in R^192)
 ```
 
-### 2b. CVAE Probabilistic Mapper
-For stochastic voice sampling from a conditional posterior:
-- **Recognition Encoder $q_\phi(z \mid \mathbf{e}_s, \mathbf{e}_f)$:** Inputs concatenated $[\mathbf{e}_s, \mathbf{e}_f]$ (752-D) $\to$ predicts $\mu_z, \log \sigma_z^2 \in \mathbb{R}^{192}$.
-- **Conditional Prior $p_\theta(z \mid \mathbf{e}_f)$:** Inputs $\mathbf{e}_f$ (560-D) $\to$ predicts $\mu_{\text{prior}}, \log \sigma_{\text{prior}}^2 \in \mathbb{R}^{192}$.
-- **Decoder $p_\psi(\mathbf{e}_s \mid z, \mathbf{e}_f)$:** Inputs $[z, \mathbf{e}_f]$ $\to$ reconstructs $\hat{\mathbf{e}}_s \in \mathbb{S}^{191}$.
-- **Posterior Regularization:** Free-bits KL penalty ($\lambda_{\text{fb}} = 0.5$ nats/dim) with linear $\beta(t)$ annealing over the first 30% of training steps.
+**Recognition Network q_phi(z | e_s, e_f) -- CVAERecognitionNetwork (training only):**
+```
+Input: [e_s || e_f]  (192 + 560 = 752-D)
+  |
+  +-- Linear(752->512) + GroupNorm + GELU
+  +-- Linear(512->384) + GroupNorm + GELU
+  +-- Linear(384->256) + GroupNorm + GELU
+       |              |
+  fc_mu(256->192)  fc_logvar(256->192)
+       |              |
+  mu_z             log_sigma2_z    (both in R^192)
+```
+> At inference, e_s is unavailable; the pipeline samples from the prior p_psi(z | e_f) only.
+
+**Decoder p_theta(e_s | z) -- CVAEDecoder:**
+```
+Input: z in R^192  (NO e_f skip connection -- by design)
+  |
+  +-- Linear(192->512) + GroupNorm + GELU
+  +-- Linear(512->384) + GroupNorm + GELU
+  +-- Linear(384->256) + GroupNorm + GELU
+       |
+  output_proj(256->192)
+       |
+  e_s_hat in R^192  (optionally L2-normalized)
+```
+> Why no e_f skip? Passing e_f directly to the decoder creates a shortcut allowing the decoder to bypass z (posterior collapse via skip connection). Removing the skip forces the decoder to rely entirely on z, encouraging meaningful latent utilization.
+
+**Reparameterization:**
+  z = mu + eps * sigma * T,   eps ~ N(0, I),   T in R+ (temperature)
+
+**Voice diversity via sample_voices(e_f, K, temperature):**
+- Predicts prior (mu_prior, sigma_prior) from e_f once.
+- Samples K independent eps ~ N(0, I), producing K distinct z vectors.
+- Decodes each z to K candidate speaker embeddings e_s_hat in R^192.
+
+#### CVAE Training Loss (voix/training/losses.py)
+
+**1. Cosine Reconstruction Loss:**
+  L_recon = (1/B) * sum_i [1 - cos_sim(e_s_hat_i, e_s_i)]
+  Range: [0, 2] where 0=perfect alignment, 2=anti-parallel.
+  Rationale: ECAPA embeddings are angular; cosine distance directly optimizes directional alignment.
+
+**2. Free-Bits KL Divergence (FreeBitsKLLoss):**
+  KL_d = 0.5 * [log_sigma2_prior_d - log_sigma2_d - 1 + (sigma2_d / sigma2_prior_d) + (mu_d - mu_prior_d)^2 / sigma2_prior_d]
+  L_KL = (1/B) * sum_i sum_d max(lambda_fb, KL_d)
+  lambda_fb = 0.5 nats/dim -- prevents posterior collapse for dims encoding < 0.5 nats.
+  Active unit metric: dims with KL > 0.1 nats; healthy CVAE expects >= 32 active units.
+
+**3. Combined Objective with beta-Annealing:**
+  L_total = L_recon + beta(t) * L_KL
+  beta(t) = beta_max * min(1, t / T_warmup)
+  beta_max = 1.0, T_warmup = 5,000 steps.
+
+### 2b. Contrastive Mapper Paradigm (Ablation Models B-D)  [EVALUATION / ABLATION ONLY]
+
+> Status: The InfoNCE contrastive mapper was evaluated as Models B, C, D in the ablation benchmark. It is NOT deployed in the production VoixPipeline but IS the architecture whose checkpoint (D_joint_infonce_best.pt) was benchmarked. The CVAE is the active generative model for multi-voice sampling.
+
+Architecture:
+```
+Input: e_f (560-D)
+  +-- Linear(560->512) + GroupNorm + GELU
+  +-- Linear(512->384) + GroupNorm + GELU
+  +-- Linear(384->256) + GroupNorm + GELU
+       |                         |
+  Linear(256->192)          Linear(256->1)
+  L2 Normalize               Sigmoid
+       |                         |
+  e_s_hat in S^191          y_gender in [0,1]
+```
+
+Supervised InfoNCE Loss (Models C, D):
+  L_InfoNCE = -(1/B) sum_i log[ exp(e_s_hat_i . c_yi / tau) / sum_j exp(e_s_hat_i . c_j / tau) ]
+  Temperature tau = 0.07; targets = precomputed speaker centroids c_y.
+
+Auxiliary Gender Loss:
+  L_gender = -(1/B) sum_i [y_i * log(y_hat_i) + (1-y_i) * log(1-y_hat_i)]
+  lambda_gender = 0.50
+
+Combined:
+  L_total = L_InfoNCE + 0.50 * L_gender
+
+### 2c. Exemplar Retrieval Gallery (Non-Parametric)  [IMPLEMENTED]
+- **Gallery:** `data/processed/retrieval_gallery.pt` -- 3,029 speaker centroids (c_i in S^191).
+- **Query:** Given predicted embedding e_s_hat and predicted gender, filter gallery to matching gender partition, retrieve top-K by cosine similarity.
+- **Centroid construction:** c_y = normalize( sum_{u in U_y} e_{s,u} ) in S^191.
+
+### 2d. Hybrid Manifold Blending  [IMPLEMENTED]
+  e_s_hybrid = alpha * e_s_hat + (1-alpha) * sum_k [w_k * c_k]
+  alpha=0.70, K=10. Weights w_k are softmax-normalized cosine similarity scores.
+  Rationale: alpha*e_s_hat carries facial identity specificity; (1-alpha)*sum(w_k*c_k) anchors on real human acoustic manifold.
 
 ---
 
-## Module 3: Vocoder Style Bridge & Style Adapter
+## Module 3: Style Adapter  [IMPLEMENTED]
+- **Source:** `voix/models/adapter.py` -- StyleAdapter.
+- **Role:** Bridges 192-D ECAPA speaker embedding space to 128-D StyleTTS 2 style latent space.
 
-### The Latent Mismatch Problem
-ECAPA-TDNN embeddings are trained for speaker verification (discriminating identities by maximizing angular margin). StyleTTS2's internal acoustic representation is an expressive style latent conditioned on pitch, energy, duration, and mel-spectral frames. Injecting raw ECAPA embeddings directly into StyleTTS2 leads to unnatural artifacts.
+```
+Input: e_s in R^192  (CVAE output or hybrid blend)
+  |
+  Linear(192->256) + LayerNorm(256) + GELU
+  |
+  Linear(256->256) + LayerNorm(256) + GELU
+  |
+  Linear(256->128)
+  |
+  s_hat in R^128  (StyleTTS 2 conditioning vector)
+```
 
-### The Vocoder Style Bridge Solution (`voix/models/tts_backend.py`)
-VOIX bridges this space using the `VocoderStyleBridge`:
-1. **Reference Demographic Anchors:** Curated male and female reference audio samples (`data/raw/librispeech_ref/`) establish clean baseline acoustic trajectories.
-2. **Style Vector Projection:** Predicted speaker embeddings $\hat{\mathbf{e}}_s$ are projected into StyleTTS2's style dimensionality.
-3. **Dual-Tier Hybrid Blending:**
-   $$\mathbf{e}_{s, \text{hybrid}} = \alpha \, \hat{\mathbf{e}}_s + (1-\alpha) \sum_{k=1}^K w_k \mathbf{c}_{(k)}$$
-   $$\mathbf{s}_{\text{target}} = \beta \, \mathcal{P}_{\text{adapt}}(\mathbf{e}_{s, \text{hybrid}}) + (1-\beta) \, \mathbf{s}_{\text{anchor}}$$
-   - **Tuned Hyperparameters:** $\alpha = 0.70$, $\beta = 0.30$, $\text{blend\_weight} = 0.75$.
-   - **Result:** Preserves the facial identity and gender trajectory while guaranteeing crisp vocoder fidelity without buzzing or raspiness.
-
----
-
-## Module 4: StyleTTS2 (Frozen Synthesis Backend)
-
-- **Role:** High-fidelity zero-shot text-to-speech synthesis conditioned on predicted style representations.
-- **Input:** Text prompt (converted to phonemes) + predicted style vector $\mathbf{s}_{\text{target}}$.
-- **Output:** 24 kHz high-fidelity speech waveform.
-- **State:** Strictly frozen — zero weights are modified, avoiding degradation of general speech synthesis capability.
+- **Parameters:** ~163k (< 200k) -- the only trainable module during Phase 4.
+- **Training Loss:** MSE + Cosine alignment:
+  L_adapter = MSE(s_hat, s_target) + lambda_cos * (1 - cos_sim(s_hat, s_target)), lambda_cos=1.0
+- **Target:** Real StyleTTS 2 style vectors extracted from LibriSpeech reference audio.
 
 ---
 
-## Training
+## Module 4: Vocoder Style Bridge  [IMPLEMENTED]
+- **Source:** `voix/models/tts_backend.py` -- VocoderStyleBridge within StyleTTS2Backend.
 
-### Loss Formulation
-The production model (`D_joint_infonce_best.pt`) is optimized end-to-end using a joint objective:
-$$\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{InfoNCE}} + \lambda_{\text{gender}} \mathcal{L}_{\text{gender}}$$
+The Latent Space Mismatch Problem:
+  ECAPA-TDNN is trained for speaker verification (angular margin discrimination).
+  StyleTTS 2 style latent encodes acoustic timbre, pitch, duration, spectral envelope.
+  Direct injection of ECAPA vectors causes artifacts.
 
-#### 1. Supervised InfoNCE over Speaker Centroids
-For batch size $B$, predicted unit embedding $\hat{\mathbf{e}}_{s, i}$, and ground-truth speaker centroid $\mathbf{c}_{y_i}$:
-$$\mathcal{L}_{\text{InfoNCE}} = -\frac{1}{B} \sum_{i=1}^{B} \log \frac{\exp(\hat{\mathbf{e}}_{s, i} \cdot \mathbf{c}_{y_i} / \tau)}{\sum_{j=1}^{C} \exp(\hat{\mathbf{e}}_{s, i} \cdot \mathbf{c}_j / \tau)}$$
-- **Temperature:** $\tau = 0.07$.
-- **Centroids:** Precomputed speaker-averaged ECAPA embeddings across all training utterances, eliminating single-utterance acoustic noise.
-
-#### 2. Auxiliary Demographic Gender Loss
-$$\mathcal{L}_{\text{gender}} = -\frac{1}{B} \sum_{i=1}^{B} \left[ y_i \log \hat{y}_i + (1 - y_i) \log(1 - \hat{y}_i) \right]$$
-- **Weight:** $\lambda_{\text{gender}} = 0.50$.
-- **Impact:** Forces internal feature representations in layer 3 (256-D) to cleanly disentangle pitch and vocal tract scale across gender.
-
-### Optimization Hyperparameters
-| Hyperparameter | Value |
-|---|---|
-| Optimizer | AdamW |
-| Learning Rate | $1 \times 10^{-3}$ with Cosine Annealing |
-| Weight Decay | $1 \times 10^{-4}$ |
-| Batch Size | 64 |
-| Epochs | 40 |
-| InfoNCE Temperature $\tau$ | 0.07 |
-| Auxiliary Weight $\lambda_{\text{gender}}$ | 0.50 |
-| Hardware / Mixed Precision | NVIDIA GPU / AMP FP16 |
+Solution: Demographic Reference Anchoring:
+```
+Hybrid Speaker Embedding  e_s_hybrid in R^192
+          |
+    StyleAdapter  (192->128)
+          |
+      s_hat in R^128
+          |
+    beta*s_hat + (1-beta)*s_anchor   [beta = 0.30]
+          |
+    s_target in R^128  (final StyleTTS 2 conditioning)
+```
+- **Anchors:** Curated male/female reference audio from `data/raw/librispeech_ref/`. Style vectors extracted offline.
+- **Blending:** beta=0.30 (30% adapter prediction, 70% calibrated demographic anchor).
+- **Loudness norm:** EBU R128 LUFS via pyloudnorm (soft peak fallback if unavailable).
 
 ---
 
-## Inference: Multiple Voice Generation
+## Module 5: StyleTTS 2 (Frozen Neural Vocoder)  [IMPLEMENTED]
+- **Role:** Zero-shot TTS conditioned on style vector s_target.
+- **Input:** Text prompt (phonemized) + style vector s_target (128-D).
+- **Output:** 24 kHz float32 speech waveform.
+- **State:** Completely frozen (requires_grad = False). Zero fine-tuning.
+- **Robust fallback:** Harmonic formant synthesizer for offline / CI testing.
 
+---
+
+## Module 6: AudioSeal Neural Watermarking  [IMPLEMENTED]
+- **Source:** `voix/models/watermarking.py` -- AudioSealWatermarker.
+- **Method:** AudioSeal (San Roman et al., ICML 2024) -- imperceptible 16-bit in-band neural watermark.
+- **SNR:** > 40 dB (inaudible). Detection accuracy > 98% under MP3 / resampling.
+- **Payload:** 16-bit cryptographic provenance marker in all generated waveforms.
+
+---
+
+## Module 7: Hardware Auto-Configuration  [IMPLEMENTED]
+- **Source:** `voix/utils/hardware.py` -- detect_hardware(), HardwareProfile.
+- **Config:** `configs/hardware.yaml` -- 5 canonical profiles.
+
+| Profile | VRAM | Device | batch_voices | Mode |
+|---|---|---|---|---|
+| tier_1_budget_gpu | <= 4.5 GB | CUDA | false (sequential) | staged_memory_isolated |
+| tier_2_mid_gpu | 4.5-12.5 GB | CUDA | true (parallel) | full_parallel |
+| tier_3_high_gpu | >= 16 GB | CUDA | true | high_throughput |
+| tier_apple_silicon | Unified RAM | MPS | true | mps_optimized |
+| tier_cpu_only | N/A | CPU | false | cpu_fallback |
+
+- **Detection:** Queries platform, CUDA/MPS/ROCm/XPU availability, VRAM at runtime.
+- **OOM safety:** Tier 1 uses torch.cuda.empty_cache() between voices; ONNX ArcFace on CPU.
+
+---
+
+## Inference: VoixPipeline API  [IMPLEMENTED]
+- **Source:** `voix/inference/pipeline.py` -- VoixPipeline.
+
+Constructor:
+```python
+VoixPipeline(
+    cvae_checkpoint: str = "D:/voix/checkpoints/cvae_best.pt",
+    adapter_checkpoint: str = "D:/voix/checkpoints/style_adapter_best.pt",
+    scaler_path: str = "D:/voix/data/processed/face_scaler.pt",
+    device: Optional[str] = None,          # None = auto-detect
+    enable_watermarking: bool = True,
+    hardware_profile: Optional[HardwareProfile] = None,
+)
+```
+
+> [KNOWN GAP] No from_pretrained() class method exists. Earlier docs showed this API but it does not exist in the current codebase. Planned for Phase 7 hardening.
+
+Usage:
 ```python
 from voix.inference.pipeline import VoixPipeline
 
-# Initialize full pipeline with production checkpoints
-pipeline = VoixPipeline.from_pretrained(
-    checkpoint_path="results/checkpoints/D_joint_infonce_best.pt",
-    scaler_path="data/processed/face_scaler.pt",
-    gallery_path="data/processed/retrieval_gallery.pt",
-    device="cuda"
+pipeline = VoixPipeline(
+    cvae_checkpoint="D:/voix/checkpoints/cvae_best.pt",
+    adapter_checkpoint="D:/voix/checkpoints/style_adapter_best.pt",
 )
 
-# Generate K=3 diverse, identity-conditioned voices
 results = pipeline.generate_voices(
     face_image_path="test_face.jpg",
-    text_prompt="Hello, this is a voice generated from my facial features.",
+    text_prompt="The voice reflects both physical anatomy and lived culture.",
     num_voices=3,
-    strategy="hybrid",   # Options: 'contrastive', 'retrieval', 'hybrid'
-    alpha=0.70,          # Weight on contrastive mapper vs exemplar gallery
-    output_dir="outputs/"
+    strategy="hybrid",
+    output_dir="outputs/",
 )
 ```
 
-### Voice Diversity Mechanism
-1. **Primary Voice ($k=1$):** Hybrid blend of contrastive prediction $\hat{\mathbf{e}}_s$ and top-1 nearest centroid $\mathbf{c}_{(1)}$.
-2. **Alternative Voices ($k > 1$):** Top-$k$ nearest neighbors within the predicted demographic cluster, or stochastic sampling around the predicted manifold vector $\hat{\mathbf{e}}_s + \epsilon_k$ with $\epsilon_k \sim \mathcal{N}(0, \sigma^2 I)$.
+Inference flow:
+1. extract_face_features() -> e_f (560-D), gender, age
+2. CVAE.sample_voices(e_f, K, temperature) -> K candidate e_s_hat
+3. Exemplar gallery retrieval + hybrid blending -> e_s_hybrid (per voice)
+4. StyleAdapter(e_s_hybrid) -> s_hat (128-D per voice)
+5. VocoderStyleBridge: s_target = beta*s_hat + (1-beta)*s_anchor
+6. StyleTTS2(text, s_target) -> 24 kHz waveform
+7. AudioSeal(waveform) -> watermarked output
 
 ---
 
-## Datasets
+## Training Pipelines
 
-### Curated Feature Store (`data/processed/voxceleb2_features.h5`)
-- **Total Utterances:** 75,720 multimodal pairs.
-- **Total Unique Speakers:** 3,029 identities.
-- **Split Breakdown:**
-  - **Training Set:** 2,629 speakers (65,720 utterance pairs).
-  - **Zero-Shot Validation Set:** 400 held-out speakers (10,000 utterance pairs) — strictly disjoint identities.
-- **Stored Tensors:**
-  - `face_features`: 560-D fused vectors (ArcFace + FaceMesh + Demographics).
-  - `speaker_embeddings`: 192-D utterance-level ECAPA embeddings.
-  - `speaker_centroids`: 192-D speaker-averaged ECAPA embeddings.
-  - `speaker_ids`: Integer identity tags for supervised contrastive batching.
-  - `gender_labels`: Binary indicators (0: Female, 1: Male).
+### Phase 3: CVAE Training  [IMPLEMENTED]
+- **Trainer:** `voix/training/trainer_adapter.py`
+- **Optimizer:** AdamW (lr=1e-3, weight_decay=1e-4), CosineAnnealingLR
+- **Mixed Precision:** AMP FP16
+- **Loss:** CVAELoss -- Cosine reconstruction + free-bits KL with beta annealing
+- **Checkpoint:** `checkpoints/cvae_best.pt`
 
-### In-Domain Evaluation: VoxCeleb1
-- 1,251 speakers, ~153,000 clips for cross-dataset zero-shot speaker retrieval and verification.
+### Phase 4: Style Adapter Supervised Training  [IMPLEMENTED]
+- **Trainer:** `voix/training/trainer_adapter_supervised.py`
+- **Loss:** SupervisedAdapterLoss -- MSE + Cosine alignment (lambda_cos=1.0)
+- **Target:** Real StyleTTS 2 style vectors from LibriSpeech reference audio
+- **Checkpoint:** `checkpoints/style_adapter_best.pt`
 
-### Out-of-Domain Evaluation: Indian F2S Benchmark
-- **Target Duration:** ~20 hours.
-- **Target Speakers:** 40–60 diverse speakers.
-- **Languages:** Hindi, Tamil, Telugu, Bengali, Marathi.
-- **Code-Switching:** ~25% of audio clips.
-- **Release Format:** Precomputed 560-D face and 192-D acoustic embeddings (privacy-preserving).
+### Optimization Hyperparameters (Verified)
 
----
-
-## Evaluation Metrics & Verified Empirical Benchmarks
-
-### Objective Metrics Evaluated Across 400 Unseen Zero-Shot Speakers
-Evaluated on the held-out validation set ($N=10,000$ utterances across 400 unseen identities):
-
-| Model Paradigm | Val Cosine | SECS (Mean) | SECS (Peak) | R@1 | R@5 | R@10 | Gender Acc | Latency |
-|---|---|---|---|---|---|---|---|---|
-| **A: Baseline Cosine Regression** | 0.0526 | 0.0076 | 0.0812 | 0.0003 | 0.0016 | 0.0028 | 51.5% | 2.1 ms |
-| **B: SpkAvg + Gender Loss** | 0.0886 | 0.0089 | 0.1245 | 0.0007 | 0.0034 | 0.0062 | 68.3% | 2.1 ms |
-| **C: Metric Contrastive (Utterances)** | 0.0914 | 0.0092 | 0.1410 | 0.0008 | 0.0038 | 0.0071 | 64.2% | 2.3 ms |
-| **D: Joint InfoNCE Centroids (Best Checkpoint)** | 0.1288 | 0.0101 | 0.1877 | 0.0009 | 0.0041 | 0.0055 | 62.6% | 2.3 ms |
-| **E: Exemplar Retrieval (k=5)** | 0.0642 | 0.0177 | 0.1208 | 0.0012 | 0.0050 | 0.0095 | **100.0%** | 3.8 ms |
-| **F: Hybrid Retrieval-Contrastive (k=10)** | **0.1299** | **0.0324** | **0.1889** | 0.0010 | 0.0045 | 0.0085 | **100.0%** | 11.2 ms |
-
-### Key Benchmark Takeaways:
-1. **Model D vs Model A:** Metric contrastive learning on centroids improves validation cosine similarity by **+145%** over baseline regression ($0.1288$ vs $0.0526$).
-2. **Model F (Hybrid):** Achieves the highest overall cosine similarity ($0.1299$), highest mean SECS ($0.0324$), peak speaker SECS ($0.1889$), and **100.0% gender consistency**.
-3. **Inference Efficiency:** All models execute well within the real-time budget ($<12$ ms per forward pass).
-
----
-
-## Software Stack
-
-| Component | Tool / Library | Version | Purpose |
-|---|---|---|---|
-| Deep Learning | PyTorch | 2.5.1+cu121 | Core tensor computations, training, AMP |
-| Face Detection | InsightFace / RetinaFace | 2.0 / Buffalo_L | Robust face bounding box & 5-point alignment |
-| Face Biometrics | ArcFace (ResNet-50) | Buffalo_L | 512-D discriminative identity representation |
-| Morphometry | MediaPipe FaceMesh | 1.0.1 | 468 landmark detection, canonical ratios |
-| Speaker Modeling | SpeechBrain ECAPA-TDNN | 1.1.1 | 192-D speaker verification embedding space |
-| Speech Synthesis | StyleTTS2 | Frozen | Neural acoustic vocoder and style conditioner |
-| Audio I/O | Librosa & SoundFile | 1.0.0 / 0.14.0 | Audio resampling, trimming, STFT processing |
-| HDF5 Storage | h5py | 3.12.x | High-throughput indexed feature store |
-| Configuration | PyYAML | 6.0.x | Reproducible experiment configs |
-
----
-
-## Hardware & Compute Profile
-
-| Resource | Specification | Allocation / Role |
+| Parameter | Value | Source |
 |---|---|---|
-| **Local GPU** | NVIDIA GeForce GTX 1650 (4.0 GB VRAM) | Feature extraction, rapid debugging, tests |
-| **Secondary GPU** | NVIDIA RTX 4050 / Colab T4 (15.0 GB VRAM) | Metric contrastive training, full evaluation |
-| **Peak Training VRAM** | 1.8 GB at batch size 64 | Fits comfortably within 4 GB constraint |
-| **Epoch Duration** | ~35 seconds on GPU | 40 epochs complete in ~24 minutes |
+| Optimizer | AdamW | trainer_adapter.py |
+| Learning rate | 1e-3 | Config |
+| Weight decay | 1e-4 | Config |
+| Batch size | 64 | cvae_training.yaml |
+| InfoNCE temperature tau | 0.07 | losses.py |
+| Gender loss weight lambda | 0.50 | losses.py |
+| Free-bits threshold lambda_fb | 0.5 nats/dim | losses.py |
+| beta warmup steps | 5,000 | losses.py |
+| Mixed precision | AMP FP16 | Trainer |
+| Epochs | 40 | Config |
+
+---
+
+## Datasets  [IMPLEMENTED]
+
+### Primary Feature Store (data/processed/voxceleb2_features.h5)
+- **Total Utterances:** 75,720 multimodal pairs.
+- **Unique Speakers:** 3,029 identities.
+- **Training Split:** 2,629 speakers (65,720 utterance pairs) -- identity-disjoint.
+- **Zero-Shot Validation:** 400 speakers (10,000 utterance pairs) -- strictly unseen.
+- **HDF5 Keys:** face_features (N,560), speaker_embeddings (N,192), speaker_centroids (3029,192), speaker_ids (N,), gender_labels (N,).
+
+### Indian F2S Benchmark  [PLANNED]
+- Target: ~20 hours, 40-60 speakers, 5 Indian languages.
+- Code-switching: ~25% of utterances.
+- Release: Privacy-preserving embeddings only.
+- Status: Specification complete; curation not yet started.
+
+---
+
+## Empirical Benchmarks (Verified from results/benchmarks/summary.csv)
+
+> [IMPORTANT] The summary.csv reports different metric values than earlier documentation.
+> The CSV uses: val_cos, recall_at_1, recall_at_3, recall_at_10, gender_accuracy, secs, secs_std
+> (NOT recall_at_5 as previously documented). Verified values from CSV are used below.
+
+### Benchmark Results (n_synthesized=10 per model unless noted)
+
+| Model | val_cos | R@1 | R@3 | R@10 | Gender Acc | SECS Mean | SECS Std |
+|---|---|---|---|---|---|---|---|
+| A: Baseline Cosine Regression | 0.1372 | 0.0010 | 0.0025 | 0.0050 | 62.6% | 0.0207 | 0.0673 |
+| B: SpkAvg + Gender Loss | 0.1370 | 0.0005 | 0.0020 | 0.0050 | 62.6% | 0.0171 | 0.0722 |
+| D: Joint InfoNCE Centroids | 0.1288 | 0.0010 | 0.0020 | 0.0060 | 62.6% | 0.0177 | 0.0600 |
+| E: Exemplar Retrieval k=5 | 0.0642 | 0.0010 | 0.0020 | 0.0060 | 100.0% | 0.0252 | 0.0542 |
+| F: Hybrid k=10 | 0.1299 | 0.0010 | 0.0020 | 0.0060 | 100.0% | 0.0117 | 0.0608 |
+| F: Hybrid k=10 (n=20 samples) | 0.1299 | 0.0010 | 0.0040 | 0.0085 | 100.0% | 0.0324 | 0.0728 |
+
+> Note: WER, FAD, and MOS columns all -1.0 (not measured). Model C not present in CSV.
+
+### Key Empirical Findings
+1. Gender fidelity: Models E and F achieve 100.0% gender accuracy vs 62.6% for regression models -- gallery gender conditioning is the key driver.
+2. SECS quality: Model F with n=20 achieves highest mean SECS (0.0324). More synthesis samples improve reliability.
+3. Val Cosine: Models A and B (0.137) exceed Model D (0.129) in this evaluation run, reflecting the retrieval vs regression trade-off.
+4. Recall: All models show low absolute recall values (<0.01) -- this reflects the difficulty of zero-shot speaker retrieval from 400 identities with only 10-20 audio samples.
+
+---
+
+## Software Stack (Verified)
+
+| Component | Library | Version | Source File |
+|---|---|---|---|
+| Deep Learning | PyTorch | 2.5.1+cu121 | requirements.txt |
+| Face Detection | InsightFace / RetinaFace | 2.0 | voix/data/face_extractor.py |
+| Face Biometrics | ArcFace ResNet-50 | Buffalo_L | ArcFaceExtractor |
+| Morphometry | MediaPipe FaceMesh | 1.0.1 | voix/data/morphology.py |
+| Speaker Modeling | SpeechBrain ECAPA-TDNN | 1.1.1 | voix/data/speaker_extractor.py |
+| Speech Synthesis | StyleTTS 2 | Frozen | voix/models/tts_backend.py |
+| Style Bridging | Custom StyleAdapter | -- | voix/models/adapter.py |
+| Audio I/O | Librosa / SoundFile | 1.0.0 / 0.14.0 | requirements.txt |
+| Loudness Norm | pyloudnorm (optional) | -- | tts_backend.py |
+| HDF5 Storage | h5py | 3.12.x | voix/data/dataset.py |
+| Configuration | PyYAML | 6.0.x | voix/utils/config.py |
+| Watermarking | AudioSeal | -- | voix/models/watermarking.py |
+
+---
+
+## Hardware & Compute (Verified)
+
+| Resource | Specification | Role |
+|---|---|---|
+| Local GPU (dev) | NVIDIA GeForce GTX 1650 (4.0 GB VRAM) | Feature extraction, debugging, Tier 1 tests |
+| Training GPU | NVIDIA RTX 4050 / Colab T4 | CVAE + adapter training |
+| Peak Training VRAM | ~1.8 GB @ batch 64 | Fits within 4 GB constraint |
+| Inference VRAM (Tier 1) | ~1.41 GB peak | Sequential, ONNX on CPU |
+| Inference VRAM (Tier 2) | ~3.8 GB peak | Parallel batch synthesis |
+| Epoch Duration | ~35 s on RTX 4050 | 40 epochs ~= 24 min |
+
+---
+
+## Known Gaps & Open Issues
+
+| Gap | Severity | Status |
+|---|---|---|
+| from_pretrained() class method missing from VoixPipeline | Medium | Open -- planned Phase 7 |
+| Craniofacial ratio contribution (RQ2) not formally ablated | Medium | Planned -- Indian F2S benchmark |
+| WER, FAD, MOS metrics not measured in current evaluation | Medium | Planned -- needs ASR + listening study |
+| Recall metric is R@3 in CSV vs R@5 in earlier docs | Low | Fixed in this doc |
+| Indian F2S Benchmark curation (Phase 5) not started | High | Pending -- core research deliverable |
+| CVAE training logs / loss curves not preserved | Low | Recommend W&B/TensorBoard logging |
 
 ---
 

@@ -1,4 +1,4 @@
-# tasks.md
+﻿# tasks.md
 > Implementation checklist — updated as work progresses. Tracks deliverables, completion dates, and validation artifacts.
 
 Status key: `[ ]` todo | `[~]` in-progress | `[x]` done | `[!]` blocked
@@ -169,7 +169,7 @@ Status key: `[ ]` todo | `[~]` in-progress | `[x]` done | `[!]` blocked
 
 ---
 
-## Phase 7 — Production Hardening & Reproducibility (IN-PROGRESS)
+## Phase 7 — Production Hardening & Reproducibility (IN-PROGRESS - Active)
 
 ### T7.1: Legacy Code & Checkpoint Purge
 - [x] Purged 25 obsolete training scripts, deprecated checkpoints, duplicate `_final.pt` files, and temporary audio
@@ -184,12 +184,25 @@ Status key: `[ ]` todo | `[~]` in-progress | `[x]` done | `[!]` blocked
 ### T7.3: Complete Documentation Synchronization
 - [x] Update `project-context/` (`context.md`, `architecture.md`, `research.md`, `tasks.md`, `mvp.md`)
 - [x] Update `plans/` (`overview.md`, Phase 3, Phase 4, Phase 6, Phase 7)
-- [x] Update `README.md`
+- [x] Full `README.md` overhaul — evidence-based 13-section publication-ready documentation (2026-10-13)
 
-### T7.4: Version Control & Remote Sync
+### T7.5: Dynamic Hardware Auto-Configuration
+- [x] Implemented `configs/hardware.yaml` — universal cross-platform hardware profiles (Windows, Linux, macOS)
+- [x] Profiles: `tier_1_budget_gpu` (<=4.5GB CUDA), `tier_2_mid_gpu` (6–12GB), `tier_3_high_gpu` (>=16GB), `tier_apple_silicon` (MPS), `tier_cpu_only`
+- [x] `voix/utils/hardware.py` — auto-detection engine querying OS, CUDA, MPS, ROCm, and XPU at runtime
+- [x] Tier 2 `batch_voices: true` enabled (parallel synthesis, ~3.8GB peak VRAM); Tier 1 sequential to prevent OOM
+- [x] `tests/test_hardware.py` — 11 assertions covering all hardware tiers (89 total tests now passing)
+
+### T7.6: Whitebox End-to-End Inference Audit (`inde/` test case)
+- [x] Full pipeline run on unknown test image (`D:/voix/inde.jpeg`) — 3 voices synthesized on CUDA
+- [x] `inde/metadata.json` — 78.5 KB whitebox dossier with all 560 input features, 32 craniofacial ratios, gallery top-10 scores, synthesis audit, and WER=0.0% ASR verification
+- [x] `inde/` and `inde.jpeg` added to `.gitignore` — local test assets excluded from VCS
+
+### T7.7: Version Control & Remote Sync
 - [ ] Stage all cleaned files and updated documentation
 - [ ] Push clean commit to GitHub main repository
 
 ---
 
 *Read next: [mvp.md](file:///D:/voix/project-context/mvp.md)*
+

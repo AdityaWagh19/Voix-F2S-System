@@ -1,5 +1,5 @@
 # mvp.md
-> The minimum working VOIX system — execution boundaries, validation gates, architectural fallbacks, and reproducibility standards.
+> The minimum working VOIX system -- execution boundaries, validation gates, architectural fallbacks, and reproducibility standards.
 
 The entire master document scope defines the MVP. This document defines the engineering boundaries, active validation gates, and empirical fallback positions.
 
@@ -9,7 +9,7 @@ The entire master document scope defines the MVP. This document defines the engi
 
 The MVP is a complete, publication-ready research system featuring:
 
-1. **Metric Contrastive & Hybrid Manifold Mapper:** Trained on VoxCeleb2 — mapping unified 560-D face representations to natural, non-collapsed speaker embeddings.
+1. **Metric Contrastive & Hybrid Manifold Mapper:** Trained on VoxCeleb2 -- mapping unified 560-D face representations to natural, non-collapsed speaker embeddings.
 2. **Exemplar Retrieval Gallery:** Precomputed 3,029-identity centroid gallery ($\mathcal{G} \in \mathbb{R}^{3029 \times 192}$) with gender partitioning.
 3. **Vocoder Style Bridge:** Frozen StyleTTS2 integration with reference demographic anchors ensuring crisp, artifact-free 24 kHz speech synthesis.
 4. **Empirical Baseline & Ablation Suite:** 6 distinct paradigm architectures evaluated across 400 zero-shot held-out speakers over 7 objective metrics.
@@ -20,7 +20,7 @@ The MVP is a complete, publication-ready research system featuring:
 
 ## Phased Delivery
 
-### Phase 1 — Environment + Data Infrastructure (COMPLETE)
+### Phase 1 -- Environment + Data Infrastructure (COMPLETE)
 
 **Delivered Components:**
 - Python virtual environment with PyTorch 2.5.1+cu121, SpeechBrain 1.1.1, InsightFace 2.0, MediaPipe 1.0.1.
@@ -36,7 +36,7 @@ The MVP is a complete, publication-ready research system featuring:
 
 ---
 
-### Phase 2 — Mapper Architecture & Acoustic Bridge (COMPLETE)
+### Phase 2 -- Mapper Architecture & Acoustic Bridge (COMPLETE)
 
 **Delivered Components:**
 - Initial CVAE implementation ($q_\phi, p_\theta, p_\psi$) with free-bits KL regularization ($\lambda_{\text{fb}} = 0.5$ nats/dim) and $\beta(t)$ annealing.
@@ -53,7 +53,7 @@ The MVP is a complete, publication-ready research system featuring:
 
 ---
 
-### Phase 3 — Empirical Evaluation & Ablations (COMPLETE)
+### Phase 3 -- Empirical Evaluation & Ablations (COMPLETE)
 
 **Delivered Components:**
 - Implementation and benchmarking of 6 distinct paradigms:
@@ -72,7 +72,7 @@ The MVP is a complete, publication-ready research system featuring:
 
 ---
 
-### Phase 4 — Benchmark Curation & Hardening (ACTIVE)
+### Phase 4 -- Benchmark Curation & Hardening (ACTIVE)
 
 **Target Deliverables:**
 - Ingestion and filtering of ~20 hours of Indian speech data across Hindi, Tamil, Telugu, Bengali, and Marathi.

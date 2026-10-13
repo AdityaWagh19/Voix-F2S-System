@@ -1,4 +1,4 @@
-# Engineering Implementation Plan Overview
+﻿# Engineering Implementation Plan Overview
 
 > **Project:** VOIX — Probabilistic Face-to-Voice Generation Through Cross-Modal Identity Modeling  
 > **Repository:** `AdityaWagh19/Voix-F2S-System`  
@@ -80,7 +80,7 @@ flowchart TD
 
 The project adheres to strict validation gates:
 
-1. **Gate 0 (Phase 1):** All pretrained backbones pass deterministic unit tests with zero VRAM leaks. *(Passed: 35 passed, 2 skipped)*
+1. **Gate 0 (Phase 1):** All pretrained backbones pass deterministic unit tests with zero VRAM leaks. *(Passed: 89 passed)*
 2. **Gate 1 (Phase 2):** Multimodal feature extraction achieves clean audio-visual pairing across 75,720 utterances with zero identity leakage between train (2,629 identities) and validation (400 identities). *(Passed)*
 3. **Gate 2 (Phase 3):** Mapper resolves acoustic collapse, achieving validation cosine similarity $>0.100$ on unseen identities. *(Passed: Model D achieved 0.1288; Model F achieved 0.1299)*
 4. **Gate 3 (Phase 4):** End-to-end synthesis produces crisp, natural, non-robotic 24 kHz speech from a single face image using the Vocoder Style Bridge. *(Passed: $\alpha=0.70, \beta=0.30, \text{blend}=0.75$)*
@@ -180,3 +180,4 @@ voix/
 ---
 
 *Read next: [phase-3-probabilistic-cvae-mapper.md](phase-3-probabilistic-cvae-mapper.md)*
+

@@ -1,5 +1,5 @@
 # research.md
-> What the 25 surveyed papers mean for VOIX — organized by engineering relevance, not bibliography.
+> What the 25 surveyed papers mean for VOIX -- organized by engineering relevance, not bibliography.
 
 Full survey details: `../Initial Docs/voix_lit_survey_outline.md`  
 Detailed matrix: `../Initial Docs/Voix F2S lit survey.csv`
@@ -8,11 +8,11 @@ Detailed matrix: `../Initial Docs/Voix F2S lit survey.csv`
 
 ## What VOIX Borrows from Each Bucket
 
-### Bucket 1 — Cross-Modal Baselines (Papers 1-4)
+### Bucket 1 -- Cross-Modal Baselines (Papers 1-4)
 
 **Speech2Face (Oh et al., CVPR 2019)**
 - **Contribution:** Establishes voice-to-face cross-modal signal is learnable without explicit demographic supervision.
-- **Flaw VOIX Fixes:** Deterministic L1/MSE regression produces blurred "mean" faces — the exact identical problem exists in the reverse F2V direction (acoustic mean collapse). VOIX solves this via Supervised InfoNCE metric contrastive mapping over speaker centroids and hybrid exemplar manifold retrieval.
+- **Flaw VOIX Fixes:** Deterministic L1/MSE regression produces blurred "mean" faces -- the exact identical problem exists in the reverse F2V direction (acoustic mean collapse). VOIX solves this via Supervised InfoNCE metric contrastive mapping over speaker centroids and hybrid exemplar manifold retrieval.
 
 **Seeing Voices & Hearing Faces (Nagrani et al., CVPR 2018)**
 - **Contribution:** Provides the cross-modal evaluation protocol VOIX adopts: 1:N forced-choice retrieval (Recall@K).
@@ -22,7 +22,7 @@ Detailed matrix: `../Initial Docs/Voix F2S lit survey.csv`
 - **Contribution:** Demonstrates visual and acoustic modalities can be aligned via a shared metric manifold without requiring end-to-end multi-modal retraining.
 - **Application:** Informs VOIX's frozen dual-backbone design: ArcFace biometric space ($\mathbb{S}^{511}$) and ECAPA speaker space ($\mathbb{S}^{191}$) are aligned via a compact metric projection head without altering pretrained representations.
 
-**Imaginary Voice (Lee et al., ICASSP 2023) — Closest Prior Work**
+**Imaginary Voice (Lee et al., ICASSP 2023) -- Closest Prior Work**
 - **Contribution:** Face image $\to$ diffusion model $\to$ TTS acoustic generation.
 - **VOIX Differences:**
   1. Lightweight metric contrastive & exemplar retrieval ($<12$ ms latency) rather than iterative diffusion denoising.
@@ -32,47 +32,47 @@ Detailed matrix: `../Initial Docs/Voix F2S lit survey.csv`
 
 ---
 
-### Bucket 2 — Visual Representation (Papers 5-8)
+### Bucket 2 -- Visual Representation (Papers 5-8)
 
-**ArcFace (Deng et al., CVPR 2019) — Used Directly**
+**ArcFace (Deng et al., CVPR 2019) -- Used Directly**
 - **Contribution:** Additive Angular Margin (AAM-Softmax) loss enforces hyperspherical clustering of facial identities.
 - **Application:** VOIX uses InsightFace's pretrained ArcFace ResNet-50 as the frozen 512-D identity extractor. Features are normalized onto $\mathbb{S}^{511}$, ensuring robustness against lighting and camera variation.
 
-**FLAME (Li et al., SIGGRAPH 2017) — Biomechanical Context**
+**FLAME (Li et al., SIGGRAPH 2017) -- Biomechanical Context**
 - **Contribution:** 3D morphable head model disentangling identity shape $\beta$ (300-D) from expression $\psi$ and pose $\theta$.
 - **Application:** Inspires VOIX's pose filtering (isolating pure neutral frontal frames) and sets the foundation for future full-3D head mesh integrations.
 
-**DECA (Feng et al., TOG 2021) — Methodology Reference**
+**DECA (Feng et al., TOG 2021) -- Methodology Reference**
 - **Contribution:** Identity-consistency supervision via a pretrained recognition network rather than unconstrained pixel/geometric loss.
 - **Application:** VOIX adopts this pattern: acoustic supervision is enforced in ECAPA-TDNN feature space, rather than raw STFT or waveform loss.
 
-**EMOCA (Danecek et al., CVPR 2022) — Methodology Reference**
+**EMOCA (Danecek et al., CVPR 2022) -- Methodology Reference**
 - **Contribution:** Disentangling emotion and expression from identity geometry using perceptual feature distances.
 - **Application:** Guides VOIX's strict exclusion of transient facial expressions (smiling, squinting) to prevent prosodic overfitting on static facial snapshots.
 
 ---
 
-### Bucket 3 — Acoustic Representation & Synthesis (Papers 9-12)
+### Bucket 3 -- Acoustic Representation & Synthesis (Papers 9-12)
 
-**ECAPA-TDNN (Desplanques et al., Interspeech 2020) — Used Directly**
+**ECAPA-TDNN (Desplanques et al., Interspeech 2020) -- Used Directly**
 - **Contribution:** Squeeze-and-Excitation channel-attention architecture for robust speaker verification embeddings.
 - **Application:** Serves as VOIX's 192-dimensional target space ($\mathbb{S}^{191}$), providing clean speaker identity clustering invariant to lexical content and linguistic variations.
 
-**StyleTTS 2 (Li et al., NeurIPS 2023) — Used Directly**
+**StyleTTS 2 (Li et al., NeurIPS 2023) -- Used Directly**
 - **Contribution:** Zero-shot text-to-speech synthesis using style diffusion and adversarial vocoding, achieving near-human naturalness.
 - **Application:** Serves as VOIX's frozen synthesis engine. Conditioning is managed through VOIX's `VocoderStyleBridge` ($\alpha=0.70, \beta=0.30$) to prevent vocoder instability from raw embedding injection.
 
-**AudioSeal (San Roman et al., ICML 2024) — Used Directly**
+**AudioSeal (San Roman et al., ICML 2024) -- Used Directly**
 - **Contribution:** Localized neural audio watermarking with high detector sensitivity and zero perceptible degradation.
 - **Application:** Embedded in `voix/models/watermarking.py` to tag all synthetic voices generated by the system, ensuring ethical deployment and deepfake provenance.
 
-**VoiceCraft (Peng et al., 2024) — Context Reference**
+**VoiceCraft (Peng et al., 2024) -- Context Reference**
 - **Contribution:** Autoregressive neural codec language modeling for voice editing and zero-shot synthesis.
 - **Application:** Serves as an alternative generative reference model; reinforces that modular style-conditioned vocoding offers greater architectural stability for deterministic identity conditioning.
 
 ---
 
-### Bucket 4 — Probabilistic Modeling (Papers 13-16)
+### Bucket 4 -- Probabilistic Modeling (Papers 13-16)
 
 **$\beta$-VAE (Higgins et al., ICLR 2017)**
 - **Contribution:** Adjustable weighting parameter $\beta$ on the KL divergence term to control latent channel capacity and encourage disentanglement.
@@ -82,11 +82,11 @@ Detailed matrix: `../Initial Docs/Voix F2S lit survey.csv`
 - **Contribution:** Minimum KL divergence penalty threshold ($\lambda_{\text{fb}}$) per latent dimension.
 - **Application:** Prevents selective posterior collapse across dimensions by enforcing $\mathcal{L}_{\text{KL}} = \sum_d \max(\lambda_{\text{fb}}, \text{KL}_d)$ with $\lambda_{\text{fb}} = 0.5$ nats/dim.
 
-**RealNVP / Normalizing Flows (Dinh et al., ICLR 2017) — Design Exploration**
+**RealNVP / Normalizing Flows (Dinh et al., ICLR 2017) -- Design Exploration**
 - **Contribution:** Invertible affine coupling layers for exact density estimation.
 - **Application:** Explored during design phase; rejected for the primary mapper due to excessive parameter footprint and computational overhead on consumer GPUs (GTX 1650 / RTX 4050).
 
-**Classifier-Free Guidance in Diffusion (Ho & Salimans, 2022) — Design Reference**
+**Classifier-Free Guidance in Diffusion (Ho & Salimans, 2022) -- Design Reference**
 - **Contribution:** Conditioning trade-off between mode coverage and sample fidelity.
 - **Application:** Directly inspired VOIX's hybrid manifold blending parameter $\alpha$:
   $$\mathbf{e}_{s, \text{hybrid}} = \alpha \, \hat{\mathbf{e}}_s + (1-\alpha) \sum_{k=1}^K w_k \mathbf{c}_{(k)}$$
@@ -94,7 +94,7 @@ Detailed matrix: `../Initial Docs/Voix F2S lit survey.csv`
 
 ---
 
-### Bucket 5 — Biomechanical Foundations (Papers 17-19)
+### Bucket 5 -- Biomechanical Foundations (Papers 17-19)
 
 **Acoustic Correlates of Vocal Tract Length (Fitch, 1997)**
 - **Contribution:** Establishes the fundamental allometric scaling relationship between mammalian craniofacial skeletal dimensions and vocal tract length (VTL), which directly determines vowel formant dispersion:
@@ -111,9 +111,9 @@ Detailed matrix: `../Initial Docs/Voix F2S lit survey.csv`
 
 ---
 
-### Bucket 6 — Corpora, Fairness, Ethics (Papers 20-25)
+### Bucket 6 -- Corpora, Fairness, Ethics (Papers 20-25)
 
-**VoxCeleb 1 & 2 (Nagrani et al., 2017; Chung et al., 2018) — Primary Training Corpus**
+**VoxCeleb 1 & 2 (Nagrani et al., 2017; Chung et al., 2018) -- Primary Training Corpus**
 - **Contribution:** Large-scale audio-visual dataset mined from YouTube under wild, unconstrained conditions.
 - **Application:** VOIX extracts 75,720 multimodal pairs across 3,029 identities into an indexed HDF5 store (`data/processed/voxceleb2_features.h5`).
 

@@ -1,4 +1,4 @@
-# context.md
+﻿# context.md
 > What VOIX is, why it exists, and what success looks like.
 
 ---
