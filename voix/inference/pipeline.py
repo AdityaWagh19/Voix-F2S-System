@@ -1,10 +1,10 @@
-"""End-to-End Face-to-Voice Inference Pipeline for VOIX (Phase 4).
+"""End-to-End Face-to-Voice Inference Pipeline for VOIX (Phase 4 & 7).
 
-Connects the full generative stack:
+Connects the full generative stack with dynamic cross-platform hardware auto-configuration:
     Face Image / Embedding (560-D)
-        -> CVAE Probabilistic Mapper (192-D speaker embeddings, K samples)
+        -> CVAE / Contrastive Mapper (192-D speaker embeddings, K samples)
         -> StyleAdapter (128-D StyleTTS 2 style space)
-        -> StyleTTS 2 Neural Vocoder (24 kHz speech synthesis)
+        -> StyleTTS 2 Neural Vocoder (24 kHz speech synthesis, CUDA / MPS / CPU adaptive)
         -> AudioSeal Neural Watermarking (provenance embedding)
         -> Auditory Speech Waveforms (Voice 1, Voice 2, ..., Voice K)
 """
@@ -24,76 +24,82 @@ from voix.models.adapter import StyleAdapter
 from voix.models.cvae import CVAE
 from voix.models.tts_backend import StyleTTS2Backend
 from voix.models.watermarking import AudioSealWatermarker
+from voix.utils.hardware import HardwareProfile, detect_hardware, free_memory
 
 
 class VoixPipeline:
-    """Unified end-to-end VOIX synthesis pipeline.
+    """Unified end-to-end VOIX synthesis pipeline with hardware auto-configuration.
 
     Args:
-        cvae_checkpoint: Path to trained CVAE weights (default: D:/voix/checkpoints/cvae_best.pt).
-        adapter_checkpoint: Path to trained StyleAdapter weights (default: D:/voix/checkpoints/style_adapter_best.pt).
-        scaler_path: Path to feature normalisation scaler (default: D:/voix/data/processed/feature_scaler.pt).
-        device: Execution device ("cuda" or "cpu").
+        cvae_checkpoint: Path to trained CVAE / Mapper weights.
+        adapter_checkpoint: Path to trained StyleAdapter weights.
+        scaler_path: Path to feature normalisation scaler.
+        device: Optional execution device override ("cuda", "mps", "cpu", or None for auto).
         enable_watermarking: Whether to pass audio through AudioSeal (default: True).
+        hardware_profile: Optional pre-configured HardwareProfile. If None, auto-detected.
     """
 
     def __init__(
         self,
         cvae_checkpoint: str = "D:/voix/checkpoints/cvae_best.pt",
         adapter_checkpoint: str = "D:/voix/checkpoints/style_adapter_best.pt",
-        scaler_path: str = "D:/voix/data/processed/feature_scaler.pt",
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        scaler_path: str = "D:/voix/data/processed/face_scaler.pt",
+        device: Optional[str] = None,
         enable_watermarking: bool = True,
+        hardware_profile: Optional[HardwareProfile] = None,
     ) -> None:
-        self.device = torch.device(device)
+        # 1. Resolve Hardware Auto-Configuration
+        self.hardware = hardware_profile or detect_hardware()
+        if device is not None:
+            self.device = torch.device(device)
+            tts_device = device
+        else:
+            self.device = self.hardware.device
+            tts_device = self.hardware.tts_device
+
         self.enable_watermarking = enable_watermarking
 
-        # 1. Load Scaler
+        # 2. Load Scaler (supports both face_scaler.pt and legacy feature_scaler.pt)
         self.scaler = None
-        if os.path.exists(scaler_path):
-            self.scaler = torch.load(scaler_path, weights_only=True)
-            self.face_mean = self.scaler["face_mean"].to(self.device)
-            self.face_std  = self.scaler["face_std"].to(self.device)
-            self.spk_mean  = self.scaler["spk_mean"].to(self.device)
-            self.spk_std   = self.scaler["spk_std"].to(self.device)
+        alt_scaler = "D:/voix/data/processed/feature_scaler.pt"
+        target_scaler = scaler_path if os.path.exists(scaler_path) else alt_scaler
+        if os.path.exists(target_scaler):
+            self.scaler = torch.load(target_scaler, weights_only=False)
+            if "face_mean" in self.scaler:
+                self.face_mean = self.scaler["face_mean"].to(self.device)
+                self.face_std  = self.scaler["face_std"].to(self.device)
+            elif "mean" in self.scaler:
+                self.face_mean = self.scaler["mean"].to(self.device)
+                self.face_std  = self.scaler["scale"].to(self.device)
+            self.spk_mean  = self.scaler.get("spk_mean", torch.zeros(192)).to(self.device)
+            self.spk_std   = self.scaler.get("spk_std", torch.ones(192)).to(self.device)
 
-        # 2. Load CVAE
+        # 3. Load CVAE / Mapper
         self.cvae = CVAE(face_dim=560, speaker_dim=192, latent_dim=192).to(self.device)
         if os.path.exists(cvae_checkpoint):
             ckpt = torch.load(cvae_checkpoint, weights_only=False, map_location=self.device)
-            # strict=False: old checkpoint has BatchNorm keys; new CVAE uses GroupNorm.
-            # Keys will fully match after Phase 3 retraining.
-            missing, unexpected = self.cvae.load_state_dict(
-                ckpt["model_state_dict"], strict=False
-            )
-            if missing:
-                print(f"[VoixPipeline] CVAE checkpoint: {len(missing)} missing keys (expected during arch migration)")
-            if unexpected:
-                print(f"[VoixPipeline] CVAE checkpoint: {len(unexpected)} unexpected keys (old BatchNorm keys, safe to ignore)")
+            state_dict = ckpt["model_state_dict"] if "model_state_dict" in ckpt else ckpt
+            self.cvae.load_state_dict(state_dict, strict=False)
         self.cvae.eval()
 
-        # 3. Load StyleAdapter
+        # 4. Load StyleAdapter
         self.adapter = StyleAdapter(in_dim=192, hidden_dim=256, out_dim=128).to(self.device)
         if os.path.exists(adapter_checkpoint):
             a_ckpt = torch.load(adapter_checkpoint, weights_only=False, map_location=self.device)
-            self.adapter.load_state_dict(a_ckpt["model_state_dict"])
+            a_state = a_ckpt["model_state_dict"] if "model_state_dict" in a_ckpt else a_ckpt
+            self.adapter.load_state_dict(a_state, strict=False)
         self.adapter.eval()
 
-        # 4. Load Synthesis Backend (route to CPU on <=4GB GPUs to prevent HiFi-GAN OOM)
-        tts_device = str(self.device)
-        if self.device.type == "cuda" and torch.cuda.get_device_properties(0).total_memory < 6e9:
-            tts_device = "cpu"
+        # 5. Load Synthesis Backend (Adaptive via Hardware Auto-Configuration)
         self.tts = StyleTTS2Backend(device=tts_device)
 
-        # 5. Load Watermarker
+        # 6. Load Watermarker
         self.watermarker = AudioSealWatermarker(sample_rate=24000, device=str(self.device))
 
-        # 6. Load inference config
+        # 7. Load inference config & pre-load anchors
         from voix.utils.config import load_config
         _cfg = load_config()
         self._inf_cfg = _cfg.get("inference", {})
-
-        # 7. Pre-load anchor paths from config (removes all hardcoded paths)
         self.tts.load_anchors_from_config(_cfg)
 
         # 8. Lazy extractors for raw face image input
@@ -118,8 +124,13 @@ class VoixPipeline:
         from voix.models.fusion import FaceFusionLayer
 
         if self._arcface is None:
+            # Use CPUExecutionProvider for ArcFace on budget GPUs to preserve VRAM for vocoder
+            use_gpu_arc = (
+                self.device.type == "cuda"
+                and self.hardware.onnx_execution_provider == "CUDAExecutionProvider"
+            )
             self._arcface = ArcFaceExtractor(
-                device_id=0 if self.device.type == "cuda" else -1,
+                device_id=0 if use_gpu_arc else -1,
                 cache_dir="D:/voix/checkpoints",
             )
         if self._facemesh is None:
@@ -155,7 +166,6 @@ class VoixPipeline:
             e_geo = np.zeros(32, dtype=np.float32)
 
         # 3. Soft Demographics 16-D with real age & gender posteriors
-        # _last_gender removed: gender is now returned and passed explicitly
         e_demo = self._demog.estimate(e_id, gender=gender, age=age)
 
         # 4. Fusion 560-D
@@ -188,13 +198,7 @@ class VoixPipeline:
             watermark: Explicit flag to enable/disable AudioSeal watermarking.
 
         Returns:
-            List of dicts, each containing:
-              - voice_index: int (1..K)
-              - waveform: torch.Tensor of shape (1, T) at 24 kHz
-              - sample_rate: int (24000)
-              - speaker_embedding: torch.Tensor (192,)
-              - style_embedding: torch.Tensor (128,)
-              - is_watermarked: bool
+            List of dicts containing voice waveforms, speaker embeddings, and metadata.
         """
         if watermark is None:
             watermark = self.enable_watermarking
@@ -241,27 +245,28 @@ class VoixPipeline:
 
         results = []
 
-        # Release visual models to free VRAM before TTS synthesis.
-        # InsightFace ONNX + StyleTTS2 diffusion cannot coexist on 4-6GB GPU.
-        self._arcface = None
-        self._facemesh = None
-        self._demog = None
-        self._fusion = None
-        import gc; gc.collect()
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
+        # Staged Memory Isolation: Release visual extractors to free VRAM before vocoding
+        if self.hardware.pipeline_mode == "staged_memory_isolated":
+            self._arcface = None
+            self._facemesh = None
+            self._demog = None
+            self._fusion = None
+            free_memory(self.device)
 
         # 2. For each candidate voice, project style and synthesize speech
+        _inf = self._inf_cfg
+        diffusion_steps = _inf.get("diffusion_steps", self.hardware.diffusion_steps)
+
         for k in range(num_voices):
-            if torch.cuda.is_available():
-                torch.cuda.empty_cache()
-            e_s_k = e_s_candidates_norm[k].unsqueeze(0)  # (1, 192)
+            if self.hardware.torch_empty_cache_per_sample:
+                free_memory(self.device)
+
+            e_s_k = e_s_candidates_norm[k].unsqueeze(0)
             e_s_raw_k = e_s_candidates_raw[k]
 
-            # Module 3: Style Adapter projection (using unnormalized ECAPA embedding)
-            s_hat_k = self.adapter(e_s_raw_k.unsqueeze(0))  # (1, 128)
+            # Style Adapter projection (192-D -> 128-D)
+            s_hat_k = self.adapter(e_s_raw_k.unsqueeze(0))
 
-            # Module 4: StyleTTS2 Speech Synthesis — config-driven params
             _gender = gender if gender is not None else 1
             _age    = age if age is not None else 30.0
             from voix.utils.config import get_anchor_path, select_anchor_key
@@ -269,8 +274,8 @@ class VoixPipeline:
             try:
                 _anchor_path = get_anchor_path(_anchor_key)
             except (KeyError, FileNotFoundError):
-                _anchor_path = None  # Falls back to config-loaded male/female ref
-            _inf = self._inf_cfg
+                _anchor_path = None
+
             waveform = self.tts.synthesize(
                 text=text,
                 style=s_hat_k,
@@ -278,11 +283,10 @@ class VoixPipeline:
                 blend_weight=_inf.get("blend_weight", 0.55),
                 beta=_inf.get("beta", 0.05),
                 alpha=_inf.get("alpha", 0.3),
-                diffusion_steps=_inf.get("diffusion_steps", 20),
+                diffusion_steps=diffusion_steps,
                 anchor_path=_anchor_path,
-            )  # (1, T)
+            )
 
-            # Module 5: AudioSeal Watermarking
             is_wm = False
             if watermark:
                 try:
@@ -308,25 +312,14 @@ class VoixPipeline:
         output_dir: str = "D:/voix/artifacts/samples",
         prefix: str = "voice",
     ) -> List[str]:
-        """Save generated candidate waveforms to disk as 24 kHz WAV files.
-
-        Args:
-            results: List of result dicts from self.generate().
-            output_dir: Destination directory.
-            prefix: Filename prefix.
-
-        Returns:
-            List of written file paths.
-        """
+        """Save generated candidate waveforms to disk as 24 kHz WAV files."""
         os.makedirs(output_dir, exist_ok=True)
         saved_paths = []
-
         for item in results:
             idx = item["voice_index"]
-            wav = item["waveform"].squeeze(0).numpy()
+            wav = item["waveform"].squeeze().numpy()
             sr = item["sample_rate"]
             path = os.path.join(output_dir, f"{prefix}_{idx}.wav")
-            sf.write(path, wav, sr, format="WAV", subtype="PCM_16")
+            sf.write(path, wav, sr)
             saved_paths.append(path)
-
         return saved_paths

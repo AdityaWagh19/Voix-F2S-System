@@ -1,0 +1,84 @@
+# configs/hardware.yaml
+# Universal Hardware Auto-Configuration Schema & Profiles for VOIX
+# Supports: Windows, Linux, macOS | NVIDIA CUDA, Apple Silicon MPS, AMD ROCm, Intel XPU, and CPU
+
+auto_detect: true       # When true, runtime automatically queries OS & GPU to pick or construct profile
+active_profile: "auto"  # "auto" | "tier_1_budget_gpu" | "tier_2_mid_gpu" | "tier_3_high_gpu" | "tier_apple_silicon" | "tier_cpu_only"
+
+# Thresholds used by the auto-detection engine (in gigabytes)
+thresholds:
+  budget_vram_limit_gb: 4.5    # <= 4.5 GB -> Tier 1 (e.g. GTX 1650, 1050 Ti, MX450)
+  mid_vram_limit_gb: 12.5     # 4.5 to 12.5 GB -> Tier 2 (e.g. RTX 4050, 3060, 4060, 2060)
+  high_vram_limit_gb: 16.0    # >= 16 GB -> Tier 3 (e.g. RTX 3090, 4090, T4, A100, H100)
+
+# Predefined Hardware Profiles
+profiles:
+  # TIER 1: Entry / Budget Dedicated GPU (<= 4 GB VRAM)
+  # Examples: NVIDIA GTX 1650, GTX 1050Ti, MX-series mobile GPUs
+  tier_1_budget_gpu:
+    name: "Entry Dedicated GPU (<= 4GB VRAM)"
+    accelerator: "cuda"
+    pipeline_mode: "staged_memory_isolated"  # Release face models before vocoder execution
+    precision: "fp16"                       # Automatic Mixed Precision
+    tts_device: "cuda"                      # Vocoder runs on GPU under 1.4 GB memory envelope
+    diffusion_steps: 10                     # Perceptually equivalent to 20, 2x speedup
+    batch_voices: false                     # Synthesize K candidate voices sequentially
+    torch_empty_cache_per_sample: true      # Proactively flush CUDA cache between voices
+    onnx_execution_provider: "CPUExecutionProvider" # Keeps ONNX out of limited VRAM
+    cpu_threads: 4
+
+  # TIER 2: Mainstream / Mid-Range GPU (6 GB to 12 GB VRAM)
+  # Examples: NVIDIA RTX 4050 (6GB), RTX 3060 (12GB), RTX 4060 (8GB), RTX 2060 (6GB)
+  tier_2_mid_gpu:
+    name: "Mainstream Dedicated GPU (6GB - 12GB VRAM)"
+    accelerator: "cuda"
+    pipeline_mode: "concurrent_gpu"          # Keep face extractors and vocoder in VRAM
+    precision: "fp16"
+    tts_device: "cuda"
+    diffusion_steps: 15
+    batch_voices: false                     # Sequential synthesis to ensure peak stability
+    torch_empty_cache_per_sample: false
+    onnx_execution_provider: "CUDAExecutionProvider"
+    cpu_threads: 6
+
+  # TIER 3: High-End / Server / Cloud GPU (>= 16 GB VRAM)
+  # Examples: NVIDIA RTX 3090/4090 (24GB), Tesla T4 (16GB), A10G (24GB), A100 (40/80GB)
+  tier_3_high_gpu:
+    name: "Workstation / Datacenter GPU (>= 16GB VRAM)"
+    accelerator: "cuda"
+    pipeline_mode: "batched_gpu"            # Batch-synthesize all K voices in a single forward pass
+    precision: "fp16"
+    tts_device: "cuda"
+    diffusion_steps: 20
+    batch_voices: true                      # Parallel voice synthesis across candidate styles
+    torch_empty_cache_per_sample: false
+    onnx_execution_provider: "CUDAExecutionProvider"
+    cpu_threads: 8
+
+  # APPLE SILICON: Unified Memory Architecture (M1 / M2 / M3 / M4)
+  # Tested across macOS Darwin with PyTorch MPS backend
+  tier_apple_silicon:
+    name: "Apple Silicon Unified Memory (MPS)"
+    accelerator: "mps"
+    pipeline_mode: "concurrent_unified"     # Leverages high-bandwidth shared unified RAM
+    precision: "fp32"                       # MPS handles FP32 with optimal native vector units
+    tts_device: "mps"
+    diffusion_steps: 12
+    batch_voices: false
+    torch_empty_cache_per_sample: true
+    onnx_execution_provider: "CoreMLExecutionProvider" # CoreML hardware acceleration if available
+    cpu_threads: 6
+
+  # CPU-ONLY: Universal Fallback (Any OS without discrete accelerator)
+  # Supported on: Windows, Linux, macOS x86_64 and aarch64
+  tier_cpu_only:
+    name: "Universal CPU Engine"
+    accelerator: "cpu"
+    pipeline_mode: "multithreaded_cpu"
+    precision: "fp32"
+    tts_device: "cpu"
+    diffusion_steps: 8                      # Fast acoustic trajectory sampling
+    batch_voices: false
+    torch_empty_cache_per_sample: false
+    onnx_execution_provider: "CPUExecutionProvider"
+    cpu_threads: "auto"                     # Automatically detected via os.cpu_count()

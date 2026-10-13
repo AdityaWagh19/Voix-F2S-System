@@ -1,30 +1,59 @@
-"""YAML configuration loader with environment variable overrides.
+"""YAML configuration loader with environment variable overrides and dynamic hardware resolution.
 
 Provides a centralized, type-safe config loader for all VOIX modules.
 All hardcoded paths and hyperparameters are sourced from configs/environment.yaml.
+Hardware auto-configuration is loaded from configs/hardware.yaml.
 Environment variables with prefix VOIX_ override YAML values at runtime.
 
 Usage:
-    from voix.utils.config import load_config, get_cfg
+    from voix.utils.config import load_config, get_cfg, get_hardware_profile
 
     cfg = load_config()                       # Load default config
     root = cfg["paths"]["project_root"]       # Access nested keys
-    beta = cfg["training"]["cvae"]["beta_max"]
+    hw = get_hardware_profile()               # Access detected hardware profile
 """
 
 from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 import yaml
 
-# Default config path relative to project root
-_DEFAULT_CONFIG = Path(__file__).resolve().parent.parent.parent / "configs" / "environment.yaml"
+from voix.utils.hardware import HardwareProfile, detect_hardware
 
-# Module-level cached config (loaded once per process)
+# Default config paths relative to project root
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+_DEFAULT_CONFIG = _PROJECT_ROOT / "configs" / "environment.yaml"
+_DEFAULT_HW_CONFIG = _PROJECT_ROOT / "configs" / "hardware.yaml"
+
+# Module-level cached config and hardware profile
 _CACHED_CONFIG: dict[str, Any] | None = None
+_CACHED_HARDWARE: HardwareProfile | None = None
+
+
+def get_hardware_profile(
+    config_path: str | Path | None = None,
+    force_reload: bool = False,
+) -> HardwareProfile:
+    """Retrieve the detected cross-platform hardware profile.
+
+    Args:
+        config_path: Optional path to configs/hardware.yaml.
+        force_reload: If True, re-detect environment even if already cached.
+
+    Returns:
+        HardwareProfile: The active resolved hardware profile.
+    """
+    global _CACHED_HARDWARE
+    if _CACHED_HARDWARE is not None and not force_reload and config_path is None:
+        return _CACHED_HARDWARE
+
+    path = Path(config_path) if config_path else _DEFAULT_HW_CONFIG
+    hw = detect_hardware(path if path.exists() else None)
+    _CACHED_HARDWARE = hw
+    return hw
 
 
 def load_config(config_path: str | Path | None = None, force_reload: bool = False) -> dict[str, Any]:
@@ -48,12 +77,10 @@ def load_config(config_path: str | Path | None = None, force_reload: bool = Fals
 
     if not path.exists():
         if config_path is not None:
-            # Explicit path given and does not exist — raise immediately (no fallback)
             raise FileNotFoundError(
                 f"Config not found at {path}. "
                 "Provide a valid path or leave as None to use the default."
             )
-        # Default path not found — try relative to cwd as last-resort fallback
         alt = Path.cwd() / "configs" / "environment.yaml"
         if alt.exists():
             path = alt
@@ -68,7 +95,6 @@ def load_config(config_path: str | Path | None = None, force_reload: bool = Fals
 
     # --- Environment variable overrides ---
     if env_val := os.environ.get("VOIX_CONFIG"):
-        # Allow completely overriding config path at runtime
         with open(env_val, "r", encoding="utf-8") as f:
             config = yaml.safe_load(f) or {}
 
@@ -88,27 +114,28 @@ def load_config(config_path: str | Path | None = None, force_reload: bool = Fals
     _apply_nested_env_override(config, "VOIX_CVAE_EPOCHS", ["training", "cvae", "epochs"], cast=int)
     _apply_nested_env_override(config, "VOIX_CVAE_LR", ["training", "cvae", "lr"], cast=float)
 
+    # Attach dynamic hardware profile into config dictionary
+    hw = get_hardware_profile(force_reload=force_reload)
+    config["hardware"] = {
+        "tier_id": hw.tier_id,
+        "name": hw.name,
+        "accelerator": hw.accelerator,
+        "device": str(hw.device),
+        "total_memory_gb": hw.total_memory_gb,
+        "pipeline_mode": hw.pipeline_mode,
+        "precision": hw.precision,
+        "tts_device": hw.tts_device,
+        "diffusion_steps": hw.diffusion_steps,
+        "batch_voices": hw.batch_voices,
+        "cpu_threads": hw.cpu_threads,
+    }
+
     _CACHED_CONFIG = config
     return config
 
 
 def get_cfg(key_path: str, config: dict[str, Any] | None = None) -> Any:
-    """Convenience accessor for dot-separated nested config keys.
-
-    Args:
-        key_path: Dot-separated key path, e.g. "training.cvae.beta_max".
-        config: Optional pre-loaded config dict. If None, uses cached config.
-
-    Returns:
-        The value at the specified key path.
-
-    Raises:
-        KeyError: If key path does not exist in config.
-
-    Example:
-        beta = get_cfg("training.cvae.beta_max")
-        librispeech = get_cfg("paths.librispeech_root")
-    """
+    """Convenience accessor for dot-separated nested config keys."""
     cfg = config if config is not None else load_config()
     keys = key_path.split(".")
     node = cfg
@@ -120,20 +147,7 @@ def get_cfg(key_path: str, config: dict[str, Any] | None = None) -> Any:
 
 
 def get_anchor_path(anchor_key: str, config: dict[str, Any] | None = None) -> str:
-    """Resolve a named anchor to its full absolute path.
-
-    Args:
-        anchor_key: One of: male_young, male_mid, male_senior,
-                             female_young, female_mid.
-        config: Optional pre-loaded config dict.
-
-    Returns:
-        Absolute path to the anchor FLAC file.
-
-    Raises:
-        KeyError: If anchor_key is not in config.
-        FileNotFoundError: If resolved path does not exist.
-    """
+    """Resolve a named anchor to its full absolute path."""
     cfg = config if config is not None else load_config()
     anchors = cfg.get("anchors", {})
     librispeech_root = cfg.get("paths", {}).get("librispeech_root", "")
@@ -154,16 +168,7 @@ def get_anchor_path(anchor_key: str, config: dict[str, Any] | None = None) -> st
 
 
 def select_anchor_key(gender: int, age: float, config: dict[str, Any] | None = None) -> str:
-    """Select the appropriate anchor key based on detected gender and age.
-
-    Args:
-        gender: 1 = Male, 0 = Female (from InsightFace).
-        age: Estimated age in years (from InsightFace).
-        config: Optional pre-loaded config dict.
-
-    Returns:
-        Anchor key string (e.g. "male_mid") for use with get_anchor_path().
-    """
+    """Select the appropriate anchor key based on detected gender and age."""
     cfg = config if config is not None else load_config()
     anchors = cfg.get("anchors", {})
 
@@ -173,21 +178,17 @@ def select_anchor_key(gender: int, age: float, config: dict[str, Any] | None = N
 
     if gender == 1:  # Male
         if age < male_young_thresh:
-            return "male_young"    # ~148 Hz, energetic
+            return "male_young"
         elif age < male_senior_thresh:
-            return "male_mid"      # ~130 Hz, classic adult male
+            return "male_mid"
         else:
-            return "male_senior"   # ~118 Hz, deep baritone
+            return "male_senior"
     else:           # Female
         if age < female_mid_thresh:
-            return "female_young"  # ~202 Hz
+            return "female_young"
         else:
-            return "female_mid"    # ~221 Hz
+            return "female_mid"
 
-
-# ---------------------------------------------------------------------------
-# Private helpers
-# ---------------------------------------------------------------------------
 
 def _apply_env_override(
     config: dict,
