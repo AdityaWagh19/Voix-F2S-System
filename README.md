@@ -9,7 +9,7 @@
   <a href="#empirical-benchmarks--ablation-analysis"><img src="https://img.shields.io/badge/Zero--Shot%20Val%20Cosine-0.1299-success" alt="Validation Cosine"></a>
   <a href="#empirical-benchmarks--ablation-analysis"><img src="https://img.shields.io/badge/Gender%20Fidelity-100.0%25-brightgreen" alt="Gender Fidelity"></a>
   <a href="#ethical-statement--audio-provenance"><img src="https://img.shields.io/badge/Watermarking-AudioSeal%2016--bit-orange" alt="AudioSeal"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-lightgrey" alt="License"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
 </p>
 
 ---
@@ -429,4 +429,4 @@ VOIX models the statistical relationship between physical appearance and voice. 
 
 ## 12. License
 
-Apache 2.0. See [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
