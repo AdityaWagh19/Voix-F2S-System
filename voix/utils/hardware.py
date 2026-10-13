@@ -214,7 +214,7 @@ def detect_hardware(config_path: Optional[Union[str, Path]] = None) -> HardwareP
             "precision": "fp16",
             "tts_device": "cuda",
             "diffusion_steps": 15,
-            "batch_voices": False,
+            "batch_voices": True,
             "torch_empty_cache_per_sample": False,
             "onnx_execution_provider": "CUDAExecutionProvider",
             "cpu_threads": 6,

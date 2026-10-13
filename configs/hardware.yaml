@@ -22,7 +22,7 @@ profiles:
     precision: "fp16"                       # Automatic Mixed Precision
     tts_device: "cuda"                      # Vocoder runs on GPU under 1.4 GB memory envelope
     diffusion_steps: 10                     # Perceptually equivalent to 20, 2x speedup
-    batch_voices: false                     # Synthesize K candidate voices sequentially
+    batch_voices: false                     # Sequential synthesis: prevents 3.8GB peak OOM crash
     torch_empty_cache_per_sample: true      # Proactively flush CUDA cache between voices
     onnx_execution_provider: "CPUExecutionProvider" # Keeps ONNX out of limited VRAM
     cpu_threads: 4
@@ -36,7 +36,7 @@ profiles:
     precision: "fp16"
     tts_device: "cuda"
     diffusion_steps: 15
-    batch_voices: false                     # Sequential synthesis to ensure peak stability
+    batch_voices: true                      # Parallel multi-voice synthesis enabled for 6GB-12GB VRAM
     torch_empty_cache_per_sample: false
     onnx_execution_provider: "CUDAExecutionProvider"
     cpu_threads: 6
@@ -64,7 +64,7 @@ profiles:
     precision: "fp32"                       # MPS handles FP32 with optimal native vector units
     tts_device: "mps"
     diffusion_steps: 12
-    batch_voices: false
+    batch_voices: false                     # Sequential by default to prevent Metal heap fragmentation
     torch_empty_cache_per_sample: true
     onnx_execution_provider: "CoreMLExecutionProvider" # CoreML hardware acceleration if available
     cpu_threads: 6
@@ -78,7 +78,7 @@ profiles:
     precision: "fp32"
     tts_device: "cpu"
     diffusion_steps: 8                      # Fast acoustic trajectory sampling
-    batch_voices: false
+    batch_voices: false                     # Sequential: multithreaded per voice avoids thread thrashing
     torch_empty_cache_per_sample: false
     onnx_execution_provider: "CPUExecutionProvider"
     cpu_threads: "auto"                     # Automatically detected via os.cpu_count()

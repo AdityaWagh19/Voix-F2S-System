@@ -53,6 +53,7 @@ class TestHardwareAutoDetection:
         assert profile.pipeline_mode == "concurrent_gpu"
         assert profile.tts_device == "cuda"
         assert profile.diffusion_steps == 15
+        assert profile.batch_voices is True
 
     @patch("torch.cuda.is_available", return_value=True)
     @patch("torch.cuda.get_device_properties")
@@ -80,6 +81,7 @@ class TestHardwareAutoDetection:
         assert profile.tts_device == "mps"
         assert profile.precision == "fp32"
         assert profile.diffusion_steps == 12
+        assert profile.batch_voices is False
 
     @patch("torch.cuda.is_available", return_value=False)
     @patch("torch.backends.mps.is_available", return_value=False)
@@ -92,6 +94,7 @@ class TestHardwareAutoDetection:
         assert profile.tier_id == "tier_cpu_only"
         assert profile.tts_device == "cpu"
         assert profile.diffusion_steps == 8
+        assert profile.batch_voices is False
 
     def test_free_memory_callable(self):
         """Ensure memory clearing executes safely without error."""
