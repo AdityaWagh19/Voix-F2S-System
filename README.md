@@ -44,8 +44,7 @@
   - [9.2 End-to-End Inference](#92-end-to-end-inference)
   - [9.3 Verification Suite](#93-verification-suite)
 - [10. Ethical Statement & Audio Provenance](#10-ethical-statement--audio-provenance)
-- [11. Citation](#11-citation)
-- [12. License](#12-license)
+- [11. License](#11-license)
 
 ---
 
@@ -414,19 +413,6 @@ VOIX models the statistical relationship between physical appearance and voice. 
 
 ---
 
-## 11. Citation
-
-```bibtex
-@article{wagh2026voix,
-  title   = {VOIX: Probabilistic Face-to-Voice Generation Through Cross-Modal Identity Modeling},
-  author  = {Wagh, Aditya},
-  journal = {arXiv preprint},
-  year    = {2026}
-}
-```
-
----
-
-## 12. License
+## 11. License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
