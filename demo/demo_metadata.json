@@ -1,0 +1,1164 @@
+{
+  "schema_version": "2.0.0",
+  "project": "VOIX: Multimodal Face-to-Voice Biometric Synthesis System",
+  "audit_timestamp": "2026-10-16 14:08:16 UTC",
+  "input_face_subject": {
+    "image_filename": "subject_face.png",
+    "image_resolution": [
+      867,
+      865
+    ],
+    "detected_demographics": {
+      "biological_sex": "Female",
+      "sex_code": 0,
+      "estimated_age_years": 42.0
+    },
+    "arcface_identity_embedding": {
+      "embedding_dimension": 512,
+      "l2_norm": 1.0,
+      "mean": -0.001129,
+      "std": 0.04418,
+      "min": -0.115683,
+      "max": 0.159904
+    },
+    "craniofacial_morphology_32d": {
+      "total_ratios": 32,
+      "normalization_basis": "Inter-Ocular Distance (IOC)",
+      "ratios": {
+        "face_height_to_ioc": {
+          "index": 0,
+          "measured_value": 1.7509,
+          "description": "Ratio of total vertical face height (forehead-to-chin) to inter-ocular distance (VTL proxy)"
+        },
+        "face_width_to_ioc": {
+          "index": 1,
+          "measured_value": 1.4973,
+          "description": "Ratio of bizygomatic cheek width to inter-ocular distance"
+        },
+        "jaw_width_to_ioc": {
+          "index": 2,
+          "measured_value": 1.2782,
+          "description": "Ratio of mandibular jaw width to inter-ocular distance (oral cavity resonant volume)"
+        },
+        "mandible_angle_deg": {
+          "index": 3,
+          "measured_value": 94.7021,
+          "description": "Mandibular vertex angle at chin in degrees (jaw morphology)"
+        },
+        "nose_width_to_ioc": {
+          "index": 4,
+          "measured_value": 0.456,
+          "description": "Ratio of nasal alar base width to inter-ocular distance (nasal cavity proxy)"
+        },
+        "nose_height_to_ioc": {
+          "index": 5,
+          "measured_value": 0.3248,
+          "description": "Ratio of nasal bridge-to-tip height to inter-ocular distance"
+        },
+        "nose_bridge_length_to_ioc": {
+          "index": 6,
+          "measured_value": 0.9235,
+          "description": "Ratio of brow-to-nose-tip length to inter-ocular distance"
+        },
+        "bizygomatic_width_to_ioc": {
+          "index": 7,
+          "measured_value": 1.4973,
+          "description": "Bizygomatic cheek-to-cheek width to inter-ocular distance (F1/F2 dispersion cue)"
+        },
+        "inner_eye_separation_to_ioc": {
+          "index": 8,
+          "measured_value": 0.3896,
+          "description": "Ratio of inner canthi distance to inter-ocular distance"
+        },
+        "lower_face_ratio": {
+          "index": 9,
+          "measured_value": 0.5629,
+          "description": "Lower facial third ratio (lip-to-chin height over total facial height)"
+        },
+        "upper_face_ratio": {
+          "index": 10,
+          "measured_value": 0.2509,
+          "description": "Upper facial third ratio (forehead-to-brow height over total facial height)"
+        },
+        "lip_width_to_ioc": {
+          "index": 11,
+          "measured_value": 0.7086,
+          "description": "Ratio of horizontal oral inter-commissure width to inter-ocular distance"
+        },
+        "upper_lip_height_to_ioc": {
+          "index": 12,
+          "measured_value": 0.2014,
+          "description": "Ratio of upper vermilion border height to inter-ocular distance"
+        },
+        "lower_lip_height_to_ioc": {
+          "index": 13,
+          "measured_value": 0.1996,
+          "description": "Ratio of lower vermilion border height to inter-ocular distance"
+        },
+        "philtrum_length_to_ioc": {
+          "index": 14,
+          "measured_value": 0.1729,
+          "description": "Ratio of subnasale-to-labiale superius distance to inter-ocular distance"
+        },
+        "left_cheekbone_offset_to_ioc": {
+          "index": 15,
+          "measured_value": 0.7148,
+          "description": "Left zygomatic transverse offset from facial sagittal midline"
+        },
+        "right_cheekbone_offset_to_ioc": {
+          "index": 16,
+          "measured_value": 0.7807,
+          "description": "Right zygomatic transverse offset from facial sagittal midline"
+        },
+        "nose_tip_to_chin_to_ioc": {
+          "index": 17,
+          "measured_value": 0.9855,
+          "description": "Vertical lower facial proportion from subnasale to gnathion"
+        },
+        "nose_tip_to_forehead_to_ioc": {
+          "index": 18,
+          "measured_value": 0.9057,
+          "description": "Vertical upper facial proportion from nasion to trichion"
+        },
+        "brow_span_to_ioc": {
+          "index": 19,
+          "measured_value": 1.2551,
+          "description": "Total orbital brow ridge horizontal span relative to inter-ocular distance"
+        },
+        "brow_to_eye_dist_left_to_ioc": {
+          "index": 20,
+          "measured_value": 0.2033,
+          "description": "Left orbital vertical separation between brow and upper eyelid"
+        },
+        "brow_to_eye_dist_right_to_ioc": {
+          "index": 21,
+          "measured_value": 0.2032,
+          "description": "Right orbital vertical separation between brow and upper eyelid"
+        },
+        "eye_width_left_to_ioc": {
+          "index": 22,
+          "measured_value": 0.3104,
+          "description": "Left palpebral fissure horizontal width relative to inter-ocular distance"
+        },
+        "eye_width_right_to_ioc": {
+          "index": 23,
+          "measured_value": 0.3176,
+          "description": "Right palpebral fissure horizontal width relative to inter-ocular distance"
+        },
+        "face_aspect_ratio": {
+          "index": 24,
+          "measured_value": 1.1693,
+          "description": "Facial index: total vertical face height divided by bizygomatic breadth"
+        },
+        "mandible_to_nose_ratio": {
+          "index": 25,
+          "measured_value": 2.8029,
+          "description": "Proportion of mandibular breadth to nasal breadth (vocal tract cavity ratio)"
+        },
+        "lip_to_jaw_ratio": {
+          "index": 26,
+          "measured_value": 0.5543,
+          "description": "Oral aperture to mandibular breadth ratio (lip radiation impedance proxy)"
+        },
+        "nose_to_lip_ratio": {
+          "index": 27,
+          "measured_value": 0.6436,
+          "description": "Nasal breadth to oral aperture ratio (nasalization acoustic coupling)"
+        },
+        "jaw_angle_left_deg": {
+          "index": 28,
+          "measured_value": 69.678,
+          "description": "Left mandibular gonial angle in degrees"
+        },
+        "jaw_angle_right_deg": {
+          "index": 29,
+          "measured_value": 71.1032,
+          "description": "Right mandibular gonial angle in degrees"
+        },
+        "chin_z_protrusion": {
+          "index": 30,
+          "measured_value": -0.1297,
+          "description": "Anterior-posterior mental projection (chin depth relative to cheek plane)"
+        },
+        "nose_tip_z_protrusion": {
+          "index": 31,
+          "measured_value": -0.0394,
+          "description": "Nasal tip anterior projection depth relative to nasal bridge"
+        }
+      }
+    },
+    "soft_demographics_16d": {
+      "detected_biological_sex": "Female",
+      "estimated_chronological_age_years": 42.0,
+      "sex_posteriors": {
+        "p_male": 0.04,
+        "p_female": 0.96
+      },
+      "age_distribution": {
+        "age_bin_00_to_10_prob": 0.0,
+        "age_bin_11_to_20_prob": 0.0003,
+        "age_bin_21_to_30_prob": 0.0299,
+        "age_bin_31_to_40_prob": 0.3457,
+        "age_bin_41_to_50_prob": 0.5199,
+        "age_bin_51_to_60_prob": 0.1016,
+        "age_bin_61_to_70_prob": 0.0026,
+        "age_bin_71_plus_prob": 0.0
+      },
+      "vocal_age_grouping": {
+        "child_prob": 0.0026,
+        "young_adult_prob": 0.1154,
+        "mature_adult_prob": 0.8529,
+        "senior_prob": 0.029
+      },
+      "apparent_morphological_build_proxy": {
+        "slender_prob": 0.5,
+        "broad_prob": 0.5
+      }
+    },
+    "fused_biometric_representation_560d": {
+      "fusion_architecture": "FaceFusionLayer (Linear 512 + Linear 32 + Linear 16 -> 560-D LayerNorm + GELU)",
+      "total_dimension": 560,
+      "l2_norm": 15.6017,
+      "mean": 0.289811,
+      "std": 0.59218
+    }
+  },
+  "model_architecture_and_pipeline": {
+    "generative_core": "Conditional Variational Autoencoder (CVAE)",
+    "speaker_embedding_space": "192-D ECAPA-TDNN (VoxCeleb2 calibrated)",
+    "style_adaptation": "StyleAdapter MLP (192-D -> 128-D latent style)",
+    "acoustic_demographic_anchor": {
+      "anchor_id": "female_mid",
+      "anchor_audio_path": "D:/voix/data/raw/librispeech_ref/LibriSpeech/dev-clean-2/84/121550/84-121550-0000.flac",
+      "anchor_gender": "Female",
+      "nominal_f0_hz": 221.5
+    },
+    "neural_vocoder": "StyleTTS 2 (Diffusion ODE Decoder + HiFi-GAN Vocoder)",
+    "naturalness_configurations": {
+      "blend_weight": 0.35,
+      "blend_mechanism": "L2-norm matched biometric injection onto acoustic manifold",
+      "alpha_style_guidance": 0.25,
+      "beta_prosody_strength": 0.7,
+      "diffusion_ode_steps": 25,
+      "peak_normalization": 0.9
+    }
+  },
+  "canonical_evaluation_prompt": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+  "total_synthesized_assets": 27,
+  "synthesized_assets": [
+    {
+      "relative_path": "01_candidates/candidate_1_primary.wav",
+      "filename": "candidate_1_primary.wav",
+      "category": "01_Candidate_Diversity",
+      "condition": {
+        "candidate_index": 1,
+        "latent_sampling": "Stochastic CVAE sampling from prior p(z|e_f)",
+        "sampling_temperature": 0.85
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 8.973,
+        "fundamental_frequency": {
+          "mean_f0_hz": 215.6,
+          "std_f0_hz": 50.8,
+          "voiced_frames_pct": 67.9
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1152
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "01_candidates/candidate_2_alternative.wav",
+      "filename": "candidate_2_alternative.wav",
+      "category": "01_Candidate_Diversity",
+      "condition": {
+        "candidate_index": 2,
+        "latent_sampling": "Stochastic CVAE sampling from prior p(z|e_f)",
+        "sampling_temperature": 0.85
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 8.073,
+        "fundamental_frequency": {
+          "mean_f0_hz": 202.0,
+          "std_f0_hz": 32.2,
+          "voiced_frames_pct": 74.1
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1637
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "01_candidates/candidate_3_contrasting.wav",
+      "filename": "candidate_3_contrasting.wav",
+      "category": "01_Candidate_Diversity",
+      "condition": {
+        "candidate_index": 3,
+        "latent_sampling": "Stochastic CVAE sampling from prior p(z|e_f)",
+        "sampling_temperature": 0.85
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 8.073,
+        "fundamental_frequency": {
+          "mean_f0_hz": 192.2,
+          "std_f0_hz": 34.5,
+          "voiced_frames_pct": 73.4
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1218
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "02_accents/accent_01_general_american.wav",
+      "filename": "accent_01_general_american.wav",
+      "category": "02_Regional_Accents",
+      "condition": {
+        "accent_dialect": "general_american",
+        "accent_strength": 1.0,
+        "phonological_rules": "Dialectal vowel formant shifts, rhoticity modulation, and cadence scaling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 7.823,
+        "fundamental_frequency": {
+          "mean_f0_hz": 211.0,
+          "std_f0_hz": 43.6,
+          "voiced_frames_pct": 73.6
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1741
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "02_accents/accent_02_british_rp.wav",
+      "filename": "accent_02_british_rp.wav",
+      "category": "02_Regional_Accents",
+      "condition": {
+        "accent_dialect": "british_rp",
+        "accent_strength": 1.0,
+        "phonological_rules": "Dialectal vowel formant shifts, rhoticity modulation, and cadence scaling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 8.098,
+        "fundamental_frequency": {
+          "mean_f0_hz": 205.6,
+          "std_f0_hz": 45.7,
+          "voiced_frames_pct": 73.9
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1496
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "02_accents/accent_03_australian.wav",
+      "filename": "accent_03_australian.wav",
+      "category": "02_Regional_Accents",
+      "condition": {
+        "accent_dialect": "australian",
+        "accent_strength": 1.0,
+        "phonological_rules": "Dialectal vowel formant shifts, rhoticity modulation, and cadence scaling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 8.223,
+        "fundamental_frequency": {
+          "mean_f0_hz": 196.5,
+          "std_f0_hz": 37.8,
+          "voiced_frames_pct": 75.1
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1447
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "02_accents/accent_04_indian_english.wav",
+      "filename": "accent_04_indian_english.wav",
+      "category": "02_Regional_Accents",
+      "condition": {
+        "accent_dialect": "indian_english",
+        "accent_strength": 1.0,
+        "phonological_rules": "Dialectal vowel formant shifts, rhoticity modulation, and cadence scaling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 8.148,
+        "fundamental_frequency": {
+          "mean_f0_hz": 188.6,
+          "std_f0_hz": 52.0,
+          "voiced_frames_pct": 73.6
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1571
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "02_accents/accent_05_irish.wav",
+      "filename": "accent_05_irish.wav",
+      "category": "02_Regional_Accents",
+      "condition": {
+        "accent_dialect": "irish",
+        "accent_strength": 1.0,
+        "phonological_rules": "Dialectal vowel formant shifts, rhoticity modulation, and cadence scaling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 9.348,
+        "fundamental_frequency": {
+          "mean_f0_hz": 193.0,
+          "std_f0_hz": 68.5,
+          "voiced_frames_pct": 74.3
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1183
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "03_emotions/emotion_01_neutral.wav",
+      "filename": "emotion_01_neutral.wav",
+      "category": "03_Affective_Emotions",
+      "condition": {
+        "emotional_tone": "neutral",
+        "intensity": 0.85,
+        "prosodic_modulation": "Pitch variance excursion, duration dilation, and vocal energy scaling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 7.523,
+        "fundamental_frequency": {
+          "mean_f0_hz": 187.5,
+          "std_f0_hz": 41.1,
+          "voiced_frames_pct": 75.4
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1306
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "03_emotions/emotion_02_happy.wav",
+      "filename": "emotion_02_happy.wav",
+      "category": "03_Affective_Emotions",
+      "condition": {
+        "emotional_tone": "happy",
+        "intensity": 0.85,
+        "prosodic_modulation": "Pitch variance excursion, duration dilation, and vocal energy scaling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 9.548,
+        "fundamental_frequency": {
+          "mean_f0_hz": 193.4,
+          "std_f0_hz": 33.2,
+          "voiced_frames_pct": 66.1
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1508
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "03_emotions/emotion_03_sad.wav",
+      "filename": "emotion_03_sad.wav",
+      "category": "03_Affective_Emotions",
+      "condition": {
+        "emotional_tone": "sad",
+        "intensity": 0.85,
+        "prosodic_modulation": "Pitch variance excursion, duration dilation, and vocal energy scaling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 8.173,
+        "fundamental_frequency": {
+          "mean_f0_hz": 192.7,
+          "std_f0_hz": 50.1,
+          "voiced_frames_pct": 77.3
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1767
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "03_emotions/emotion_04_angry.wav",
+      "filename": "emotion_04_angry.wav",
+      "category": "03_Affective_Emotions",
+      "condition": {
+        "emotional_tone": "angry",
+        "intensity": 0.85,
+        "prosodic_modulation": "Pitch variance excursion, duration dilation, and vocal energy scaling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 9.223,
+        "fundamental_frequency": {
+          "mean_f0_hz": 199.0,
+          "std_f0_hz": 37.4,
+          "voiced_frames_pct": 69.5
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1295
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "03_emotions/emotion_05_whispered.wav",
+      "filename": "emotion_05_whispered.wav",
+      "category": "03_Affective_Emotions",
+      "condition": {
+        "emotional_tone": "whispered",
+        "intensity": 0.85,
+        "prosodic_modulation": "Pitch variance excursion, duration dilation, and vocal energy scaling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 9.248,
+        "fundamental_frequency": {
+          "mean_f0_hz": 205.3,
+          "std_f0_hz": 46.6,
+          "voiced_frames_pct": 63.4
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.0925
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "04_speech_differences/speech_01_interdental_lisp.wav",
+      "filename": "speech_01_interdental_lisp.wav",
+      "category": "04_Speech_Pathologies",
+      "condition": {
+        "pathological_characteristic": "interdental_lisp",
+        "severity": 0.7,
+        "simulation_mechanism": "Phonemic substitution, articulatory dysfluency, or acoustic resonance coupling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 8.773,
+        "fundamental_frequency": {
+          "mean_f0_hz": 191.0,
+          "std_f0_hz": 34.8,
+          "voiced_frames_pct": 71.8
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1431
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of pathonal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "04_speech_differences/speech_02_lateral_lisp.wav",
+      "filename": "speech_02_lateral_lisp.wav",
+      "category": "04_Speech_Pathologies",
+      "condition": {
+        "pathological_characteristic": "lateral_lisp",
+        "severity": 0.7,
+        "simulation_mechanism": "Phonemic substitution, articulatory dysfluency, or acoustic resonance coupling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 9.173,
+        "fundamental_frequency": {
+          "mean_f0_hz": 174.2,
+          "std_f0_hz": 44.8,
+          "voiced_frames_pct": 77.7
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1758
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "04_speech_differences/speech_03_rhotacism.wav",
+      "filename": "speech_03_rhotacism.wav",
+      "category": "04_Speech_Pathologies",
+      "condition": {
+        "pathological_characteristic": "rhotacism",
+        "severity": 0.7,
+        "simulation_mechanism": "Phonemic substitution, articulatory dysfluency, or acoustic resonance coupling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 9.348,
+        "fundamental_frequency": {
+          "mean_f0_hz": 184.0,
+          "std_f0_hz": 47.4,
+          "voiced_frames_pct": 70.2
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1293
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice, Weff, lex both physical anatomy and lived culture, carrying the yuh, Nick cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "04_speech_differences/speech_04_stutter_clonic.wav",
+      "filename": "speech_04_stutter_clonic.wav",
+      "category": "04_Speech_Pathologies",
+      "condition": {
+        "pathological_characteristic": "stutter_clonic",
+        "severity": 0.7,
+        "simulation_mechanism": "Phonemic substitution, articulatory dysfluency, or acoustic resonance coupling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 9.748,
+        "fundamental_frequency": {
+          "mean_f0_hz": 176.1,
+          "std_f0_hz": 34.2,
+          "voiced_frames_pct": 72.6
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1632
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice, ref ref reflects both physical anatomy and lived culture, carrying the unique CAD CAD cadence of per-per-personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "04_speech_differences/speech_05_hypernasality.wav",
+      "filename": "speech_05_hypernasality.wav",
+      "category": "04_Speech_Pathologies",
+      "condition": {
+        "pathological_characteristic": "hypernasality",
+        "severity": 0.7,
+        "simulation_mechanism": "Phonemic substitution, articulatory dysfluency, or acoustic resonance coupling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 7.923,
+        "fundamental_frequency": {
+          "mean_f0_hz": 217.1,
+          "std_f0_hz": 39.0,
+          "voiced_frames_pct": 74.2
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1591
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "04_speech_differences/speech_06_prolonged_phonemes.wav",
+      "filename": "speech_06_prolonged_phonemes.wav",
+      "category": "04_Speech_Pathologies",
+      "condition": {
+        "pathological_characteristic": "prolonged_phonemes",
+        "severity": 0.7,
+        "simulation_mechanism": "Phonemic substitution, articulatory dysfluency, or acoustic resonance coupling"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 9.448,
+        "fundamental_frequency": {
+          "mean_f0_hz": 191.3,
+          "std_f0_hz": 39.8,
+          "voiced_frames_pct": 69.1
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1215
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects with Fissiical Owenitomy O, and lived culture, carrying the unit cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "05_cross_lingual/lang_01_spanish.wav",
+      "filename": "lang_01_spanish.wav",
+      "category": "05_Cross_Lingual",
+      "condition": {
+        "target_language": "01",
+        "phonetic_adapter": "Zero-shot IPA phonetic mapping with biometric vocal tract preservation"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 10.673,
+        "fundamental_frequency": {
+          "mean_f0_hz": 203.8,
+          "std_f0_hz": 28.2,
+          "voiced_frames_pct": 77.8
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1747
+        },
+        "transcription": {
+          "whisper_transcript": "La Vos Humana Refleotanto La Anatomia Fisica Comola Culture Vivida Yavando Lacaden Shiyunika De La Identited Personal",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "05_cross_lingual/lang_02_french.wav",
+      "filename": "lang_02_french.wav",
+      "category": "05_Cross_Lingual",
+      "condition": {
+        "target_language": "02",
+        "phonetic_adapter": "Zero-shot IPA phonetic mapping with biometric vocal tract preservation"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 10.948,
+        "fundamental_frequency": {
+          "mean_f0_hz": 216.5,
+          "std_f0_hz": 32.2,
+          "voiced_frames_pct": 78.4
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.139
+        },
+        "transcription": {
+          "whisper_transcript": "Laboics whom, Maine Reflit Allah Foyselzan, Atami Fizik at La Culture Vecu, Portant La Cadence, Unique Dosaid, Ented Personal.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "05_cross_lingual/lang_03_german.wav",
+      "filename": "lang_03_german.wav",
+      "category": "05_Cross_Lingual",
+      "condition": {
+        "target_language": "03",
+        "phonetic_adapter": "Zero-shot IPA phonetic mapping with biometric vocal tract preservation"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 12.573,
+        "fundamental_frequency": {
+          "mean_f0_hz": 198.0,
+          "std_f0_hz": 40.5,
+          "voiced_frames_pct": 68.8
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1839
+        },
+        "transcription": {
+          "whisper_transcript": "Dimanche. Lich Stimsch biggelt so all defy'sish anatem al's oj, de-gelibed culture wider, untrag'd daens. A Gartag Kaden's de personlikan, I'd entered it.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "05_cross_lingual/lang_04_italian.wav",
+      "filename": "lang_04_italian.wav",
+      "category": "05_Cross_Lingual",
+      "condition": {
+        "target_language": "04",
+        "phonetic_adapter": "Zero-shot IPA phonetic mapping with biometric vocal tract preservation"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 10.148,
+        "fundamental_frequency": {
+          "mean_f0_hz": 190.9,
+          "std_f0_hz": 47.4,
+          "voiced_frames_pct": 78.8
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1249
+        },
+        "transcription": {
+          "whisper_transcript": "La voce mana rief, let sils anatomi a fisica silo culture visitor, portandola kei denze unica delz, ai dentita personal.",
+          "target_language": "la"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            0.9999260902404785
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "06_craniofacial_sliders/slider_01_jaw_expanded.wav",
+      "filename": "slider_01_jaw_expanded.wav",
+      "category": "06_Morphology_Sliders",
+      "condition": {
+        "manipulated_slider": "jaw_width",
+        "slider_delta": 0.8,
+        "anatomical_effect": "Direct modification of craniofacial morphological ratios before fusion"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 8.398,
+        "fundamental_frequency": {
+          "mean_f0_hz": 180.5,
+          "std_f0_hz": 31.7,
+          "voiced_frames_pct": 69.8
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1176
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "06_craniofacial_sliders/slider_02_jaw_narrow.wav",
+      "filename": "slider_02_jaw_narrow.wav",
+      "category": "06_Morphology_Sliders",
+      "condition": {
+        "manipulated_slider": "jaw_width",
+        "slider_delta": -0.8,
+        "anatomical_effect": "Direct modification of craniofacial morphological ratios before fusion"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 8.398,
+        "fundamental_frequency": {
+          "mean_f0_hz": 180.5,
+          "std_f0_hz": 31.7,
+          "voiced_frames_pct": 69.8
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1177
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "06_craniofacial_sliders/slider_03_face_elongated.wav",
+      "filename": "slider_03_face_elongated.wav",
+      "category": "06_Morphology_Sliders",
+      "condition": {
+        "manipulated_slider": "face_height",
+        "slider_delta": 0.8,
+        "anatomical_effect": "Direct modification of craniofacial morphological ratios before fusion"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 8.398,
+        "fundamental_frequency": {
+          "mean_f0_hz": 180.8,
+          "std_f0_hz": 31.9,
+          "voiced_frames_pct": 69.5
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.118
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "relative_path": "06_craniofacial_sliders/slider_04_face_compact.wav",
+      "filename": "slider_04_face_compact.wav",
+      "category": "06_Morphology_Sliders",
+      "condition": {
+        "manipulated_slider": "face_height",
+        "slider_delta": -0.8,
+        "anatomical_effect": "Direct modification of craniofacial morphological ratios before fusion"
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 8.398,
+        "fundamental_frequency": {
+          "mean_f0_hz": 181.0,
+          "std_f0_hz": 31.9,
+          "voiced_frames_pct": 69.8
+        },
+        "signal_energy": {
+          "peak_amplitude": 0.9,
+          "rms_energy": 0.1187
+        },
+        "transcription": {
+          "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+          "target_language": "en"
+        },
+        "provenance": {
+          "sample_rate_hz": 24000,
+          "format": "16-bit PCM WAV",
+          "audioseal_watermarked": [
+            true,
+            1.0
+          ]
+        }
+      }
+    }
+  ]
+}

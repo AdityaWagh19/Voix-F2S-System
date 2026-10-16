@@ -39,10 +39,10 @@ anchors:
   female_mid_age_threshold: 40
 
 inference:
-  blend_weight: 0.0
+  blend_weight: 0.35
   alpha: 0.25
-  beta: 0.60
-  diffusion_steps: 12
+  beta: 0.70
+  diffusion_steps: 25
   num_voices: 3
   temperature: 0.85
   loudness_target_lufs: -23.0

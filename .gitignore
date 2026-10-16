@@ -30,6 +30,7 @@ data/india_benchmark/video/
 *.wav
 *.mp4
 *.mp3
+!demo/**/*.wav
 
 # Experiment outputs
 artifacts/*.png

@@ -21,7 +21,7 @@ profiles:
     pipeline_mode: "staged_memory_isolated"  # Release face models before vocoder execution
     precision: "fp16"                       # Automatic Mixed Precision
     tts_device: "cuda"                      # Vocoder runs on GPU under 1.4 GB memory envelope
-    diffusion_steps: 10                     # Perceptually equivalent to 20, 2x speedup
+    diffusion_steps: 20                     # High naturalness without ODE truncation artifacts
     batch_voices: false                     # Sequential synthesis: prevents 3.8GB peak OOM crash
     torch_empty_cache_per_sample: true      # Proactively flush CUDA cache between voices
     onnx_execution_provider: "CPUExecutionProvider" # Keeps ONNX out of limited VRAM
@@ -35,7 +35,7 @@ profiles:
     pipeline_mode: "concurrent_gpu"          # Keep face extractors and vocoder in VRAM
     precision: "fp16"
     tts_device: "cuda"
-    diffusion_steps: 15
+    diffusion_steps: 25
     batch_voices: true                      # Parallel multi-voice synthesis enabled for 6GB-12GB VRAM
     torch_empty_cache_per_sample: false
     onnx_execution_provider: "CUDAExecutionProvider"
@@ -49,7 +49,7 @@ profiles:
     pipeline_mode: "batched_gpu"            # Batch-synthesize all K voices in a single forward pass
     precision: "fp16"
     tts_device: "cuda"
-    diffusion_steps: 20
+    diffusion_steps: 30
     batch_voices: true                      # Parallel voice synthesis across candidate styles
     torch_empty_cache_per_sample: false
     onnx_execution_provider: "CUDAExecutionProvider"

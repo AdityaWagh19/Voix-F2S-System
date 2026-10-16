@@ -267,6 +267,8 @@ class VoixPipeline:
             if e_f.dim() == 1:
                 e_f = e_f.unsqueeze(0)
             e_f = e_f.to(self.device)
+            if self.scaler is not None and e_f.abs().mean() > 1.5:
+                e_f = (e_f - self.face_mean) / self.face_std
         else:
             raise TypeError("face_input must be an image path, 560-D tensor, or numpy array")
 
@@ -346,13 +348,13 @@ class VoixPipeline:
 
             base_dur = _inf.get("duration_scale", 1.0)
             final_duration = base_dur * duration_mult * accent_mods["duration_mult"] * emotion_mods["duration_scale"] * lang_mods["duration_scale"]
-            base_beta = _inf.get("beta", 0.60)
+            base_beta = _inf.get("beta", 0.70)
             final_beta = float(np.clip(base_beta * accent_mods["prosody_mult"] * emotion_mods["beta_mult"] * lang_mods["pitch_dynamics_factor"], 0.20, 0.95))
             waveform = self.tts.synthesize(
                 text=synth_text,
                 style=s_hat_k,
                 gender=_gender,
-                blend_weight=_inf.get("blend_weight", 0.0),
+                blend_weight=_inf.get("blend_weight", 0.35),
                 beta=final_beta,
                 alpha=_inf.get("alpha", 0.25),
                 duration_scale=final_duration,

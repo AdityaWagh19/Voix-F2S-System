@@ -1,4 +1,4 @@
-﻿"""StyleTTS 2 Acoustic Synthesis Backend for VOIX (Phase 4).
+"""StyleTTS 2 Acoustic Synthesis Backend for VOIX (Phase 4).
 
 Wraps the frozen StyleTTS 2 neural text-to-speech synthesis model.
 Receives text prompt and a predicted 128-D style conditioning vector s_hat
@@ -185,11 +185,11 @@ class StyleTTS2Backend(nn.Module):
         text: str,
         style: torch.Tensor,
         gender: int = 1,
-        blend_weight: float = 0.75,
-        alpha: float = 0.70,
-        beta: float = 0.30,
+        blend_weight: float = 0.35,
+        alpha: float = 0.25,
+        beta: float = 0.70,
         duration_scale: float = 1.0,
-        diffusion_steps: int = 20,
+        diffusion_steps: int = 25,
         anchor_path: str | None = None,
         loudness_lufs: float = -23.0,
     ) -> torch.Tensor:
@@ -200,9 +200,10 @@ class StyleTTS2Backend(nn.Module):
             style: 128-D style conditioning vector (128,) or (1, 128).
             gender: Demographic gender (1 = Male ~125 Hz, 0 = Female ~215 Hz).
             blend_weight: Face biometric timbre modulation weight (default: 0.35).
-            alpha: Style diffusion weight factor (default: 0.3).
-            beta: Prosody transfer factor (default: 0.7).
+            alpha: Style diffusion weight factor (default: 0.25).
+            beta: Prosody transfer factor (default: 0.70).
             duration_scale: Speech pace multiplier.
+            diffusion_steps: Number of ODE diffusion sampling steps (default: 25).
 
         Returns:
             waveform: Float32 Tensor of shape (1, num_samples) at self.sample_rate Hz,
@@ -245,9 +246,14 @@ class StyleTTS2Backend(nn.Module):
                 if style_proj.dim() == 1:
                     style_proj = style_proj.unsqueeze(0)
 
-                # Smoothly blend face biometric style into demographic acoustic manifold
+                # Smoothly blend face biometric style into demographic acoustic manifold.
+                # Project style_proj L2 norm to match the anchor manifold to prevent out-of-distribution acoustic distortion.
                 if blend_weight > 0.02:
-                    ref_s[:, :128] = (1.0 - blend_weight) * anchor[:, :128].to(self._model.device) + blend_weight * style_proj
+                    anchor_part = anchor[:, :128].to(self._model.device)
+                    s_norm = torch.norm(style_proj, dim=-1, keepdim=True) + 1e-8
+                    a_norm = torch.norm(anchor_part, dim=-1, keepdim=True)
+                    s_proj_scaled = (style_proj / s_norm) * a_norm
+                    ref_s[:, :128] = (1.0 - blend_weight) * anchor_part + blend_weight * s_proj_scaled
 
                 if torch.cuda.is_available():
                     torch.cuda.empty_cache()
