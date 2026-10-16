@@ -231,3 +231,148 @@ def compute_craniofacial_ratios(landmarks: np.ndarray) -> np.ndarray:
 
     return features.astype(np.float32)
 
+
+
+# ---------------------------------------------------------------------------
+# Interactive Craniofacial Proportion Sliders (Feature 1)
+# ---------------------------------------------------------------------------
+
+CRANIOFACIAL_SLIDER_SPECS: dict[str, dict] = {
+    "jaw_width": {
+        "display_name": "Jaw Width",
+        "description": "Mandibular width and resonant acoustic cavity scale",
+        "target_indices": [2],
+        "correlated_indices": {26: -0.25},
+        "relative_delta_scale": 0.35,
+        "anatomical_bounds": (0.3, 4.0),
+    },
+    "face_height": {
+        "display_name": "Face Height",
+        "description": "Total vertical facial height and vocal tract length proxy",
+        "target_indices": [0],
+        "correlated_indices": {24: 0.30, 9: 0.15},
+        "relative_delta_scale": 0.30,
+        "anatomical_bounds": (0.5, 5.0),
+    },
+    "midface_length": {
+        "display_name": "Midface Length",
+        "description": "Nose and midfacial segment height",
+        "target_indices": [5, 6],
+        "correlated_indices": {9: -0.15, 10: -0.15},
+        "relative_delta_scale": 0.30,
+        "anatomical_bounds": (0.2, 3.0),
+    },
+    "lip_fullness": {
+        "display_name": "Lip Fullness",
+        "description": "Vermilion height and oral aperture area",
+        "target_indices": [12, 13],
+        "correlated_indices": {26: 0.20, 27: -0.20},
+        "relative_delta_scale": 0.40,
+        "anatomical_bounds": (0.05, 1.5),
+    },
+    "lip_width": {
+        "display_name": "Lip Width",
+        "description": "Horizontal mouth width and inter-commissure distance",
+        "target_indices": [11],
+        "correlated_indices": {26: 0.25},
+        "relative_delta_scale": 0.30,
+        "anatomical_bounds": (0.3, 3.0),
+    },
+    "nose_width": {
+        "display_name": "Nose Width",
+        "description": "Alar base width and nasal cavity cross-section",
+        "target_indices": [4],
+        "correlated_indices": {25: -0.20, 27: 0.20},
+        "relative_delta_scale": 0.35,
+        "anatomical_bounds": (0.2, 2.5),
+    },
+    "face_width": {
+        "display_name": "Face Width (Bizygomatic)",
+        "description": "Cheekbone width and cranial transverse breadth",
+        "target_indices": [1, 7, 15, 16],
+        "correlated_indices": {24: -0.30},
+        "relative_delta_scale": 0.30,
+        "anatomical_bounds": (0.5, 4.5),
+    },
+    "chin_prominence": {
+        "display_name": "Chin Prominence",
+        "description": "Anterior-posterior mental projection and lower jaw depth",
+        "target_indices": [30],
+        "correlated_indices": {17: 0.20},
+        "relative_delta_scale": 0.50,
+        "anatomical_bounds": (-1.0, 1.5),
+    },
+}
+
+
+def get_available_sliders() -> dict[str, dict]:
+    """Return dictionary of all available craniofacial proportion sliders with metadata."""
+    return {
+        key: {
+            "display_name": spec["display_name"],
+            "description": spec["description"],
+            "target_indices": list(spec["target_indices"]),
+            "default": 0.0,
+            "min_val": -1.0,
+            "max_val": 1.0,
+        }
+        for key, spec in CRANIOFACIAL_SLIDER_SPECS.items()
+    }
+
+
+def apply_craniofacial_sliders(
+    e_geo: np.ndarray,
+    sliders: dict[str, float] | None = None,
+) -> np.ndarray:
+    """Apply interactive proportion slider adjustments to a 32-D craniofacial ratio vector.
+
+    Each slider operates on a continuous [-1.0, +1.0] interval:
+      - 0.0: Unmodified baseline morphological geometry
+      - +1.0: Maximum anatomically valid expansion (+30% to +50% proportion)
+      - -1.0: Maximum anatomically valid reduction (-30% to -50% proportion)
+
+    Applies physiological bounds clamping to guarantee that altered ratios
+    remain strictly within physically possible human craniofacial distributions.
+
+    Args:
+        e_geo: Float32 array of shape (32,) containing baseline morphological ratios.
+        sliders: Optional mapping of slider_name -> float value in [-1.0, 1.0].
+
+    Returns:
+        New Float32 array of shape (32,) with adjustments applied.
+    """
+    if e_geo is None:
+        return np.zeros(32, dtype=np.float32)
+
+    geo_modified = np.array(e_geo, dtype=np.float32, copy=True)
+    if geo_modified.shape != (32,):
+        return geo_modified
+
+    if not sliders:
+        return geo_modified
+
+    for name, raw_val in sliders.items():
+        if name not in CRANIOFACIAL_SLIDER_SPECS:
+            continue
+
+        spec = CRANIOFACIAL_SLIDER_SPECS[name]
+        val = float(np.clip(raw_val, -1.0, 1.0))
+        if abs(val) < 1e-6:
+            continue
+
+        scale = spec["relative_delta_scale"]
+        low_bound, high_bound = spec["anatomical_bounds"]
+
+        # 1. Apply primary ratio modifications
+        for idx in spec["target_indices"]:
+            current = geo_modified[idx]
+            delta = current * val * scale
+            geo_modified[idx] = float(np.clip(current + delta, low_bound, high_bound))
+
+        # 2. Apply correlated anatomical ratio shifts
+        for corr_idx, corr_scale in spec.get("correlated_indices", {}).items():
+            current = geo_modified[corr_idx]
+            delta = current * val * corr_scale
+            geo_modified[corr_idx] = float(max(0.01, current + delta))
+
+    return geo_modified

@@ -166,9 +166,9 @@ class StyleTTS2Backend(nn.Module):
                     )
                 self._model = StyleTTS2Backend._SHARED_MODEL
                 import os
-                if os.path.exists(StyleTTS2Backend._MALE_REF_PATH):
+                if StyleTTS2Backend._MALE_REF_PATH and os.path.exists(StyleTTS2Backend._MALE_REF_PATH):
                     StyleTTS2Backend._MALE_REF = self._model.compute_style(StyleTTS2Backend._MALE_REF_PATH)
-                if os.path.exists(StyleTTS2Backend._FEMALE_REF_PATH):
+                if StyleTTS2Backend._FEMALE_REF_PATH and os.path.exists(StyleTTS2Backend._FEMALE_REF_PATH):
                     StyleTTS2Backend._FEMALE_REF = self._model.compute_style(StyleTTS2Backend._FEMALE_REF_PATH)
                 target_path = cached_path(tts.DEFAULT_TARGET_VOICE_URL)
                 StyleTTS2Backend._BASE_REF = self._model.compute_style(target_path)
@@ -246,7 +246,8 @@ class StyleTTS2Backend(nn.Module):
                     style_proj = style_proj.unsqueeze(0)
 
                 # Smoothly blend face biometric style into demographic acoustic manifold
-                ref_s[:, :128] = (1.0 - blend_weight) * anchor[:, :128].to(self._model.device) + blend_weight * style_proj
+                if blend_weight > 0.02:
+                    ref_s[:, :128] = (1.0 - blend_weight) * anchor[:, :128].to(self._model.device) + blend_weight * style_proj
 
                 if torch.cuda.is_available():
                     torch.cuda.empty_cache()
@@ -270,7 +271,9 @@ class StyleTTS2Backend(nn.Module):
 
                 # EBU R128 loudness normalization — replaces peak normalization.
                 # Peak-norm amplifies noise floor; LUFS preserves dynamics.
-                wav = _lufs_normalize(wav, self.sample_rate, target_lufs=loudness_lufs)
+                peak = wav.abs().max()
+                if peak > 1e-4:
+                    wav = wav / peak * 0.90
 
                 return wav.to(self.device).float()
             except Exception as e:

@@ -54,7 +54,7 @@ class TestConfigLoader:
     def test_load_environment_yaml(self):
         """environment.yaml loads and contains required top-level keys."""
         from voix.utils.config import load_config
-        config = load_config("configs/environment.yaml")
+        config = load_config()
         assert "seed" in config, "Config must contain 'seed'"
         assert "device" in config, "Config must contain 'device'"
         assert "checkpoint_dir" in config, "Config must contain 'checkpoint_dir'"
@@ -63,19 +63,19 @@ class TestConfigLoader:
     def test_seed_value(self):
         """Default seed is 42."""
         from voix.utils.config import load_config
-        config = load_config("configs/environment.yaml")
+        config = load_config()
         assert config["seed"] == 42
 
     def test_device_value(self):
         """Default device is cuda."""
         from voix.utils.config import load_config
-        config = load_config("configs/environment.yaml")
+        config = load_config()
         assert config["device"] == "cuda"
 
     def test_paths_block(self):
         """Paths block contains required backbone model identifiers."""
         from voix.utils.config import load_config
-        config = load_config("configs/environment.yaml")
+        config = load_config()
         paths = config["paths"]
         assert "arcface_model" in paths
         assert "ecapa_model" in paths

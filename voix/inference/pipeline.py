@@ -1,3 +1,9 @@
+from __future__ import annotations
+
+from voix.models.speech_simulation import SpeechSimulator
+from voix.models.accent_control import AccentTransformer, list_available_accents
+from voix.models.emotion_control import EmotionModulator, list_available_emotions
+from voix.models.cross_lingual import MultilingualPhoneticAdapter, list_supported_languages
 """End-to-End Face-to-Voice Inference Pipeline for VOIX (Phase 4 & 7).
 
 Connects the full generative stack with dynamic cross-platform hardware auto-configuration:
@@ -9,7 +15,6 @@ Connects the full generative stack with dynamic cross-platform hardware auto-con
         -> Auditory Speech Waveforms (Voice 1, Voice 2, ..., Voice K)
 """
 
-from __future__ import annotations
 
 import os
 from pathlib import Path
@@ -41,7 +46,7 @@ class VoixPipeline:
 
     def __init__(
         self,
-        cvae_checkpoint: str = "D:/voix/checkpoints/cvae_best.pt",
+        cvae_checkpoint: str = "D:/voix/results/checkpoints/D_joint_infonce_best.pt",
         adapter_checkpoint: str = "D:/voix/checkpoints/style_adapter_best.pt",
         scaler_path: str = "D:/voix/data/processed/face_scaler.pt",
         device: Optional[str] = None,
@@ -108,7 +113,11 @@ class VoixPipeline:
         self._demog = None
         self._fusion = None
 
-    def extract_face_features(self, image_input: Union[str, Path, np.ndarray]) -> torch.Tensor:
+    def extract_face_features(
+        self,
+        image_input: Union[str, Path, np.ndarray],
+        craniofacial_sliders: Optional[Dict[str, float]] = None,
+    ) -> torch.Tensor:
         """Extract and fuse facial features (ArcFace 512 + FaceMesh 32 + Demographics 16 -> 560-D) from an image.
 
         Args:
@@ -165,6 +174,10 @@ class VoixPipeline:
         else:
             e_geo = np.zeros(32, dtype=np.float32)
 
+        if craniofacial_sliders:
+            from voix.data.morphology import apply_craniofacial_sliders
+            e_geo = apply_craniofacial_sliders(e_geo, craniofacial_sliders)
+
         # 3. Soft Demographics 16-D with real age & gender posteriors
         e_demo = self._demog.estimate(e_id, gender=gender, age=age)
 
@@ -187,6 +200,14 @@ class VoixPipeline:
         watermark: Optional[bool] = None,
         gender: Optional[int] = None,
         age: Optional[float] = None,
+        craniofacial_sliders: Optional[Dict[str, float]] = None,
+        speech_difference: Optional[str] = None,
+        speech_severity: float = 0.5,
+        accent: Optional[str] = None,
+        accent_strength: float = 0.5,
+        emotion: Optional[str] = None,
+        emotion_intensity: float = 0.5,
+        language: str = "en",
     ) -> List[Dict[str, Any]]:
         """Generate K diverse candidate voice waveforms for a single face representation.
 
@@ -205,14 +226,33 @@ class VoixPipeline:
 
         # Process face input into 560-D normalized tensor
         if isinstance(face_input, (str, Path)):
-            e_f, _det_gender, _det_age = self.extract_face_features(str(face_input))
-            if gender is None: gender = _det_gender
-            if age is None: age = _det_age
-            if self.scaler is not None:
-                e_f = (e_f - self.face_mean) / self.face_std
+            str_path = str(face_input)
+            if not os.path.exists(str_path) and not Path(str_path).is_file():
+                # Check if string corresponds to a demographic preset ID
+                try:
+                    preset = self.get_demographic_preset(str_path)
+                    e_f = preset.embedding.to(self.device)
+                    if gender is None: gender = preset.gender
+                    if age is None: age = preset.age
+                    if self.scaler is not None:
+                        e_f = (e_f - self.face_mean) / self.face_std
+                except KeyError:
+                    raise FileNotFoundError(f"Image file or preset not found: {str_path}")
+            else:
+                e_f, _det_gender, _det_age = self.extract_face_features(
+                    str_path,
+                    craniofacial_sliders=craniofacial_sliders,
+                )
+                if gender is None: gender = _det_gender
+                if age is None: age = _det_age
+                if self.scaler is not None:
+                    e_f = (e_f - self.face_mean) / self.face_std
         elif isinstance(face_input, np.ndarray):
             if face_input.ndim == 3:  # HxWx3 image
-                e_f, _det_gender, _det_age = self.extract_face_features(face_input)
+                e_f, _det_gender, _det_age = self.extract_face_features(
+                    face_input,
+                    craniofacial_sliders=craniofacial_sliders,
+                )
                 if gender is None: gender = _det_gender
                 if age is None: age = _det_age
                 if self.scaler is not None:
@@ -253,7 +293,35 @@ class VoixPipeline:
             self._fusion = None
             free_memory(self.device)
 
-        # 2. For each candidate voice, project style and synthesize speech
+        # 2. Text preprocessing: Cross-lingual adaptation, Accent, Speech Difference, and Emotion modulation
+        lang_mods = {"duration_scale": 1.0, "pitch_dynamics_factor": 1.0}
+        text_lang = text
+        if language and language.lower() != "en":
+            text_lang, lang_mods = MultilingualPhoneticAdapter.transform(text, language=language)
+
+        text_accented = text_lang
+        accent_mods = {"duration_mult": 1.0, "pitch_mult": 1.0, "prosody_mult": 1.0}
+        if accent:
+            text_accented, accent_mods = AccentTransformer.transform(
+                text=text_lang,
+                accent=accent,
+                strength=accent_strength,
+            )
+
+        duration_mult = 1.0
+        synth_text = text_accented
+        if speech_difference and speech_severity > 0.001:
+            synth_text, duration_mult = SpeechSimulator.process_text(
+                text=text_accented,
+                difference_type=speech_difference,
+                severity=speech_severity,
+            )
+
+        emotion_mods = EmotionModulator.get_acoustic_modifiers(
+            emotion=emotion,
+            intensity=emotion_intensity,
+        )
+        # 3. For each candidate voice, project style and synthesize speech
         _inf = self._inf_cfg
         diffusion_steps = _inf.get("diffusion_steps", self.hardware.diffusion_steps)
 
@@ -276,17 +344,39 @@ class VoixPipeline:
             except (KeyError, FileNotFoundError):
                 _anchor_path = None
 
+            base_dur = _inf.get("duration_scale", 1.0)
+            final_duration = base_dur * duration_mult * accent_mods["duration_mult"] * emotion_mods["duration_scale"] * lang_mods["duration_scale"]
+            base_beta = _inf.get("beta", 0.60)
+            final_beta = float(np.clip(base_beta * accent_mods["prosody_mult"] * emotion_mods["beta_mult"] * lang_mods["pitch_dynamics_factor"], 0.20, 0.95))
             waveform = self.tts.synthesize(
-                text=text,
+                text=synth_text,
                 style=s_hat_k,
                 gender=_gender,
-                blend_weight=_inf.get("blend_weight", 0.55),
-                beta=_inf.get("beta", 0.05),
-                alpha=_inf.get("alpha", 0.3),
+                blend_weight=_inf.get("blend_weight", 0.0),
+                beta=final_beta,
+                alpha=_inf.get("alpha", 0.25),
+                duration_scale=final_duration,
                 diffusion_steps=diffusion_steps,
                 anchor_path=_anchor_path,
             )
 
+            # Apply post-synthesis acoustic filters for speech differences
+            if speech_difference and speech_severity > 0.001:
+                waveform = SpeechSimulator.process_waveform(
+                    waveform=waveform,
+                    sample_rate=self.tts.sample_rate,
+                    difference_type=speech_difference,
+                    severity=speech_severity,
+                )
+
+            # Apply post-synthesis acoustic filters for emotion
+            if emotion and emotion_intensity > 0.01:
+                waveform = EmotionModulator.apply_acoustic_filter(
+                    waveform=waveform,
+                    sample_rate=self.tts.sample_rate,
+                    emotion=emotion,
+                    intensity=emotion_intensity,
+                )
             is_wm = False
             if watermark:
                 try:
@@ -306,6 +396,57 @@ class VoixPipeline:
 
         return results
 
+    def list_demographic_presets(self) -> List[Dict[str, Any]]:
+        """Return list of available reference demographic presets."""
+        from voix.data.presets import list_demographic_presets
+        return list_demographic_presets()
+
+    def get_demographic_preset(self, preset_id: str):
+        """Retrieve a specific demographic preset by ID."""
+        from voix.data.presets import get_demographic_preset
+        return get_demographic_preset(preset_id)
+
+    def generate_from_preset(
+        self,
+        preset_id: str,
+        text: str = "Welcome to VOIX. This voice was synthesized directly from your facial biometrics.",
+        num_voices: int = 3,
+        temperature: float = 1.0,
+        watermark: Optional[bool] = None,
+        craniofacial_sliders: Optional[Dict[str, float]] = None,
+        speech_difference: Optional[str] = None,
+        speech_severity: float = 0.0,
+        accent: Optional[str] = None,
+        accent_strength: float = 0.5,
+        emotion: Optional[str] = None,
+        emotion_intensity: float = 0.5,
+        language: str = "en",
+    ) -> List[Dict[str, Any]]:
+        """Synthesize candidate voices directly from a demographic preset ID."""
+        preset = self.get_demographic_preset(preset_id)
+        return self.generate(
+            face_input=preset.embedding,
+            text=text,
+            num_voices=num_voices,
+            temperature=temperature,
+            watermark=watermark,
+            gender=preset.gender,
+            age=preset.age,
+            craniofacial_sliders=craniofacial_sliders,
+            speech_difference=speech_difference,
+            speech_severity=speech_severity,
+            accent=accent,
+            accent_strength=accent_strength,
+            emotion=emotion,
+            emotion_intensity=emotion_intensity,
+            language=language,
+        )
+
+    def list_supported_speech_differences(self) -> List[Dict[str, Any]]:
+        """Return list of supported speech difference simulation modes."""
+        from voix.models.speech_simulation import SpeechSimulator
+        return SpeechSimulator.list_supported_differences()
+
     def save_audio(
         self,
         results: List[Dict[str, Any]],
@@ -323,3 +464,15 @@ class VoixPipeline:
             sf.write(path, wav, sr)
             saved_paths.append(path)
         return saved_paths
+
+    def list_accents(self) -> List[Dict[str, Any]]:
+        """Return list of available regional accents and dialects."""
+        return list_available_accents()
+
+    def list_emotions(self) -> List[Dict[str, Any]]:
+        """Return list of available emotional tone profiles."""
+        return list_available_emotions()
+
+    def list_languages(self) -> List[Dict[str, Any]]:
+        """Return list of supported languages for cross-lingual transfer."""
+        return list_supported_languages()
