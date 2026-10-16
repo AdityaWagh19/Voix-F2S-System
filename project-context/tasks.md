@@ -133,4 +133,4 @@ All core technical deliverables are complete. The Indian F2S Benchmark curation 
 | Emotion Control | `test_emotion_control.py` | ✅ Passing |
 | Cross-Lingual | `test_cross_lingual.py` | ✅ Passing |
 
-**Total: 35 passing unit tests.**
+**Total: 151 passing unit tests across 15 test suites.**

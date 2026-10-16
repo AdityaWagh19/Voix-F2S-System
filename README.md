@@ -32,6 +32,7 @@
   - [5.1 Evaluation Setup](#51-evaluation-setup)
   - [5.2 Ablation Paradigm Trajectory](#52-ablation-paradigm-trajectory)
   - [5.3 Quantitative Results](#53-quantitative-results)
+  - [5.4 Multi-Cohort Exhaustive Stress Test](#54-multi-cohort-exhaustive-stress-test-31-subjects-181-synthesized-audios)
 - [6. Scientific Insights: Deconstructing the Results](#6-scientific-insights-deconstructing-the-results)
   - [6.1 The Variance Collapse Problem (Models A & B)](#61-the-variance-collapse-problem-models-a--b)
   - [6.2 InfoNCE Breaks the Plateau (Model D)](#62-infonce-breaks-the-plateau-model-d)
@@ -258,6 +259,22 @@ flowchart LR
 
 ★ Model F is the **Pareto champion** — it dominates all prior models on every metric simultaneously.
 
+### 5.4 Multi-Cohort Exhaustive Stress Test (31 Subjects, 181 Synthesized Audios)
+
+Beyond the 400-speaker VoxCeleb2 validation partition, VOIX was subjected to an exhaustive unconstrained stress testing protocol across 31 diverse identities spanning three specialized cohorts: demographic diversity (South Asian, East Asian, Black, Caucasian, Hispanic), extreme age/morphology outliers, and clinical speech differences:
+
+| Metric | Benchmark Target | Empirical Result | Status |
+|---|---|---|---|
+| **Feature Extraction** | 100% (512-D ArcFace + 468 landmarks) | **31/31 (100.0%)** | Verified |
+| **Gender Classification** | >95% accuracy | **31/31 (100.0%)** | Verified |
+| **Male Baseline $F_0$** | 100–135 Hz | **112.6 Hz** (111.9–114.6 Hz) | Verified |
+| **Female Baseline $F_0$** | 185–230 Hz | **205.7 Hz** (200.7–210.8 Hz) | Verified |
+| **Dynamic Peak Amplitude** | 0.90 target | **0.8968** (max: 0.9432) | Verified |
+| **RMS Loudness** | 0.10–0.18 (natural speech) | **0.1443** | Verified |
+| **ASR Intelligibility** | Whisper transcription | **181/181 (100.0%)** | Verified |
+
+Complete audit metrics, acoustic parameters, and ASR transcripts: [`artifacts/stress_test/exhaustive_stress_test_audit.json`](artifacts/stress_test/exhaustive_stress_test_audit.json) and [`artifacts/stress_test/EXHAUSTIVE_STRESS_TEST_REPORT.md`](artifacts/stress_test/EXHAUSTIVE_STRESS_TEST_REPORT.md).
+
 ---
 
 ## 6. Scientific Insights: Deconstructing the Results
@@ -332,7 +349,7 @@ voix/
 │   │   └── summary.csv           # Verified 7-metric empirical results
 │   └── checkpoints/
 │       └── D_joint_infonce_best.pt
-├── tests/                        # 35 passing automated unit tests
+├── tests/                        # 151 passing automated unit tests
 │   ├── test_acoustic_backbones.py
 │   ├── test_visual_backbones.py
 │   ├── test_auxiliary_backbones.py
@@ -432,7 +449,7 @@ pipeline.generate(
 
 ```bash
 pytest tests/ -v
-# Expected: 35 passed in ~25s
+# Expected: 151 passed, 1 warning in ~35s
 ```
 
 ---
