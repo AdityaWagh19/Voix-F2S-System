@@ -31,44 +31,46 @@ This is inherently a **one-to-many problem**: one face can plausibly produce man
 
 ## System Architecture
 
-```
-Face Image + Text Prompt
-    │
-    ├── ArcFace ResNet-50 (frozen, InsightFace Buffalo_L)   ──▶  512-D identity embedding
-    ├── MediaPipe FaceMesh (468 3D landmarks)               ──▶   32-D craniofacial ratios
-    └── Soft Demographic Estimator                          ──▶   16-D age/sex posteriors
-                              │
-            FaceFusionLayer  (Linear 560→560 + LayerNorm + GELU)
-                              │
-                       560-D  e_f
-            ┌─────────────────┴──────────────────────┐
-            │                                        │
-            ▼                                        ▼
-  CVAE Conditional Prior                 Exemplar Retrieval Gallery
-  p_ψ(z | e_f) → sample z               3,029 speaker centroids (192-D)
-  CVAEDecoder p_θ(e_s | z, e_f)         Gender-conditioned kNN (k=5 or k=10)
-            │                                        │
-            └──────────────┬─────────────────────────┘
-                           │  Hybrid Blending (α=0.70)
-                           ▼
-                 StyleAdapter (MLP 192→256→256→128)
-                           │
-                 StyleTTS 2 (completely frozen, 24 kHz)
-                           │
-                 LUFS Loudness Normalization (EBU R128)
-                           │
-                 AudioSeal Watermarker (16-bit neural watermark)
-                           │
-                 24 kHz Speech Waveforms (Voice 1, Voice 2, …, Voice K)
-```
+```mermaid
+flowchart TD
+    IMG["Face Image + Text Prompt"]
 
----
+    IMG --> ARC["ArcFace ResNet-50\nfrozen · InsightFace Buffalo-L\n512-D identity embedding"]
+    IMG --> MESH["MediaPipe FaceMesh\n468 3D landmarks\n32-D craniofacial ratios"]
+    IMG --> DEMO["Soft Demographic Estimator\n16-D age and sex posteriors"]
+
+    ARC  --> FUSE["FaceFusionLayer\nLinear 560 to 560 + LayerNorm + GELU\n560-D unified face embedding  e_f"]
+    MESH --> FUSE
+    DEMO --> FUSE
+
+    FUSE --> CVAE["CVAE Conditional Prior\np_psi(z given e_f) — sample K latent z\nCVAEDecoder p_theta(e_s given z, e_f)\nOutputs K x 192-D speaker embeddings"]
+    FUSE --> RET["Exemplar Retrieval Gallery\n3,029 speaker centroids\nGender-conditioned kNN  k=10"]
+
+    CVAE --> BLEND["Hybrid Blending\nalpha * e_s_hat + (1-alpha) * weighted centroids\nalpha = 0.70"]
+    RET  --> BLEND
+
+    BLEND --> ADAPT["StyleAdapter MLP\n192 -> 256 -> 256 -> 128-D\nECAPA space to StyleTTS 2 style space"]
+
+    ADAPT --> TTS["StyleTTS 2  completely frozen\n24 kHz neural speech synthesis"]
+
+    TTS   --> LUFS["LUFS Loudness Normalization\nEBU R128  target -23 LUFS"]
+    LUFS  --> WM["AudioSeal Neural Watermarker\n16-bit imperceptible watermark\nAUC 0.97 · SNR greater than 40 dB"]
+    WM    --> OUT["24 kHz Speech Waveforms\nVoice 1 · Voice 2 · ... · Voice K"]
+
+    style IMG   fill:#4A90D9,color:#fff,stroke:#2C6FAC,stroke-width:2px
+    style FUSE  fill:#7B68EE,color:#fff,stroke:#5A4DB0,stroke-width:2px
+    style BLEND fill:#6BAF5E,color:#fff,stroke:#4D8A42,stroke-width:2px
+    style ADAPT fill:#E8943A,color:#fff,stroke:#C07020,stroke-width:2px
+    style TTS   fill:#E8943A,color:#fff,stroke:#C07020,stroke-width:2px
+    style WM    fill:#C0392B,color:#fff,stroke:#922B21,stroke-width:2px
+    style OUT   fill:#27AE60,color:#fff,stroke:#1E8449,stroke-width:2px
+```
 
 ## 1. Repository Structure
 
 ```
 voix/
-├── configs/                     # System & training configuration
+├── configs/
 │   ├── environment.yaml         # Checkpoint paths, hardware config
 │   ├── cvae_training.yaml       # Loss weights, optimizer, LR schedule
 │   └── hardware.yaml            # GPU hardware tier profiles
@@ -84,13 +86,13 @@ voix/
 │   │   ├── demographics.py      # 16-D soft demographic estimator
 │   │   ├── speaker_extractor.py # ECAPA-TDNN speaker embedding extractor
 │   │   ├── dataset.py           # VoxCeleb2 HDF5 paired dataset
-│   │   ├── head_pose.py         # Pose filtering (|pitch|,|yaw| < 15°)
+│   │   ├── head_pose.py         # Pose filtering (|pitch|,|yaw| < 15 deg)
 │   │   └── presets.py           # 8 canonical demographic presets
 │   │
 │   ├── models/
 │   │   ├── fusion.py            # FaceFusionLayer (560-D multimodal fusion)
 │   │   ├── cvae.py              # CVAE v2 (prior + recognition + decoder)
-│   │   ├── adapter.py           # StyleAdapter MLP (192→256→256→128-D)
+│   │   ├── adapter.py           # StyleAdapter MLP (192->256->256->128-D)
 │   │   ├── tts_backend.py       # Frozen StyleTTS 2 wrapper + LUFS normalization
 │   │   ├── watermarking.py      # AudioSeal neural watermarker
 │   │   ├── accent_control.py    # Regional accent modulation (6 dialects)
@@ -112,23 +114,22 @@ voix/
 │       └── seed.py              # Global deterministic seed (seed=42)
 │
 ├── scripts/                     # Data curation & training scripts
-│   ├── run_pipeline.py          # Full extraction pipeline
-│   ├── extract_voxceleb.py      # ArcFace + ECAPA feature extraction
-│   ├── build_training_index.py  # Train/val split construction
-│   ├── train_contrastive.py     # Metric contrastive mapper training
-│   ├── train_regressor.py       # Baseline regression training
-│   ├── benchmark.py             # 6-model ablation benchmark
-│   └── generate_voices.py       # Sample voice generation script
+│   ├── run_pipeline.py
+│   ├── extract_voxceleb.py
+│   ├── build_training_index.py
+│   ├── train_contrastive.py
+│   ├── benchmark.py
+│   └── generate_voices.py
 │
 ├── results/
 │   ├── benchmarks/
-│   │   ├── summary.csv          # 7-metric comparison across Models A–F
-│   │   ├── D_joint_infonce.json # Best trained mapper metrics
-│   │   └── F_hybrid_k10.json   # Pareto-optimal hybrid metrics
+│   │   ├── summary.csv          # 7-metric comparison across Models A-F
+│   │   ├── D_joint_infonce.json
+│   │   └── F_hybrid_k10.json
 │   └── checkpoints/
-│       └── D_joint_infonce_best.pt   # Best mapper checkpoint
+│       └── D_joint_infonce_best.pt
 │
-├── tests/                       # Pytest verification suite
+├── tests/                       # Pytest verification suite (35 tests)
 │   ├── test_visual_backbones.py
 │   ├── test_acoustic_backbones.py
 │   ├── test_cvae.py
@@ -153,9 +154,9 @@ voix/
 │
 ├── artifacts/                   # Evaluation outputs (git-ignored)
 │   └── stress_test/
-│       ├── exhaustive_stress_test_audit.json  # 31-subject, 181-audio master audit
-│       ├── EXHAUSTIVE_STRESS_TEST_REPORT.md   # Full evaluation report
-│       └── benchmarks/                        # RTF, latency, CVAE sweep results
+│       ├── exhaustive_stress_test_audit.json
+│       ├── EXHAUSTIVE_STRESS_TEST_REPORT.md
+│       └── benchmarks/
 │
 ├── pyproject.toml
 ├── requirements.txt
