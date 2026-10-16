@@ -67,3 +67,7 @@ data/raw/
 # Local test assets
 inde/
 inde.jpeg
+
+# Stress test assets and local evaluation artifacts
+artifacts/stress_test/
+data/test_subjects/
