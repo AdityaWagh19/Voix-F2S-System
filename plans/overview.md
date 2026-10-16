@@ -15,9 +15,9 @@ Phase 1: Environment & Backbones      -> COMPLETE (commit 2802626, 35 tests pass
 Phase 2: Multimodal Feature Pipelines  -> COMPLETE (75.7K pairs, 3,029 identities in voxceleb2_features.h5)
 Phase 3: Probabilistic & Metric Mapper -> COMPLETE (Metric Contrastive InfoNCE on centroids, Model D best.pt)
 Phase 4: Synthesis & Vocoder Bridge    -> COMPLETE (VocoderStyleBridge, alpha=0.70, beta=0.30, StyleTTS2)
-Phase 5: Indian Benchmark Curation     -> PENDING (20h multimodal dataset, SyncNet verification, IndicLID)
-Phase 6: Baselines, Ablations & Eval   -> COMPLETE (Models A-F on 400 zero-shot identities, summary.csv)
-Phase 7: Hardening & Reproducibility   -> IN-PROGRESS (pruning completed, docs synchronized, CLI pipeline)
+Phase 5: Indian Benchmark Curation     -> DEFERRED / FUTURE SCOPE (Out of scope for initial release)
+Phase 6: Baselines, Ablations & Eval   -> COMPLETE (Models A-F on 400 zero-shot identities + 31-subject stress test)
+Phase 7: Hardening & Reproducibility   -> COMPLETE (Artifact consolidation, unified docs, clean CLI & Python API)
 ```
 
 ### Key Risk Mitigations Built into Sequencing
@@ -37,7 +37,7 @@ flowchart TD
     P2[Phase 2: Multimodal Feature Pipelines & Data Extraction]
     P3[Phase 3: Probabilistic & Metric Contrastive Mapper]
     P4[Phase 4: Acoustic Synthesis & Vocoder Style Bridge]
-    P5[Phase 5: Indian F2S Benchmark Curation & Packaging]
+    P5[Phase 5: Indian F2S Benchmark Curation (Future Scope)]
     P6[Phase 6: Baselines, Ablations & Empirical Evaluation]
     P7[Phase 7: Production Hardening, Release & Reproducibility]
 
@@ -56,8 +56,9 @@ flowchart TD
     classDef inprog fill:#744210,stroke:#d69e2e,stroke-width:2px,color:#fff;
 
     class P1,P2,P3,P4,P6 complete;
-    class P5 pending;
-    class P7 inprog;
+    class P5 deferred;
+    class P7 complete;
+    classDef deferred fill:#4a5568,stroke:#a0aec0,stroke-width:2px,color:#fff;
 ```
 
 ---

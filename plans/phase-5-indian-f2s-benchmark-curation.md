@@ -1,9 +1,9 @@
-﻿# Phase 5: Indian F2S Benchmark Curation
+# Phase 5: Indian F2S Benchmark Curation (FUTURE SCOPE)
 
-> **Phase Identifier:** `PHASE-5`  
-> **Target Duration:** Weeks 9–11  
-> **Status:** Pending Execution  
-> **Prerequisites:** `PHASE-1` Complete (can execute in parallel with Phase 3/4)
+> **Phase Identifier:** PHASE-5  
+> **Status:** DEFERRED TO FUTURE SCOPE (Out of Scope for Initial Release)  
+> **Prerequisites:** Post-Release Extended Research  
+> **Evaluation Substitute:** Cross-demographic biometric generalization for the initial release is fully evaluated via the **31-Subject Unconstrained Stress Test Suite** (encompassing diverse South Asian, East Asian, Black, Caucasian, and Hispanic cohorts). The dedicated 20-hour regional scraping/ASR curation is formally deferred to future development phases.
 
 ---
 
