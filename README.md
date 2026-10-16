@@ -355,6 +355,7 @@ voix/
 │   ├── test_auxiliary_backbones.py
 │   ├── test_cvae.py
 │   ├── test_adapter.py
+│   ├── test_tts_backend.py
 │   ├── test_pipeline.py
 │   ├── test_hardware.py
 │   ├── test_data_pipeline.py
@@ -367,6 +368,7 @@ voix/
 ├── voix/
 │   ├── data/
 │   │   ├── face_extractor.py     # ArcFace + MediaPipe FaceMesh extractors
+│   │   ├── head_pose.py          # Frontal frame selection & pose filtering
 │   │   ├── morphology.py         # 32-D craniofacial ratios (IOC-normalized)
 │   │   ├── demographics.py       # 16-D soft demographic estimator
 │   │   ├── speaker_extractor.py  # ECAPA-TDNN speaker embeddings
@@ -382,6 +384,9 @@ voix/
 │   │   ├── emotion_control.py    # Emotion & affective tone (6 states)
 │   │   ├── speech_simulation.py  # Clinical speech differences (6 types)
 │   │   └── cross_lingual.py      # Cross-lingual synthesis (5 languages)
+│   ├── training/
+│   │   ├── losses.py             # Supervised InfoNCE & joint training loss
+│   │   └── trainer_adapter.py    # StyleAdapter & CVAE training routines
 │   ├── inference/
 │   │   └── pipeline.py           # VoixPipeline — unified end-to-end API
 │   └── utils/
@@ -444,6 +449,17 @@ pipeline.generate(
     speech_difference="stutter_clonic", speech_severity=0.4,
 )
 ```
+
+#### Controllable Expressivity Options
+
+| Dimension | Parameter | Supported Options / Range |
+|---|---|---|
+| **Regional Accent** | `accent`, `accent_strength` | `neutral_general` (default), `british_rp`, `american_southern`, `indian_english`, `australian`, `scottish` (strength: 0.0–1.0) |
+| **Emotion Modulation** | `emotion`, `emotion_intensity` | `neutral` (default), `happy`, `sad`, `angry`, `surprised`, `calm` (intensity: 0.0–1.0) |
+| **Speech Difference** | `speech_difference`, `speech_severity` | `stutter_clonic`, `stutter_tonic`, `dysarthria_spastic`, `dysarthria_ataxic`, `apraxia`, `lisp` (severity: 0.0–1.0) |
+| **Cross-Lingual Synthesis** | `language` | `en` (English, default), `es` (Spanish), `fr` (French), `de` (German), `hi` (Hindi) |
+| **Craniofacial Sliders** | `craniofacial_sliders` | Dict with keys `jaw_width`, `lip_fullness`, `facial_height`, `gonial_angle` (values: -1.0 to +1.0) |
+| **Demographic Presets** | `face_input="<preset_id>"` | 8 canonical presets: `young_female_resonant`, `adult_female_warm`, `mature_female_authoritative`, `young_male_bright`, `adult_male_baritone`, `senior_male_deep`, `androgynous_balanced`, `athletic_broad_build` |
 
 ### 9.3 Verification Suite
 
