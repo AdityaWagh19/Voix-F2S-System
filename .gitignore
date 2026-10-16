@@ -12,6 +12,9 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
 # Checkpoints and model weights (large binary files)
 checkpoints/*.pt
