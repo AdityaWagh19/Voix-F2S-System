@@ -93,7 +93,7 @@ class StyleTTS2Backend(nn.Module):
         config_path: Optional[str] = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         sample_rate: int = 24000,
-        style_dim: int = 128,
+        style_dim: int = 256,
         use_neural: Optional[bool] = None,
     ) -> None:
         super().__init__()
@@ -185,11 +185,11 @@ class StyleTTS2Backend(nn.Module):
         text: str,
         style: torch.Tensor,
         gender: int = 1,
-        blend_weight: float = 0.35,
-        alpha: float = 0.25,
-        beta: float = 0.70,
+        blend_weight: float = 0.0,
+        alpha: float = 0.30,
+        beta: float = 0.80,
         duration_scale: float = 1.0,
-        diffusion_steps: int = 25,
+        diffusion_steps: int = 15,
         anchor_path: str | None = None,
         loudness_lufs: float = -23.0,
     ) -> torch.Tensor:
@@ -215,45 +215,32 @@ class StyleTTS2Backend(nn.Module):
         if style.dim() == 1:
             style = style.unsqueeze(0)
 
-        assert style.shape[-1] == self.style_dim, (
-            f"Expected style vector of dimension {self.style_dim}, got {style.shape[-1]}"
+        assert style.shape[-1] in (128, 256), (
+            f"Expected style vector of dimension 128 or 256, got {style.shape[-1]}"
         )
 
         style = style.to(self.device)
 
         if not self._use_fallback and self._model is not None:
             try:
-                # Select reference anchor. Priority:
-                # 1. Explicit anchor_path param (age-aware selection from pipeline)
-                # 2. Config-loaded gender anchor (male_mid / female_young)
-                # 3. StyleTTS2 default base reference
-                if anchor_path and os.path.exists(anchor_path):
-                    anchor = self._model.compute_style(anchor_path)
-                elif gender == 1 and StyleTTS2Backend._MALE_REF is not None:
-                    anchor = StyleTTS2Backend._MALE_REF
-                elif gender == 0 and StyleTTS2Backend._FEMALE_REF is not None:
-                    anchor = StyleTTS2Backend._FEMALE_REF
-                else:
-                    if StyleTTS2Backend._BASE_REF is None:
-                        from styletts2 import tts
-                        from cached_path import cached_path
-                        target_path = cached_path(tts.DEFAULT_TARGET_VOICE_URL)
-                        StyleTTS2Backend._BASE_REF = self._model.compute_style(target_path)
-                    anchor = StyleTTS2Backend._BASE_REF
-
-                ref_s = anchor.clone().to(self._model.device)
-                style_proj = style.to(self._model.device)
+                style_proj = style.to(self._model.device).float()
                 if style_proj.dim() == 1:
                     style_proj = style_proj.unsqueeze(0)
 
-                # Smoothly blend face biometric style into demographic acoustic manifold.
-                # Project style_proj L2 norm to match the anchor manifold to prevent out-of-distribution acoustic distortion.
-                if blend_weight > 0.02:
+                # Build 256-D reference style tensor [timbre (128) | prosody (128)]
+                if style_proj.shape[-1] == 256:
+                    ref_s = style_proj.clone()
+                else:
+                    ref_s = torch.cat([style_proj, style_proj], dim=-1)
+
+                # Optional demographic anchor blending (disabled by default in anchor-free mode)
+                if blend_weight > 0.05 and anchor_path and os.path.exists(anchor_path):
+                    anchor = self._model.compute_style(anchor_path)
                     anchor_part = anchor[:, :128].to(self._model.device)
-                    s_norm = torch.norm(style_proj, dim=-1, keepdim=True) + 1e-8
+                    s_norm = torch.norm(ref_s[:, :128], dim=-1, keepdim=True) + 1e-8
                     a_norm = torch.norm(anchor_part, dim=-1, keepdim=True)
-                    s_proj_scaled = (style_proj / s_norm) * a_norm
-                    ref_s[:, :128] = (1.0 - blend_weight) * anchor_part + blend_weight * s_proj_scaled
+                    s_scaled = (ref_s[:, :128] / s_norm) * a_norm
+                    ref_s[:, :128] = (1.0 - blend_weight) * anchor_part + blend_weight * s_scaled
 
                 if torch.cuda.is_available():
                     torch.cuda.empty_cache()

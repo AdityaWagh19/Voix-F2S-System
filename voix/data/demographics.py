@@ -111,3 +111,89 @@ class SoftDemographicEstimator:
             gender=1 if p_male >= 0.5 else 0,
             age=est_age,
         )
+
+
+class ViTAgeEstimator:
+    """Vision Transformer (ViT) facial age estimator.
+
+    Uses pre-trained ViT model (nateraw/vit-age-classifier) fine-tuned on
+    facial age classification. Predicts calibrated soft probability distributions
+    across 8 age brackets and computes continuous expected age in years.
+    """
+
+    BIN_CENTERS: dict[str, float] = {
+        "0-2": 1.0,
+        "3-9": 6.0,
+        "10-19": 15.0,
+        "20-29": 25.0,
+        "30-39": 35.0,
+        "40-49": 45.0,
+        "50-69": 60.0,
+        "more than 70": 75.0,
+    }
+
+    def __init__(
+        self,
+        model_name: str = "nateraw/vit-age-classifier",
+        device: str = "cuda",
+    ) -> None:
+        import torch
+
+        self.model_name = model_name
+        self.device = device if (device.startswith("cuda") and torch.cuda.is_available()) else "cpu"
+        self._model = None
+        self._loaded = False
+
+    def _load(self) -> None:
+        """Lazy-load ViT model on first prediction."""
+        from transformers import AutoModelForImageClassification
+
+        self._model = AutoModelForImageClassification.from_pretrained(self.model_name)
+        self._model.to(self.device)
+        self._model.eval()
+        self._loaded = True
+
+    def predict_age(
+        self,
+        image_bgr: np.ndarray,
+        bbox: Optional[Union[list, tuple, np.ndarray]] = None,
+    ) -> float:
+        """Predict expected age in years from face image/crop."""
+        import cv2
+        import torch
+        from PIL import Image
+
+        if not self._loaded:
+            self._load()
+
+        h, w = image_bgr.shape[:2]
+        if bbox is not None:
+            x1, y1, x2, y2 = [int(v) for v in bbox[:4]]
+            margin_x = int((x2 - x1) * 0.15)
+            margin_y = int((y2 - y1) * 0.15)
+            x1 = max(0, x1 - margin_x)
+            y1 = max(0, y1 - margin_y)
+            x2 = min(w, x2 + margin_x)
+            y2 = min(h, y2 + margin_y)
+            crop = image_bgr[y1:y2, x1:x2]
+            if crop.size == 0:
+                crop = image_bgr
+        else:
+            crop = image_bgr
+
+        crop_rgb = cv2.cvtColor(crop, cv2.COLOR_BGR2RGB)
+        crop_pil = Image.fromarray(crop_rgb).resize((224, 224), Image.Resampling.BILINEAR)
+
+        # Standard ViT normalization: (x - 0.5) / 0.5
+        arr = (np.array(crop_pil, dtype=np.float32) / 255.0 - 0.5) / 0.5
+        tensor = torch.from_numpy(arr).permute(2, 0, 1).unsqueeze(0).to(self.device)
+
+        with torch.no_grad():
+            logits = self._model(pixel_values=tensor).logits
+            probs = torch.softmax(logits, dim=-1)[0].cpu().numpy()
+
+        expected_age = sum(
+            probs[i] * self.BIN_CENTERS.get(self._model.config.id2label[i], 30.0)
+            for i in range(len(probs))
+        )
+        return float(expected_age)

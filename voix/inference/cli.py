@@ -353,12 +353,12 @@ def run_showcase_suite(
     face_arg: str,
     output_dir: Path,
     text: str = DEFAULT_REFERENCE_TEXT,
-    blend_weight: float = 0.35,
-    alpha: float = 0.25,
-    beta: float = 0.70,
-    diffusion_steps: int = 25,
+    blend_weight: float = 0.0,
+    alpha: float = 0.30,
+    beta: float = 0.80,
+    diffusion_steps: int = 15,
     temperature: float = 0.85,
-    watermark: bool = True,
+    watermark: bool = False,
 ) -> Dict[str, Any]:
     """Execute complete 6-category demonstration showcase suite (29 canonical assets)."""
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -418,7 +418,13 @@ def run_showcase_suite(
         if whisper_model is not None and full_out_path.exists():
             try:
                 lang_code = params.get("language", "en")
-                asr_res = whisper_model.transcribe(str(full_out_path), language=lang_code if lang_code in ["en", "es", "fr", "de", "it"] else None)
+                import librosa
+                audio_np, sr = sf.read(str(full_out_path))
+                if sr != 16000:
+                    audio_16k = librosa.resample(audio_np.astype(np.float32), orig_sr=sr, target_sr=16000)
+                else:
+                    audio_16k = audio_np.astype(np.float32)
+                asr_res = whisper_model.transcribe(audio_16k, language=lang_code if lang_code in ["en", "es", "fr", "de", "it"] else None)
                 asr_transcript = asr_res.get("text", "").strip()
             except Exception:
                 asr_transcript = ""
@@ -436,7 +442,11 @@ def run_showcase_suite(
         }
         records.append(record)
         asr_display = f' | ASR: "{asr_transcript[:40]}..."' if asr_transcript else ""
-        print(f"  -> Generated [{category}] {label} ({metrics['duration_seconds']}s, F0: {metrics['f0_mean_hz']} Hz){asr_display} -> {rel_path}")
+        safe_asr = asr_display.encode("ascii", errors="replace").decode("ascii")
+        try:
+            print(f"  -> Generated [{category}] {label} ({metrics['duration_seconds']}s, F0: {metrics['f0_mean_hz']} Hz){safe_asr} -> {rel_path}")
+        except Exception:
+            print(f"  -> Generated [{category}] {label} ({metrics['duration_seconds']}s, F0: {metrics['f0_mean_hz']} Hz) -> {rel_path}")
 
     # 1. Candidate Voices (Probabilistic CVAE diversity)
     print()
@@ -571,14 +581,9 @@ def run_showcase_suite(
     ]
     for slider_dict, rel, label, desc in sliders:
         out_f = output_dir / rel
-        e_f_mod_raw, _, _, _, _ = resolve_face_input(pipeline, face_arg, craniofacial_sliders=slider_dict)
-        if pipeline.scaler is not None:
-            e_f_mod_norm = (e_f_mod_raw - pipeline.face_mean) / pipeline.face_std
-        else:
-            e_f_mod_norm = e_f_mod_raw
-
         res = pipeline.generate(
-            face_input=e_f_mod_norm,
+            face_input=e_f_norm,
+            craniofacial_sliders=slider_dict,
             gender=pred_gender,
             age=pred_age,
             text=text,

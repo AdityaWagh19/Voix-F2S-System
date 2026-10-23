@@ -42,6 +42,8 @@ class ArcFaceExtractor:
         self.cache_dir = str(Path(cache_dir).resolve())
         self._app = None
         self._loaded = False
+        self.use_vit_age = True
+        self._vit_age = None
 
     def _load(self) -> None:
         """Lazy-load model on first use to avoid VRAM usage at import time."""
@@ -78,7 +80,22 @@ class ArcFaceExtractor:
         face = max(faces, key=lambda f: (f.bbox[2] - f.bbox[0]) * (f.bbox[3] - f.bbox[1]))
         embedding = face.normed_embedding.astype(np.float32)
         gender = int(face.gender) if hasattr(face, "gender") else None
-        age = float(face.age) if hasattr(face, "age") else None
+        # High-accuracy Vision Transformer age estimation
+        age = None
+        if self.use_vit_age:
+            try:
+                if self._vit_age is None:
+                    import torch
+                    from voix.data.demographics import ViTAgeEstimator
+                    dev = f"cuda:{self.device_id}" if (self.device_id >= 0 and torch.cuda.is_available()) else "cpu"
+                    self._vit_age = ViTAgeEstimator(device=dev)
+                age = self._vit_age.predict_age(image_bgr, bbox=face.bbox)
+            except Exception:
+                age = None
+
+        if age is None:
+            age = float(face.age) if hasattr(face, "age") else None
+
         return embedding, gender, age
 
     def extract(self, image_bgr: np.ndarray) -> Optional[np.ndarray]:

@@ -5,6 +5,7 @@ energy intensity, and spectral acoustic coloration across discrete emotional sta
 """
 
 from __future__ import annotations
+from pathlib import Path
 
 from dataclasses import dataclass
 from enum import Enum
@@ -236,3 +237,44 @@ def list_available_emotions() -> List[Dict[str, Any]]:
         }
         for p in EMOTION_REGISTRY.values()
     ]
+
+# ---------------------------------------------------------------------------
+# Style-Space Emotion Delta Functions
+# ---------------------------------------------------------------------------
+_EMOTION_DELTA_DIR = Path(__file__).resolve().parent.parent.parent / "checkpoints" / "emotion_deltas"
+_EMOTION_DELTA_CACHE: dict = {}
+
+def get_emotion_style_delta(emotion_id: str, device: str = "cpu") -> torch.Tensor | None:
+    """Retrieve precomputed 256-D style delta tensor for given emotion."""
+    if emotion_id in _EMOTION_DELTA_CACHE:
+        return _EMOTION_DELTA_CACHE[emotion_id].to(device)
+    path = _EMOTION_DELTA_DIR / f"{emotion_id}.pt"
+    if not path.exists():
+        return None
+    try:
+        data = torch.load(path, map_location=device, weights_only=False)
+        delta = data.get("delta", None)
+        if delta is not None and isinstance(delta, torch.Tensor):
+            _EMOTION_DELTA_CACHE[emotion_id] = delta.cpu()
+            return delta.to(device)
+    except Exception:
+        return None
+    return None
+
+def apply_emotion_style_delta(ref_s: torch.Tensor, emotion_id: str, intensity: float = 1.0) -> torch.Tensor:
+    """Modulate the prosody half [128:] of a 256-D reference style vector."""
+    if intensity <= 0.0 or emotion_id in ("neutral", "default"):
+        return ref_s
+    delta = get_emotion_style_delta(emotion_id, device=str(ref_s.device))
+    if delta is None:
+        return ref_s
+    is_1d = (ref_s.dim() == 1)
+    if is_1d:
+        ref_s = ref_s.unsqueeze(0)
+    s_mod = ref_s.clone()
+    if s_mod.shape[-1] >= 256:
+        d_prosody = delta[128:256] if delta.shape[0] >= 256 else delta
+        s_mod[:, 128:256] = s_mod[:, 128:256] + float(intensity) * d_prosody.to(s_mod.device)
+    else:
+        s_mod = s_mod + float(intensity) * delta[:128].to(s_mod.device)
+    return s_mod.squeeze(0) if is_1d else s_mod

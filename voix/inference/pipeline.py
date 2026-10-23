@@ -108,7 +108,7 @@ class VoixPipeline:
         self.cfvn.eval()
 
         # 4. Load StyleAdapter
-        self.adapter = StyleAdapter(in_dim=192, hidden_dim=256, out_dim=128).to(self.device)
+        self.adapter = StyleAdapter(in_dim=192, hidden_dim=256, out_dim=256).to(self.device)
         if os.path.exists(adapter_checkpoint):
             a_ckpt = torch.load(adapter_checkpoint, weights_only=False, map_location=self.device)
             a_state = a_ckpt["model_state_dict"] if "model_state_dict" in a_ckpt else a_ckpt
@@ -348,7 +348,17 @@ class VoixPipeline:
             e_f = e_f.to(self.device)
             if self.scaler is not None and e_f.abs().mean() > 1.5:
                 e_f = (e_f - self.face_mean) / self.face_std
-            e_geo = None
+            if e_f.shape[-1] >= 544:
+                e_geo_base = e_f[:, 512:544]
+                if craniofacial_sliders:
+                    from voix.data.morphology import apply_craniofacial_sliders
+                    base_np = e_geo_base.detach().cpu().numpy().squeeze()
+                    mod_np = apply_craniofacial_sliders(base_np, craniofacial_sliders)
+                    e_geo = torch.from_numpy(mod_np).float().to(self.device)
+                else:
+                    e_geo = e_geo_base
+            else:
+                e_geo = None
         else:
             raise TypeError("face_input must be an image path, 560-D tensor, or numpy array")
 
@@ -431,11 +441,10 @@ class VoixPipeline:
             e_s_k = e_s_candidates_norm[k].unsqueeze(0)
             e_s_raw_k = e_s_candidates_raw[k]
 
-            # Style Adapter projection (192-D -> 128-D)
+            # Dual-Head Style Adapter projection (192-D -> 256-D [timbre | prosody])
             s_hat_k = self.adapter(e_s_raw_k.unsqueeze(0))
 
-            # Apply craniofacial morphology modulation to style vector
-            # Maps jaw width, face height, lip fullness, etc. to vocal tract resonance
+            # Apply craniofacial morphology modulation to style vector (oral/nasal resonance)
             if e_geo is not None:
                 from voix.models.craniofacial_style import apply_craniofacial_to_style
                 s_hat_k = apply_craniofacial_to_style(
@@ -444,29 +453,41 @@ class VoixPipeline:
                     strength=1.0,
                 )
 
+            # Apply style-space accent delta to prosody half of s_hat_k
+            if accent and accent != "general_american":
+                from voix.models.accent_control import apply_accent_style_delta
+                s_hat_k = apply_accent_style_delta(
+                    ref_s=s_hat_k,
+                    accent_id=accent,
+                    strength=accent_strength,
+                )
+
+            # Apply style-space emotion delta to prosody half of s_hat_k
+            if emotion and emotion != "neutral":
+                from voix.models.emotion_control import apply_emotion_style_delta
+                s_hat_k = apply_emotion_style_delta(
+                    ref_s=s_hat_k,
+                    emotion_id=emotion,
+                    intensity=emotion_intensity,
+                )
+
             _gender = gender if gender is not None else 1
-            _age    = age if age is not None else 30.0
-            from voix.utils.config import get_anchor_path, select_anchor_key
-            _anchor_key = select_anchor_key(_gender, _age)
-            try:
-                _anchor_path = get_anchor_path(_anchor_key)
-            except (KeyError, FileNotFoundError):
-                _anchor_path = None
 
             base_dur = _inf.get("duration_scale", 1.0)
             final_duration = base_dur * duration_mult * accent_mods["duration_mult"] * emotion_mods["duration_scale"] * lang_mods["duration_scale"]
-            base_beta = _inf.get("beta", 0.70)
-            final_beta = float(np.clip(base_beta * accent_mods["prosody_mult"] * emotion_mods["beta_mult"] * lang_mods["pitch_dynamics_factor"], 0.20, 0.95))
+            base_beta = _inf.get("beta", 0.80)
+            final_beta = float(np.clip(base_beta * accent_mods["prosody_mult"] * emotion_mods["beta_mult"] * lang_mods["pitch_dynamics_factor"], 0.55, 0.95))
+            eff_alpha = _inf.get("alpha", 0.30)
             waveform = self.tts.synthesize(
                 text=synth_text,
                 style=s_hat_k,
                 gender=_gender,
-                blend_weight=_inf.get("blend_weight", 0.35),
+                blend_weight=0.0,
                 beta=final_beta,
-                alpha=_inf.get("alpha", 0.25),
+                alpha=eff_alpha,
                 duration_scale=final_duration,
                 diffusion_steps=diffusion_steps,
-                anchor_path=_anchor_path,
+                anchor_path=None,
             )
 
             # Apply post-synthesis acoustic filters for speech differences

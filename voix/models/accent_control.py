@@ -5,6 +5,7 @@ to simulate regional accents while preserving biometric facial voice identity.
 """
 
 from __future__ import annotations
+from pathlib import Path
 
 import re
 from dataclasses import dataclass
@@ -273,3 +274,44 @@ def list_available_accents() -> List[Dict[str, Any]]:
         }
         for p in ACCENT_REGISTRY.values()
     ]
+
+# ---------------------------------------------------------------------------
+# Style-Space Accent Delta Functions
+# ---------------------------------------------------------------------------
+_ACCENT_DELTA_DIR = Path(__file__).resolve().parent.parent.parent / "checkpoints" / "accent_deltas"
+_ACCENT_DELTA_CACHE: dict = {}
+
+def get_accent_style_delta(accent_id: str, device: str = "cpu") -> torch.Tensor | None:
+    """Retrieve precomputed 256-D style delta tensor for given accent."""
+    if accent_id in _ACCENT_DELTA_CACHE:
+        return _ACCENT_DELTA_CACHE[accent_id].to(device)
+    path = _ACCENT_DELTA_DIR / f"{accent_id}.pt"
+    if not path.exists():
+        return None
+    try:
+        data = torch.load(path, map_location=device, weights_only=False)
+        delta = data.get("delta", None)
+        if delta is not None and isinstance(delta, torch.Tensor):
+            _ACCENT_DELTA_CACHE[accent_id] = delta.cpu()
+            return delta.to(device)
+    except Exception:
+        return None
+    return None
+
+def apply_accent_style_delta(ref_s: torch.Tensor, accent_id: str, strength: float = 1.0) -> torch.Tensor:
+    """Modulate the prosody half [128:] of a 256-D reference style vector."""
+    if strength <= 0.0 or accent_id in ("general_american", "default"):
+        return ref_s
+    delta = get_accent_style_delta(accent_id, device=str(ref_s.device))
+    if delta is None:
+        return ref_s
+    is_1d = (ref_s.dim() == 1)
+    if is_1d:
+        ref_s = ref_s.unsqueeze(0)
+    s_mod = ref_s.clone()
+    if s_mod.shape[-1] >= 256:
+        d_prosody = delta[128:256] if delta.shape[0] >= 256 else delta
+        s_mod[:, 128:256] = s_mod[:, 128:256] + float(strength) * d_prosody.to(s_mod.device)
+    else:
+        s_mod = s_mod + float(strength) * delta[:128].to(s_mod.device)
+    return s_mod.squeeze(0) if is_1d else s_mod

@@ -131,12 +131,22 @@ def apply_craniofacial_to_style(
     resonance without modifying the StyleTTS2 backend.
 
     Args:
-        style: Style vector from StyleAdapter, shape (B, 128) or (128,).
+        style: Style vector from StyleAdapter, shape (B, 128), (B, 256), or 1D equivalent.
         e_geo: Craniofacial ratio vector, shape (B, 32) or (32,).
         strength: Modulation strength in [0, 1].
 
     Returns:
         Modified style tensor with craniofacial modulation applied.
     """
-    delta = craniofacial_to_style_delta(e_geo, strength=strength)
-    return style + delta.to(style.device)
+    delta = craniofacial_to_style_delta(e_geo, strength=strength).to(style.device)
+    is_1d = (style.dim() == 1)
+    if is_1d:
+        style = style.unsqueeze(0)
+    
+    out = style.clone()
+    if out.shape[-1] >= 256:
+        out[:, :128] = out[:, :128] + delta
+    else:
+        out = out + delta
+
+    return out.squeeze(0) if is_1d else out
