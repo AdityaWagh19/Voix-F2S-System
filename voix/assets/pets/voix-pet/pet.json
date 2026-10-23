@@ -1,0 +1,61 @@
+{
+  "id": "voix-pet",
+  "displayName": "Voix",
+  "description": "The official biometric acoustic companion for VOIX, featuring cobalt blue coat and yellow equalizer headphone accents.",
+  "spritesheetPath": "spritesheet.webp",
+  "version": "1.0.0",
+  "author": "VOIX",
+  "grid": {
+    "columns": 8,
+    "rows": 9,
+    "frameWidth": 192,
+    "frameHeight": 208
+  },
+  "states": {
+    "idle": {
+      "row": 0,
+      "frames": 8,
+      "duration": 800
+    },
+    "look": {
+      "row": 1,
+      "frames": 8,
+      "duration": 800
+    },
+    "walk": {
+      "row": 2,
+      "frames": 8,
+      "duration": 700
+    },
+    "run": {
+      "row": 3,
+      "frames": 8,
+      "duration": 600
+    },
+    "jump": {
+      "row": 4,
+      "frames": 8,
+      "duration": 700
+    },
+    "think": {
+      "row": 5,
+      "frames": 8,
+      "duration": 900
+    },
+    "speak": {
+      "row": 6,
+      "frames": 8,
+      "duration": 750
+    },
+    "sleep": {
+      "row": 7,
+      "frames": 8,
+      "duration": 1200
+    },
+    "alert": {
+      "row": 8,
+      "frames": 8,
+      "duration": 800
+    }
+  }
+}
