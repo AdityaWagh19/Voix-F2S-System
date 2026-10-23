@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project": "VOIX \u2013 Probabilistic Face-to-Voice Biometric Synthesis",
-  "audit_timestamp": "2026-10-23 09:35:42 UTC",
+  "audit_timestamp": "2026-10-23 13:30:17 UTC",
   "input_face_subject": {
     "input_type": "image_upload",
     "image_filename": "subject_face.png",
@@ -260,10 +260,10 @@
       "acoustic_analysis": {
         "duration_seconds": 7.323,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.085,
-        "f0_mean_hz": 146.2,
-        "f0_std_hz": 33.8,
-        "voiced_percentage": 68.3
+        "rms_energy": 0.0576,
+        "f0_mean_hz": 202.4,
+        "f0_std_hz": 44.6,
+        "voiced_percentage": 48.8
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -281,10 +281,10 @@
       "acoustic_analysis": {
         "duration_seconds": 7.048,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0956,
-        "f0_mean_hz": 135.6,
-        "f0_std_hz": 19.2,
-        "voiced_percentage": 70.4
+        "rms_energy": 0.0597,
+        "f0_mean_hz": 208.5,
+        "f0_std_hz": 27.8,
+        "voiced_percentage": 51.4
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -302,10 +302,10 @@
       "acoustic_analysis": {
         "duration_seconds": 7.448,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.109,
-        "f0_mean_hz": 160.0,
-        "f0_std_hz": 21.4,
-        "voiced_percentage": 71.1
+        "rms_energy": 0.0739,
+        "f0_mean_hz": 208.3,
+        "f0_std_hz": 27.5,
+        "voiced_percentage": 60.0
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -323,10 +323,10 @@
       "acoustic_analysis": {
         "duration_seconds": 7.298,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0718,
-        "f0_mean_hz": 137.0,
-        "f0_std_hz": 38.4,
-        "voiced_percentage": 54.8
+        "rms_energy": 0.0573,
+        "f0_mean_hz": 189.3,
+        "f0_std_hz": 78.5,
+        "voiced_percentage": 35.0
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -342,12 +342,12 @@
         "strength": 1.0
       },
       "acoustic_analysis": {
-        "duration_seconds": 7.148,
+        "duration_seconds": 7.073,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.099,
-        "f0_mean_hz": 141.9,
-        "f0_std_hz": 24.8,
-        "voiced_percentage": 68.5
+        "rms_energy": 0.0714,
+        "f0_mean_hz": 227.7,
+        "f0_std_hz": 42.9,
+        "voiced_percentage": 46.1
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -363,12 +363,12 @@
         "strength": 1.0
       },
       "acoustic_analysis": {
-        "duration_seconds": 6.848,
+        "duration_seconds": 6.798,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0928,
-        "f0_mean_hz": 144.5,
-        "f0_std_hz": 38.2,
-        "voiced_percentage": 62.9
+        "rms_energy": 0.0654,
+        "f0_mean_hz": 185.3,
+        "f0_std_hz": 76.5,
+        "voiced_percentage": 46.4
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and live culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -384,12 +384,12 @@
         "strength": 1.0
       },
       "acoustic_analysis": {
-        "duration_seconds": 7.023,
+        "duration_seconds": 6.948,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0741,
-        "f0_mean_hz": 126.8,
-        "f0_std_hz": 30.0,
-        "voiced_percentage": 71.2
+        "rms_energy": 0.0532,
+        "f0_mean_hz": 211.4,
+        "f0_std_hz": 48.3,
+        "voiced_percentage": 29.8
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -405,14 +405,14 @@
         "strength": 1.0
       },
       "acoustic_analysis": {
-        "duration_seconds": 5.173,
+        "duration_seconds": 5.273,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.1096,
-        "f0_mean_hz": 198.5,
-        "f0_std_hz": 51.9,
+        "rms_energy": 0.071,
+        "f0_mean_hz": 186.0,
+        "f0_std_hz": 43.9,
         "voiced_percentage": 77.0
       },
-      "whisper_transcript": "The human voice reflects both physical anatomy and live culture, carrying the unique cadence of personal identity.",
+      "whisper_transcript": "The human voice reflects both physical anatomy and live culture carrying the unique cadence of personal identity.",
       "watermarked": false
     },
     {
@@ -426,12 +426,12 @@
         "strength": 1.0
       },
       "acoustic_analysis": {
-        "duration_seconds": 6.948,
+        "duration_seconds": 6.973,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.1084,
-        "f0_mean_hz": 130.0,
-        "f0_std_hz": 22.8,
-        "voiced_percentage": 76.1
+        "rms_energy": 0.0759,
+        "f0_mean_hz": 211.2,
+        "f0_std_hz": 25.6,
+        "voiced_percentage": 63.9
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -449,10 +449,10 @@
       "acoustic_analysis": {
         "duration_seconds": 7.898,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.1075,
-        "f0_mean_hz": 109.0,
-        "f0_std_hz": 31.7,
-        "voiced_percentage": 64.4
+        "rms_energy": 0.0728,
+        "f0_mean_hz": 174.6,
+        "f0_std_hz": 65.6,
+        "voiced_percentage": 58.5
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -468,12 +468,12 @@
         "intensity": 0.9
       },
       "acoustic_analysis": {
-        "duration_seconds": 7.598,
+        "duration_seconds": 7.698,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0832,
-        "f0_mean_hz": 173.9,
-        "f0_std_hz": 16.6,
-        "voiced_percentage": 62.2
+        "rms_energy": 0.0599,
+        "f0_mean_hz": 205.4,
+        "f0_std_hz": 31.9,
+        "voiced_percentage": 52.1
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -489,12 +489,12 @@
         "intensity": 0.9
       },
       "acoustic_analysis": {
-        "duration_seconds": 8.148,
+        "duration_seconds": 7.873,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0881,
-        "f0_mean_hz": 101.3,
-        "f0_std_hz": 16.3,
-        "voiced_percentage": 69.9
+        "rms_energy": 0.07,
+        "f0_mean_hz": 195.0,
+        "f0_std_hz": 51.7,
+        "voiced_percentage": 71.6
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -510,12 +510,12 @@
         "intensity": 0.9
       },
       "acoustic_analysis": {
-        "duration_seconds": 6.273,
+        "duration_seconds": 6.348,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0797,
-        "f0_mean_hz": 145.2,
-        "f0_std_hz": 35.7,
-        "voiced_percentage": 55.6
+        "rms_energy": 0.0572,
+        "f0_mean_hz": 224.4,
+        "f0_std_hz": 48.8,
+        "voiced_percentage": 30.5
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -531,14 +531,14 @@
         "intensity": 0.9
       },
       "acoustic_analysis": {
-        "duration_seconds": 8.473,
+        "duration_seconds": 8.348,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0662,
-        "f0_mean_hz": 105.8,
-        "f0_std_hz": 16.1,
-        "voiced_percentage": 52.3
+        "rms_energy": 0.0411,
+        "f0_mean_hz": 190.8,
+        "f0_std_hz": 27.4,
+        "voiced_percentage": 43.9
       },
-      "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the nick cadence of personal identity.",
+      "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
     },
     {
@@ -552,14 +552,14 @@
         "intensity": 0.9
       },
       "acoustic_analysis": {
-        "duration_seconds": 6.323,
+        "duration_seconds": 6.648,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0844,
-        "f0_mean_hz": 160.4,
-        "f0_std_hz": 57.5,
-        "voiced_percentage": 55.9
+        "rms_energy": 0.0621,
+        "f0_mean_hz": 157.2,
+        "f0_std_hz": 71.6,
+        "voiced_percentage": 59.3
       },
-      "whisper_transcript": "The human voice reflects both physical anatomy and live culture, carrying the unique cadence of personal identity.",
+      "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
     },
     {
@@ -573,12 +573,12 @@
         "severity": 0.7
       },
       "acoustic_analysis": {
-        "duration_seconds": 8.023,
+        "duration_seconds": 7.548,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0777,
-        "f0_mean_hz": 138.9,
-        "f0_std_hz": 37.7,
-        "voiced_percentage": 59.9
+        "rms_energy": 0.0548,
+        "f0_mean_hz": 210.9,
+        "f0_std_hz": 56.0,
+        "voiced_percentage": 42.1
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of pathonal identity.",
       "watermarked": false
@@ -596,10 +596,10 @@
       "acoustic_analysis": {
         "duration_seconds": 8.373,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0975,
-        "f0_mean_hz": 157.0,
-        "f0_std_hz": 26.4,
-        "voiced_percentage": 64.9
+        "rms_energy": 0.0627,
+        "f0_mean_hz": 212.0,
+        "f0_std_hz": 23.4,
+        "voiced_percentage": 56.7
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -617,12 +617,12 @@
       "acoustic_analysis": {
         "duration_seconds": 8.423,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0764,
-        "f0_mean_hz": 159.9,
-        "f0_std_hz": 36.1,
-        "voiced_percentage": 63.0
+        "rms_energy": 0.0727,
+        "f0_mean_hz": 221.3,
+        "f0_std_hz": 45.6,
+        "voiced_percentage": 53.4
       },
-      "whisper_transcript": "The human voice, Weft, lacks both physical anatomy and lived culture, carrying the, Nick Cadence of personal identity.",
+      "whisper_transcript": "The human voice weft, lex both physical anatomy and lived culture, carrying the in, nick cadence of personal identity.",
       "watermarked": false
     },
     {
@@ -638,12 +638,12 @@
       "acoustic_analysis": {
         "duration_seconds": 9.098,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0827,
-        "f0_mean_hz": 100.1,
-        "f0_std_hz": 20.3,
-        "voiced_percentage": 49.6
+        "rms_energy": 0.0599,
+        "f0_mean_hz": 139.0,
+        "f0_std_hz": 61.3,
+        "voiced_percentage": 30.4
       },
-      "whisper_transcript": "The human voice ref-ref reflects both physical anatomy and lived culture, carrying the unique CAD CAD cadence of Power Power Personal identity.",
+      "whisper_transcript": "The human voice ref-ref reflects both physical anatomy and lived culture, carrying the unique CAD CAD cadence of part-part personal identity.",
       "watermarked": false
     },
     {
@@ -659,10 +659,10 @@
       "acoustic_analysis": {
         "duration_seconds": 6.898,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.1169,
-        "f0_mean_hz": 161.5,
-        "f0_std_hz": 27.8,
-        "voiced_percentage": 70.4
+        "rms_energy": 0.0766,
+        "f0_mean_hz": 215.2,
+        "f0_std_hz": 35.4,
+        "voiced_percentage": 60.2
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -680,12 +680,12 @@
       "acoustic_analysis": {
         "duration_seconds": 8.548,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.1008,
-        "f0_mean_hz": 134.9,
-        "f0_std_hz": 32.2,
-        "voiced_percentage": 60.1
+        "rms_energy": 0.0742,
+        "f0_mean_hz": 213.6,
+        "f0_std_hz": 50.1,
+        "voiced_percentage": 51.9
       },
-      "whisper_transcript": "The human voice reflects Beth Fissichle Oenitomi O, and lived culture, carrying the unit cadence of personal identity.",
+      "whisper_transcript": "The human voice reflects Beth Fissacle, oh, and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
     },
     {
@@ -701,12 +701,12 @@
       "acoustic_analysis": {
         "duration_seconds": 8.648,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.1082,
-        "f0_mean_hz": 113.1,
-        "f0_std_hz": 18.1,
-        "voiced_percentage": 75.9
+        "rms_energy": 0.0668,
+        "f0_mean_hz": 190.5,
+        "f0_std_hz": 22.7,
+        "voiced_percentage": 65.8
       },
-      "whisper_transcript": "La voz humana refletando la anatomy e f\u00edsica como la cultura vivida, Yavando la quitan, Che yunica de la identidad personal.",
+      "whisper_transcript": "La voz humana, rafliotanto, la anatom\u00eda f\u00edsica como la cultura vivida, Yavando la quiden, Che y noca de la identidad personal.",
       "watermarked": false
     },
     {
@@ -722,12 +722,12 @@
       "acoustic_analysis": {
         "duration_seconds": 9.348,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.1136,
-        "f0_mean_hz": 163.1,
-        "f0_std_hz": 26.0,
-        "voiced_percentage": 66.7
+        "rms_energy": 0.0716,
+        "f0_mean_hz": 193.7,
+        "f0_std_hz": 53.4,
+        "voiced_percentage": 51.9
       },
-      "whisper_transcript": "L'avoux, whom, aient reflits \u00e0 la foie Salsan, a d'aume-y physique et \u00e0 la culture vecu, portant la cadence unique d'aux idens et personnels.",
+      "whisper_transcript": "La voix de son, la main r\u00e9flate \u00e0 la voix de saison. A de mes physiques et \u00e0 la culture vecu, portant la cadence unique de sa identit\u00e9 de la personale.",
       "watermarked": false
     },
     {
@@ -743,12 +743,12 @@
       "acoustic_analysis": {
         "duration_seconds": 11.698,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0922,
-        "f0_mean_hz": 158.0,
-        "f0_std_hz": 32.0,
-        "voiced_percentage": 59.7
+        "rms_energy": 0.0668,
+        "f0_mean_hz": 199.9,
+        "f0_std_hz": 53.9,
+        "voiced_percentage": 48.6
       },
-      "whisper_transcript": "Dementsch, Littschstimm spiegelt so, all defiesisch, Anatem Alzach, Degelubb Kulturewider, Untrag Dianns, A gottage cadence to person like an identity.",
+      "whisper_transcript": "Demenz, Lichstimm, Spiegel, So, Oldy, Faizisch, Anatum, Alzart, Degelb, Kulturwider, Untrag, Diannes, The Goddard's cadence, the person like an identity.",
       "watermarked": false
     },
     {
@@ -764,12 +764,12 @@
       "acoustic_analysis": {
         "duration_seconds": 7.523,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0808,
-        "f0_mean_hz": 100.6,
-        "f0_std_hz": 21.6,
-        "voiced_percentage": 71.4
+        "rms_energy": 0.0623,
+        "f0_mean_hz": 154.0,
+        "f0_std_hz": 57.4,
+        "voiced_percentage": 56.4
       },
-      "whisper_transcript": "La voce \u00e8 un Golf e la r Cao Come P\u8207,gersi una citt\u00e0 cubista cominciata per Penisation Pour Brittany Informati",
+      "whisper_transcript": "Sono oroso e con un difusi \u0432\u044b\u0439<|ar|>",
       "watermarked": false
     },
     {
@@ -786,12 +786,12 @@
       "acoustic_analysis": {
         "duration_seconds": 8.648,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0816,
-        "f0_mean_hz": 117.9,
-        "f0_std_hz": 16.8,
-        "voiced_percentage": 45.8
+        "rms_energy": 0.0664,
+        "f0_mean_hz": 206.8,
+        "f0_std_hz": 48.1,
+        "voiced_percentage": 54.7
       },
-      "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+      "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the young, nick cadence of personal identity.",
       "watermarked": false
     },
     {
@@ -806,12 +806,12 @@
         }
       },
       "acoustic_analysis": {
-        "duration_seconds": 6.748,
+        "duration_seconds": 6.798,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0984,
-        "f0_mean_hz": 128.8,
-        "f0_std_hz": 22.4,
-        "voiced_percentage": 66.2
+        "rms_energy": 0.0547,
+        "f0_mean_hz": 200.5,
+        "f0_std_hz": 59.1,
+        "voiced_percentage": 54.9
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -828,12 +828,12 @@
         }
       },
       "acoustic_analysis": {
-        "duration_seconds": 6.798,
+        "duration_seconds": 7.473,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.0867,
-        "f0_mean_hz": 141.8,
-        "f0_std_hz": 31.6,
-        "voiced_percentage": 70.5
+        "rms_energy": 0.0648,
+        "f0_mean_hz": 212.1,
+        "f0_std_hz": 24.6,
+        "voiced_percentage": 58.7
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false
@@ -852,10 +852,10 @@
       "acoustic_analysis": {
         "duration_seconds": 6.823,
         "peak_amplitude": 0.9,
-        "rms_energy": 0.1101,
-        "f0_mean_hz": 120.8,
-        "f0_std_hz": 27.2,
-        "voiced_percentage": 69.7
+        "rms_energy": 0.0704,
+        "f0_mean_hz": 199.4,
+        "f0_std_hz": 50.4,
+        "voiced_percentage": 47.2
       },
       "whisper_transcript": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
       "watermarked": false

@@ -280,6 +280,8 @@ class VoixPipeline:
         emotion: Optional[str] = None,
         emotion_intensity: float = 0.5,
         language: str = "en",
+        speaker_embedding: Optional[torch.Tensor] = None,
+        seed: Optional[int] = None,
     ) -> List[Dict[str, Any]]:
         """Generate K diverse candidate voice waveforms for a single face representation.
 
@@ -366,29 +368,55 @@ class VoixPipeline:
         with torch.no_grad():
             e_f_voice = self.cfvn(e_f, normalize=True)  # (1, 192)
 
-        # 1. Generate K diverse candidate speaker embeddings via CVAE
-        e_s_candidates = self.cvae.sample_voices(
-            e_f_voice,
-            num_samples=num_voices,
-            temperature=temperature,
-        )  # (K, 192)
-
-        # 2. Inject face identity direction from ArcFace for distinct individuality
+        # Extract ArcFace visual identity projection for consistency
         e_id_val = getattr(self, "_last_e_id", None)
         if e_id_val is None and e_f.shape[-1] >= 512:
             e_id_val = e_f[:, :512]
 
-        if e_id_val is not None:
-            if isinstance(e_id_val, np.ndarray):
-                eid_t = torch.from_numpy(e_id_val).float().to(self.device)
+        if speaker_embedding is not None:
+            # Use explicit fixed speaker embedding (e.g. Primary candidate identity)
+            spk_t = speaker_embedding.to(self.device).float()
+            if spk_t.dim() == 1:
+                spk_t = spk_t.unsqueeze(0)
+            if spk_t.shape[0] < num_voices:
+                spk_t = spk_t.repeat(num_voices, 1)
+            e_s_candidates_norm = F.normalize(spk_t, dim=-1)
+        elif temperature <= 0.001:
+            # Deterministic mode: prior mean mode without stochastic noise
+            mu_prior, _ = self.cvae.prior_net(e_f_voice)
+            e_s_base = self.cvae.decoder(mu_prior)
+            if e_id_val is not None:
+                if isinstance(e_id_val, np.ndarray):
+                    eid_t = torch.from_numpy(e_id_val).float().to(self.device)
+                else:
+                    eid_t = e_id_val.float().to(self.device)
+                if eid_t.dim() == 1:
+                    eid_t = eid_t.unsqueeze(0)
+                id_delta = F.normalize(eid_t @ self.id_proj_q, dim=-1)
+                e_s_candidates_norm = F.normalize(0.55 * e_s_base + 0.45 * id_delta, dim=-1)
             else:
-                eid_t = e_id_val.float().to(self.device)
-            if eid_t.dim() == 1:
-                eid_t = eid_t.unsqueeze(0)
-            id_delta = F.normalize(eid_t @ self.id_proj_q, dim=-1)  # (1, 192)
-            e_s_candidates_norm = F.normalize(0.55 * e_s_candidates + 0.45 * id_delta, dim=-1)
+                e_s_candidates_norm = F.normalize(e_s_base, dim=-1)
+            if e_s_candidates_norm.shape[0] < num_voices:
+                e_s_candidates_norm = e_s_candidates_norm.repeat(num_voices, 1)
         else:
-            e_s_candidates_norm = F.normalize(e_s_candidates, dim=-1)
+            if seed is not None:
+                torch.manual_seed(seed)
+            e_s_candidates = self.cvae.sample_voices(
+                e_f_voice,
+                num_samples=num_voices,
+                temperature=temperature,
+            )
+            if e_id_val is not None:
+                if isinstance(e_id_val, np.ndarray):
+                    eid_t = torch.from_numpy(e_id_val).float().to(self.device)
+                else:
+                    eid_t = e_id_val.float().to(self.device)
+                if eid_t.dim() == 1:
+                    eid_t = eid_t.unsqueeze(0)
+                id_delta = F.normalize(eid_t @ self.id_proj_q, dim=-1)
+                e_s_candidates_norm = F.normalize(0.55 * e_s_candidates + 0.45 * id_delta, dim=-1)
+            else:
+                e_s_candidates_norm = F.normalize(e_s_candidates, dim=-1)
 
         e_s_candidates_raw = e_s_candidates_norm
 

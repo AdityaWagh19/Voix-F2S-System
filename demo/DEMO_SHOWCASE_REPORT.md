@@ -1,7 +1,7 @@
 # VOIX: Probabilistic Face-to-Voice Synthesis – Demonstration Showcase Report
 
 > **Project Phase**: Demonstration & Expressivity Showcase  
-> **Generated Date**: 2026-10-23 09:35:42 UTC  
+> **Generated Date**: 2026-10-23 13:30:17 UTC  
 > **Input Face Subject**: `subject_face.png` (Estimated Demographics: Female, ~26.6 years)  
 > **Total Synthesized Assets**: 29 audio files  
 > **Canonical Speech Prompt**: *'The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.'*  
@@ -24,35 +24,35 @@ This showcase suite provides an empirical demonstration of the **VOIX** generati
 
 | Category | Asset Filename | Acoustic Condition | Duration | Mean F0 | Voiced % | Watermarked |
 | :--- | :--- | :--- | :---: | :---: | :---: | :---: |
-| **01_Candidates** | [`01_candidates/candidate_1_primary.wav`](01_candidates/candidate_1_primary.wav) | Candidate 1 (Primary / Most Likely) | 7.323s | 146.2 Hz | 68.3% | No |
-| **01_Candidates** | [`01_candidates/candidate_2_alternative.wav`](01_candidates/candidate_2_alternative.wav) | Candidate 2 (Alternative Timbre) | 7.048s | 135.6 Hz | 70.4% | No |
-| **01_Candidates** | [`01_candidates/candidate_3_contrasting.wav`](01_candidates/candidate_3_contrasting.wav) | Candidate 3 (Contrasting Cadence) | 7.448s | 160.0 Hz | 71.1% | No |
-| **02_Accents** | [`02_accents/accent_01_general_american.wav`](02_accents/accent_01_general_american.wav) | General American | 7.298s | 137.0 Hz | 54.8% | No |
-| **02_Accents** | [`02_accents/accent_02_british_rp.wav`](02_accents/accent_02_british_rp.wav) | British Received Pronunciation | 7.148s | 141.9 Hz | 68.5% | No |
-| **02_Accents** | [`02_accents/accent_03_australian.wav`](02_accents/accent_03_australian.wav) | Australian English | 6.848s | 144.5 Hz | 62.9% | No |
-| **02_Accents** | [`02_accents/accent_04_indian_english.wav`](02_accents/accent_04_indian_english.wav) | Indian English | 7.023s | 126.8 Hz | 71.2% | No |
-| **02_Accents** | [`02_accents/accent_05_irish.wav`](02_accents/accent_05_irish.wav) | Irish English | 5.173s | 198.5 Hz | 77.0% | No |
-| **02_Accents** | [`02_accents/accent_06_scottish.wav`](02_accents/accent_06_scottish.wav) | Scottish English | 6.948s | 130.0 Hz | 76.1% | No |
-| **03_Emotions** | [`03_emotions/emotion_01_neutral.wav`](03_emotions/emotion_01_neutral.wav) | Neutral / Conversational | 7.898s | 109.0 Hz | 64.4% | No |
-| **03_Emotions** | [`03_emotions/emotion_02_happy.wav`](03_emotions/emotion_02_happy.wav) | Happy / Cheerful | 7.598s | 173.9 Hz | 62.2% | No |
-| **03_Emotions** | [`03_emotions/emotion_03_sad.wav`](03_emotions/emotion_03_sad.wav) | Sad / Somber | 8.148s | 101.3 Hz | 69.9% | No |
-| **03_Emotions** | [`03_emotions/emotion_04_angry.wav`](03_emotions/emotion_04_angry.wav) | Angry / Assertive | 6.273s | 145.2 Hz | 55.6% | No |
-| **03_Emotions** | [`03_emotions/emotion_05_whispered.wav`](03_emotions/emotion_05_whispered.wav) | Whispered / Soft | 8.473s | 105.8 Hz | 52.3% | No |
-| **03_Emotions** | [`03_emotions/emotion_06_surprised.wav`](03_emotions/emotion_06_surprised.wav) | Surprised / Inquisitive | 6.323s | 160.4 Hz | 55.9% | No |
-| **04_Speech_Differences** | [`04_speech_differences/speech_01_interdental_lisp.wav`](04_speech_differences/speech_01_interdental_lisp.wav) | Interdental Lisp | 8.023s | 138.9 Hz | 59.9% | No |
-| **04_Speech_Differences** | [`04_speech_differences/speech_02_lateral_lisp.wav`](04_speech_differences/speech_02_lateral_lisp.wav) | Lateral Lisp | 8.373s | 157.0 Hz | 64.9% | No |
-| **04_Speech_Differences** | [`04_speech_differences/speech_03_rhotacism.wav`](04_speech_differences/speech_03_rhotacism.wav) | Rhotacism | 8.423s | 159.9 Hz | 63.0% | No |
-| **04_Speech_Differences** | [`04_speech_differences/speech_04_stutter_clonic.wav`](04_speech_differences/speech_04_stutter_clonic.wav) | Clonic Stuttering | 9.098s | 100.1 Hz | 49.6% | No |
-| **04_Speech_Differences** | [`04_speech_differences/speech_05_hypernasality.wav`](04_speech_differences/speech_05_hypernasality.wav) | Hypernasality | 6.898s | 161.5 Hz | 70.4% | No |
-| **04_Speech_Differences** | [`04_speech_differences/speech_06_prolonged_phonemes.wav`](04_speech_differences/speech_06_prolonged_phonemes.wav) | Prolonged Phonemes | 8.548s | 134.9 Hz | 60.1% | No |
-| **05_Cross_Lingual** | [`05_cross_lingual/lang_01_spanish.wav`](05_cross_lingual/lang_01_spanish.wav) | Spanish | 8.648s | 113.1 Hz | 75.9% | No |
-| **05_Cross_Lingual** | [`05_cross_lingual/lang_02_french.wav`](05_cross_lingual/lang_02_french.wav) | French | 9.348s | 163.1 Hz | 66.7% | No |
-| **05_Cross_Lingual** | [`05_cross_lingual/lang_03_german.wav`](05_cross_lingual/lang_03_german.wav) | German | 11.698s | 158.0 Hz | 59.7% | No |
-| **05_Cross_Lingual** | [`05_cross_lingual/lang_04_italian.wav`](05_cross_lingual/lang_04_italian.wav) | Italian | 7.523s | 100.6 Hz | 71.4% | No |
-| **06_Morphology_Sliders** | [`06_craniofacial_sliders/slider_01_jaw_expanded.wav`](06_craniofacial_sliders/slider_01_jaw_expanded.wav) | Expanded Jaw Width (+0.8) | 8.648s | 117.9 Hz | 45.8% | No |
-| **06_Morphology_Sliders** | [`06_craniofacial_sliders/slider_02_jaw_narrow.wav`](06_craniofacial_sliders/slider_02_jaw_narrow.wav) | Narrow Jaw Width (-0.8) | 6.748s | 128.8 Hz | 66.2% | No |
-| **06_Morphology_Sliders** | [`06_craniofacial_sliders/slider_03_face_elongated.wav`](06_craniofacial_sliders/slider_03_face_elongated.wav) | Elongated Face Height (+0.8) | 6.798s | 141.8 Hz | 70.5% | No |
-| **06_Morphology_Sliders** | [`06_craniofacial_sliders/slider_04_face_compact.wav`](06_craniofacial_sliders/slider_04_face_compact.wav) | Compact Face Height (-0.8) | 6.823s | 120.8 Hz | 69.7% | No |
+| **01_Candidates** | [`01_candidates/candidate_1_primary.wav`](01_candidates/candidate_1_primary.wav) | Candidate 1 (Primary / Most Likely) | 7.323s | 202.4 Hz | 48.8% | No |
+| **01_Candidates** | [`01_candidates/candidate_2_alternative.wav`](01_candidates/candidate_2_alternative.wav) | Candidate 2 (Alternative Timbre) | 7.048s | 208.5 Hz | 51.4% | No |
+| **01_Candidates** | [`01_candidates/candidate_3_contrasting.wav`](01_candidates/candidate_3_contrasting.wav) | Candidate 3 (Contrasting Cadence) | 7.448s | 208.3 Hz | 60.0% | No |
+| **02_Accents** | [`02_accents/accent_01_general_american.wav`](02_accents/accent_01_general_american.wav) | General American | 7.298s | 189.3 Hz | 35.0% | No |
+| **02_Accents** | [`02_accents/accent_02_british_rp.wav`](02_accents/accent_02_british_rp.wav) | British Received Pronunciation | 7.073s | 227.7 Hz | 46.1% | No |
+| **02_Accents** | [`02_accents/accent_03_australian.wav`](02_accents/accent_03_australian.wav) | Australian English | 6.798s | 185.3 Hz | 46.4% | No |
+| **02_Accents** | [`02_accents/accent_04_indian_english.wav`](02_accents/accent_04_indian_english.wav) | Indian English | 6.948s | 211.4 Hz | 29.8% | No |
+| **02_Accents** | [`02_accents/accent_05_irish.wav`](02_accents/accent_05_irish.wav) | Irish English | 5.273s | 186.0 Hz | 77.0% | No |
+| **02_Accents** | [`02_accents/accent_06_scottish.wav`](02_accents/accent_06_scottish.wav) | Scottish English | 6.973s | 211.2 Hz | 63.9% | No |
+| **03_Emotions** | [`03_emotions/emotion_01_neutral.wav`](03_emotions/emotion_01_neutral.wav) | Neutral / Conversational | 7.898s | 174.6 Hz | 58.5% | No |
+| **03_Emotions** | [`03_emotions/emotion_02_happy.wav`](03_emotions/emotion_02_happy.wav) | Happy / Cheerful | 7.698s | 205.4 Hz | 52.1% | No |
+| **03_Emotions** | [`03_emotions/emotion_03_sad.wav`](03_emotions/emotion_03_sad.wav) | Sad / Somber | 7.873s | 195.0 Hz | 71.6% | No |
+| **03_Emotions** | [`03_emotions/emotion_04_angry.wav`](03_emotions/emotion_04_angry.wav) | Angry / Assertive | 6.348s | 224.4 Hz | 30.5% | No |
+| **03_Emotions** | [`03_emotions/emotion_05_whispered.wav`](03_emotions/emotion_05_whispered.wav) | Whispered / Soft | 8.348s | 190.8 Hz | 43.9% | No |
+| **03_Emotions** | [`03_emotions/emotion_06_surprised.wav`](03_emotions/emotion_06_surprised.wav) | Surprised / Inquisitive | 6.648s | 157.2 Hz | 59.3% | No |
+| **04_Speech_Differences** | [`04_speech_differences/speech_01_interdental_lisp.wav`](04_speech_differences/speech_01_interdental_lisp.wav) | Interdental Lisp | 7.548s | 210.9 Hz | 42.1% | No |
+| **04_Speech_Differences** | [`04_speech_differences/speech_02_lateral_lisp.wav`](04_speech_differences/speech_02_lateral_lisp.wav) | Lateral Lisp | 8.373s | 212.0 Hz | 56.7% | No |
+| **04_Speech_Differences** | [`04_speech_differences/speech_03_rhotacism.wav`](04_speech_differences/speech_03_rhotacism.wav) | Rhotacism | 8.423s | 221.3 Hz | 53.4% | No |
+| **04_Speech_Differences** | [`04_speech_differences/speech_04_stutter_clonic.wav`](04_speech_differences/speech_04_stutter_clonic.wav) | Clonic Stuttering | 9.098s | 139.0 Hz | 30.4% | No |
+| **04_Speech_Differences** | [`04_speech_differences/speech_05_hypernasality.wav`](04_speech_differences/speech_05_hypernasality.wav) | Hypernasality | 6.898s | 215.2 Hz | 60.2% | No |
+| **04_Speech_Differences** | [`04_speech_differences/speech_06_prolonged_phonemes.wav`](04_speech_differences/speech_06_prolonged_phonemes.wav) | Prolonged Phonemes | 8.548s | 213.6 Hz | 51.9% | No |
+| **05_Cross_Lingual** | [`05_cross_lingual/lang_01_spanish.wav`](05_cross_lingual/lang_01_spanish.wav) | Spanish | 8.648s | 190.5 Hz | 65.8% | No |
+| **05_Cross_Lingual** | [`05_cross_lingual/lang_02_french.wav`](05_cross_lingual/lang_02_french.wav) | French | 9.348s | 193.7 Hz | 51.9% | No |
+| **05_Cross_Lingual** | [`05_cross_lingual/lang_03_german.wav`](05_cross_lingual/lang_03_german.wav) | German | 11.698s | 199.9 Hz | 48.6% | No |
+| **05_Cross_Lingual** | [`05_cross_lingual/lang_04_italian.wav`](05_cross_lingual/lang_04_italian.wav) | Italian | 7.523s | 154.0 Hz | 56.4% | No |
+| **06_Morphology_Sliders** | [`06_craniofacial_sliders/slider_01_jaw_expanded.wav`](06_craniofacial_sliders/slider_01_jaw_expanded.wav) | Expanded Jaw Width (+0.8) | 8.648s | 206.8 Hz | 54.7% | No |
+| **06_Morphology_Sliders** | [`06_craniofacial_sliders/slider_02_jaw_narrow.wav`](06_craniofacial_sliders/slider_02_jaw_narrow.wav) | Narrow Jaw Width (-0.8) | 6.798s | 200.5 Hz | 54.9% | No |
+| **06_Morphology_Sliders** | [`06_craniofacial_sliders/slider_03_face_elongated.wav`](06_craniofacial_sliders/slider_03_face_elongated.wav) | Elongated Face Height (+0.8) | 7.473s | 212.1 Hz | 58.7% | No |
+| **06_Morphology_Sliders** | [`06_craniofacial_sliders/slider_04_face_compact.wav`](06_craniofacial_sliders/slider_04_face_compact.wav) | Compact Face Height (-0.8) | 6.823s | 199.4 Hz | 47.2% | No |
 
 ---
 

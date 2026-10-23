@@ -180,6 +180,118 @@ class StyleTTS2Backend(nn.Module):
 
         self._loaded = True
 
+    def _neural_synthesize(
+        self,
+        text: str,
+        ref_s: torch.Tensor,
+        gender: int = 1,
+        alpha: float = 0.30,
+        beta: float = 0.80,
+        diffusion_steps: int = 15,
+        target_f0: float | None = None,
+    ) -> torch.Tensor:
+        st = self._model
+        dev = st.device
+
+        # Check for long text
+        if len(text) > 450 and hasattr(st, "long_inference"):
+            wav = st.long_inference(
+                text,
+                alpha=alpha,
+                beta=beta,
+                diffusion_steps=diffusion_steps,
+                ref_s=ref_s,
+            )
+            return torch.from_numpy(wav).unsqueeze(0).float()
+
+        from nltk.tokenize import word_tokenize
+        from styletts2.text_utils import TextCleaner
+        from styletts2.utils import length_to_mask
+
+        clean_text = text.strip().replace('"', '')
+        phonemized = st.phoneme_converter.phonemize(clean_text)
+        ps = word_tokenize(phonemized)
+        tokens = TextCleaner()(" ".join(ps))
+        tokens.insert(0, 0)
+        tokens = torch.LongTensor(tokens).to(dev).unsqueeze(0)
+
+        with torch.no_grad():
+            input_lengths = torch.LongTensor([tokens.shape[-1]]).to(dev)
+            text_mask = length_to_mask(input_lengths).to(dev)
+
+            t_en = st.model.text_encoder(tokens, input_lengths, text_mask)
+            bert_dur = st.model.bert(tokens, attention_mask=(~text_mask).int())
+            d_en = st.model.bert_encoder(bert_dur).transpose(-1, -2)
+
+            s_pred = st.sampler(
+                noise=torch.randn((1, 256)).unsqueeze(1).to(dev),
+                embedding=bert_dur,
+                embedding_scale=1.0,
+                features=ref_s.to(dev),
+                num_steps=diffusion_steps,
+            ).squeeze(1)
+
+            ref = alpha * s_pred[:, :128] + (1.0 - alpha) * ref_s[:, :128].to(dev)
+            s = beta * s_pred[:, 128:] + (1.0 - beta) * ref_s[:, 128:].to(dev)
+
+            d = st.model.predictor.text_encoder(d_en, s, input_lengths, text_mask)
+            x, _ = st.model.predictor.lstm(d)
+            duration = torch.sigmoid(st.model.predictor.duration_proj(x)).sum(axis=-1)
+            pred_dur = torch.round(duration.squeeze()).clamp(min=1)
+
+            pred_aln_trg = torch.zeros(input_lengths, int(pred_dur.sum().data))
+            c_frame = 0
+            for i in range(pred_aln_trg.size(0)):
+                pred_aln_trg[i, c_frame : c_frame + int(pred_dur[i].data)] = 1
+                c_frame += int(pred_dur[i].data)
+
+            en = d.transpose(-1, -2) @ pred_aln_trg.unsqueeze(0).to(dev)
+            if st.model_params.decoder.type == "hifigan":
+                asr_new = torch.zeros_like(en)
+                asr_new[:, :, 0] = en[:, :, 0]
+                asr_new[:, :, 1:] = en[:, :, 0:-1]
+                en = asr_new
+
+            F0_pred, N_pred = st.model.predictor.F0Ntrain(en, s)
+
+            # Demographic F0 calibration
+            voiced = F0_pred > 50.0
+            if voiced.any():
+                mean_f0 = float(F0_pred[voiced].mean().item())
+                if gender == 0:  # Female (demographic target ~200 - 215 Hz)
+                    target = target_f0 if target_f0 is not None else 205.0
+                    if mean_f0 < 185.0:
+                        scale = min(1.65, max(1.10, target / mean_f0))
+                        F0_pred[voiced] = F0_pred[voiced] * scale
+                else:  # Male (demographic target ~115 - 130 Hz)
+                    target = target_f0 if target_f0 is not None else 122.0
+                    if mean_f0 > 155.0:
+                        scale = max(0.65, min(0.90, target / mean_f0))
+                        F0_pred[voiced] = F0_pred[voiced] * scale
+
+            # Suppression of harsh aperiodic noise spikes
+            N_pred = torch.clamp(N_pred, max=0.85)
+
+            asr = t_en @ pred_aln_trg.unsqueeze(0).to(dev)
+            if st.model_params.decoder.type == "hifigan":
+                asr_new = torch.zeros_like(asr)
+                asr_new[:, :, 0] = asr[:, :, 0]
+                asr_new[:, :, 1:] = asr[:, :, 0:-1]
+                asr = asr_new
+
+            # Free intermediate activations before decoder to conserve VRAM on 4GB GPUs
+            del t_en, bert_dur, d_en, d, x, s_pred, pred_aln_trg, en
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+
+            out = st.model.decoder(asr, F0_pred, N_pred, ref.squeeze().unsqueeze(0))
+            wav = out.squeeze().cpu().numpy()[..., :-50]
+            if not isinstance(wav, torch.Tensor):
+                wav = torch.from_numpy(wav)
+            if wav.dim() == 1:
+                wav = wav.unsqueeze(0)
+            return wav.float()
+
     def synthesize(
         self,
         text: str,
@@ -246,13 +358,24 @@ class StyleTTS2Backend(nn.Module):
                     torch.cuda.empty_cache()
 
                 with torch.no_grad():
-                    wav = self._model.inference(
-                        text,
-                        ref_s=ref_s,
-                        alpha=alpha,
-                        beta=beta,
-                        diffusion_steps=diffusion_steps,
-                    )
+                    try:
+                        wav = self._neural_synthesize(
+                            text=text,
+                            ref_s=ref_s,
+                            gender=gender,
+                            alpha=alpha,
+                            beta=beta,
+                            diffusion_steps=diffusion_steps,
+                        )
+                    except Exception as e_neural:
+                        # Fallback to direct model inference if custom path fails
+                        wav = self._model.inference(
+                            text,
+                            ref_s=ref_s,
+                            alpha=alpha,
+                            beta=beta,
+                            diffusion_steps=diffusion_steps,
+                        )
 
                 if torch.cuda.is_available():
                     torch.cuda.empty_cache()
