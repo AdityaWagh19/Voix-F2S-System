@@ -114,6 +114,19 @@ def handle_synth(args: argparse.Namespace, service: VoixService) -> int:
     )
 
     try:
+        pet_ctrl = None
+        if getattr(args, "pet", False):
+            try:
+                from voix.pet import PetCompanionController
+                pet_ctrl = PetCompanionController()
+                pet_ctrl.launch(
+                    initial_state="think",
+                    initial_speech="Analyzing biometric face...",
+                    scale=0.9,
+                )
+            except Exception:
+                pet_ctrl = None
+
         if not args.quiet and not args.json:
             print_banner()
             if HAS_RICH and console:
@@ -121,7 +134,15 @@ def handle_synth(args: argparse.Namespace, service: VoixService) -> int:
             else:
                 print(f"Synthesizing voice from '{args.face}'...")
 
+        if pet_ctrl:
+            pet_ctrl.set_state("speak")
+            pet_ctrl.say("Synthesizing voice acoustics...", 2.5)
+
         response: SynthesisResponse = service.synthesize(request)
+
+        if pet_ctrl:
+            pet_ctrl.set_state("jump")
+            pet_ctrl.say(f"Synthesis Complete ({response.latency_seconds:.2f}s)!", 4.0)
 
         # Output formatting
         if args.json:
@@ -396,6 +417,42 @@ def handle_capabilities(service: VoixService, as_json: bool = False) -> int:
     return 0
 
 
+
+def handle_pet(args: argparse.Namespace) -> int:
+    """Launch the VOIX floating companion pet or render terminal companion card."""
+    from voix.pet import VoixPetWindow, render_terminal_pet, HAS_GUI
+
+    if args.terminal or not HAS_GUI:
+        render_terminal_pet(state=args.state, speech=args.speech)
+        return 0
+
+    if not args.quiet:
+        print_banner()
+        if HAS_RICH and console:
+            console.print("[bold cyan]🐱 Launching VOIX Floating Companion on Desktop...[/bold cyan]")
+            console.print("[dim]  • Left-click and drag: move anywhere on screen[/dim]")
+            console.print("[dim]  • Double-click: cycle animation states[/dim]")
+            console.print("[dim]  • Right-click: context menu (states, size scaling, close)[/dim]")
+            console.print("[dim]Press Ctrl+C or Right-click -> Close Companion to exit.[/dim]\n")
+        else:
+            print("Launching VOIX Floating Companion on Desktop...")
+            print("  • Left-click and drag: move anywhere on screen")
+            print("  • Double-click: cycle animation states")
+            print("  • Right-click: context menu (states, size scaling, close)")
+            print("Press Ctrl+C or Right-click -> Close Companion to exit.\n")
+
+    try:
+        pet = VoixPetWindow(
+            scale=args.scale,
+            initial_state=args.state,
+            initial_speech=args.speech,
+        )
+        pet.run()
+    except KeyboardInterrupt:
+        pass
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Build production-grade CLI argument parser."""
     parser = argparse.ArgumentParser(
@@ -439,6 +496,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_synth.add_argument("--no-watermark", action="store_true", help="Disable AudioSeal synthetic speech watermark")
     p_synth.add_argument("--json", action="store_true", help="Output machine-readable JSON metadata to stdout")
     p_synth.add_argument("-q", "--quiet", action="store_true", help="Suppress terminal banners and progress info")
+    p_synth.add_argument("--pet", action="store_true", help="Spawn the floating desktop companion pet during synthesis")
 
     # 2. Subcommand: batch
     p_batch = subparsers.add_parser("batch", help="Batch synthesize voices for all face images in a directory")
@@ -454,6 +512,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_batch.add_argument("--no-watermark", action="store_true", help="Disable watermarking")
     p_batch.add_argument("--json", action="store_true", help="Output JSON results")
     p_batch.add_argument("-q", "--quiet", action="store_true", help="Quiet mode")
+    p_batch.add_argument("--pet", action="store_true", help="Spawn the floating desktop companion pet during batch processing")
 
     # 3. Subcommand: interactive
     subparsers.add_parser("interactive", help="Launch interactive step-by-step synthesis wizard")
@@ -465,6 +524,37 @@ def build_parser() -> argparse.ArgumentParser:
     # 5. Subcommand: capabilities
     p_caps = subparsers.add_parser("capabilities", help="List supported accents, emotions, languages, and sliders")
     p_caps.add_argument("--json", action="store_true", help="Output capabilities as JSON")
+
+    # 6. Subcommand: pet
+    p_pet = subparsers.add_parser("pet", help="Launch the floating desktop companion pet or terminal card")
+    p_pet.add_argument(
+        "--state",
+        choices=["idle", "look", "walk", "run", "jump", "think", "speak", "sleep", "alert"],
+        default="idle",
+        help="Initial animation state (default: idle)",
+    )
+    p_pet.add_argument(
+        "--scale",
+        type=float,
+        default=1.0,
+        help="Companion window scale factor (default: 1.0, e.g. 0.8 for compact, 1.25 for large)",
+    )
+    p_pet.add_argument(
+        "--speech",
+        type=str,
+        default="VOIX Biometric Acoustic Companion Ready!",
+        help="Initial speech bubble message",
+    )
+    p_pet.add_argument(
+        "--terminal",
+        action="store_true",
+        help="Render ASCII terminal pet card instead of floating desktop window",
+    )
+    p_pet.add_argument(
+        "-q", "--quiet",
+        action="store_true",
+        help="Suppress terminal banner",
+    )
 
     return parser
 
@@ -486,6 +576,9 @@ def main() -> None:
         sys.exit(0)
 
     args = parser.parse_args()
+
+    if args.command == "pet":
+        sys.exit(handle_pet(args))
 
     # Instantiate Application Service with target device
     service = VoixService(device=getattr(args, "device", None))
