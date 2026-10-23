@@ -28,6 +28,7 @@ dependencies = [
     "h5py>=3.10.0",
     "safetensors>=0.4.3",
     "tqdm>=4.66.0",
+    "rich>=13.0.0",
 ]
 
 [project.optional-dependencies]
@@ -47,6 +48,10 @@ backbones = [
     "opencv-python-headless>=4.9.0",
     "huggingface-hub>=0.23.0",
 ]
+
+
+[project.scripts]
+voix = "voix.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
