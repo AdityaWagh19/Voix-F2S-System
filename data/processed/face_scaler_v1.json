@@ -1,0 +1,8 @@
+{
+  "schema_version": "FaceFeatureV1",
+  "representation": "fused_raw",
+  "n_train": 55448,
+  "n_train_speakers": 3029,
+  "source_features_sha256": "96fe7a6e9a0ccd3a55a3126e0b3af75f671ad6bf2d58eb1ca43f154b48733636",
+  "source_index_sha256": "b40f7dee41240f5fd4b967343fdc76d00b86bc1794443db253f51749130ca4a0"
+}

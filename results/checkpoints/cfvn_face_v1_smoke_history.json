@@ -1,0 +1,10 @@
+[
+  {
+    "epoch": 1,
+    "train_loss": 1.50905,
+    "val_cos": 0.12147,
+    "recall_at_1": 0.0,
+    "recall_at_3": 0.003,
+    "recall_at_10": 0.027
+  }
+]

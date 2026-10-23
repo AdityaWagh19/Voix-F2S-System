@@ -26,7 +26,9 @@ import torch
 import torch.nn.functional as F
 
 from voix.models.adapter import StyleAdapter
+from voix.models.craniofacial_style import apply_craniofacial_to_style
 from voix.models.cvae import CVAE
+from voix.models.contrastive_net import ContrastiveFaceVoiceNet
 from voix.models.tts_backend import StyleTTS2Backend
 from voix.models.watermarking import AudioSealWatermarker
 from voix.utils.hardware import HardwareProfile, detect_hardware, free_memory
@@ -46,7 +48,7 @@ class VoixPipeline:
 
     def __init__(
         self,
-        cvae_checkpoint: str = "D:/voix/results/checkpoints/D_joint_infonce_best.pt",
+        cvae_checkpoint: str = "D:/voix/checkpoints/cvae_cfvn_face192_latent128_diversity.pt",
         adapter_checkpoint: str = "D:/voix/checkpoints/style_adapter_best.pt",
         scaler_path: str = "D:/voix/data/processed/face_scaler.pt",
         device: Optional[str] = None,
@@ -64,6 +66,12 @@ class VoixPipeline:
 
         self.enable_watermarking = enable_watermarking
 
+        # Initialize visual extractors lazily
+        self._arcface = None
+        self._facemesh = None
+        self._demog = None
+        self._fusion = None
+
         # 2. Load Scaler (supports both face_scaler.pt and legacy feature_scaler.pt)
         self.scaler = None
         alt_scaler = "D:/voix/data/processed/feature_scaler.pt"
@@ -76,16 +84,28 @@ class VoixPipeline:
             elif "mean" in self.scaler:
                 self.face_mean = self.scaler["mean"].to(self.device)
                 self.face_std  = self.scaler["scale"].to(self.device)
-            self.spk_mean  = self.scaler.get("spk_mean", torch.zeros(192)).to(self.device)
-            self.spk_std   = self.scaler.get("spk_std", torch.ones(192)).to(self.device)
 
-        # 3. Load CVAE / Mapper
-        self.cvae = CVAE(face_dim=560, speaker_dim=192, latent_dim=192).to(self.device)
+        # Canonical identity projection from ArcFace (512-D) to ECAPA space (192-D)
+        torch.manual_seed(42)
+        _w = torch.randn(512, 192)
+        _q, _ = torch.linalg.qr(_w)
+        self.id_proj_q = _q.to(self.device)
+        self._last_e_id = None
+
+        # 3. Load CVAE / Mapper (face_dim=192: CFVN-produced ECAPA-space embedding)
+        self.cvae = CVAE(face_dim=192, speaker_dim=192, latent_dim=128).to(self.device)
         if os.path.exists(cvae_checkpoint):
             ckpt = torch.load(cvae_checkpoint, weights_only=False, map_location=self.device)
             state_dict = ckpt["model_state_dict"] if "model_state_dict" in ckpt else ckpt
             self.cvae.load_state_dict(state_dict, strict=False)
         self.cvae.eval()
+
+        # 3b. Load ContrastiveFaceVoiceNet (560-D fused face -> 192-D ECAPA space)
+        self.cfvn = ContrastiveFaceVoiceNet.from_checkpoint(
+            "D:/voix/results/checkpoints/D_joint_infonce_best.pt",
+            device=str(self.device),
+        ).to(self.device)
+        self.cfvn.eval()
 
         # 4. Load StyleAdapter
         self.adapter = StyleAdapter(in_dim=192, hidden_dim=256, out_dim=128).to(self.device)
@@ -113,18 +133,69 @@ class VoixPipeline:
         self._demog = None
         self._fusion = None
 
+        # Pre-compute mean ECAPA from a diverse set of face images for deviation amplification
+        self.mean_ecapa = None
+        self._compute_mean_ecapa()
+
+    def _compute_mean_ecapa(self):
+        """Compute mean ECAPA embedding from a diverse set of face images.
+        
+        Used as reference for amplifying face-specific deviations in ECAPA space.
+        This helps differentiate voices for same-gender faces whose ECAPA embeddings
+        are naturally very similar (cosine similarity > 0.99).
+        """
+        # Diverse face images for computing mean ECAPA
+        mean_ecapa_faces = [
+            f"D:/voix/data/test_subjects/{f}"
+            for f in [
+                "C1_01_young_female_Zendaya.jpg",
+                "C1_04_adult_male_George_Clooney.jpg",
+                "C2_08_south_asian_female_Priyanka_Chopra.jpg",
+                "C2_11_black_male_Barack_Obama.jpg",
+                "C2_15_latino_male_Pedro_Pascal.jpg",
+                "C3_17_prominent_jaw_Arnold_Schwarzenegger.jpg",
+                "SD_07_rhotacism_Barbara_Walters.jpg",
+            ]
+        ]
+        # Filter to existing files
+        existing = [p for p in mean_ecapa_faces if os.path.exists(p)]
+        if len(existing) < 2:
+            # Not enough face images, use zero mean (no amplification)
+            self.mean_ecapa = torch.zeros(192, device=self.device)
+            return
+        
+        # Extract ECAPA embeddings from all faces
+        embs = []
+        with torch.no_grad():
+            for f_path in existing:
+                try:
+                    e_f, _, _, _ = self.extract_face_features(f_path)
+                    e_f_voice = self.cfvn(e_f, normalize=True)  # (1, 192)
+                    embs.append(e_f_voice.squeeze(0))
+                except Exception:
+                    pass
+        
+        if len(embs) > 0:
+            self.mean_ecapa = torch.stack(embs).mean(dim=0)  # (192,)
+        else:
+            self.mean_ecapa = torch.zeros(192, device=self.device)
+
     def extract_face_features(
         self,
         image_input: Union[str, Path, np.ndarray],
         craniofacial_sliders: Optional[Dict[str, float]] = None,
-    ) -> torch.Tensor:
+    ) -> tuple:
         """Extract and fuse facial features (ArcFace 512 + FaceMesh 32 + Demographics 16 -> 560-D) from an image.
 
         Args:
             image_input: File path to image or BGR numpy array.
 
         Returns:
-            torch.Tensor: Fused 560-D face representation of shape (1, 560) on self.device.
+            Tuple of (e_f, gender, age, e_geo):
+                e_f: Fused 560-D face representation of shape (1, 560) on self.device.
+                gender: Detected biological sex (1 = Male, 0 = Female).
+                age: Estimated chronological age in years.
+                e_geo: Craniofacial morphology vector of shape (32,).
         """
         import cv2
         from voix.data.face_extractor import ArcFaceExtractor, FaceMeshExtractor
@@ -165,6 +236,7 @@ class VoixPipeline:
         e_id, gender, age = self._arcface.extract_full(img_bgr)
         if e_id is None:
             raise ValueError(f"No face detected in image: {image_input}")
+        self._last_e_id = e_id
 
         # 2. FaceMesh 32-D morphology
         img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
@@ -188,7 +260,7 @@ class VoixPipeline:
             e_demo_t = torch.from_numpy(e_demo).unsqueeze(0).to(self.device)
             e_f = self._fusion(e_id_t, e_geo_t, e_demo_t)
 
-        return e_f, int(gender) if gender is not None else 1, float(age) if age is not None else 30.0
+        return e_f, int(gender) if gender is not None else 1, float(age) if age is not None else 30.0, e_geo
 
     @torch.no_grad()
     def generate(
@@ -224,6 +296,11 @@ class VoixPipeline:
         if watermark is None:
             watermark = self.enable_watermarking
 
+        # Det gender/age defaults (set when face features are extracted)
+        _det_gender = None
+        _det_age = None
+        e_geo = None
+
         # Process face input into 560-D normalized tensor
         if isinstance(face_input, (str, Path)):
             str_path = str(face_input)
@@ -238,8 +315,9 @@ class VoixPipeline:
                         e_f = (e_f - self.face_mean) / self.face_std
                 except KeyError:
                     raise FileNotFoundError(f"Image file or preset not found: {str_path}")
+                e_geo = None  # Presets don't have craniofacial data
             else:
-                e_f, _det_gender, _det_age = self.extract_face_features(
+                e_f, _det_gender, _det_age, e_geo = self.extract_face_features(
                     str_path,
                     craniofacial_sliders=craniofacial_sliders,
                 )
@@ -249,7 +327,7 @@ class VoixPipeline:
                     e_f = (e_f - self.face_mean) / self.face_std
         elif isinstance(face_input, np.ndarray):
             if face_input.ndim == 3:  # HxWx3 image
-                e_f, _det_gender, _det_age = self.extract_face_features(
+                e_f, _det_gender, _det_age, e_geo = self.extract_face_features(
                     face_input,
                     craniofacial_sliders=craniofacial_sliders,
                 )
@@ -262,6 +340,7 @@ class VoixPipeline:
                 if e_f.dim() == 1:
                     e_f = e_f.unsqueeze(0)
                 e_f = e_f.to(self.device)
+                e_geo = None
         elif isinstance(face_input, torch.Tensor):
             e_f = face_input.float()
             if e_f.dim() == 1:
@@ -269,21 +348,39 @@ class VoixPipeline:
             e_f = e_f.to(self.device)
             if self.scaler is not None and e_f.abs().mean() > 1.5:
                 e_f = (e_f - self.face_mean) / self.face_std
+            e_geo = None
         else:
             raise TypeError("face_input must be an image path, 560-D tensor, or numpy array")
 
-        # 1. Generate K candidate speaker embeddings via CVAE
-        e_s_candidates_norm = self.cvae.sample_voices(
-            e_f,
+        # Map 560-D fused face -> 192-D ECAPA-space embedding via CFVN
+        with torch.no_grad():
+            e_f_voice = self.cfvn(e_f, normalize=True)  # (1, 192)
+
+        # 1. Generate K diverse candidate speaker embeddings via CVAE
+        e_s_candidates = self.cvae.sample_voices(
+            e_f_voice,
             num_samples=num_voices,
             temperature=temperature,
         )  # (K, 192)
 
-        # Convert to raw ECAPA space if scaler is attached
-        if self.scaler is not None:
-            e_s_candidates_raw = e_s_candidates_norm * self.spk_std + self.spk_mean
+        # 2. Inject face identity direction from ArcFace for distinct individuality
+        e_id_val = getattr(self, "_last_e_id", None)
+        if e_id_val is None and e_f.shape[-1] >= 512:
+            e_id_val = e_f[:, :512]
+
+        if e_id_val is not None:
+            if isinstance(e_id_val, np.ndarray):
+                eid_t = torch.from_numpy(e_id_val).float().to(self.device)
+            else:
+                eid_t = e_id_val.float().to(self.device)
+            if eid_t.dim() == 1:
+                eid_t = eid_t.unsqueeze(0)
+            id_delta = F.normalize(eid_t @ self.id_proj_q, dim=-1)  # (1, 192)
+            e_s_candidates_norm = F.normalize(0.55 * e_s_candidates + 0.45 * id_delta, dim=-1)
         else:
-            e_s_candidates_raw = e_s_candidates_norm
+            e_s_candidates_norm = F.normalize(e_s_candidates, dim=-1)
+
+        e_s_candidates_raw = e_s_candidates_norm
 
         results = []
 
@@ -336,6 +433,16 @@ class VoixPipeline:
 
             # Style Adapter projection (192-D -> 128-D)
             s_hat_k = self.adapter(e_s_raw_k.unsqueeze(0))
+
+            # Apply craniofacial morphology modulation to style vector
+            # Maps jaw width, face height, lip fullness, etc. to vocal tract resonance
+            if e_geo is not None:
+                from voix.models.craniofacial_style import apply_craniofacial_to_style
+                s_hat_k = apply_craniofacial_to_style(
+                    s_hat_k,
+                    e_geo,
+                    strength=1.0,
+                )
 
             _gender = gender if gender is not None else 1
             _age    = age if age is not None else 30.0

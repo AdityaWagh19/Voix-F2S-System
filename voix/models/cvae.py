@@ -147,12 +147,14 @@ class CVAEDecoder(nn.Module):
         in_dim: int = 192,  # latent_dim only — no e_f skip connection
         speaker_dim: int = 192,
         hidden_dims: Tuple[int, ...] = (512, 384, 256),  # larger since no skip
-        normalize_output: bool = False,
+        normalize_output: bool = True,
+        skip_scale: float = 0.3,  # Learnable skip connection scale for face-specific info
     ) -> None:
         super().__init__()
         self.in_dim = in_dim
         self.speaker_dim = speaker_dim
         self.normalize_output = normalize_output
+        self.skip_scale = nn.Parameter(torch.tensor(skip_scale))  # Learnable skip scale
 
         blocks: list[nn.Module] = []
         prev_dim = in_dim
@@ -172,7 +174,13 @@ class CVAEDecoder(nn.Module):
                     nn.init.zeros_(m.bias)
 
     def forward(self, cond_z: torch.Tensor) -> torch.Tensor:
-        e_s_hat = self.output_proj(self.net(cond_z))
+        # Decoder path: latent -> MLP -> output projection
+        decoded = self.output_proj(self.net(cond_z))
+        # Skip connection: add scaled latent if dimensions match
+        if cond_z.shape[-1] == decoded.shape[-1]:
+            e_s_hat = decoded + self.skip_scale * cond_z
+        else:
+            e_s_hat = decoded
         if self.normalize_output:
             e_s_hat = F.normalize(e_s_hat, p=2, dim=-1)
         return e_s_hat
@@ -195,7 +203,7 @@ class CVAE(nn.Module):
         speaker_dim: int = 192,
         latent_dim: int = 192,
         dropout: float = 0.0,
-        normalize_output: bool = False,
+        normalize_output: bool = True,
     ) -> None:
         super().__init__()
         self.face_dim = face_dim
