@@ -1,0 +1,274 @@
+{
+  "status": "computed",
+  "summary": {
+    "status": "computed",
+    "n": 4,
+    "conditions": {
+      "base": {
+        "n": 2,
+        "metrics": {
+          "wer": {
+            "mean": 0.021739,
+            "std": 0.021739,
+            "n": 2
+          },
+          "speaker_similarity_target": {
+            "mean": 0.15735,
+            "std": 0.01465,
+            "n": 2
+          },
+          "speaker_similarity_ref": {
+            "mean": 0.28175,
+            "std": 0.04115,
+            "n": 2
+          },
+          "f0_mean_hz": {
+            "mean": 182.875,
+            "std": 7.945,
+            "n": 2
+          },
+          "f0_std_hz": {
+            "mean": 47.035,
+            "std": 7.685,
+            "n": 2
+          },
+          "f0_range_hz": {
+            "mean": 182.37,
+            "std": 5.1,
+            "n": 2
+          },
+          "f0_voiced_ratio": {
+            "mean": 0.4635,
+            "std": 0.0135,
+            "n": 2
+          },
+          "duration_seconds": {
+            "mean": 9.723,
+            "std": 2.75,
+            "n": 2
+          },
+          "energy_mean": {
+            "mean": 0.04777,
+            "std": 0.00098,
+            "n": 2
+          },
+          "energy_std": {
+            "mean": 0.04662,
+            "std": 0.00114,
+            "n": 2
+          }
+        }
+      },
+      "lora": {
+        "n": 2,
+        "metrics": {
+          "wer": {
+            "mean": 0.021739,
+            "std": 0.021739,
+            "n": 2
+          },
+          "speaker_similarity_target": {
+            "mean": 0.1555,
+            "std": 0.004,
+            "n": 2
+          },
+          "speaker_similarity_ref": {
+            "mean": 0.26685,
+            "std": 0.03065,
+            "n": 2
+          },
+          "f0_mean_hz": {
+            "mean": 187.835,
+            "std": 9.495,
+            "n": 2
+          },
+          "f0_std_hz": {
+            "mean": 44.075,
+            "std": 9.085,
+            "n": 2
+          },
+          "f0_range_hz": {
+            "mean": 196.27,
+            "std": 18.96,
+            "n": 2
+          },
+          "f0_voiced_ratio": {
+            "mean": 0.4275,
+            "std": 0.0455,
+            "n": 2
+          },
+          "duration_seconds": {
+            "mean": 9.7105,
+            "std": 2.7375,
+            "n": 2
+          },
+          "energy_mean": {
+            "mean": 0.048725,
+            "std": 0.001955,
+            "n": 2
+          },
+          "energy_std": {
+            "mean": 0.047555,
+            "std": 0.000355,
+            "n": 2
+          }
+        }
+      }
+    },
+    "delta_lora_minus_base": {
+      "wer": 0.0,
+      "speaker_similarity_target": -0.00185,
+      "speaker_similarity_ref": -0.0149,
+      "f0_mean_hz": 4.96,
+      "f0_std_hz": -2.96,
+      "f0_range_hz": 13.9,
+      "f0_voiced_ratio": -0.036,
+      "duration_seconds": -0.0125,
+      "energy_mean": 0.000955,
+      "energy_std": 0.000935
+    },
+    "paired_delta_lora_minus_base": {
+      "wer": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n": 2
+      },
+      "speaker_similarity_target": {
+        "mean": -0.00185,
+        "std": 0.01065,
+        "n": 2
+      },
+      "speaker_similarity_ref": {
+        "mean": -0.0149,
+        "std": 0.0105,
+        "n": 2
+      },
+      "f0_mean_hz": {
+        "mean": 4.96,
+        "std": 1.55,
+        "n": 2
+      },
+      "f0_std_hz": {
+        "mean": -2.96,
+        "std": 1.4,
+        "n": 2
+      },
+      "f0_range_hz": {
+        "mean": 13.9,
+        "std": 13.86,
+        "n": 2
+      },
+      "f0_voiced_ratio": {
+        "mean": -0.036,
+        "std": 0.032,
+        "n": 2
+      },
+      "duration_seconds": {
+        "mean": -0.0125,
+        "std": 0.0125,
+        "n": 2
+      },
+      "energy_mean": {
+        "mean": 0.000955,
+        "std": 0.000975,
+        "n": 2
+      },
+      "energy_std": {
+        "mean": 0.000935,
+        "std": 0.000785,
+        "n": 2
+      }
+    },
+    "wer_status": {
+      "base": {
+        "status": "computed",
+        "model": "whisper-base",
+        "n": 2,
+        "wer": 0.021739130434782608,
+        "wer_std": 0.021739130434782608
+      },
+      "lora": {
+        "status": "computed",
+        "model": "whisper-base",
+        "n": 2,
+        "wer": 0.021739130434782608,
+        "wer_std": 0.021739130434782608
+      }
+    },
+    "elapsed_sec": 33.7
+  },
+  "rows": [
+    {
+      "clip_id": "dev/id01316/HURpmn6JdJI/00028",
+      "speaker_id": "id01316",
+      "condition": "base",
+      "text": "get messy and not knowing when it's right or it tastes good or not right so you want to give yourself some lead",
+      "wav_path": "D:\\voix\\results\\styletts2_lora_eval\\dev__id01316__HURpmn6JdJI__00028__base.wav",
+      "wer": 0.043478260869565216,
+      "speaker_similarity_target": 0.1427,
+      "speaker_similarity_ref": 0.2406,
+      "duration_seconds": 6.973,
+      "f0_mean_hz": 190.82,
+      "f0_std_hz": 39.35,
+      "f0_range_hz": 177.27,
+      "f0_voiced_ratio": 0.45,
+      "f0_smoothness": 7.647,
+      "energy_mean": 0.04875,
+      "energy_std": 0.04548
+    },
+    {
+      "clip_id": "dev/id01316/HURpmn6JdJI/00028",
+      "speaker_id": "id01316",
+      "condition": "lora",
+      "text": "get messy and not knowing when it's right or it tastes good or not right so you want to give yourself some lead",
+      "wav_path": "D:\\voix\\results\\styletts2_lora_eval\\dev__id01316__HURpmn6JdJI__00028__lora.wav",
+      "wer": 0.043478260869565216,
+      "speaker_similarity_target": 0.1515,
+      "speaker_similarity_ref": 0.2362,
+      "duration_seconds": 6.973,
+      "f0_mean_hz": 197.33,
+      "f0_std_hz": 34.99,
+      "f0_range_hz": 177.31,
+      "f0_voiced_ratio": 0.382,
+      "f0_smoothness": 6.636,
+      "energy_mean": 0.05068,
+      "energy_std": 0.0472
+    },
+    {
+      "clip_id": "dev/id01316/5p2GU-DHDdg/00014",
+      "speaker_id": "id01316",
+      "condition": "base",
+      "text": "I'm gonna do this. And then I'll get pregnant again. And I'll be out. Do it like that. And then on my third one, I was like, that's it. I'm not getting pregnant again. I'm doing this.",
+      "wav_path": "D:\\voix\\results\\styletts2_lora_eval\\dev__id01316__5p2GU-DHDdg__00014__base.wav",
+      "wer": 0.0,
+      "speaker_similarity_target": 0.172,
+      "speaker_similarity_ref": 0.3229,
+      "duration_seconds": 12.473,
+      "f0_mean_hz": 174.93,
+      "f0_std_hz": 54.72,
+      "f0_range_hz": 187.47,
+      "f0_voiced_ratio": 0.477,
+      "f0_smoothness": 7.032,
+      "energy_mean": 0.04679,
+      "energy_std": 0.04776
+    },
+    {
+      "clip_id": "dev/id01316/5p2GU-DHDdg/00014",
+      "speaker_id": "id01316",
+      "condition": "lora",
+      "text": "I'm gonna do this. And then I'll get pregnant again. And I'll be out. Do it like that. And then on my third one, I was like, that's it. I'm not getting pregnant again. I'm doing this.",
+      "wav_path": "D:\\voix\\results\\styletts2_lora_eval\\dev__id01316__5p2GU-DHDdg__00014__lora.wav",
+      "wer": 0.0,
+      "speaker_similarity_target": 0.1595,
+      "speaker_similarity_ref": 0.2975,
+      "duration_seconds": 12.448,
+      "f0_mean_hz": 178.34,
+      "f0_std_hz": 53.16,
+      "f0_range_hz": 215.23,
+      "f0_voiced_ratio": 0.473,
+      "f0_smoothness": 7.256,
+      "energy_mean": 0.04677,
+      "energy_std": 0.04791
+    }
+  ]
+}

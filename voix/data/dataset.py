@@ -1,7 +1,10 @@
-"""VoxCeleb2 paired HDF5 dataset and DataLoader factory (T2.7).
+"""Legacy V1 paired HDF5 dataset and DataLoader factory.
+
+Kept for the archived ``features.h5`` corpus. New work must use the
+FaceFeatureV2 loader in ``voix.training.data.load_v2_dataset``.
 
 Implements memory-mapped and in-memory access to the extracted HDF5 feature store
-produced by scripts/extract_voxceleb.py / run_pipeline.py.
+produced by the now-archived V1 extraction scripts in ``legacy/scripts``.
 
 Design decisions:
   - By default, in_memory=True preloads the compact feature matrices (~223 MB total)
@@ -10,10 +13,10 @@ Design decisions:
   - Optional normalisation: pass a scaler dict loaded from feature_scaler.pt
     to apply per-dimension z-score normalisation. When in_memory=True, normalisation
     is applied once during preload for zero runtime overhead.
-  - The canonical split (train/val/test) is driven by training_index.csv
-    produced by scripts/build_training_index.py. Speaker identity is
-    derived from the 'metadata' HDF5 field (speaker_id/video_id/utt_id)
-    rather than the stale integer speaker_ids array.
+  - The canonical split (train/val/test) is driven by a speaker-disjoint
+    index CSV. Speaker identity is derived from the 'metadata' HDF5 field
+    (speaker_id/video_id/utt_id) rather than the stale integer speaker_ids
+    array.
 """
 
 from __future__ import annotations
@@ -27,13 +30,15 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader, Dataset
 
+from voix.utils.paths import project_path
+
 
 # ---------------------------------------------------------------------------
 # Default paths
 # ---------------------------------------------------------------------------
-_DEFAULT_HDF5   = Path("D:/voix/data/processed/features.h5")
-_DEFAULT_INDEX  = Path("D:/voix/data/processed/training_index.csv")
-_DEFAULT_SCALER = Path("D:/voix/data/processed/feature_scaler.pt")
+_DEFAULT_HDF5   = project_path("data", "processed", "features.h5")
+_DEFAULT_INDEX  = project_path("data", "processed", "training_index.csv")
+_DEFAULT_SCALER = project_path("data", "processed", "feature_scaler.pt")
 
 
 # ---------------------------------------------------------------------------
@@ -226,7 +231,7 @@ class VoxCelebPairedDataset(Dataset):
         if "metadata" not in f:
             raise ValueError(
                 "HDF5 is missing the 'metadata' dataset.  "
-                "Ensure you used run_pipeline.py to produce features.h5."
+                "This loader expects the archived V1 corpus with clip metadata."
             )
 
     def _open(self) -> None:

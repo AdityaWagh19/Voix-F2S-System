@@ -1,0 +1,516 @@
+{
+  "schema_version": "voix.crema_paired_eval.v1",
+  "split": "val",
+  "actors": 9,
+  "actor_ids": [
+    "1010",
+    "1026",
+    "1028",
+    "1037",
+    "1074",
+    "1075",
+    "1078",
+    "1083",
+    "1084"
+  ],
+  "sentences": 12,
+  "emotions": [
+    "neutral",
+    "happy",
+    "sad",
+    "angry",
+    "fear",
+    "disgust"
+  ],
+  "rows": 648,
+  "pairs": 108,
+  "per_emotion": {
+    "neutral": {
+      "rows": 108,
+      "actors": 9,
+      "sentences": 12,
+      "with_real_clip": 108,
+      "real_seconds": 268.2348
+    },
+    "happy": {
+      "rows": 108,
+      "actors": 9,
+      "sentences": 12,
+      "with_real_clip": 108,
+      "real_seconds": 258.2836
+    },
+    "sad": {
+      "rows": 108,
+      "actors": 9,
+      "sentences": 12,
+      "with_real_clip": 108,
+      "real_seconds": 287.6398
+    },
+    "angry": {
+      "rows": 108,
+      "actors": 9,
+      "sentences": 12,
+      "with_real_clip": 79,
+      "real_seconds": 219.13160000000002
+    },
+    "fear": {
+      "rows": 108,
+      "actors": 9,
+      "sentences": 12,
+      "with_real_clip": 106,
+      "real_seconds": 275.53509999999994
+    },
+    "disgust": {
+      "rows": 108,
+      "actors": 9,
+      "sentences": 12,
+      "with_real_clip": 107,
+      "real_seconds": 303.26269999999994
+    }
+  },
+  "identity_rule": "per actor: longest neutral clip with finite audio and no clipping; tie-break by clip_id",
+  "skipped_missing_neutral": [],
+  "duplicate_neutral": [],
+  "duplicate_emotion": [
+    {
+      "actor_id": "1010",
+      "sentence": "IEO",
+      "emotion": "happy",
+      "clip_ids": [
+        "1010_IEO_HAP_HI",
+        "1010_IEO_HAP_LO",
+        "1010_IEO_HAP_MD"
+      ]
+    },
+    {
+      "actor_id": "1010",
+      "sentence": "IEO",
+      "emotion": "sad",
+      "clip_ids": [
+        "1010_IEO_SAD_HI",
+        "1010_IEO_SAD_LO",
+        "1010_IEO_SAD_MD"
+      ]
+    },
+    {
+      "actor_id": "1010",
+      "sentence": "IEO",
+      "emotion": "angry",
+      "clip_ids": [
+        "1010_IEO_ANG_LO",
+        "1010_IEO_ANG_MD"
+      ]
+    },
+    {
+      "actor_id": "1010",
+      "sentence": "IEO",
+      "emotion": "fear",
+      "clip_ids": [
+        "1010_IEO_FEA_LO",
+        "1010_IEO_FEA_MD"
+      ]
+    },
+    {
+      "actor_id": "1010",
+      "sentence": "IEO",
+      "emotion": "disgust",
+      "clip_ids": [
+        "1010_IEO_DIS_HI",
+        "1010_IEO_DIS_LO",
+        "1010_IEO_DIS_MD"
+      ]
+    },
+    {
+      "actor_id": "1026",
+      "sentence": "IEO",
+      "emotion": "happy",
+      "clip_ids": [
+        "1026_IEO_HAP_HI",
+        "1026_IEO_HAP_LO",
+        "1026_IEO_HAP_MD"
+      ]
+    },
+    {
+      "actor_id": "1026",
+      "sentence": "IEO",
+      "emotion": "sad",
+      "clip_ids": [
+        "1026_IEO_SAD_HI",
+        "1026_IEO_SAD_LO",
+        "1026_IEO_SAD_MD"
+      ]
+    },
+    {
+      "actor_id": "1026",
+      "sentence": "IEO",
+      "emotion": "angry",
+      "clip_ids": [
+        "1026_IEO_ANG_LO",
+        "1026_IEO_ANG_MD"
+      ]
+    },
+    {
+      "actor_id": "1026",
+      "sentence": "IEO",
+      "emotion": "fear",
+      "clip_ids": [
+        "1026_IEO_FEA_LO",
+        "1026_IEO_FEA_MD"
+      ]
+    },
+    {
+      "actor_id": "1026",
+      "sentence": "IEO",
+      "emotion": "disgust",
+      "clip_ids": [
+        "1026_IEO_DIS_HI",
+        "1026_IEO_DIS_LO",
+        "1026_IEO_DIS_MD"
+      ]
+    },
+    {
+      "actor_id": "1028",
+      "sentence": "IEO",
+      "emotion": "happy",
+      "clip_ids": [
+        "1028_IEO_HAP_HI",
+        "1028_IEO_HAP_LO",
+        "1028_IEO_HAP_MD"
+      ]
+    },
+    {
+      "actor_id": "1028",
+      "sentence": "IEO",
+      "emotion": "sad",
+      "clip_ids": [
+        "1028_IEO_SAD_HI",
+        "1028_IEO_SAD_LO",
+        "1028_IEO_SAD_MD"
+      ]
+    },
+    {
+      "actor_id": "1028",
+      "sentence": "IEO",
+      "emotion": "angry",
+      "clip_ids": [
+        "1028_IEO_ANG_LO",
+        "1028_IEO_ANG_MD"
+      ]
+    },
+    {
+      "actor_id": "1028",
+      "sentence": "IEO",
+      "emotion": "fear",
+      "clip_ids": [
+        "1028_IEO_FEA_HI",
+        "1028_IEO_FEA_LO",
+        "1028_IEO_FEA_MD"
+      ]
+    },
+    {
+      "actor_id": "1028",
+      "sentence": "IEO",
+      "emotion": "disgust",
+      "clip_ids": [
+        "1028_IEO_DIS_HI",
+        "1028_IEO_DIS_LO",
+        "1028_IEO_DIS_MD"
+      ]
+    },
+    {
+      "actor_id": "1037",
+      "sentence": "IEO",
+      "emotion": "happy",
+      "clip_ids": [
+        "1037_IEO_HAP_HI",
+        "1037_IEO_HAP_LO",
+        "1037_IEO_HAP_MD"
+      ]
+    },
+    {
+      "actor_id": "1037",
+      "sentence": "IEO",
+      "emotion": "sad",
+      "clip_ids": [
+        "1037_IEO_SAD_HI",
+        "1037_IEO_SAD_LO",
+        "1037_IEO_SAD_MD"
+      ]
+    },
+    {
+      "actor_id": "1037",
+      "sentence": "IEO",
+      "emotion": "fear",
+      "clip_ids": [
+        "1037_IEO_FEA_HI",
+        "1037_IEO_FEA_LO",
+        "1037_IEO_FEA_MD"
+      ]
+    },
+    {
+      "actor_id": "1037",
+      "sentence": "IEO",
+      "emotion": "disgust",
+      "clip_ids": [
+        "1037_IEO_DIS_HI",
+        "1037_IEO_DIS_LO",
+        "1037_IEO_DIS_MD"
+      ]
+    },
+    {
+      "actor_id": "1074",
+      "sentence": "IEO",
+      "emotion": "happy",
+      "clip_ids": [
+        "1074_IEO_HAP_HI",
+        "1074_IEO_HAP_LO",
+        "1074_IEO_HAP_MD"
+      ]
+    },
+    {
+      "actor_id": "1074",
+      "sentence": "IEO",
+      "emotion": "sad",
+      "clip_ids": [
+        "1074_IEO_SAD_HI",
+        "1074_IEO_SAD_LO",
+        "1074_IEO_SAD_MD"
+      ]
+    },
+    {
+      "actor_id": "1074",
+      "sentence": "IEO",
+      "emotion": "angry",
+      "clip_ids": [
+        "1074_IEO_ANG_LO",
+        "1074_IEO_ANG_MD"
+      ]
+    },
+    {
+      "actor_id": "1074",
+      "sentence": "IEO",
+      "emotion": "fear",
+      "clip_ids": [
+        "1074_IEO_FEA_LO",
+        "1074_IEO_FEA_MD"
+      ]
+    },
+    {
+      "actor_id": "1074",
+      "sentence": "IEO",
+      "emotion": "disgust",
+      "clip_ids": [
+        "1074_IEO_DIS_HI",
+        "1074_IEO_DIS_LO",
+        "1074_IEO_DIS_MD"
+      ]
+    },
+    {
+      "actor_id": "1075",
+      "sentence": "IEO",
+      "emotion": "happy",
+      "clip_ids": [
+        "1075_IEO_HAP_HI",
+        "1075_IEO_HAP_LO",
+        "1075_IEO_HAP_MD"
+      ]
+    },
+    {
+      "actor_id": "1075",
+      "sentence": "IEO",
+      "emotion": "sad",
+      "clip_ids": [
+        "1075_IEO_SAD_HI",
+        "1075_IEO_SAD_LO",
+        "1075_IEO_SAD_MD"
+      ]
+    },
+    {
+      "actor_id": "1075",
+      "sentence": "IEO",
+      "emotion": "angry",
+      "clip_ids": [
+        "1075_IEO_ANG_HI",
+        "1075_IEO_ANG_LO",
+        "1075_IEO_ANG_MD"
+      ]
+    },
+    {
+      "actor_id": "1075",
+      "sentence": "IEO",
+      "emotion": "fear",
+      "clip_ids": [
+        "1075_IEO_FEA_LO",
+        "1075_IEO_FEA_MD"
+      ]
+    },
+    {
+      "actor_id": "1075",
+      "sentence": "IEO",
+      "emotion": "disgust",
+      "clip_ids": [
+        "1075_IEO_DIS_HI",
+        "1075_IEO_DIS_LO",
+        "1075_IEO_DIS_MD"
+      ]
+    },
+    {
+      "actor_id": "1078",
+      "sentence": "IEO",
+      "emotion": "happy",
+      "clip_ids": [
+        "1078_IEO_HAP_HI",
+        "1078_IEO_HAP_LO",
+        "1078_IEO_HAP_MD"
+      ]
+    },
+    {
+      "actor_id": "1078",
+      "sentence": "IEO",
+      "emotion": "sad",
+      "clip_ids": [
+        "1078_IEO_SAD_HI",
+        "1078_IEO_SAD_LO",
+        "1078_IEO_SAD_MD"
+      ]
+    },
+    {
+      "actor_id": "1078",
+      "sentence": "IEO",
+      "emotion": "angry",
+      "clip_ids": [
+        "1078_IEO_ANG_LO",
+        "1078_IEO_ANG_MD"
+      ]
+    },
+    {
+      "actor_id": "1078",
+      "sentence": "IEO",
+      "emotion": "fear",
+      "clip_ids": [
+        "1078_IEO_FEA_LO",
+        "1078_IEO_FEA_MD"
+      ]
+    },
+    {
+      "actor_id": "1078",
+      "sentence": "IEO",
+      "emotion": "disgust",
+      "clip_ids": [
+        "1078_IEO_DIS_HI",
+        "1078_IEO_DIS_LO",
+        "1078_IEO_DIS_MD"
+      ]
+    },
+    {
+      "actor_id": "1083",
+      "sentence": "IEO",
+      "emotion": "happy",
+      "clip_ids": [
+        "1083_IEO_HAP_HI",
+        "1083_IEO_HAP_LO",
+        "1083_IEO_HAP_MD"
+      ]
+    },
+    {
+      "actor_id": "1083",
+      "sentence": "IEO",
+      "emotion": "sad",
+      "clip_ids": [
+        "1083_IEO_SAD_HI",
+        "1083_IEO_SAD_LO",
+        "1083_IEO_SAD_MD"
+      ]
+    },
+    {
+      "actor_id": "1083",
+      "sentence": "IEO",
+      "emotion": "angry",
+      "clip_ids": [
+        "1083_IEO_ANG_HI",
+        "1083_IEO_ANG_LO",
+        "1083_IEO_ANG_MD"
+      ]
+    },
+    {
+      "actor_id": "1083",
+      "sentence": "IEO",
+      "emotion": "fear",
+      "clip_ids": [
+        "1083_IEO_FEA_HI",
+        "1083_IEO_FEA_LO",
+        "1083_IEO_FEA_MD"
+      ]
+    },
+    {
+      "actor_id": "1083",
+      "sentence": "IEO",
+      "emotion": "disgust",
+      "clip_ids": [
+        "1083_IEO_DIS_HI",
+        "1083_IEO_DIS_LO",
+        "1083_IEO_DIS_MD"
+      ]
+    },
+    {
+      "actor_id": "1084",
+      "sentence": "IEO",
+      "emotion": "happy",
+      "clip_ids": [
+        "1084_IEO_HAP_HI",
+        "1084_IEO_HAP_LO",
+        "1084_IEO_HAP_MD"
+      ]
+    },
+    {
+      "actor_id": "1084",
+      "sentence": "IEO",
+      "emotion": "sad",
+      "clip_ids": [
+        "1084_IEO_SAD_HI",
+        "1084_IEO_SAD_LO",
+        "1084_IEO_SAD_MD"
+      ]
+    },
+    {
+      "actor_id": "1084",
+      "sentence": "IEO",
+      "emotion": "angry",
+      "clip_ids": [
+        "1084_IEO_ANG_HI",
+        "1084_IEO_ANG_LO",
+        "1084_IEO_ANG_MD"
+      ]
+    },
+    {
+      "actor_id": "1084",
+      "sentence": "IEO",
+      "emotion": "fear",
+      "clip_ids": [
+        "1084_IEO_FEA_HI",
+        "1084_IEO_FEA_LO",
+        "1084_IEO_FEA_MD"
+      ]
+    },
+    {
+      "actor_id": "1084",
+      "sentence": "IEO",
+      "emotion": "disgust",
+      "clip_ids": [
+        "1084_IEO_DIS_HI",
+        "1084_IEO_DIS_LO",
+        "1084_IEO_DIS_MD"
+      ]
+    }
+  ],
+  "generated_at": "2026-10-29 08:30:39 UTC",
+  "source_manifest": "D:\\voix\\data\\processed\\crema_d_manifest.csv",
+  "source_manifest_sha256": "b4be4ccdbea18a29d18ca92e24c1c4bf007acd9444f5b77deca2a710023344e8",
+  "output": "D:\\voix\\data\\processed\\crema_d_paired_eval_val.csv",
+  "output_sha256": "b782e6a5a9d3d5b88f669e5836803182573fac4df42bddc892fb8e42da6b6912",
+  "validation": {
+    "passed": true,
+    "errors": [],
+    "audio_checked": true
+  }
+}

@@ -17,12 +17,10 @@ from voix.inference.pipeline import VoixPipeline
 class TestAccentRegistry:
     def test_canonical_accents_present(self):
         expected = [
-            "general_american",
-            "british_rp",
-            "australian",
+            "us",
+            "england",
             "indian_english",
-            "irish",
-            "scottish",
+            "australian",
         ]
         for acc in expected:
             assert acc in ACCENT_REGISTRY
@@ -33,10 +31,9 @@ class TestAccentRegistry:
 
     def test_list_available_accents(self):
         accents = list_available_accents()
-        assert len(accents) >= 6
+        assert len(accents) == 4
         ids = [a["accent_id"] for a in accents]
-        assert "british_rp" in ids
-        assert "indian_english" in ids
+        assert set(ids) == {"us", "england", "indian_english", "australian"}
 
 
 class TestAccentTransformer:
@@ -58,15 +55,23 @@ class TestAccentTransformer:
 
     def test_strength_clamping(self):
         text = "Testing strength clamping."
-        _, mods_high = AccentTransformer.transform(text, accent="irish", strength=2.5)
-        _, mods_normal = AccentTransformer.transform(text, accent="irish", strength=1.0)
-        assert mods_high["pitch_mult"] == mods_normal["pitch_mult"]
+        _, mods_high = AccentTransformer.transform(
+            text, accent="australian", strength=2.5
+        )
+        _, mods_normal = AccentTransformer.transform(
+            text, accent="australian", strength=1.0
+        )
+        assert mods_high["prosody_mult"] == mods_normal["prosody_mult"]
 
 
 class TestPipelineAccentIntegration:
     @pytest.fixture
-    def pipeline(self):
-        return VoixPipeline(device="cpu", enable_watermarking=False)
+    def pipeline(self, v2_artifacts):
+        return VoixPipeline(
+            device="cpu",
+            enable_watermarking=False,
+            tts_use_neural=False,
+        )
 
     def test_pipeline_generate_with_accent(self, pipeline):
         res = pipeline.generate(
@@ -82,4 +87,4 @@ class TestPipelineAccentIntegration:
 
     def test_pipeline_list_accents(self, pipeline):
         accs = pipeline.list_accents()
-        assert len(accs) >= 6
+        assert len(accs) == 4

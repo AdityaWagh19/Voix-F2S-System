@@ -1,0 +1,2887 @@
+{
+  "schema_version": "voix.research_report.v1",
+  "track": "emotion",
+  "level": "exploratory",
+  "run_id": "e2_learned_residual_shuffled_neutral_scalars",
+  "git_commit": "3bbf21d35dbccd15c0548f6e0c86291c32f01900",
+  "config_sha256": "7731e625b48b6631379eb5be09794ea7748ee80caca42d7fbbcc834a9ec0977b",
+  "manifest_sha256": "b782e6a5a9d3d5b88f669e5836803182573fac4df42bddc892fb8e42da6b6912",
+  "seeds": [
+    0
+  ],
+  "metrics": {
+    "classifier_accuracy": {
+      "status": "unavailable",
+      "reason": "classifier proxy invalid: generated features are far outside the real-speech spread; classifier predictions are not a valid emotion measure"
+    },
+    "classifier_macro_f1": {
+      "status": "unavailable",
+      "reason": "classifier proxy invalid: generated features are far outside the real-speech spread; classifier predictions are not a valid emotion measure"
+    },
+    "classifier_target_recall": {
+      "status": "unavailable",
+      "reason": "classifier proxy invalid: generated features are far outside the real-speech spread; classifier predictions are not a valid emotion measure"
+    },
+    "classifier_domain_shift_ratio": {
+      "status": "computed",
+      "value": 8.361490853311855,
+      "threshold": 3.0,
+      "standardized_centroid_distance": 67.35074301018254,
+      "real_val_spread": 8.05487253310885
+    },
+    "f0_mean_hz": {
+      "status": "computed",
+      "value": {
+        "neutral:neutral": 156.1850925925926,
+        "learned_residual_shuffled:happy": 171.41555555555553,
+        "learned_residual_shuffled:sad": 145.8923148148148,
+        "learned_residual_shuffled:angry": 172.62740740740742,
+        "learned_residual_shuffled:fear": 169.71064814814812,
+        "learned_residual_shuffled:disgust": 152.0473148148148
+      }
+    },
+    "f0_std_hz": {
+      "status": "computed",
+      "value": {
+        "neutral:neutral": 36.57648148148149,
+        "learned_residual_shuffled:happy": 41.896111111111125,
+        "learned_residual_shuffled:sad": 35.696481481481484,
+        "learned_residual_shuffled:angry": 36.012499999999996,
+        "learned_residual_shuffled:fear": 39.2425,
+        "learned_residual_shuffled:disgust": 34.682037037037034
+      }
+    },
+    "duration_seconds": {
+      "status": "computed",
+      "value": {
+        "neutral:neutral": 2.1468425925925927,
+        "learned_residual_shuffled:happy": 2.1174444444444447,
+        "learned_residual_shuffled:sad": 2.195916666666667,
+        "learned_residual_shuffled:angry": 2.1160555555555556,
+        "learned_residual_shuffled:fear": 2.140592592592593,
+        "learned_residual_shuffled:disgust": 2.2290185185185187
+      }
+    },
+    "energy_mean": {
+      "status": "computed",
+      "value": {
+        "neutral:neutral": 0.05504981481481482,
+        "learned_residual_shuffled:happy": 0.05344861111111111,
+        "learned_residual_shuffled:sad": 0.05694611111111111,
+        "learned_residual_shuffled:angry": 0.052715555555555564,
+        "learned_residual_shuffled:fear": 0.055043703703703706,
+        "learned_residual_shuffled:disgust": 0.05505370370370371
+      }
+    },
+    "ecapa_generated_neutral": {
+      "status": "computed",
+      "value": {
+        "neutral:neutral": 1.0,
+        "learned_residual_shuffled:happy": 0.8790542764796151,
+        "learned_residual_shuffled:sad": 0.9066324454766733,
+        "learned_residual_shuffled:angry": 0.887343512641059,
+        "learned_residual_shuffled:fear": 0.8822222898403803,
+        "learned_residual_shuffled:disgust": 0.8996615051119415
+      }
+    },
+    "ecapa_identity_reference": {
+      "status": "computed",
+      "value": {
+        "neutral:neutral": 0.2037437015764967,
+        "learned_residual_shuffled:happy": 0.19675677171390918,
+        "learned_residual_shuffled:sad": 0.18464737238914328,
+        "learned_residual_shuffled:angry": 0.20461850278769378,
+        "learned_residual_shuffled:fear": 0.1970959361642599,
+        "learned_residual_shuffled:disgust": 0.19588882244985412
+      }
+    },
+    "neutral_zero_max_abs_error": {
+      "status": "computed",
+      "value": 0.0,
+      "tolerance": 1e-07
+    },
+    "wer": {
+      "status": "unavailable",
+      "reason": "WER was not requested; pass --compute-wer"
+    }
+  },
+  "gates": {
+    "e0_directions": {
+      "status": "computed",
+      "checks": {
+        "happy": {
+          "f0_mean_hz": {
+            "status": "computed",
+            "mean_delta": 15.230462962962964,
+            "ci_low": 10.244592592592591,
+            "ci_high": 20.785840277777776,
+            "n_pairs": 108,
+            "n_speakers": 9,
+            "expected_direction": 1,
+            "direction_match": true,
+            "ci_excludes_zero_in_expected_direction": true,
+            "passed": true
+          },
+          "duration_seconds": {
+            "status": "computed",
+            "mean_delta": -0.02939814814814813,
+            "ci_low": -0.0421296296296296,
+            "ci_high": -0.017824074074074055,
+            "n_pairs": 108,
+            "n_speakers": 9,
+            "expected_direction": -1,
+            "direction_match": true,
+            "ci_excludes_zero_in_expected_direction": true,
+            "passed": true
+          }
+        },
+        "sad": {
+          "f0_mean_hz": {
+            "status": "computed",
+            "mean_delta": -10.29277777777778,
+            "ci_low": -19.70734722222222,
+            "ci_high": -1.5597777777777786,
+            "n_pairs": 108,
+            "n_speakers": 9,
+            "expected_direction": -1,
+            "direction_match": true,
+            "ci_excludes_zero_in_expected_direction": true,
+            "passed": true
+          },
+          "duration_seconds": {
+            "status": "computed",
+            "mean_delta": 0.04907407407407406,
+            "ci_low": 0.03171296296296295,
+            "ci_high": 0.06689814814814812,
+            "n_pairs": 108,
+            "n_speakers": 9,
+            "expected_direction": 1,
+            "direction_match": true,
+            "ci_excludes_zero_in_expected_direction": true,
+            "passed": true
+          }
+        },
+        "angry": {
+          "f0_mean_hz": {
+            "status": "computed",
+            "mean_delta": 16.44231481481481,
+            "ci_low": 10.4318125,
+            "ci_high": 23.321965277777775,
+            "n_pairs": 108,
+            "n_speakers": 9,
+            "expected_direction": 1,
+            "direction_match": true,
+            "ci_excludes_zero_in_expected_direction": true,
+            "passed": true
+          },
+          "duration_seconds": {
+            "status": "computed",
+            "mean_delta": -0.03078703703703703,
+            "ci_low": -0.04189814814814812,
+            "ci_high": -0.020596064814814886,
+            "n_pairs": 108,
+            "n_speakers": 9,
+            "expected_direction": -1,
+            "direction_match": true,
+            "ci_excludes_zero_in_expected_direction": true,
+            "passed": true
+          }
+        }
+      },
+      "passed": true,
+      "failures": []
+    },
+    "identity": {
+      "passed": true,
+      "failures": [],
+      "warnings": [
+        "generated neutral ECAPA reference 0.2037437015764967 is below 0.5; condition comparisons are relative only (domain shift)"
+      ],
+      "neutral_sanity": {
+        "status": "computed",
+        "mean": 0.2037437015764967,
+        "threshold": 0.5,
+        "passed": false
+      },
+      "thresholds": {
+        "min_ecapa_neutral": 0.8,
+        "max_reference_drop": 0.05,
+        "max_canonical_drop": 0.05,
+        "cfvn_tolerance": 0.005,
+        "min_pairwise_diversity": null,
+        "min_neutral_reference": 0.5
+      }
+    },
+    "neutral_zero": {
+      "passed": true,
+      "max_abs_error": 0.0,
+      "tolerance": 1e-07
+    },
+    "classifier_above_chance": {
+      "passed": false,
+      "status": "invalid",
+      "proxy_valid": false,
+      "reason": "generated features are far outside the real-speech spread; classifier predictions are not a valid emotion measure",
+      "accuracy": 0.16666666666666666,
+      "macro_f1": 0.047619047619047616,
+      "chance": 0.16666666666666666,
+      "domain_shift": {
+        "status": "computed",
+        "standardized_centroid_distance": 67.35074301018254,
+        "real_val_spread": 8.05487253310885,
+        "ratio": 8.361490853311855,
+        "threshold": 3.0,
+        "valid": false,
+        "reason": "generated features are far outside the real-speech spread; classifier predictions are not a valid emotion measure"
+      }
+    }
+  },
+  "status": "completed",
+  "limitations": [
+    "Exploratory: CREMA-D is acted speech and every emotion class is below the 2 h confirmatory gate.",
+    "Only 9 validation actor(s); speaker-cluster intervals are provisional.",
+    "No human MOS or emotion-identification study was run; perceptual quality is unmeasured.",
+    "Fear and disgust have no fixed-delta artifact in this checkout and are reported as unavailable for E0.",
+    "The emotion classifier is an evaluator, not a learned control; real-speech calibration is train-only.",
+    "The canonical face-to-voice artifacts are frozen and were not used to generate these clips.",
+    "The identity base is StyleTTS2's frozen style/predictor encoder, not the face-to-voice adapter.",
+    "Generated neutral ECAPA similarity to the real speaker is 0.204 < 0.500; condition comparisons are relative only (domain shift).",
+    "Generated speech is outside the real-speech feature distribution (standardized centroid distance 67.4, 8.4x the real validation spread); the emotion classifier proxy is invalid for this run and its accuracy is reported as unavailable for decision-making.",
+    "One generation seed; multi-seed stability is not established."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings were collected for this run"
+  },
+  "per_class": {
+    "generated_confusion_matrix": {
+      "labels": [
+        "neutral",
+        "happy",
+        "sad",
+        "angry",
+        "fear",
+        "disgust"
+      ],
+      "matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          108,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          108,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          108,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          108,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          108,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          108,
+          0
+        ]
+      ]
+    },
+    "generated_per_class": {
+      "neutral": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 108
+      },
+      "happy": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 108
+      },
+      "sad": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 108
+      },
+      "angry": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 108
+      },
+      "fear": {
+        "precision": 0.16666666666666666,
+        "recall": 1.0,
+        "f1": 0.2857142857142857,
+        "support": 108
+      },
+      "disgust": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 108
+      }
+    },
+    "real_val_calibration": {
+      "status": "computed",
+      "n": 694,
+      "n_speakers": 9,
+      "accuracy": 0.5345821325648416,
+      "macro_f1": 0.5321252955867287,
+      "per_class": {
+        "neutral": {
+          "precision": 0.5271317829457365,
+          "recall": 0.6296296296296297,
+          "f1": 0.5738396624472574,
+          "support": 108
+        },
+        "happy": {
+          "precision": 0.6,
+          "recall": 0.42857142857142855,
+          "f1": 0.5,
+          "support": 126
+        },
+        "sad": {
+          "precision": 0.5240963855421686,
+          "recall": 0.6904761904761905,
+          "f1": 0.595890410958904,
+          "support": 126
+        },
+        "angry": {
+          "precision": 0.5909090909090909,
+          "recall": 0.7222222222222222,
+          "f1": 0.65,
+          "support": 90
+        },
+        "fear": {
+          "precision": 0.5185185185185185,
+          "recall": 0.47058823529411764,
+          "f1": 0.49339207048458145,
+          "support": 119
+        },
+        "disgust": {
+          "precision": 0.45054945054945056,
+          "recall": 0.328,
+          "f1": 0.37962962962962965,
+          "support": 125
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry",
+          "fear",
+          "disgust"
+        ],
+        "matrix": [
+          [
+            68,
+            2,
+            10,
+            0,
+            10,
+            18
+          ],
+          [
+            11,
+            54,
+            5,
+            28,
+            21,
+            7
+          ],
+          [
+            10,
+            7,
+            87,
+            0,
+            9,
+            13
+          ],
+          [
+            9,
+            9,
+            0,
+            65,
+            0,
+            7
+          ],
+          [
+            6,
+            7,
+            42,
+            3,
+            56,
+            5
+          ],
+          [
+            25,
+            11,
+            22,
+            14,
+            12,
+            41
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "computed",
+        "accuracy_low": 0.46575192480751926,
+        "accuracy_high": 0.6008776846825584,
+        "confidence": 0.95,
+        "n_resamples": 10000,
+        "seed": 0
+      }
+    },
+    "real_val_saved_model_in_sample": {
+      "status": "computed",
+      "n": 694,
+      "n_speakers": 9,
+      "accuracy": 0.6729106628242075,
+      "macro_f1": 0.6755868419813168,
+      "per_class": {
+        "neutral": {
+          "precision": 0.583941605839416,
+          "recall": 0.7407407407407407,
+          "f1": 0.6530612244897959,
+          "support": 108
+        },
+        "happy": {
+          "precision": 0.7981651376146789,
+          "recall": 0.6904761904761905,
+          "f1": 0.7404255319148935,
+          "support": 126
+        },
+        "sad": {
+          "precision": 0.610062893081761,
+          "recall": 0.7698412698412699,
+          "f1": 0.6807017543859649,
+          "support": 126
+        },
+        "angry": {
+          "precision": 0.7835051546391752,
+          "recall": 0.8444444444444444,
+          "f1": 0.8128342245989305,
+          "support": 90
+        },
+        "fear": {
+          "precision": 0.7319587628865979,
+          "recall": 0.5966386554621849,
+          "f1": 0.6574074074074073,
+          "support": 119
+        },
+        "disgust": {
+          "precision": 0.5894736842105263,
+          "recall": 0.448,
+          "f1": 0.509090909090909,
+          "support": 125
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry",
+          "fear",
+          "disgust"
+        ],
+        "matrix": [
+          [
+            80,
+            2,
+            7,
+            0,
+            6,
+            13
+          ],
+          [
+            9,
+            87,
+            4,
+            11,
+            8,
+            7
+          ],
+          [
+            11,
+            2,
+            97,
+            0,
+            4,
+            12
+          ],
+          [
+            9,
+            3,
+            0,
+            76,
+            0,
+            2
+          ],
+          [
+            6,
+            5,
+            31,
+            1,
+            71,
+            5
+          ],
+          [
+            22,
+            10,
+            20,
+            9,
+            8,
+            56
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "computed",
+        "accuracy_low": 0.6165725009686168,
+        "accuracy_high": 0.7276848705292536,
+        "confidence": 0.95,
+        "n_resamples": 10000,
+        "seed": 0
+      }
+    },
+    "generated_saved_model": {
+      "status": "computed",
+      "n": 648,
+      "n_speakers": 9,
+      "accuracy": 0.16666666666666666,
+      "macro_f1": 0.047619047619047616,
+      "per_class": {
+        "neutral": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        },
+        "happy": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        },
+        "sad": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        },
+        "angry": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        },
+        "fear": {
+          "precision": 0.16666666666666666,
+          "recall": 1.0,
+          "f1": 0.2857142857142857,
+          "support": 108
+        },
+        "disgust": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry",
+          "fear",
+          "disgust"
+        ],
+        "matrix": [
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "computed",
+        "accuracy_low": 0.16666666666666666,
+        "accuracy_high": 0.16666666666666666,
+        "confidence": 0.95,
+        "n_resamples": 10000,
+        "seed": 0
+      }
+    }
+  },
+  "artifacts": {
+    "generation_index": "results\\emotion\\e2c\\generation_index_style_shuffled.csv",
+    "generation_report": "results\\emotion\\e2c\\generation_report_style_shuffled.json",
+    "audio_dir": "results\\emotion\\e2c\\audio_style_shuffled\\neutral",
+    "classifier": "D:\\voix\\checkpoints\\emotion_classifier_crema_d.joblib",
+    "features_cache": "D:\\voix\\data\\processed\\crema_d_features.npz",
+    "canonical_hashes": "D:\\voix\\results\\canonical_hashes.json"
+  },
+  "config": {
+    "index": "results\\emotion\\e2c\\generation_index_shuffled.csv",
+    "manifest": "D:\\voix\\data\\processed\\crema_d_paired_eval_val.csv",
+    "classifier": "D:\\voix\\checkpoints\\emotion_classifier_crema_d.joblib",
+    "features_cache": "D:\\voix\\data\\processed\\crema_d_features.npz",
+    "device": "cuda",
+    "workers": 4,
+    "n_resamples": 10000,
+    "seed": 0,
+    "min_ecapa_neutral": 0.8,
+    "compute_wer": false,
+    "wer_model": "base"
+  },
+  "generation": {
+    "seeds": [
+      0
+    ],
+    "diffusion_steps": 10,
+    "scalar_modifiers": "neutral",
+    "emotions_generated": [
+      "happy",
+      "sad",
+      "angry",
+      "fear",
+      "disgust"
+    ],
+    "emotions_unavailable": {},
+    "neutral_zero": {
+      "max_abs_error": 0.0,
+      "tolerance": 1e-07,
+      "passed": true,
+      "failures": []
+    },
+    "counts": {
+      "learned_residual_shuffled:angry": {
+        "rows": 108,
+        "actors": 9,
+        "pairs": 108,
+        "audio_seconds": 228.52500000000003,
+        "mean_style_delta_l2": 0.4999999933772617,
+        "mean_generation_seconds": 0.3958796296296295
+      },
+      "learned_residual_shuffled:disgust": {
+        "rows": 108,
+        "actors": 9,
+        "pairs": 108,
+        "audio_seconds": 240.725,
+        "mean_style_delta_l2": 0.4999999801317851,
+        "mean_generation_seconds": 0.41099074074074066
+      },
+      "learned_residual_shuffled:fear": {
+        "rows": 108,
+        "actors": 9,
+        "pairs": 108,
+        "audio_seconds": 231.175,
+        "mean_style_delta_l2": 0.4999999867545234,
+        "mean_generation_seconds": 0.3983796296296297
+      },
+      "learned_residual_shuffled:happy": {
+        "rows": 108,
+        "actors": 9,
+        "pairs": 108,
+        "audio_seconds": 228.675,
+        "mean_style_delta_l2": 0.4999999768204159,
+        "mean_generation_seconds": 0.3917962962962963
+      },
+      "learned_residual_shuffled:sad": {
+        "rows": 108,
+        "actors": 9,
+        "pairs": 108,
+        "audio_seconds": 237.14999999999998,
+        "mean_style_delta_l2": 0.4999999933772617,
+        "mean_generation_seconds": 0.40355555555555545
+      },
+      "neutral:neutral": {
+        "rows": 108,
+        "actors": 9,
+        "pairs": 108,
+        "audio_seconds": 231.85,
+        "mean_style_delta_l2": null,
+        "mean_generation_seconds": 0.4175462962962963
+      }
+    }
+  },
+  "conditions": {
+    "neutral:neutral": {
+      "condition": "neutral",
+      "emotion": "neutral",
+      "n": 108,
+      "actors": 9,
+      "metrics": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "mean": 156.1850925925926,
+          "std": 41.48692214827633,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 135.50213888888888,
+          "ci_high": 174.42136574074075,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "mean": 36.57648148148149,
+          "std": 22.602417549747013,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 27.07861111111111,
+          "ci_high": 46.02771296296296,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "mean": 2.1468425925925927,
+          "std": 0.3222000934590047,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 2.094753472222222,
+          "ci_high": 2.1996203703703707,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_mean": {
+          "status": "computed",
+          "mean": 0.05504981481481482,
+          "std": 0.003324082610139346,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.05389631944444445,
+          "ci_high": 0.05641462962962963,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_std": {
+          "status": "computed",
+          "mean": 0.04409787037037037,
+          "std": 0.002477442927632164,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.043116375000000005,
+          "ci_high": 0.045054548611111106,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "mean": 1.0,
+          "std": 0.0,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "mean": 0.2037437015764967,
+          "std": 0.08624619394893615,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.16583243976519615,
+          "ci_high": 0.24156645661288942,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "mean": 0.16357959034266295,
+          "std": 0.10021591018138072,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.1382262441493502,
+          "ci_high": 0.19055384959835833,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        }
+      }
+    },
+    "learned_residual_shuffled:happy": {
+      "condition": "learned_residual_shuffled",
+      "emotion": "happy",
+      "n": 108,
+      "actors": 9,
+      "metrics": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "mean": 171.41555555555553,
+          "std": 53.44518284043335,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 147.51555092592594,
+          "ci_high": 193.49196296296293,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "mean": 41.896111111111125,
+          "std": 25.89591050719949,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 32.62742361111111,
+          "ci_high": 50.646511574074076,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "mean": 2.1174444444444447,
+          "std": 0.325212607190111,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 2.054944444444445,
+          "ci_high": 2.180175925925926,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_mean": {
+          "status": "computed",
+          "mean": 0.05344861111111111,
+          "std": 0.0032745896392213708,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.05230904861111111,
+          "ci_high": 0.05459777777777778,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_std": {
+          "status": "computed",
+          "mean": 0.04504898148148148,
+          "std": 0.002380465257208211,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.04421953703703704,
+          "ci_high": 0.04586631481481482,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "mean": 0.8790542764796151,
+          "std": 0.031360801460621826,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.8684011553724608,
+          "ci_high": 0.8902330622766856,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "mean": 0.19675677171390918,
+          "std": 0.09199118514201637,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.15493544241137527,
+          "ci_high": 0.24006183250910704,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "mean": 0.16663958202978527,
+          "std": 0.10462730233046647,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.13887728479156203,
+          "ci_high": 0.19474292426042394,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        }
+      }
+    },
+    "learned_residual_shuffled:sad": {
+      "condition": "learned_residual_shuffled",
+      "emotion": "sad",
+      "n": 108,
+      "actors": 9,
+      "metrics": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "mean": 145.8923148148148,
+          "std": 45.87432820270504,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 125.09102777777778,
+          "ci_high": 166.8845810185185,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "mean": 35.696481481481484,
+          "std": 22.782940753412095,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 26.370185185185186,
+          "ci_high": 44.73902546296296,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "mean": 2.195916666666667,
+          "std": 0.34078532516889176,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 2.1294814814814815,
+          "ci_high": 2.2637407407407406,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_mean": {
+          "status": "computed",
+          "mean": 0.05694611111111111,
+          "std": 0.003472499660774785,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.055549224537037034,
+          "ci_high": 0.058510000000000006,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_std": {
+          "status": "computed",
+          "mean": 0.04299768518518518,
+          "std": 0.002783530537843185,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.041760648148148144,
+          "ci_high": 0.04428324305555555,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "mean": 0.9066324454766733,
+          "std": 0.029647388230990262,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.8955727034558852,
+          "ci_high": 0.9154823913618371,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "mean": 0.18464737238914328,
+          "std": 0.09181951139362822,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.14000066479978462,
+          "ci_high": 0.2297086344811962,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "mean": 0.15028286842560326,
+          "std": 0.09831930081881927,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.1266465958350131,
+          "ci_high": 0.17644493594610441,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        }
+      }
+    },
+    "learned_residual_shuffled:angry": {
+      "condition": "learned_residual_shuffled",
+      "emotion": "angry",
+      "n": 108,
+      "actors": 9,
+      "metrics": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "mean": 172.62740740740742,
+          "std": 51.99606736334036,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 147.3376759259259,
+          "ci_high": 196.3597777777778,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "mean": 36.012499999999996,
+          "std": 22.601803671512755,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 28.358499999999996,
+          "ci_high": 43.25616203703703,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "mean": 2.1160555555555556,
+          "std": 0.31923962913455606,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 2.0577222222222225,
+          "ci_high": 2.1746203703703704,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_mean": {
+          "status": "computed",
+          "mean": 0.052715555555555564,
+          "std": 0.0033661984807551093,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.0515697037037037,
+          "ci_high": 0.05383271759259259,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_std": {
+          "status": "computed",
+          "mean": 0.045290000000000004,
+          "std": 0.0023886918173198573,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.04450814351851852,
+          "ci_high": 0.04606482407407407,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "mean": 0.887343512641059,
+          "std": 0.028852079798807332,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.8766990000451053,
+          "ci_high": 0.8979381856129126,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "mean": 0.20461850278769378,
+          "std": 0.0922736560581399,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.16401347251160556,
+          "ci_high": 0.24734151596246565,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "mean": 0.16317847198634236,
+          "std": 0.10933400493994673,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.13436995091399662,
+          "ci_high": 0.19205966591231388,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        }
+      }
+    },
+    "learned_residual_shuffled:fear": {
+      "condition": "learned_residual_shuffled",
+      "emotion": "fear",
+      "n": 108,
+      "actors": 9,
+      "metrics": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "mean": 169.71064814814812,
+          "std": 46.6689628550764,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 146.8951365740741,
+          "ci_high": 190.28698611111108,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "mean": 39.2425,
+          "std": 24.886101707129022,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 29.0437037037037,
+          "ci_high": 49.850706018518515,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "mean": 2.140592592592593,
+          "std": 0.33656211427765814,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 2.0760092592592594,
+          "ci_high": 2.2063333333333337,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_mean": {
+          "status": "computed",
+          "mean": 0.055043703703703706,
+          "std": 0.0033069147584718957,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.05388997685185185,
+          "ci_high": 0.056293333333333334,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_std": {
+          "status": "computed",
+          "mean": 0.044447870370370374,
+          "std": 0.0024544748571049997,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.0435053125,
+          "ci_high": 0.045367965277777776,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "mean": 0.8822222898403803,
+          "std": 0.03529308178830784,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.8671379511968957,
+          "ci_high": 0.8961243356819506,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "mean": 0.1970959361642599,
+          "std": 0.08648886658313777,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.15674100878338018,
+          "ci_high": 0.23890278681560798,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "mean": 0.16505829029268138,
+          "std": 0.09885728277146644,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.14046387138164224,
+          "ci_high": 0.1911282217371519,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        }
+      }
+    },
+    "learned_residual_shuffled:disgust": {
+      "condition": "learned_residual_shuffled",
+      "emotion": "disgust",
+      "n": 108,
+      "actors": 9,
+      "metrics": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "mean": 152.0473148148148,
+          "std": 52.73006184041849,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 128.08310185185184,
+          "ci_high": 174.65137499999997,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "mean": 34.682037037037034,
+          "std": 24.698463070699155,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 25.83600694444445,
+          "ci_high": 43.62602083333333,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "mean": 2.2290185185185187,
+          "std": 0.3442937775524503,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 2.1593425925925924,
+          "ci_high": 2.3000833333333337,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_mean": {
+          "status": "computed",
+          "mean": 0.05505370370370371,
+          "std": 0.003444588765274501,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.05380961805555555,
+          "ci_high": 0.05637782407407407,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_std": {
+          "status": "computed",
+          "mean": 0.0440475,
+          "std": 0.002543532434035519,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.04294619212962963,
+          "ci_high": 0.04511555555555555,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "mean": 0.8996615051119415,
+          "std": 0.02674163164219648,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.8925942949674748,
+          "ci_high": 0.9056570667911459,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "mean": 0.19588882244985412,
+          "std": 0.0920694160658473,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.15354578002804406,
+          "ci_high": 0.2398332159879997,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "mean": 0.1552874200494477,
+          "std": 0.1018722232743023,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": 0.13166796231590625,
+          "ci_high": 0.18067279675354558,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        }
+      }
+    }
+  },
+  "paired_effects": {
+    "status": "computed",
+    "effects": {
+      "learned_residual_shuffled:happy": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 15.230462962962964,
+          "sd_delta": 41.9571651034955,
+          "cohens_dz": 0.36300028673038487,
+          "ci_low": 10.244592592592591,
+          "ci_high": 20.785840277777776,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0,
+          "expected_direction": 1,
+          "direction_match": true,
+          "ci_excludes_zero_in_expected_direction": true
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 5.319629629629629,
+          "sd_delta": 24.16772613998743,
+          "cohens_dz": 0.22011295555140697,
+          "ci_low": 2.553981481481482,
+          "ci_high": 8.149888888888889,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.02939814814814813,
+          "sd_delta": 0.035491986673528465,
+          "cohens_dz": -0.8283038201993523,
+          "ci_low": -0.0421296296296296,
+          "ci_high": -0.017824074074074055,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0,
+          "expected_direction": -1,
+          "direction_match": true,
+          "ci_excludes_zero_in_expected_direction": true
+        },
+        "energy_mean": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.0016012037037037036,
+          "sd_delta": 0.000996141826024913,
+          "cohens_dz": -1.607405353204854,
+          "ci_low": -0.002065106481481481,
+          "ci_high": -0.001158143518518518,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_std": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 0.0009511111111111111,
+          "sd_delta": 0.0008354274000833155,
+          "cohens_dz": 1.1384724884726773,
+          "ci_low": 0.0006335069444444441,
+          "ci_high": 0.0013558356481481483,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.12094572352038489,
+          "sd_delta": 0.031360801460621826,
+          "cohens_dz": -3.8565890502591373,
+          "ci_low": -0.13159884462753932,
+          "ci_high": -0.10976693772331433,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.00698692986258754,
+          "sd_delta": 0.05092056248532042,
+          "cohens_dz": -0.13721234647794317,
+          "ci_low": -0.021259022552382063,
+          "ci_high": 0.008323807651349515,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 0.0030599916871223184,
+          "sd_delta": 0.04427940852738857,
+          "cohens_dz": 0.06910642641555594,
+          "ci_low": -0.007307439789400193,
+          "ci_high": 0.016674527322821726,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        }
+      },
+      "learned_residual_shuffled:sad": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -10.29277777777778,
+          "sd_delta": 39.14814519981336,
+          "cohens_dz": -0.2629186574547305,
+          "ci_low": -19.70734722222222,
+          "ci_high": -1.5597777777777786,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0,
+          "expected_direction": -1,
+          "direction_match": true,
+          "ci_excludes_zero_in_expected_direction": true
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.8800000000000006,
+          "sd_delta": 19.20738462933112,
+          "cohens_dz": -0.04581571187241049,
+          "ci_low": -3.364722222222223,
+          "ci_high": 1.5976550925925912,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 0.04907407407407406,
+          "sd_delta": 0.04468554800009986,
+          "cohens_dz": 1.09820906915955,
+          "ci_low": 0.03171296296296295,
+          "ci_high": 0.06689814814814812,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0,
+          "expected_direction": 1,
+          "direction_match": true,
+          "ci_excludes_zero_in_expected_direction": true
+        },
+        "energy_mean": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 0.0018962962962962967,
+          "sd_delta": 0.0011447789588645712,
+          "cohens_dz": 1.6564737512096699,
+          "ci_low": 0.0013219305555555558,
+          "ci_high": 0.0024053703703703698,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_std": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.0011001851851851852,
+          "sd_delta": 0.0008755281252456869,
+          "cohens_dz": -1.2565960515277061,
+          "ci_low": -0.0014654629629629631,
+          "ci_high": -0.0006605208333333335,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.09336755452332673,
+          "sd_delta": 0.029647388230990262,
+          "cohens_dz": -3.149267442915262,
+          "ci_low": -0.10442729654411474,
+          "ci_high": -0.08451760863816296,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.01909632918735345,
+          "sd_delta": 0.04317066414747449,
+          "cohens_dz": -0.4423450406535059,
+          "ci_low": -0.035567472240439164,
+          "ci_high": -0.005608565117991364,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.013296721917059686,
+          "sd_delta": 0.0391427624907843,
+          "cohens_dz": -0.33969809668365236,
+          "ci_low": -0.0222243903791187,
+          "ci_high": -0.006958081007555679,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        }
+      },
+      "learned_residual_shuffled:angry": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 16.44231481481481,
+          "sd_delta": 41.35285426997509,
+          "cohens_dz": 0.39761015545553335,
+          "ci_low": 10.4318125,
+          "ci_high": 23.321965277777775,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0,
+          "expected_direction": 1,
+          "direction_match": true,
+          "ci_excludes_zero_in_expected_direction": true
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.5639814814814818,
+          "sd_delta": 23.252052343938615,
+          "cohens_dz": -0.024255126951342056,
+          "ci_low": -3.432458333333333,
+          "ci_high": 2.422902777777776,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.03078703703703703,
+          "sd_delta": 0.03342002615421101,
+          "cohens_dz": -0.921215228706749,
+          "ci_low": -0.04189814814814812,
+          "ci_high": -0.020596064814814886,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0,
+          "expected_direction": -1,
+          "direction_match": true,
+          "ci_excludes_zero_in_expected_direction": true
+        },
+        "energy_mean": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.002334259259259259,
+          "sd_delta": 0.001121600328389055,
+          "cohens_dz": -2.0811863193834257,
+          "ci_low": -0.0028487060185185186,
+          "ci_high": -0.001809231481481482,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_std": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 0.0011921296296296296,
+          "sd_delta": 0.0008909399120952811,
+          "cohens_dz": 1.338058395909126,
+          "ci_low": 0.0007941620370370371,
+          "ci_high": 0.0016160277777777776,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.11265648735894097,
+          "sd_delta": 0.028852079798807335,
+          "cohens_dz": -3.904622756644319,
+          "ci_low": -0.12330099995489474,
+          "ci_high": -0.10206181438708749,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 0.0008748012111970672,
+          "sd_delta": 0.050261540498636945,
+          "cohens_dz": 0.017404982070153445,
+          "ci_low": -0.012030279942081067,
+          "ci_high": 0.013399754735399727,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.0004011183563205931,
+          "sd_delta": 0.04512912335604944,
+          "cohens_dz": -0.008888237273211384,
+          "ci_low": -0.011174523409593988,
+          "ci_high": 0.011526978462158376,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        }
+      },
+      "learned_residual_shuffled:fear": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 13.525555555555554,
+          "sd_delta": 37.656995113748586,
+          "cohens_dz": 0.3591777706824347,
+          "ci_low": 6.4566388888888895,
+          "ci_high": 20.976134259259258,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 2.666018518518518,
+          "sd_delta": 21.812855976896117,
+          "cohens_dz": 0.12222235003716748,
+          "ci_low": -1.091381944444444,
+          "ci_high": 5.908796296296296,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.006250000000000017,
+          "sd_delta": 0.03958384570909569,
+          "cohens_dz": -0.15789269304280543,
+          "ci_low": -0.023148148148148147,
+          "ci_high": 0.009953703703703678,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_mean": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -6.111111111111376e-06,
+          "sd_delta": 0.0010358263064199763,
+          "cohens_dz": -0.0058997450375947716,
+          "ci_low": -0.00042453703703703723,
+          "ci_high": 0.00045028472222222155,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_std": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 0.0003500000000000004,
+          "sd_delta": 0.0008211332492866868,
+          "cohens_dz": 0.4262401995096936,
+          "ci_low": 9.46296296296302e-05,
+          "ci_high": 0.0006475092592592592,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.11777771015961964,
+          "sd_delta": 0.03529308178830784,
+          "cohens_dz": -3.3371330638130314,
+          "ci_low": -0.1328620488031043,
+          "ci_high": -0.1038756643180494,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.006647765412236805,
+          "sd_delta": 0.04799539184711377,
+          "cohens_dz": -0.13850841000346104,
+          "ci_low": -0.026332472281582236,
+          "ci_high": 0.010852426219369356,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 0.0014786999500184148,
+          "sd_delta": 0.04497024511808144,
+          "cohens_dz": 0.0328817409408308,
+          "ci_low": -0.0075976126482365305,
+          "ci_high": 0.010838711929197112,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        }
+      },
+      "learned_residual_shuffled:disgust": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -4.137777777777779,
+          "sd_delta": 36.20279777832361,
+          "cohens_dz": -0.1142944200918988,
+          "ci_low": -10.510206018518517,
+          "ci_high": 2.0371296296296286,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -1.8944444444444442,
+          "sd_delta": 19.88157491708845,
+          "cohens_dz": -0.09528643743490092,
+          "ci_low": -3.261210648148148,
+          "ci_high": -0.4550925925925933,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 0.08217592592592594,
+          "sd_delta": 0.05437097024770392,
+          "cohens_dz": 1.5113934062891994,
+          "ci_low": 0.05972222222222222,
+          "ci_high": 0.10416666666666667,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_mean": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": 3.8888888888889235e-06,
+          "sd_delta": 0.0009073962269993114,
+          "cohens_dz": 0.004285767091790954,
+          "ci_low": -0.00027824074074074063,
+          "ci_high": 0.000306486111111111,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "energy_std": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -5.037037037037044e-05,
+          "sd_delta": 0.0007386042987567278,
+          "cohens_dz": -0.06819669267449091,
+          "ci_low": -0.0002658425925925927,
+          "ci_high": 0.00016805555555555562,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.10033849488805842,
+          "sd_delta": 0.026741631642196485,
+          "cohens_dz": -3.7521455770010332,
+          "ci_low": -0.10740570503252524,
+          "ci_high": -0.0943429332088541,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.00785487912664259,
+          "sd_delta": 0.04499871751741084,
+          "cohens_dz": -0.17455784431197158,
+          "ci_low": -0.022644903019277584,
+          "ci_high": 0.005022795122823919,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "n_pairs": 108,
+          "n_speakers": 9,
+          "mean_delta": -0.008292170293215249,
+          "sd_delta": 0.038282051131082837,
+          "cohens_dz": -0.21660726236485486,
+          "ci_low": -0.015790357529099477,
+          "ci_high": 0.00015518762455839032,
+          "ci_status": "computed",
+          "ci_confidence": 0.95,
+          "ci_n_resamples": 10000,
+          "ci_seed": 0
+        }
+      }
+    }
+  },
+  "classification": {
+    "generated_calibration_model": {
+      "status": "computed",
+      "n": 648,
+      "n_speakers": 9,
+      "accuracy": 0.16666666666666666,
+      "macro_f1": 0.047619047619047616,
+      "per_class": {
+        "neutral": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        },
+        "happy": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        },
+        "sad": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        },
+        "angry": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        },
+        "fear": {
+          "precision": 0.16666666666666666,
+          "recall": 1.0,
+          "f1": 0.2857142857142857,
+          "support": 108
+        },
+        "disgust": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry",
+          "fear",
+          "disgust"
+        ],
+        "matrix": [
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "computed",
+        "accuracy_low": 0.16666666666666666,
+        "accuracy_high": 0.16666666666666666,
+        "confidence": 0.95,
+        "n_resamples": 10000,
+        "seed": 0
+      }
+    },
+    "generated_saved_model": {
+      "status": "computed",
+      "n": 648,
+      "n_speakers": 9,
+      "accuracy": 0.16666666666666666,
+      "macro_f1": 0.047619047619047616,
+      "per_class": {
+        "neutral": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        },
+        "happy": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        },
+        "sad": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        },
+        "angry": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        },
+        "fear": {
+          "precision": 0.16666666666666666,
+          "recall": 1.0,
+          "f1": 0.2857142857142857,
+          "support": 108
+        },
+        "disgust": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 108
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry",
+          "fear",
+          "disgust"
+        ],
+        "matrix": [
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            108,
+            0
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "computed",
+        "accuracy_low": 0.16666666666666666,
+        "accuracy_high": 0.16666666666666666,
+        "confidence": 0.95,
+        "n_resamples": 10000,
+        "seed": 0
+      }
+    },
+    "target_recall": {
+      "neutral:neutral": {
+        "status": "computed",
+        "n": 108,
+        "target_recall": 0.0,
+        "predicted_counts": {
+          "fear": 108
+        }
+      },
+      "learned_residual_shuffled:happy": {
+        "status": "computed",
+        "n": 108,
+        "target_recall": 0.0,
+        "predicted_counts": {
+          "fear": 108
+        }
+      },
+      "learned_residual_shuffled:sad": {
+        "status": "computed",
+        "n": 108,
+        "target_recall": 0.0,
+        "predicted_counts": {
+          "fear": 108
+        }
+      },
+      "learned_residual_shuffled:angry": {
+        "status": "computed",
+        "n": 108,
+        "target_recall": 0.0,
+        "predicted_counts": {
+          "fear": 108
+        }
+      },
+      "learned_residual_shuffled:fear": {
+        "status": "computed",
+        "n": 108,
+        "target_recall": 1.0,
+        "predicted_counts": {
+          "fear": 108
+        }
+      },
+      "learned_residual_shuffled:disgust": {
+        "status": "computed",
+        "n": 108,
+        "target_recall": 0.0,
+        "predicted_counts": {
+          "fear": 108
+        }
+      }
+    },
+    "real_val_calibration": {
+      "status": "computed",
+      "n": 694,
+      "n_speakers": 9,
+      "accuracy": 0.5345821325648416,
+      "macro_f1": 0.5321252955867287,
+      "per_class": {
+        "neutral": {
+          "precision": 0.5271317829457365,
+          "recall": 0.6296296296296297,
+          "f1": 0.5738396624472574,
+          "support": 108
+        },
+        "happy": {
+          "precision": 0.6,
+          "recall": 0.42857142857142855,
+          "f1": 0.5,
+          "support": 126
+        },
+        "sad": {
+          "precision": 0.5240963855421686,
+          "recall": 0.6904761904761905,
+          "f1": 0.595890410958904,
+          "support": 126
+        },
+        "angry": {
+          "precision": 0.5909090909090909,
+          "recall": 0.7222222222222222,
+          "f1": 0.65,
+          "support": 90
+        },
+        "fear": {
+          "precision": 0.5185185185185185,
+          "recall": 0.47058823529411764,
+          "f1": 0.49339207048458145,
+          "support": 119
+        },
+        "disgust": {
+          "precision": 0.45054945054945056,
+          "recall": 0.328,
+          "f1": 0.37962962962962965,
+          "support": 125
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry",
+          "fear",
+          "disgust"
+        ],
+        "matrix": [
+          [
+            68,
+            2,
+            10,
+            0,
+            10,
+            18
+          ],
+          [
+            11,
+            54,
+            5,
+            28,
+            21,
+            7
+          ],
+          [
+            10,
+            7,
+            87,
+            0,
+            9,
+            13
+          ],
+          [
+            9,
+            9,
+            0,
+            65,
+            0,
+            7
+          ],
+          [
+            6,
+            7,
+            42,
+            3,
+            56,
+            5
+          ],
+          [
+            25,
+            11,
+            22,
+            14,
+            12,
+            41
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "computed",
+        "accuracy_low": 0.46575192480751926,
+        "accuracy_high": 0.6008776846825584,
+        "confidence": 0.95,
+        "n_resamples": 10000,
+        "seed": 0
+      }
+    },
+    "real_val_saved_model_in_sample": {
+      "status": "computed",
+      "n": 694,
+      "n_speakers": 9,
+      "accuracy": 0.6729106628242075,
+      "macro_f1": 0.6755868419813168,
+      "per_class": {
+        "neutral": {
+          "precision": 0.583941605839416,
+          "recall": 0.7407407407407407,
+          "f1": 0.6530612244897959,
+          "support": 108
+        },
+        "happy": {
+          "precision": 0.7981651376146789,
+          "recall": 0.6904761904761905,
+          "f1": 0.7404255319148935,
+          "support": 126
+        },
+        "sad": {
+          "precision": 0.610062893081761,
+          "recall": 0.7698412698412699,
+          "f1": 0.6807017543859649,
+          "support": 126
+        },
+        "angry": {
+          "precision": 0.7835051546391752,
+          "recall": 0.8444444444444444,
+          "f1": 0.8128342245989305,
+          "support": 90
+        },
+        "fear": {
+          "precision": 0.7319587628865979,
+          "recall": 0.5966386554621849,
+          "f1": 0.6574074074074073,
+          "support": 119
+        },
+        "disgust": {
+          "precision": 0.5894736842105263,
+          "recall": 0.448,
+          "f1": 0.509090909090909,
+          "support": 125
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry",
+          "fear",
+          "disgust"
+        ],
+        "matrix": [
+          [
+            80,
+            2,
+            7,
+            0,
+            6,
+            13
+          ],
+          [
+            9,
+            87,
+            4,
+            11,
+            8,
+            7
+          ],
+          [
+            11,
+            2,
+            97,
+            0,
+            4,
+            12
+          ],
+          [
+            9,
+            3,
+            0,
+            76,
+            0,
+            2
+          ],
+          [
+            6,
+            5,
+            31,
+            1,
+            71,
+            5
+          ],
+          [
+            22,
+            10,
+            20,
+            9,
+            8,
+            56
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "computed",
+        "accuracy_low": 0.6165725009686168,
+        "accuracy_high": 0.7276848705292536,
+        "confidence": 0.95,
+        "n_resamples": 10000,
+        "seed": 0
+      }
+    },
+    "domain_shift_neutral": {
+      "status": "computed",
+      "standardized_centroid_distance": 67.35074301018254,
+      "real_val_spread": 8.05487253310885,
+      "ratio": 8.361490853311855,
+      "threshold": 3.0,
+      "valid": false,
+      "reason": "generated features are far outside the real-speech spread; classifier predictions are not a valid emotion measure"
+    },
+    "domain_shift_all": {
+      "status": "computed",
+      "standardized_centroid_distance": 67.04293679845887,
+      "real_val_spread": 11.05075654187329,
+      "ratio": 6.066818732674204,
+      "threshold": 3.0,
+      "valid": false,
+      "reason": "generated features are far outside the real-speech spread; classifier predictions are not a valid emotion measure"
+    },
+    "proxy_valid": false
+  },
+  "identity": {
+    "schema_version": "voix.identity_guardrail.v1",
+    "thresholds": {
+      "min_ecapa_neutral": 0.8,
+      "max_reference_drop": 0.05,
+      "max_canonical_drop": 0.05,
+      "cfvn_tolerance": 0.005,
+      "min_pairwise_diversity": null,
+      "min_neutral_reference": 0.5
+    },
+    "conditions": {
+      "angry": {
+        "n": 108,
+        "ecapa_neutral": {
+          "status": "computed",
+          "mean": 0.887343512641059,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": 0.8766990000451053,
+          "ci_high": 0.8979381856129126,
+          "ci_status": "computed"
+        },
+        "ecapa_reference": {
+          "status": "computed",
+          "mean": 0.20461850278769378,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": 0.16401347251160556,
+          "ci_high": 0.24734151596246565,
+          "ci_status": "computed"
+        },
+        "reference_drop": {
+          "status": "computed",
+          "mean": -0.0008748012111970662,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": -0.013399754735399727,
+          "ci_high": 0.012030279942081062,
+          "ci_status": "computed"
+        },
+        "canonical_drop": {
+          "status": "unavailable",
+          "reason": "no rows contain both 'ecapa_neutral' and 'canonical_ecapa'"
+        },
+        "pairwise_diversity": {
+          "status": "unavailable",
+          "reason": "no finite 'pairwise_diversity' values"
+        },
+        "passed": true,
+        "failures": []
+      },
+      "disgust": {
+        "n": 108,
+        "ecapa_neutral": {
+          "status": "computed",
+          "mean": 0.8996615051119415,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": 0.8925942949674748,
+          "ci_high": 0.9056570667911459,
+          "ci_status": "computed"
+        },
+        "ecapa_reference": {
+          "status": "computed",
+          "mean": 0.19588882244985412,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": 0.15354578002804406,
+          "ci_high": 0.2398332159879997,
+          "ci_status": "computed"
+        },
+        "reference_drop": {
+          "status": "computed",
+          "mean": 0.007854879126642591,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": -0.005022795122823913,
+          "ci_high": 0.022644903019277587,
+          "ci_status": "computed"
+        },
+        "canonical_drop": {
+          "status": "unavailable",
+          "reason": "no rows contain both 'ecapa_neutral' and 'canonical_ecapa'"
+        },
+        "pairwise_diversity": {
+          "status": "unavailable",
+          "reason": "no finite 'pairwise_diversity' values"
+        },
+        "passed": true,
+        "failures": []
+      },
+      "fear": {
+        "n": 108,
+        "ecapa_neutral": {
+          "status": "computed",
+          "mean": 0.8822222898403803,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": 0.8671379511968957,
+          "ci_high": 0.8961243356819506,
+          "ci_status": "computed"
+        },
+        "ecapa_reference": {
+          "status": "computed",
+          "mean": 0.1970959361642599,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": 0.15674100878338018,
+          "ci_high": 0.23890278681560798,
+          "ci_status": "computed"
+        },
+        "reference_drop": {
+          "status": "computed",
+          "mean": 0.006647765412236806,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": -0.010852426219369368,
+          "ci_high": 0.026332472281582236,
+          "ci_status": "computed"
+        },
+        "canonical_drop": {
+          "status": "unavailable",
+          "reason": "no rows contain both 'ecapa_neutral' and 'canonical_ecapa'"
+        },
+        "pairwise_diversity": {
+          "status": "unavailable",
+          "reason": "no finite 'pairwise_diversity' values"
+        },
+        "passed": true,
+        "failures": []
+      },
+      "happy": {
+        "n": 108,
+        "ecapa_neutral": {
+          "status": "computed",
+          "mean": 0.8790542764796151,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": 0.8684011553724608,
+          "ci_high": 0.8902330622766856,
+          "ci_status": "computed"
+        },
+        "ecapa_reference": {
+          "status": "computed",
+          "mean": 0.19675677171390918,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": 0.15493544241137527,
+          "ci_high": 0.24006183250910704,
+          "ci_status": "computed"
+        },
+        "reference_drop": {
+          "status": "computed",
+          "mean": 0.0069869298625875416,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": -0.00832380765134951,
+          "ci_high": 0.021259022552382063,
+          "ci_status": "computed"
+        },
+        "canonical_drop": {
+          "status": "unavailable",
+          "reason": "no rows contain both 'ecapa_neutral' and 'canonical_ecapa'"
+        },
+        "pairwise_diversity": {
+          "status": "unavailable",
+          "reason": "no finite 'pairwise_diversity' values"
+        },
+        "passed": true,
+        "failures": []
+      },
+      "neutral": {
+        "n": 108,
+        "ecapa_neutral": {
+          "status": "computed",
+          "mean": 1.0,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "ci_status": "computed"
+        },
+        "ecapa_reference": {
+          "status": "computed",
+          "mean": 0.2037437015764967,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": 0.16583243976519615,
+          "ci_high": 0.24156645661288942,
+          "ci_status": "computed"
+        },
+        "reference_drop": {
+          "status": "not_applicable",
+          "reason": "neutral is the reference baseline",
+          "mean": 0.0,
+          "n": 108,
+          "n_speakers": 9,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "not_applicable"
+        },
+        "canonical_drop": {
+          "status": "unavailable",
+          "reason": "no rows contain both 'ecapa_neutral' and 'canonical_ecapa'"
+        },
+        "pairwise_diversity": {
+          "status": "unavailable",
+          "reason": "no finite 'pairwise_diversity' values"
+        },
+        "passed": true,
+        "failures": []
+      },
+      "sad": {
+        "n": 108,
+        "ecapa_neutral": {
+          "status": "computed",
+          "mean": 0.9066324454766733,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": 0.8955727034558852,
+          "ci_high": 0.9154823913618371,
+          "ci_status": "computed"
+        },
+        "ecapa_reference": {
+          "status": "computed",
+          "mean": 0.18464737238914328,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": 0.14000066479978462,
+          "ci_high": 0.2297086344811962,
+          "ci_status": "computed"
+        },
+        "reference_drop": {
+          "status": "computed",
+          "mean": 0.01909632918735345,
+          "n": 9,
+          "n_speakers": 9,
+          "ci_low": 0.005608565117991362,
+          "ci_high": 0.03556747224043918,
+          "ci_status": "computed"
+        },
+        "canonical_drop": {
+          "status": "unavailable",
+          "reason": "no rows contain both 'ecapa_neutral' and 'canonical_ecapa'"
+        },
+        "pairwise_diversity": {
+          "status": "unavailable",
+          "reason": "no finite 'pairwise_diversity' values"
+        },
+        "passed": true,
+        "failures": []
+      }
+    },
+    "neutral_sanity": {
+      "status": "computed",
+      "mean": 0.2037437015764967,
+      "threshold": 0.5,
+      "passed": false
+    },
+    "cfvn": {
+      "status": "not_applicable",
+      "reason": "this experiment is identity-conditioned and does not execute the face-to-voice CFVN",
+      "passed": true
+    },
+    "canonical_hashes": {
+      "status": "computed",
+      "passed": true,
+      "files": {
+        "cfvn": {
+          "path": "results/checkpoints/cfvn_v2_best.pt",
+          "expected_sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b",
+          "actual_sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b",
+          "match": true
+        },
+        "cvae": {
+          "path": "checkpoints/cvae_cfvn_face192_latent128_diversity.pt",
+          "expected_sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b",
+          "actual_sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b",
+          "match": true
+        },
+        "style_adapter": {
+          "path": "checkpoints/style_adapter_cfvn_best.pt",
+          "expected_sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+          "actual_sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+          "match": true
+        }
+      },
+      "missing": [],
+      "mismatched": []
+    },
+    "passed": true,
+    "failures": [],
+    "warnings": [
+      "generated neutral ECAPA reference 0.2037437015764967 is below 0.5; condition comparisons are relative only (domain shift)"
+    ]
+  },
+  "wer": {
+    "status": "unavailable",
+    "reason": "WER was not requested; pass --compute-wer",
+    "conditions": {},
+    "mean": null,
+    "worst": null
+  },
+  "unavailable": [
+    "human MOS",
+    "human emotion-identification",
+    "fear fixed delta",
+    "disgust fixed delta"
+  ],
+  "control_note": "Historical style-shuffled diagnostic: label/target pairs were reassigned to neutral styles, preserving the label-target association. Not a valid label-shuffled null."
+}

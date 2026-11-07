@@ -1,0 +1,301 @@
+{
+  "schema_version": "voix.crema_generation.v3",
+  "generated_at": "2026-10-29 14:43:38 UTC",
+  "level": "exploratory",
+  "condition": "learned_residual",
+  "scope": "Identity-conditioned CREMA-D evaluation. No face, CFVN, CVAE, or canonical face-to-voice style adapter is used. The identity base is the frozen StyleTTS2 style/predictor encoder applied to one real neutral clip per actor. The style residual is learned_residual.",
+  "manifest": "D:\\voix\\data\\processed\\crema_d_paired_eval_val.csv",
+  "manifest_sha256": "b782e6a5a9d3d5b88f669e5836803182573fac4df42bddc892fb8e42da6b6912",
+  "index": "results\\emotion\\e2_smoke\\generation_index.csv",
+  "index_sha256": "e1c6867160c89520d07c7451cb581344719c438d7ed4319366e760c4bd329c60",
+  "identity_style_source": "styletts2_style_encoder",
+  "residual_artifact": "checkpoints\\emotion_adapter\\e2_adapter_seed0.pt",
+  "residual_artifact_sha256": "b4e99ecc8178a3007361f1251fa23467933fdac30c01ea63600d86af8779e54a",
+  "residual_variant": "learned",
+  "residual_scale": 1.0,
+  "match_fixed_norm": false,
+  "adapter": {
+    "artifact": "checkpoints\\emotion_adapter\\e2_adapter_seed0.pt",
+    "artifact_sha256": "b4e99ecc8178a3007361f1251fa23467933fdac30c01ea63600d86af8779e54a",
+    "schema_version": "voix.emotion_adapter.v1",
+    "emotions": [
+      "neutral",
+      "happy",
+      "sad",
+      "angry",
+      "fear",
+      "disgust"
+    ],
+    "max_norm": 0.5,
+    "style_dim": 256,
+    "metadata": {
+      "level": "exploratory",
+      "role": "research_adapter_not_serving",
+      "run_id": "e2_adapter_seed0",
+      "manifest": "D:\\voix\\data\\processed\\crema_d_manifest.csv",
+      "manifest_sha256": "b4be4ccdbea18a29d18ca92e24c1c4bf007acd9444f5b77deca2a710023344e8",
+      "style_cache": "D:\\voix\\data\\processed\\crema_d_style_cache_train.npz",
+      "style_cache_sha256": "dc4d84e53ec80d588056bdcedd92abfe7977b1723dab080d8197a6eb262b5194",
+      "train_actors": [
+        "1001",
+        "1002",
+        "1003",
+        "1004",
+        "1005",
+        "1006",
+        "1007",
+        "1008",
+        "1009",
+        "1011",
+        "1012",
+        "1013",
+        "1015",
+        "1016",
+        "1017",
+        "1018",
+        "1021",
+        "1022",
+        "1023",
+        "1024",
+        "1025",
+        "1027",
+        "1029",
+        "1030",
+        "1031",
+        "1032",
+        "1033",
+        "1034",
+        "1035",
+        "1036",
+        "1038",
+        "1039",
+        "1041",
+        "1042",
+        "1043",
+        "1044",
+        "1046",
+        "1048",
+        "1049",
+        "1050",
+        "1052",
+        "1053",
+        "1054",
+        "1055",
+        "1056",
+        "1057",
+        "1058",
+        "1059",
+        "1060",
+        "1061",
+        "1062",
+        "1063",
+        "1064",
+        "1065",
+        "1066",
+        "1067",
+        "1068",
+        "1069",
+        "1070",
+        "1071",
+        "1073",
+        "1076",
+        "1077",
+        "1079",
+        "1080",
+        "1081",
+        "1082",
+        "1085",
+        "1086",
+        "1087",
+        "1088",
+        "1090",
+        "1091"
+      ],
+      "n_train_actors": 73,
+      "excluded_splits": [
+        "test",
+        "val"
+      ],
+      "excluded_actors": [
+        "1010",
+        "1014",
+        "1019",
+        "1020",
+        "1026",
+        "1028",
+        "1037",
+        "1040",
+        "1045",
+        "1047",
+        "1051",
+        "1072",
+        "1074",
+        "1075",
+        "1078",
+        "1083",
+        "1084",
+        "1089"
+      ],
+      "pairs": 4031,
+      "pairs_per_emotion": {
+        "angry": 628,
+        "disgust": 861,
+        "fear": 833,
+        "happy": 838,
+        "sad": 871
+      },
+      "best_epoch": 6,
+      "best_val_loss": 0.2422412782907486,
+      "val_metrics": {
+        "weighted_mse": 0.011561436578631401,
+        "cosine_mean": 0.5386403203010559,
+        "prediction_norm_mean": 0.5,
+        "target_norm_mean": 1.953504204750061,
+        "n": 601,
+        "per_emotion": {
+          "angry": {
+            "n": 87,
+            "cosine_mean": 0.6579349040985107,
+            "weighted_mse": 0.016536803916096687
+          },
+          "disgust": {
+            "n": 125,
+            "cosine_mean": 0.4612060487270355,
+            "weighted_mse": 0.008735074661672115
+          },
+          "fear": {
+            "n": 126,
+            "cosine_mean": 0.4965347647666931,
+            "weighted_mse": 0.014572412706911564
+          },
+          "happy": {
+            "n": 131,
+            "cosine_mean": 0.5795620083808899,
+            "weighted_mse": 0.013207051903009415
+          },
+          "sad": {
+            "n": 132,
+            "cosine_mean": 0.5329222679138184,
+            "weighted_mse": 0.0064514377154409885
+          }
+        }
+      },
+      "neutral_zero": {
+        "max_abs_error": 0.0,
+        "tolerance": 1e-07,
+        "passed": true,
+        "neutral_zero_exact": true,
+        "zero_intensity_exact": true,
+        "apply_zero_returns_same_object": true
+      },
+      "class_mean_baseline": "D:\\voix\\checkpoints\\emotion_residuals\\class_mean.pt",
+      "class_mean_baseline_sha256": "6bb4f17ff4bfaf4a9fe4b69514ba3b2e83f4dfe4c8a80f8706c9172cf4bb4408"
+    }
+  },
+  "fixed_delta_norms": {},
+  "mean_fixed_delta_norm": null,
+  "device": "cuda",
+  "seeds": [
+    0
+  ],
+  "diffusion_steps": 10,
+  "alpha": 0.18,
+  "beta": 0.22,
+  "duration_scale": 1.0,
+  "sample_rate": 24000,
+  "backend": "neural",
+  "emotions_requested": [
+    "happy",
+    "sad",
+    "angry",
+    "fear",
+    "disgust"
+  ],
+  "emotions_generated": [
+    "happy",
+    "sad",
+    "angry",
+    "fear",
+    "disgust"
+  ],
+  "emotions_unavailable": {},
+  "identity_styles": {
+    "1010": {
+      "clip_id": "1010_IWL_NEU_XX",
+      "path": "data\\raw\\crema_d\\AudioWAV\\1010_IWL_NEU_XX.wav",
+      "sha256": "2896ec8b9a4e5e7cabc7acd6483ad95076a76e0b36079e94940ab096488998de",
+      "norm": 3.579190731048584,
+      "source": "styletts2_style_encoder"
+    }
+  },
+  "counts": {
+    "learned_residual:angry": {
+      "rows": 1,
+      "actors": 1,
+      "pairs": 1,
+      "audio_seconds": 1.4721666666666666,
+      "mean_style_delta_l2": 0.4999999701976776,
+      "mean_generation_seconds": 0.387
+    },
+    "learned_residual:disgust": {
+      "rows": 1,
+      "actors": 1,
+      "pairs": 1,
+      "audio_seconds": 1.7479166666666666,
+      "mean_style_delta_l2": 0.4999999701976776,
+      "mean_generation_seconds": 0.325
+    },
+    "learned_residual:fear": {
+      "rows": 1,
+      "actors": 1,
+      "pairs": 1,
+      "audio_seconds": 1.6729166666666666,
+      "mean_style_delta_l2": 0.5000000596046448,
+      "mean_generation_seconds": 0.349
+    },
+    "learned_residual:happy": {
+      "rows": 1,
+      "actors": 1,
+      "pairs": 1,
+      "audio_seconds": 1.5160833333333332,
+      "mean_style_delta_l2": 0.4999999701976776,
+      "mean_generation_seconds": 0.59
+    },
+    "learned_residual:sad": {
+      "rows": 1,
+      "actors": 1,
+      "pairs": 1,
+      "audio_seconds": 2.049625,
+      "mean_style_delta_l2": 0.5,
+      "mean_generation_seconds": 0.417
+    },
+    "neutral:neutral": {
+      "rows": 1,
+      "actors": 1,
+      "pairs": 1,
+      "audio_seconds": 1.7479166666666666,
+      "mean_style_delta_l2": null,
+      "mean_generation_seconds": 1.631
+    }
+  },
+  "neutral_zero": {
+    "max_abs_error": 0.0,
+    "tolerance": 1e-07,
+    "passed": true,
+    "failures": []
+  },
+  "failures": [],
+  "elapsed_seconds": 3.81,
+  "notes": [
+    "Neutral is generated once per (actor, sentence, seed) and shared by emotion rows.",
+    "The learned-residual condition applies the E2 adapter prediction directly; the adapter output is hard-bounded at max_norm. This is a research artifact, not a serving checkpoint.",
+    "The learned residual is not rescaled; the adapter's max_norm is the bound.",
+    "Fear and disgust are available in the learned adapter artifact.",
+    "Fear/disgust use the neutral post-synthesis scalar profile; the learned style residual carries the emotion. The index records scalar_modifier_source for every row.",
+    "No human MOS is claimed; perceptual quality is unmeasured."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings were collected for this generation run"
+  }
+}

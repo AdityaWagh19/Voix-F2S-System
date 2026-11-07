@@ -1,0 +1,41 @@
+{
+  "schema_version": "voix.globe_accent_ssl_features.v1",
+  "generated_at": "2026-10-31 14:17:53 UTC",
+  "level": "exploratory",
+  "track": "accent",
+  "base_cache": "D:\\voix\\data\\processed\\globe_accent_features.npz",
+  "base_cache_sha256": "a3fe9569b64bee32304c1b8549559dd57dd9ca7f5a65181cea96dcbcb95e6d31",
+  "output": "data\\processed\\globe_accent_ssl_smoke_fixed.npz",
+  "output_sha256": "aaa01e48de49e187e7ae492c3d5ec55225d7d80faf1ab8263a746cd947dd11e9",
+  "clips": 8,
+  "speakers": 1,
+  "classes": [
+    "australian"
+  ],
+  "splits": [
+    "test"
+  ],
+  "base_dim": 222,
+  "ssl_dim": 768,
+  "combined_dim": 990,
+  "ssl_config": {
+    "bundle": "WAV2VEC2_BASE",
+    "num_layers": 8,
+    "sample_rate": 16000,
+    "max_seconds": 12.0,
+    "l2_normalize": true,
+    "pooling": "mean",
+    "feature_dim": 768
+  },
+  "failures": [],
+  "notes": [
+    "The Wav2Vec2 model is frozen; no fine-tuning was performed.",
+    "Mean pooling over layer-8 hidden states, L2-normalized per clip.",
+    "The combined cache is base features followed by SSL features.",
+    "Irish remains evaluation-only and is not a training class."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings collected"
+  }
+}

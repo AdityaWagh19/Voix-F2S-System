@@ -1,0 +1,14 @@
+{
+  "audio_id": "meeting_time_conversational_seed1",
+  "prompt_pair_id": "meeting_time",
+  "register": "conversational",
+  "seed": 1,
+  "text": "Hey, can we set up the meeting for tomorrow afternoon?",
+  "sample_rate": 24000,
+  "backend": "neural",
+  "watermark": false,
+  "style_embedding_sha256": "fe141be34d1e4d39aa1873d9f07909fc1bc5ff4a22ec4c713db18aabcbd4af5c",
+  "speaker_embedding_sha256": "e96d105f4bc8cf429a745755a8dd777c672adeae0aba9e35ade895dcf568bf99",
+  "diffusion_steps": 10,
+  "temperature": 0.85
+}

@@ -1,0 +1,385 @@
+{
+  "schema_version": "voix.emotion_classifier.v1",
+  "generated_at": "2026-10-28 09:38:19 UTC",
+  "manifest": "D:\\voix\\data\\processed\\crema_d_manifest.csv",
+  "model": "checkpoints\\emotion_classifier_crema_d_smoke.joblib",
+  "features_cache": "data\\processed\\crema_d_features_smoke.npz",
+  "feature_dim": 125,
+  "feature_names": [
+    "mfcc_0_mean",
+    "mfcc_1_mean",
+    "mfcc_2_mean",
+    "mfcc_3_mean",
+    "mfcc_4_mean",
+    "mfcc_5_mean",
+    "mfcc_6_mean",
+    "mfcc_7_mean",
+    "mfcc_8_mean",
+    "mfcc_9_mean",
+    "mfcc_10_mean",
+    "mfcc_11_mean",
+    "mfcc_12_mean",
+    "mfcc_13_mean",
+    "mfcc_14_mean",
+    "mfcc_15_mean",
+    "mfcc_16_mean",
+    "mfcc_17_mean",
+    "mfcc_18_mean",
+    "mfcc_19_mean",
+    "mfcc_0_std",
+    "mfcc_1_std",
+    "mfcc_2_std",
+    "mfcc_3_std",
+    "mfcc_4_std",
+    "mfcc_5_std",
+    "mfcc_6_std",
+    "mfcc_7_std",
+    "mfcc_8_std",
+    "mfcc_9_std",
+    "mfcc_10_std",
+    "mfcc_11_std",
+    "mfcc_12_std",
+    "mfcc_13_std",
+    "mfcc_14_std",
+    "mfcc_15_std",
+    "mfcc_16_std",
+    "mfcc_17_std",
+    "mfcc_18_std",
+    "mfcc_19_std",
+    "delta_mfcc_0_mean",
+    "delta_mfcc_1_mean",
+    "delta_mfcc_2_mean",
+    "delta_mfcc_3_mean",
+    "delta_mfcc_4_mean",
+    "delta_mfcc_5_mean",
+    "delta_mfcc_6_mean",
+    "delta_mfcc_7_mean",
+    "delta_mfcc_8_mean",
+    "delta_mfcc_9_mean",
+    "delta_mfcc_10_mean",
+    "delta_mfcc_11_mean",
+    "delta_mfcc_12_mean",
+    "delta_mfcc_13_mean",
+    "delta_mfcc_14_mean",
+    "delta_mfcc_15_mean",
+    "delta_mfcc_16_mean",
+    "delta_mfcc_17_mean",
+    "delta_mfcc_18_mean",
+    "delta_mfcc_19_mean",
+    "delta_mfcc_0_std",
+    "delta_mfcc_1_std",
+    "delta_mfcc_2_std",
+    "delta_mfcc_3_std",
+    "delta_mfcc_4_std",
+    "delta_mfcc_5_std",
+    "delta_mfcc_6_std",
+    "delta_mfcc_7_std",
+    "delta_mfcc_8_std",
+    "delta_mfcc_9_std",
+    "delta_mfcc_10_std",
+    "delta_mfcc_11_std",
+    "delta_mfcc_12_std",
+    "delta_mfcc_13_std",
+    "delta_mfcc_14_std",
+    "delta_mfcc_15_std",
+    "delta_mfcc_16_std",
+    "delta_mfcc_17_std",
+    "delta_mfcc_18_std",
+    "delta_mfcc_19_std",
+    "chroma_0_mean",
+    "chroma_1_mean",
+    "chroma_2_mean",
+    "chroma_3_mean",
+    "chroma_4_mean",
+    "chroma_5_mean",
+    "chroma_6_mean",
+    "chroma_7_mean",
+    "chroma_8_mean",
+    "chroma_9_mean",
+    "chroma_10_mean",
+    "chroma_11_mean",
+    "chroma_0_std",
+    "chroma_1_std",
+    "chroma_2_std",
+    "chroma_3_std",
+    "chroma_4_std",
+    "chroma_5_std",
+    "chroma_6_std",
+    "chroma_7_std",
+    "chroma_8_std",
+    "chroma_9_std",
+    "chroma_10_std",
+    "chroma_11_std",
+    "contrast_0_mean",
+    "contrast_1_mean",
+    "contrast_2_mean",
+    "contrast_3_mean",
+    "contrast_4_mean",
+    "contrast_5_mean",
+    "contrast_6_mean",
+    "contrast_0_std",
+    "contrast_1_std",
+    "contrast_2_std",
+    "contrast_3_std",
+    "contrast_4_std",
+    "contrast_5_std",
+    "contrast_6_std",
+    "zcr_mean",
+    "zcr_std",
+    "rms_mean",
+    "rms_std",
+    "f0_mean",
+    "f0_std",
+    "f0_voiced_ratio"
+  ],
+  "scope": "Pilot evaluation classifier for acted CREMA-D emotion. It is not a learned expression control.",
+  "control_training_eligible": false,
+  "curation_gate": {
+    "thresholds": {
+      "min_speakers_per_class": 30,
+      "min_hours_per_class": 2.0,
+      "max_min_class_ratio": 1.5,
+      "min_val_speakers": 5,
+      "min_test_speakers": 5,
+      "split_policy": "speaker-disjoint train/validation/test"
+    },
+    "pass": false,
+    "training_eligible": false,
+    "failures": [
+      "max/min hours ratio 1.521 > 1.500",
+      "neutral: 0.734h < 2.000h",
+      "happy: 0.789h < 2.000h",
+      "sad: 0.914h < 2.000h",
+      "angry: 0.633h < 2.000h",
+      "fear: 0.836h < 2.000h",
+      "disgust: 0.963h < 2.000h"
+    ]
+  },
+  "dataset": {
+    "clips": 144,
+    "speakers": 3,
+    "hours": 0.099
+  },
+  "best_params": {
+    "C": 10.0,
+    "gamma": 0.001
+  },
+  "selection": [
+    {
+      "params": {
+        "C": 1.0,
+        "gamma": "scale"
+      },
+      "val_accuracy": 0.25,
+      "val_macro_f1": 0.1572
+    },
+    {
+      "params": {
+        "C": 3.0,
+        "gamma": "scale"
+      },
+      "val_accuracy": 0.2292,
+      "val_macro_f1": 0.1489
+    },
+    {
+      "params": {
+        "C": 10.0,
+        "gamma": "scale"
+      },
+      "val_accuracy": 0.2292,
+      "val_macro_f1": 0.1489
+    },
+    {
+      "params": {
+        "C": 3.0,
+        "gamma": 0.01
+      },
+      "val_accuracy": 0.1667,
+      "val_macro_f1": 0.0485
+    },
+    {
+      "params": {
+        "C": 10.0,
+        "gamma": 0.001
+      },
+      "val_accuracy": 0.375,
+      "val_macro_f1": 0.3036
+    }
+  ],
+  "selection_metric": "val_macro_f1",
+  "test": {
+    "accuracy": 0.4167,
+    "macro_f1": 0.3817,
+    "weighted_f1": 0.3817,
+    "per_class": {
+      "angry": {
+        "precision": 0.7778,
+        "recall": 0.875,
+        "f1": 0.8235,
+        "support": 8
+      },
+      "disgust": {
+        "precision": 0.2609,
+        "recall": 0.75,
+        "f1": 0.3871,
+        "support": 8
+      },
+      "fear": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 8
+      },
+      "happy": {
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "support": 8
+      },
+      "neutral": {
+        "precision": 0.2727,
+        "recall": 0.375,
+        "f1": 0.3158,
+        "support": 8
+      },
+      "sad": {
+        "precision": 0.6667,
+        "recall": 0.25,
+        "f1": 0.3636,
+        "support": 8
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "angry",
+        "disgust",
+        "fear",
+        "happy",
+        "neutral",
+        "sad"
+      ],
+      "matrix": [
+        [
+          7,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          1,
+          5,
+          0,
+          0,
+          1,
+          1
+        ],
+        [
+          0,
+          4,
+          0,
+          2,
+          2,
+          0
+        ],
+        [
+          1,
+          4,
+          0,
+          0,
+          3,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          0,
+          3,
+          2
+        ]
+      ]
+    },
+    "n": 48
+  },
+  "majority_baseline_test_accuracy": 0.1667,
+  "test_predictions": [
+    "angry",
+    "angry",
+    "angry",
+    "disgust",
+    "angry",
+    "angry",
+    "angry",
+    "angry",
+    "disgust",
+    "disgust",
+    "disgust",
+    "disgust",
+    "disgust",
+    "disgust",
+    "neutral",
+    "neutral",
+    "disgust",
+    "disgust",
+    "sad",
+    "neutral",
+    "angry",
+    "disgust",
+    "disgust",
+    "disgust",
+    "disgust",
+    "disgust",
+    "disgust",
+    "happy",
+    "disgust",
+    "neutral",
+    "happy",
+    "neutral",
+    "disgust",
+    "disgust",
+    "neutral",
+    "disgust",
+    "neutral",
+    "angry",
+    "disgust",
+    "neutral",
+    "disgust",
+    "neutral",
+    "disgust",
+    "sad",
+    "neutral",
+    "disgust",
+    "neutral",
+    "sad"
+  ],
+  "split_counts": {
+    "train": 48,
+    "val": 48,
+    "test": 48
+  },
+  "split_speakers": {
+    "train": 1,
+    "val": 1,
+    "test": 1
+  },
+  "notes": [
+    "Speaker-disjoint train/validation/test splits; test is evaluated once.",
+    "CREMA-D is acted speech and about 0.88 h/emotion, so this is a pilot classifier, not a production control.",
+    "Metrics are measured on held-out speakers; no human MOS is claimed.",
+    "Cross-corpus generalization is untested and reported as unavailable."
+  ],
+  "unavailable": [
+    "human MOS",
+    "cross-corpus generalization"
+  ]
+}

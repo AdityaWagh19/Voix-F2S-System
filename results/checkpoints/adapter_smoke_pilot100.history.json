@@ -1,0 +1,30 @@
+{
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.7040403513212177,
+      "val_loss": 0.8971648812294006,
+      "val_loss_timbre_mse": 0.11780760437250137,
+      "val_loss_prosody_mse": 0.111138254404068,
+      "val_loss_timbre_cos": 0.2917976975440979,
+      "val_loss_prosody_cos": 0.37642133235931396,
+      "val_cosine_timbre": 0.7082023024559021,
+      "val_cosine_prosody": 0.623578667640686,
+      "val_output_within_cosine": 0.8185588717460632,
+      "val_output_across_cosine": 0.7786620259284973,
+      "val_output_identity_margin": 0.03989684581756592,
+      "val_output_per_dim_std": 0.028416618704795837,
+      "best": true
+    }
+  ],
+  "best_epoch": 1,
+  "best_val_loss": 0.8971648812294006,
+  "style_match": {
+    "style_match_cosine_mean": 0.22211266443133354,
+    "style_match_cosine_min": 0.11092397570610046,
+    "style_match_cosine_max": 0.4723844826221466,
+    "style_match_speakers": 100
+  },
+  "style_targets_speaker_disjoint": false,
+  "elapsed_sec": 0.25652050971984863
+}

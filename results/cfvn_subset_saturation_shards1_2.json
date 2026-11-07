@@ -1,0 +1,57 @@
+{
+  "features": "data\\processed\\voxceleb2_v2\\features_v2_shards1_2.h5",
+  "index": "data\\processed\\voxceleb2_v2\\index.csv",
+  "face_key": "face_features",
+  "epochs": 12,
+  "seed": 42,
+  "results": [
+    {
+      "fraction": 0.25,
+      "train_speakers": 500,
+      "train_clips": 2971,
+      "val_r1": 0.03862661123275757,
+      "val_r10": 0.11587982624769211,
+      "val_chance_r1": 0.004291845493562232,
+      "val_chance_multiple": 9.000000417232513,
+      "val_gender_controlled_r1": 0.03862660944206009,
+      "val_gender_controlled_chance_r1": 0.008583690987124463,
+      "cfvn_face_face_r1": 0.8798283338546753,
+      "raw_face_face_r1": 0.8755365014076233,
+      "within_speaker_cosine": 0.5929297208786011,
+      "between_speaker_cosine": 0.21956400573253632,
+      "seconds": 10.4
+    },
+    {
+      "fraction": 0.5,
+      "train_speakers": 1000,
+      "train_clips": 5930,
+      "val_r1": 0.042918454855680466,
+      "val_r10": 0.21030043065547943,
+      "val_chance_r1": 0.004291845493562232,
+      "val_chance_multiple": 9.999999981373549,
+      "val_gender_controlled_r1": 0.04721030042918455,
+      "val_gender_controlled_chance_r1": 0.008583690987124463,
+      "cfvn_face_face_r1": 0.8798283338546753,
+      "raw_face_face_r1": 0.8755365014076233,
+      "within_speaker_cosine": 0.6057525873184204,
+      "between_speaker_cosine": 0.2313094288110733,
+      "seconds": 9.0
+    },
+    {
+      "fraction": 1.0,
+      "train_speakers": 2000,
+      "train_clips": 11837,
+      "val_r1": 0.03433476388454437,
+      "val_r10": 0.21459227800369263,
+      "val_chance_r1": 0.004291845493562232,
+      "val_chance_multiple": 7.999999985098839,
+      "val_gender_controlled_r1": 0.03862660944206009,
+      "val_gender_controlled_chance_r1": 0.008583690987124463,
+      "cfvn_face_face_r1": 0.8798283338546753,
+      "raw_face_face_r1": 0.8755365014076233,
+      "within_speaker_cosine": 0.6406052112579346,
+      "between_speaker_cosine": 0.26265090703964233,
+      "seconds": 12.5
+    }
+  ]
+}

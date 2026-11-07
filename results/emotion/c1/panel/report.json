@@ -1,0 +1,1423 @@
+{
+  "schema_version": "voix.evaluation.panel.v1",
+  "created_at": "2026-11-07 12:52:36 UTC",
+  "role": "independent_external_evaluation",
+  "controls_synthesis": false,
+  "command": "python.exe scripts/evaluation/evaluate_panel.py --demo results/emotion/c1 --output-dir results/emotion/c1/panel --evaluators superb_er emotion2vec --n-resamples 10000 --batch-size 8 --device cuda",
+  "config": {
+    "evaluators": [
+      "superb_er",
+      "emotion2vec"
+    ],
+    "seed": 0,
+    "train_per_class": 80,
+    "max_test_per_class": 0,
+    "n_resamples": 10000,
+    "domain_shift_threshold": 3.0,
+    "batch_size": 8,
+    "device_requested": "cuda",
+    "device_resolved": "cuda",
+    "model_cache_dir": "D:\\voix\\checkpoints\\models"
+  },
+  "environment": {
+    "python": "3.12.1",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "torch": "2.4.1+cu121",
+    "numpy": "1.26.4",
+    "sklearn": "1.3.2",
+    "transformers": "4.40.2",
+    "device": "cuda",
+    "cuda_available": true,
+    "speechbrain": "1.1.1",
+    "huggingface_hub": "0.36.2",
+    "funasr": "1.0.27",
+    "modelscope": "1.38.1",
+    "gpu": "NVIDIA GeForce GTX 1650"
+  },
+  "inputs": {
+    "accent_train": {
+      "dataset": "GLOBE",
+      "manifest": "D:\\voix\\data\\processed\\globe_accent_manifest.csv",
+      "audio_root": "D:\\voix\\data\\processed\\globe_audio",
+      "speaker_split": "train",
+      "source_rows": 8438,
+      "target_class_rows": 6096,
+      "missing_audio": 0,
+      "missing_by_class": {},
+      "n_selected": 320,
+      "n_speakers": 223,
+      "class_counts": {
+        "australian": 80,
+        "england": 80,
+        "indian_english": 80,
+        "us": 80
+      },
+      "sampling_seed": 0,
+      "max_per_class": 80
+    },
+    "accent_test": {
+      "dataset": "GLOBE",
+      "manifest": "D:\\voix\\data\\processed\\globe_accent_manifest.csv",
+      "audio_root": "D:\\voix\\data\\processed\\globe_audio",
+      "speaker_split": "test",
+      "source_rows": 674,
+      "target_class_rows": 449,
+      "missing_audio": 0,
+      "missing_by_class": {},
+      "n_selected": 449,
+      "n_speakers": 36,
+      "class_counts": {
+        "australian": 159,
+        "england": 69,
+        "indian_english": 101,
+        "us": 120
+      },
+      "sampling_seed": 1,
+      "max_per_class": 0
+    },
+    "emotion_train": {
+      "dataset": "CREMA-D",
+      "manifest": "D:\\voix\\data\\processed\\crema_d_manifest.csv",
+      "split": "train",
+      "source_rows": 5499,
+      "target_class_rows": 3550,
+      "missing_audio": 0,
+      "missing_by_class": {},
+      "n_selected": 320,
+      "n_speakers": 73,
+      "class_counts": {
+        "angry": 80,
+        "happy": 80,
+        "neutral": 80,
+        "sad": 80
+      },
+      "sampling_seed": 0,
+      "max_per_class": 80,
+      "excluded_classes": [
+        "fear",
+        "disgust"
+      ]
+    },
+    "emotion_test": {
+      "dataset": "CREMA-D",
+      "manifest": "D:\\voix\\data\\processed\\crema_d_manifest.csv",
+      "split": "test",
+      "source_rows": 699,
+      "target_class_rows": 455,
+      "missing_audio": 0,
+      "missing_by_class": {},
+      "n_selected": 455,
+      "n_speakers": 9,
+      "class_counts": {
+        "angry": 101,
+        "happy": 122,
+        "neutral": 107,
+        "sad": 125
+      },
+      "sampling_seed": 1,
+      "max_per_class": 0,
+      "excluded_classes": [
+        "fear",
+        "disgust"
+      ]
+    },
+    "generated": {
+      "dataset": "generated_demo",
+      "demo_dir": "results\\emotion\\c1",
+      "index": "results\\emotion\\c1\\index.csv",
+      "n_index_rows": 12,
+      "n_selected": 12,
+      "missing_audio": 0,
+      "missing_paths": [],
+      "voices": [
+        "C1_02",
+        "C2_09",
+        "C2_12"
+      ],
+      "tracks": {
+        "baseline": 3,
+        "emotion": 9
+      }
+    },
+    "generated_accent": {
+      "task": "accent",
+      "n": 0,
+      "n_voices": 0,
+      "voices": [],
+      "labels": [],
+      "missing_labels": [
+        "us",
+        "england",
+        "indian_english",
+        "australian"
+      ],
+      "class_counts": {}
+    },
+    "generated_emotion": {
+      "task": "emotion",
+      "n": 12,
+      "n_voices": 3,
+      "voices": [
+        "C1_02",
+        "C2_09",
+        "C2_12"
+      ],
+      "labels": [
+        "neutral",
+        "happy",
+        "sad",
+        "angry"
+      ],
+      "missing_labels": [],
+      "class_counts": {
+        "angry": 3,
+        "happy": 3,
+        "neutral": 3,
+        "sad": 3
+      }
+    }
+  },
+  "datasets": {
+    "globe": {
+      "path": "D:\\voix\\data\\processed\\globe_accent_manifest.csv",
+      "status": "present",
+      "size_bytes": 3775210,
+      "sha256": "eb02cccebb7ff716216d5f80f8756d355fbfab323046e612b76533592630bba0"
+    },
+    "crema_d": {
+      "path": "D:\\voix\\data\\processed\\crema_d_manifest.csv",
+      "status": "present",
+      "size_bytes": 1269074,
+      "sha256": "b4be4ccdbea18a29d18ca92e24c1c4bf007acd9444f5b77deca2a710023344e8"
+    },
+    "demo_index": {
+      "path": "results\\emotion\\c1\\index.csv",
+      "status": "present",
+      "size_bytes": 10164,
+      "sha256": "1371d7bf778e95cba4a85bb058117b4c8c6ec4e033ab5e4745e6011e6b990ada"
+    },
+    "demo_report": {
+      "path": "results\\emotion\\c1\\report.json",
+      "status": "present",
+      "size_bytes": 109689,
+      "sha256": "70260bbaeb06aa04ec6f34bc5635254f041609576f27eef2b5ee0b0de07e6387"
+    }
+  },
+  "evaluators": {
+    "superb_er": {
+      "status": "computed",
+      "task": "emotion",
+      "model": {
+        "id": "superb/wav2vec2-base-superb-er",
+        "role": "evaluation_only",
+        "controls_synthesis": false,
+        "feature_kind": "embedding",
+        "feature_dim": 768,
+        "artifacts": [
+          {
+            "path": "D:\\voix\\checkpoints\\models\\superb_wav2vec2-base-superb-er\\config.json",
+            "status": "present",
+            "size_bytes": 2153,
+            "sha256": "631bd282ad58492a69cf870c2917bae90ef963079ed2d6e0611eee9e40a19894"
+          },
+          {
+            "path": "D:\\voix\\checkpoints\\models\\superb_wav2vec2-base-superb-er\\preprocessor_config.json",
+            "status": "present",
+            "size_bytes": 215,
+            "sha256": "99272fe8ccfab114b68b478681ea47ee3a1ce62bb788cb92dd6e4f69fb1f1da2"
+          },
+          {
+            "path": "D:\\voix\\checkpoints\\models\\superb_wav2vec2-base-superb-er\\pytorch_model.bin",
+            "status": "present",
+            "size_bytes": 378361105,
+            "sha256": null,
+            "sha256_note": "skipped for files larger than 128 MiB"
+          }
+        ]
+      },
+      "input_counts": {
+        "train": 320,
+        "real": 455,
+        "generated": 12
+      },
+      "real": {
+        "status": "computed",
+        "n": 455,
+        "n_speakers": 9,
+        "accuracy": 0.43956043956043955,
+        "macro_f1": 0.3775156912143295,
+        "per_class": {
+          "neutral": {
+            "precision": 0.5555555555555556,
+            "recall": 0.14018691588785046,
+            "f1": 0.22388059701492535,
+            "support": 107
+          },
+          "happy": {
+            "precision": 0.21052631578947367,
+            "recall": 0.03278688524590164,
+            "f1": 0.056737588652482275,
+            "support": 122
+          },
+          "sad": {
+            "precision": 0.8913043478260869,
+            "recall": 0.656,
+            "f1": 0.7557603686635944,
+            "support": 125
+          },
+          "angry": {
+            "precision": 0.31230283911671924,
+            "recall": 0.9801980198019802,
+            "f1": 0.4736842105263158,
+            "support": 101
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "neutral",
+            "happy",
+            "sad",
+            "angry"
+          ],
+          "matrix": [
+            [
+              15,
+              5,
+              10,
+              77
+            ],
+            [
+              3,
+              4,
+              0,
+              115
+            ],
+            [
+              9,
+              8,
+              82,
+              26
+            ],
+            [
+              0,
+              2,
+              0,
+              99
+            ]
+          ]
+        },
+        "speaker_cluster_ci": {
+          "status": "computed",
+          "accuracy_low": 0.35280898876404493,
+          "accuracy_high": 0.5164835164835165,
+          "confidence": 0.95,
+          "n_resamples": 10000,
+          "seed": 0
+        },
+        "predicted_counts": {
+          "angry": 317,
+          "happy": 19,
+          "neutral": 27,
+          "sad": 92
+        },
+        "n_distinct_predictions": 4,
+        "majority_prediction_fraction": 0.6967032967032967,
+        "out_of_scope_predictions": 0,
+        "out_of_scope_rate": 0.0,
+        "majority_baseline": {
+          "label": "angry",
+          "accuracy": 0.22197802197802197,
+          "train_support": 80
+        }
+      },
+      "generated": {
+        "status": "computed",
+        "n": 12,
+        "n_speakers": 3,
+        "accuracy": 0.5,
+        "macro_f1": 0.4363636363636364,
+        "per_class": {
+          "neutral": {
+            "precision": 0.5,
+            "recall": 0.3333333333333333,
+            "f1": 0.4,
+            "support": 3
+          },
+          "happy": {
+            "precision": 0.375,
+            "recall": 1.0,
+            "f1": 0.5454545454545454,
+            "support": 3
+          },
+          "sad": {
+            "precision": 1.0,
+            "recall": 0.6666666666666666,
+            "f1": 0.8,
+            "support": 3
+          },
+          "angry": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "neutral",
+            "happy",
+            "sad",
+            "angry"
+          ],
+          "matrix": [
+            [
+              1,
+              2,
+              0,
+              0
+            ],
+            [
+              0,
+              3,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              2,
+              0
+            ],
+            [
+              1,
+              2,
+              0,
+              0
+            ]
+          ]
+        },
+        "speaker_cluster_ci": {
+          "status": "computed",
+          "accuracy_low": 0.25,
+          "accuracy_high": 0.75,
+          "confidence": 0.95,
+          "n_resamples": 10000,
+          "seed": 2
+        },
+        "predicted_counts": {
+          "happy": 8,
+          "neutral": 2,
+          "sad": 2
+        },
+        "n_distinct_predictions": 3,
+        "majority_prediction_fraction": 0.6666666666666666,
+        "out_of_scope_predictions": 0,
+        "out_of_scope_rate": 0.0
+      },
+      "domain_shift": {
+        "status": "computed",
+        "standardized_centroid_distance": 41.024748788359595,
+        "real_val_spread": 25.788384916451317,
+        "ratio": 1.5908227258616907,
+        "threshold": 3.0,
+        "valid": true,
+        "reason": "generated features are within the real-speech spread",
+        "train_rows": 320,
+        "real_rows": 455,
+        "generated_rows": 12,
+        "feature_kind": "embedding",
+        "feature_dim": 768
+      },
+      "summary": {
+        "evaluator": "superb_er",
+        "task": "emotion",
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry"
+        ],
+        "panel_valid": true,
+        "gate": {
+          "valid": true,
+          "reasons": [],
+          "chance_accuracy": 0.25,
+          "minimum_real_accuracy": 0.35,
+          "domain_shift_threshold": 3.0,
+          "n_resamples": 10000
+        },
+        "real": {
+          "accuracy": 0.43956043956043955,
+          "macro_f1": 0.3775156912143295,
+          "n": 455,
+          "n_speakers": 9,
+          "speaker_cluster_ci": {
+            "status": "computed",
+            "accuracy_low": 0.35280898876404493,
+            "accuracy_high": 0.5164835164835165,
+            "confidence": 0.95,
+            "n_resamples": 10000,
+            "seed": 0
+          },
+          "per_class": {
+            "neutral": {
+              "precision": 0.5555555555555556,
+              "recall": 0.14018691588785046,
+              "f1": 0.22388059701492535,
+              "support": 107
+            },
+            "happy": {
+              "precision": 0.21052631578947367,
+              "recall": 0.03278688524590164,
+              "f1": 0.056737588652482275,
+              "support": 122
+            },
+            "sad": {
+              "precision": 0.8913043478260869,
+              "recall": 0.656,
+              "f1": 0.7557603686635944,
+              "support": 125
+            },
+            "angry": {
+              "precision": 0.31230283911671924,
+              "recall": 0.9801980198019802,
+              "f1": 0.4736842105263158,
+              "support": 101
+            }
+          },
+          "confusion_matrix": {
+            "labels": [
+              "neutral",
+              "happy",
+              "sad",
+              "angry"
+            ],
+            "matrix": [
+              [
+                15,
+                5,
+                10,
+                77
+              ],
+              [
+                3,
+                4,
+                0,
+                115
+              ],
+              [
+                9,
+                8,
+                82,
+                26
+              ],
+              [
+                0,
+                2,
+                0,
+                99
+              ]
+            ]
+          },
+          "predicted_counts": {
+            "angry": 317,
+            "happy": 19,
+            "neutral": 27,
+            "sad": 92
+          },
+          "out_of_scope_predictions": 0
+        },
+        "domain_shift": {
+          "status": "computed",
+          "standardized_centroid_distance": 41.024748788359595,
+          "real_val_spread": 25.788384916451317,
+          "ratio": 1.5908227258616907,
+          "threshold": 3.0,
+          "valid": true,
+          "reason": "generated features are within the real-speech spread",
+          "train_rows": 320,
+          "real_rows": 455,
+          "generated_rows": 12,
+          "feature_kind": "embedding",
+          "feature_dim": 768
+        },
+        "generated": {
+          "accuracy": 0.5,
+          "macro_f1": 0.4363636363636364,
+          "n": 12,
+          "n_speakers": 3,
+          "per_class": {
+            "neutral": {
+              "precision": 0.5,
+              "recall": 0.3333333333333333,
+              "f1": 0.4,
+              "support": 3
+            },
+            "happy": {
+              "precision": 0.375,
+              "recall": 1.0,
+              "f1": 0.5454545454545454,
+              "support": 3
+            },
+            "sad": {
+              "precision": 1.0,
+              "recall": 0.6666666666666666,
+              "f1": 0.8,
+              "support": 3
+            },
+            "angry": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "support": 3
+            }
+          },
+          "confusion_matrix": {
+            "labels": [
+              "neutral",
+              "happy",
+              "sad",
+              "angry"
+            ],
+            "matrix": [
+              [
+                1,
+                2,
+                0,
+                0
+              ],
+              [
+                0,
+                3,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                2,
+                0
+              ],
+              [
+                1,
+                2,
+                0,
+                0
+              ]
+            ]
+          },
+          "predicted_counts": {
+            "happy": 8,
+            "neutral": 2,
+            "sad": 2
+          },
+          "out_of_scope_predictions": 0,
+          "majority_prediction_fraction": 0.6666666666666666
+        },
+        "interpretation": "The evaluator passed its real-speech and domain-shift gates. Generated accuracy is a measurable external-classifier result, not a human perceptual result."
+      }
+    },
+    "emotion2vec": {
+      "status": "computed",
+      "task": "emotion",
+      "model": {
+        "id": "emotion2vec/emotion2vec_plus_large",
+        "role": "evaluation_only",
+        "controls_synthesis": false,
+        "feature_kind": "embedding",
+        "feature_dim": 1024,
+        "artifacts": [
+          {
+            "path": "D:\\voix\\checkpoints\\models\\emotion2vec_plus_large\\config.yaml",
+            "status": "present",
+            "size_bytes": 5552,
+            "sha256": "f4fa0eb82cc78bfebb43c56d68791afb01788085a18897d20999af7bc45d51d3"
+          },
+          {
+            "path": "D:\\voix\\checkpoints\\models\\emotion2vec_plus_large\\configuration.json",
+            "status": "present",
+            "size_bytes": 343,
+            "sha256": "8b6a745213025c7d4565f9f074cfef1b5cd5ef76e38e2a8f7f8a3db271e735b2"
+          },
+          {
+            "path": "D:\\voix\\checkpoints\\models\\emotion2vec_plus_large\\model.pt",
+            "status": "present",
+            "size_bytes": 1945790254,
+            "sha256": null,
+            "sha256_note": "skipped for files larger than 128 MiB"
+          }
+        ]
+      },
+      "input_counts": {
+        "train": 320,
+        "real": 455,
+        "generated": 12
+      },
+      "real": {
+        "status": "computed",
+        "n": 455,
+        "n_speakers": 9,
+        "accuracy": 0.9098901098901099,
+        "macro_f1": 0.9318181581737375,
+        "per_class": {
+          "neutral": {
+            "precision": 0.9272727272727272,
+            "recall": 0.9532710280373832,
+            "f1": 0.9400921658986175,
+            "support": 107
+          },
+          "happy": {
+            "precision": 0.9344262295081968,
+            "recall": 0.9344262295081968,
+            "f1": 0.9344262295081968,
+            "support": 122
+          },
+          "sad": {
+            "precision": 0.972972972972973,
+            "recall": 0.864,
+            "f1": 0.9152542372881355,
+            "support": 125
+          },
+          "angry": {
+            "precision": 0.989010989010989,
+            "recall": 0.8910891089108911,
+            "f1": 0.9375,
+            "support": 101
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "neutral",
+            "happy",
+            "sad",
+            "angry"
+          ],
+          "matrix": [
+            [
+              102,
+              2,
+              2,
+              0
+            ],
+            [
+              4,
+              114,
+              1,
+              1
+            ],
+            [
+              0,
+              6,
+              108,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              90
+            ]
+          ]
+        },
+        "speaker_cluster_ci": {
+          "status": "computed",
+          "accuracy_low": 0.8611682783292733,
+          "accuracy_high": 0.9474835886214442,
+          "confidence": 0.95,
+          "n_resamples": 10000,
+          "seed": 0
+        },
+        "predicted_counts": {
+          "angry": 91,
+          "disgusted": 12,
+          "fearful": 9,
+          "happy": 122,
+          "neutral": 110,
+          "sad": 111
+        },
+        "n_distinct_predictions": 6,
+        "majority_prediction_fraction": 0.2681318681318681,
+        "out_of_scope_predictions": 0,
+        "out_of_scope_rate": 0.0,
+        "majority_baseline": {
+          "label": "angry",
+          "accuracy": 0.22197802197802197,
+          "train_support": 80
+        }
+      },
+      "generated": {
+        "status": "computed",
+        "n": 12,
+        "n_speakers": 3,
+        "accuracy": 0.25,
+        "macro_f1": 0.1,
+        "per_class": {
+          "neutral": {
+            "precision": 0.25,
+            "recall": 1.0,
+            "f1": 0.4,
+            "support": 3
+          },
+          "happy": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "sad": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "angry": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "neutral",
+            "happy",
+            "sad",
+            "angry"
+          ],
+          "matrix": [
+            [
+              3,
+              0,
+              0,
+              0
+            ],
+            [
+              3,
+              0,
+              0,
+              0
+            ],
+            [
+              3,
+              0,
+              0,
+              0
+            ],
+            [
+              3,
+              0,
+              0,
+              0
+            ]
+          ]
+        },
+        "speaker_cluster_ci": {
+          "status": "computed",
+          "accuracy_low": 0.25,
+          "accuracy_high": 0.25,
+          "confidence": 0.95,
+          "n_resamples": 10000,
+          "seed": 2
+        },
+        "predicted_counts": {
+          "neutral": 12
+        },
+        "n_distinct_predictions": 1,
+        "majority_prediction_fraction": 1.0,
+        "out_of_scope_predictions": 0,
+        "out_of_scope_rate": 0.0
+      },
+      "domain_shift": {
+        "status": "computed",
+        "standardized_centroid_distance": 27.86923229807996,
+        "real_val_spread": 33.091953274234825,
+        "ratio": 0.8421755001019767,
+        "threshold": 3.0,
+        "valid": true,
+        "reason": "generated features are within the real-speech spread",
+        "train_rows": 320,
+        "real_rows": 455,
+        "generated_rows": 12,
+        "feature_kind": "embedding",
+        "feature_dim": 1024
+      },
+      "summary": {
+        "evaluator": "emotion2vec",
+        "task": "emotion",
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry"
+        ],
+        "panel_valid": true,
+        "gate": {
+          "valid": true,
+          "reasons": [],
+          "chance_accuracy": 0.25,
+          "minimum_real_accuracy": 0.35,
+          "domain_shift_threshold": 3.0,
+          "n_resamples": 10000
+        },
+        "real": {
+          "accuracy": 0.9098901098901099,
+          "macro_f1": 0.9318181581737375,
+          "n": 455,
+          "n_speakers": 9,
+          "speaker_cluster_ci": {
+            "status": "computed",
+            "accuracy_low": 0.8611682783292733,
+            "accuracy_high": 0.9474835886214442,
+            "confidence": 0.95,
+            "n_resamples": 10000,
+            "seed": 0
+          },
+          "per_class": {
+            "neutral": {
+              "precision": 0.9272727272727272,
+              "recall": 0.9532710280373832,
+              "f1": 0.9400921658986175,
+              "support": 107
+            },
+            "happy": {
+              "precision": 0.9344262295081968,
+              "recall": 0.9344262295081968,
+              "f1": 0.9344262295081968,
+              "support": 122
+            },
+            "sad": {
+              "precision": 0.972972972972973,
+              "recall": 0.864,
+              "f1": 0.9152542372881355,
+              "support": 125
+            },
+            "angry": {
+              "precision": 0.989010989010989,
+              "recall": 0.8910891089108911,
+              "f1": 0.9375,
+              "support": 101
+            }
+          },
+          "confusion_matrix": {
+            "labels": [
+              "neutral",
+              "happy",
+              "sad",
+              "angry"
+            ],
+            "matrix": [
+              [
+                102,
+                2,
+                2,
+                0
+              ],
+              [
+                4,
+                114,
+                1,
+                1
+              ],
+              [
+                0,
+                6,
+                108,
+                0
+              ],
+              [
+                4,
+                0,
+                0,
+                90
+              ]
+            ]
+          },
+          "predicted_counts": {
+            "angry": 91,
+            "disgusted": 12,
+            "fearful": 9,
+            "happy": 122,
+            "neutral": 110,
+            "sad": 111
+          },
+          "out_of_scope_predictions": 0
+        },
+        "domain_shift": {
+          "status": "computed",
+          "standardized_centroid_distance": 27.86923229807996,
+          "real_val_spread": 33.091953274234825,
+          "ratio": 0.8421755001019767,
+          "threshold": 3.0,
+          "valid": true,
+          "reason": "generated features are within the real-speech spread",
+          "train_rows": 320,
+          "real_rows": 455,
+          "generated_rows": 12,
+          "feature_kind": "embedding",
+          "feature_dim": 1024
+        },
+        "generated": {
+          "accuracy": 0.25,
+          "macro_f1": 0.1,
+          "n": 12,
+          "n_speakers": 3,
+          "per_class": {
+            "neutral": {
+              "precision": 0.25,
+              "recall": 1.0,
+              "f1": 0.4,
+              "support": 3
+            },
+            "happy": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "support": 3
+            },
+            "sad": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "support": 3
+            },
+            "angry": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0,
+              "support": 3
+            }
+          },
+          "confusion_matrix": {
+            "labels": [
+              "neutral",
+              "happy",
+              "sad",
+              "angry"
+            ],
+            "matrix": [
+              [
+                3,
+                0,
+                0,
+                0
+              ],
+              [
+                3,
+                0,
+                0,
+                0
+              ],
+              [
+                3,
+                0,
+                0,
+                0
+              ],
+              [
+                3,
+                0,
+                0,
+                0
+              ]
+            ]
+          },
+          "predicted_counts": {
+            "neutral": 12
+          },
+          "out_of_scope_predictions": 0,
+          "majority_prediction_fraction": 1.0
+        },
+        "interpretation": "The evaluator passed its real-speech and domain-shift gates. Generated accuracy is a measurable external-classifier result, not a human perceptual result."
+      }
+    }
+  },
+  "summary": {
+    "superb_er": {
+      "evaluator": "superb_er",
+      "task": "emotion",
+      "labels": [
+        "neutral",
+        "happy",
+        "sad",
+        "angry"
+      ],
+      "panel_valid": true,
+      "gate": {
+        "valid": true,
+        "reasons": [],
+        "chance_accuracy": 0.25,
+        "minimum_real_accuracy": 0.35,
+        "domain_shift_threshold": 3.0,
+        "n_resamples": 10000
+      },
+      "real": {
+        "accuracy": 0.43956043956043955,
+        "macro_f1": 0.3775156912143295,
+        "n": 455,
+        "n_speakers": 9,
+        "speaker_cluster_ci": {
+          "status": "computed",
+          "accuracy_low": 0.35280898876404493,
+          "accuracy_high": 0.5164835164835165,
+          "confidence": 0.95,
+          "n_resamples": 10000,
+          "seed": 0
+        },
+        "per_class": {
+          "neutral": {
+            "precision": 0.5555555555555556,
+            "recall": 0.14018691588785046,
+            "f1": 0.22388059701492535,
+            "support": 107
+          },
+          "happy": {
+            "precision": 0.21052631578947367,
+            "recall": 0.03278688524590164,
+            "f1": 0.056737588652482275,
+            "support": 122
+          },
+          "sad": {
+            "precision": 0.8913043478260869,
+            "recall": 0.656,
+            "f1": 0.7557603686635944,
+            "support": 125
+          },
+          "angry": {
+            "precision": 0.31230283911671924,
+            "recall": 0.9801980198019802,
+            "f1": 0.4736842105263158,
+            "support": 101
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "neutral",
+            "happy",
+            "sad",
+            "angry"
+          ],
+          "matrix": [
+            [
+              15,
+              5,
+              10,
+              77
+            ],
+            [
+              3,
+              4,
+              0,
+              115
+            ],
+            [
+              9,
+              8,
+              82,
+              26
+            ],
+            [
+              0,
+              2,
+              0,
+              99
+            ]
+          ]
+        },
+        "predicted_counts": {
+          "angry": 317,
+          "happy": 19,
+          "neutral": 27,
+          "sad": 92
+        },
+        "out_of_scope_predictions": 0
+      },
+      "domain_shift": {
+        "status": "computed",
+        "standardized_centroid_distance": 41.024748788359595,
+        "real_val_spread": 25.788384916451317,
+        "ratio": 1.5908227258616907,
+        "threshold": 3.0,
+        "valid": true,
+        "reason": "generated features are within the real-speech spread",
+        "train_rows": 320,
+        "real_rows": 455,
+        "generated_rows": 12,
+        "feature_kind": "embedding",
+        "feature_dim": 768
+      },
+      "generated": {
+        "accuracy": 0.5,
+        "macro_f1": 0.4363636363636364,
+        "n": 12,
+        "n_speakers": 3,
+        "per_class": {
+          "neutral": {
+            "precision": 0.5,
+            "recall": 0.3333333333333333,
+            "f1": 0.4,
+            "support": 3
+          },
+          "happy": {
+            "precision": 0.375,
+            "recall": 1.0,
+            "f1": 0.5454545454545454,
+            "support": 3
+          },
+          "sad": {
+            "precision": 1.0,
+            "recall": 0.6666666666666666,
+            "f1": 0.8,
+            "support": 3
+          },
+          "angry": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "neutral",
+            "happy",
+            "sad",
+            "angry"
+          ],
+          "matrix": [
+            [
+              1,
+              2,
+              0,
+              0
+            ],
+            [
+              0,
+              3,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              2,
+              0
+            ],
+            [
+              1,
+              2,
+              0,
+              0
+            ]
+          ]
+        },
+        "predicted_counts": {
+          "happy": 8,
+          "neutral": 2,
+          "sad": 2
+        },
+        "out_of_scope_predictions": 0,
+        "majority_prediction_fraction": 0.6666666666666666
+      },
+      "interpretation": "The evaluator passed its real-speech and domain-shift gates. Generated accuracy is a measurable external-classifier result, not a human perceptual result."
+    },
+    "emotion2vec": {
+      "evaluator": "emotion2vec",
+      "task": "emotion",
+      "labels": [
+        "neutral",
+        "happy",
+        "sad",
+        "angry"
+      ],
+      "panel_valid": true,
+      "gate": {
+        "valid": true,
+        "reasons": [],
+        "chance_accuracy": 0.25,
+        "minimum_real_accuracy": 0.35,
+        "domain_shift_threshold": 3.0,
+        "n_resamples": 10000
+      },
+      "real": {
+        "accuracy": 0.9098901098901099,
+        "macro_f1": 0.9318181581737375,
+        "n": 455,
+        "n_speakers": 9,
+        "speaker_cluster_ci": {
+          "status": "computed",
+          "accuracy_low": 0.8611682783292733,
+          "accuracy_high": 0.9474835886214442,
+          "confidence": 0.95,
+          "n_resamples": 10000,
+          "seed": 0
+        },
+        "per_class": {
+          "neutral": {
+            "precision": 0.9272727272727272,
+            "recall": 0.9532710280373832,
+            "f1": 0.9400921658986175,
+            "support": 107
+          },
+          "happy": {
+            "precision": 0.9344262295081968,
+            "recall": 0.9344262295081968,
+            "f1": 0.9344262295081968,
+            "support": 122
+          },
+          "sad": {
+            "precision": 0.972972972972973,
+            "recall": 0.864,
+            "f1": 0.9152542372881355,
+            "support": 125
+          },
+          "angry": {
+            "precision": 0.989010989010989,
+            "recall": 0.8910891089108911,
+            "f1": 0.9375,
+            "support": 101
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "neutral",
+            "happy",
+            "sad",
+            "angry"
+          ],
+          "matrix": [
+            [
+              102,
+              2,
+              2,
+              0
+            ],
+            [
+              4,
+              114,
+              1,
+              1
+            ],
+            [
+              0,
+              6,
+              108,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              90
+            ]
+          ]
+        },
+        "predicted_counts": {
+          "angry": 91,
+          "disgusted": 12,
+          "fearful": 9,
+          "happy": 122,
+          "neutral": 110,
+          "sad": 111
+        },
+        "out_of_scope_predictions": 0
+      },
+      "domain_shift": {
+        "status": "computed",
+        "standardized_centroid_distance": 27.86923229807996,
+        "real_val_spread": 33.091953274234825,
+        "ratio": 0.8421755001019767,
+        "threshold": 3.0,
+        "valid": true,
+        "reason": "generated features are within the real-speech spread",
+        "train_rows": 320,
+        "real_rows": 455,
+        "generated_rows": 12,
+        "feature_kind": "embedding",
+        "feature_dim": 1024
+      },
+      "generated": {
+        "accuracy": 0.25,
+        "macro_f1": 0.1,
+        "n": 12,
+        "n_speakers": 3,
+        "per_class": {
+          "neutral": {
+            "precision": 0.25,
+            "recall": 1.0,
+            "f1": 0.4,
+            "support": 3
+          },
+          "happy": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "sad": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          },
+          "angry": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 3
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "neutral",
+            "happy",
+            "sad",
+            "angry"
+          ],
+          "matrix": [
+            [
+              3,
+              0,
+              0,
+              0
+            ],
+            [
+              3,
+              0,
+              0,
+              0
+            ],
+            [
+              3,
+              0,
+              0,
+              0
+            ],
+            [
+              3,
+              0,
+              0,
+              0
+            ]
+          ]
+        },
+        "predicted_counts": {
+          "neutral": 12
+        },
+        "out_of_scope_predictions": 0,
+        "majority_prediction_fraction": 1.0
+      },
+      "interpretation": "The evaluator passed its real-speech and domain-shift gates. Generated accuracy is a measurable external-classifier result, not a human perceptual result."
+    }
+  },
+  "limitations": [
+    "External recognizers are proxies, not listeners.",
+    "CommonAccent is a 16-class model evaluated on a four-class subset.",
+    "GLOBE accents are self-reported and the test split is speaker-disjoint.",
+    "CREMA-D is acted speech; fear and disgust are excluded.",
+    "The generated set has three voices; generated accuracy is not a speaker-generalization estimate.",
+    "A failed domain-shift gate invalidates the generated prediction comparison; it does not prove the synthesis control is wrong.",
+    "emotion2vec+ uses the FunASR model license (other); review redistribution terms.",
+    "No MOS, CMOS, or human identification study was run."
+  ],
+  "predictions_csv": "D:\\voix\\results\\emotion\\c1\\panel\\predictions.csv"
+}

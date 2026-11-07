@@ -1,0 +1,725 @@
+{
+  "manifest": "demo\\expression_manifest.json",
+  "generated_by": "scripts/evaluate_expression_controls.py",
+  "report": {
+    "schema_version": "voix.expression.v1",
+    "n_samples": 12,
+    "prosody": {
+      "status": "computed",
+      "n_samples": 12,
+      "per_sample": [
+        {
+          "audio": "D:\\voix\\demo\\03_emotions\\emotion_01_neutral.wav",
+          "control": "emotion",
+          "label": "neutral",
+          "intensity": 0.0,
+          "speaker_id": "subject_face",
+          "prosody": {
+            "status": "computed",
+            "duration_seconds": 9.373,
+            "f0_mean_hz": 234.44,
+            "f0_std_hz": 70.14,
+            "f0_range_hz": 345.56,
+            "f0_voiced_ratio": 0.534,
+            "f0_smoothness": 7.163,
+            "energy_mean": 0.05125,
+            "energy_std": 0.04925
+          }
+        },
+        {
+          "audio": "D:\\voix\\demo\\03_emotions\\emotion_02_happy.wav",
+          "control": "emotion",
+          "label": "happy",
+          "intensity": 0.9,
+          "speaker_id": "subject_face",
+          "prosody": {
+            "status": "computed",
+            "duration_seconds": 8.489,
+            "f0_mean_hz": 287.02,
+            "f0_std_hz": 67.57,
+            "f0_range_hz": 263.36,
+            "f0_voiced_ratio": 0.598,
+            "f0_smoothness": 4.158,
+            "energy_mean": 0.05847,
+            "energy_std": 0.04858
+          }
+        },
+        {
+          "audio": "D:\\voix\\demo\\03_emotions\\emotion_03_sad.wav",
+          "control": "emotion",
+          "label": "sad",
+          "intensity": 0.9,
+          "speaker_id": "subject_face",
+          "prosody": {
+            "status": "computed",
+            "duration_seconds": 10.582,
+            "f0_mean_hz": 211.0,
+            "f0_std_hz": 69.69,
+            "f0_range_hz": 335.94,
+            "f0_voiced_ratio": 0.515,
+            "f0_smoothness": 5.735,
+            "energy_mean": 0.04682,
+            "energy_std": 0.0412
+          }
+        },
+        {
+          "audio": "D:\\voix\\demo\\03_emotions\\emotion_04_angry.wav",
+          "control": "emotion",
+          "label": "angry",
+          "intensity": 0.9,
+          "speaker_id": "subject_face",
+          "prosody": {
+            "status": "computed",
+            "duration_seconds": 8.584,
+            "f0_mean_hz": 277.02,
+            "f0_std_hz": 70.06,
+            "f0_range_hz": 293.61,
+            "f0_voiced_ratio": 0.586,
+            "f0_smoothness": 4.78,
+            "energy_mean": 0.06057,
+            "energy_std": 0.05461
+          }
+        },
+        {
+          "audio": "D:\\voix\\demo\\03_emotions\\emotion_05_whispered.wav",
+          "control": "emotion",
+          "label": "whispered",
+          "intensity": 0.9,
+          "speaker_id": "subject_face",
+          "prosody": {
+            "status": "computed",
+            "duration_seconds": 9.994,
+            "f0_mean_hz": 256.38,
+            "f0_std_hz": 122.36,
+            "f0_range_hz": 520.41,
+            "f0_voiced_ratio": 0.497,
+            "f0_smoothness": 10.089,
+            "energy_mean": 0.0398,
+            "energy_std": 0.03415
+          }
+        },
+        {
+          "audio": "D:\\voix\\demo\\03_emotions\\emotion_06_surprised.wav",
+          "control": "emotion",
+          "label": "surprised",
+          "intensity": 0.9,
+          "speaker_id": "subject_face",
+          "prosody": {
+            "status": "computed",
+            "duration_seconds": 8.234,
+            "f0_mean_hz": 302.56,
+            "f0_std_hz": 73.33,
+            "f0_range_hz": 308.1,
+            "f0_voiced_ratio": 0.596,
+            "f0_smoothness": 5.098,
+            "energy_mean": 0.05806,
+            "energy_std": 0.04877
+          }
+        },
+        {
+          "audio": "D:\\voix\\demo\\02_accents\\accent_01_general_american.wav",
+          "control": "accent",
+          "label": "general_american",
+          "intensity": 1.0,
+          "speaker_id": "subject_face",
+          "prosody": {
+            "status": "computed",
+            "duration_seconds": 9.048,
+            "f0_mean_hz": 243.95,
+            "f0_std_hz": 66.4,
+            "f0_range_hz": 265.62,
+            "f0_voiced_ratio": 0.494,
+            "f0_smoothness": 7.644,
+            "energy_mean": 0.05066,
+            "energy_std": 0.0486
+          }
+        },
+        {
+          "audio": "D:\\voix\\demo\\02_accents\\accent_02_british_rp.wav",
+          "control": "accent",
+          "label": "british_rp",
+          "intensity": 1.0,
+          "speaker_id": "subject_face",
+          "prosody": {
+            "status": "computed",
+            "duration_seconds": 8.83,
+            "f0_mean_hz": 251.37,
+            "f0_std_hz": 61.7,
+            "f0_range_hz": 244.25,
+            "f0_voiced_ratio": 0.548,
+            "f0_smoothness": 3.945,
+            "energy_mean": 0.05179,
+            "energy_std": 0.0472
+          }
+        },
+        {
+          "audio": "D:\\voix\\demo\\02_accents\\accent_03_australian.wav",
+          "control": "accent",
+          "label": "australian",
+          "intensity": 1.0,
+          "speaker_id": "subject_face",
+          "prosody": {
+            "status": "computed",
+            "duration_seconds": 10.606,
+            "f0_mean_hz": 246.8,
+            "f0_std_hz": 72.54,
+            "f0_range_hz": 369.61,
+            "f0_voiced_ratio": 0.514,
+            "f0_smoothness": 5.321,
+            "energy_mean": 0.05069,
+            "energy_std": 0.04687
+          }
+        },
+        {
+          "audio": "D:\\voix\\demo\\02_accents\\accent_04_indian_english.wav",
+          "control": "accent",
+          "label": "indian_english",
+          "intensity": 1.0,
+          "speaker_id": "subject_face",
+          "prosody": {
+            "status": "computed",
+            "duration_seconds": 10.798,
+            "f0_mean_hz": 265.67,
+            "f0_std_hz": 83.11,
+            "f0_range_hz": 403.89,
+            "f0_voiced_ratio": 0.59,
+            "f0_smoothness": 5.892,
+            "energy_mean": 0.05268,
+            "energy_std": 0.04573
+          }
+        },
+        {
+          "audio": "D:\\voix\\demo\\02_accents\\accent_05_irish.wav",
+          "control": "accent",
+          "label": "irish",
+          "intensity": 1.0,
+          "speaker_id": "subject_face",
+          "prosody": {
+            "status": "computed",
+            "duration_seconds": 8.94,
+            "f0_mean_hz": 256.18,
+            "f0_std_hz": 60.25,
+            "f0_range_hz": 403.89,
+            "f0_voiced_ratio": 0.598,
+            "f0_smoothness": 4.851,
+            "energy_mean": 0.04942,
+            "energy_std": 0.05074
+          }
+        },
+        {
+          "audio": "D:\\voix\\demo\\02_accents\\accent_06_scottish.wav",
+          "control": "accent",
+          "label": "scottish",
+          "intensity": 1.0,
+          "speaker_id": "subject_face",
+          "prosody": {
+            "status": "computed",
+            "duration_seconds": 10.147,
+            "f0_mean_hz": 245.02,
+            "f0_std_hz": 62.4,
+            "f0_range_hz": 235.59,
+            "f0_voiced_ratio": 0.439,
+            "f0_smoothness": 4.668,
+            "energy_mean": 0.05239,
+            "energy_std": 0.04709
+          }
+        }
+      ],
+      "conditions": {
+        "accent:australian": {
+          "control": "accent",
+          "label": "australian",
+          "n": 1,
+          "duration_seconds_mean": 10.606,
+          "f0_mean_hz_mean": 246.8,
+          "f0_std_hz_mean": 72.54,
+          "energy_mean_mean": 0.05069,
+          "voiced_ratio_mean": 0.514
+        },
+        "accent:british_rp": {
+          "control": "accent",
+          "label": "british_rp",
+          "n": 1,
+          "duration_seconds_mean": 8.83,
+          "f0_mean_hz_mean": 251.37,
+          "f0_std_hz_mean": 61.7,
+          "energy_mean_mean": 0.05179,
+          "voiced_ratio_mean": 0.548
+        },
+        "accent:general_american": {
+          "control": "accent",
+          "label": "general_american",
+          "n": 1,
+          "duration_seconds_mean": 9.048,
+          "f0_mean_hz_mean": 243.95,
+          "f0_std_hz_mean": 66.4,
+          "energy_mean_mean": 0.05066,
+          "voiced_ratio_mean": 0.494
+        },
+        "accent:indian_english": {
+          "control": "accent",
+          "label": "indian_english",
+          "n": 1,
+          "duration_seconds_mean": 10.798,
+          "f0_mean_hz_mean": 265.67,
+          "f0_std_hz_mean": 83.11,
+          "energy_mean_mean": 0.05268,
+          "voiced_ratio_mean": 0.59
+        },
+        "accent:irish": {
+          "control": "accent",
+          "label": "irish",
+          "n": 1,
+          "duration_seconds_mean": 8.94,
+          "f0_mean_hz_mean": 256.18,
+          "f0_std_hz_mean": 60.25,
+          "energy_mean_mean": 0.04942,
+          "voiced_ratio_mean": 0.598
+        },
+        "accent:scottish": {
+          "control": "accent",
+          "label": "scottish",
+          "n": 1,
+          "duration_seconds_mean": 10.147,
+          "f0_mean_hz_mean": 245.02,
+          "f0_std_hz_mean": 62.4,
+          "energy_mean_mean": 0.05239,
+          "voiced_ratio_mean": 0.439
+        },
+        "emotion:angry": {
+          "control": "emotion",
+          "label": "angry",
+          "n": 1,
+          "duration_seconds_mean": 8.584,
+          "f0_mean_hz_mean": 277.02,
+          "f0_std_hz_mean": 70.06,
+          "energy_mean_mean": 0.06057,
+          "voiced_ratio_mean": 0.586
+        },
+        "emotion:happy": {
+          "control": "emotion",
+          "label": "happy",
+          "n": 1,
+          "duration_seconds_mean": 8.489,
+          "f0_mean_hz_mean": 287.02,
+          "f0_std_hz_mean": 67.57,
+          "energy_mean_mean": 0.05847,
+          "voiced_ratio_mean": 0.598
+        },
+        "emotion:neutral": {
+          "control": "emotion",
+          "label": "neutral",
+          "n": 1,
+          "duration_seconds_mean": 9.373,
+          "f0_mean_hz_mean": 234.44,
+          "f0_std_hz_mean": 70.14,
+          "energy_mean_mean": 0.05125,
+          "voiced_ratio_mean": 0.534
+        },
+        "emotion:sad": {
+          "control": "emotion",
+          "label": "sad",
+          "n": 1,
+          "duration_seconds_mean": 10.582,
+          "f0_mean_hz_mean": 211.0,
+          "f0_std_hz_mean": 69.69,
+          "energy_mean_mean": 0.04682,
+          "voiced_ratio_mean": 0.515
+        },
+        "emotion:surprised": {
+          "control": "emotion",
+          "label": "surprised",
+          "n": 1,
+          "duration_seconds_mean": 8.234,
+          "f0_mean_hz_mean": 302.56,
+          "f0_std_hz_mean": 73.33,
+          "energy_mean_mean": 0.05806,
+          "voiced_ratio_mean": 0.596
+        },
+        "emotion:whispered": {
+          "control": "emotion",
+          "label": "whispered",
+          "n": 1,
+          "duration_seconds_mean": 9.994,
+          "f0_mean_hz_mean": 256.38,
+          "f0_std_hz_mean": 122.36,
+          "energy_mean_mean": 0.0398,
+          "voiced_ratio_mean": 0.497
+        }
+      },
+      "reason": null
+    },
+    "intensity_monotonicity": {
+      "status": "computed",
+      "conditions": {
+        "accent:australian": {
+          "status": "insufficient_data",
+          "n": 1,
+          "distinct_intensities": 1
+        },
+        "accent:british_rp": {
+          "status": "insufficient_data",
+          "n": 1,
+          "distinct_intensities": 1
+        },
+        "accent:general_american": {
+          "status": "insufficient_data",
+          "n": 1,
+          "distinct_intensities": 1
+        },
+        "accent:indian_english": {
+          "status": "insufficient_data",
+          "n": 1,
+          "distinct_intensities": 1
+        },
+        "accent:irish": {
+          "status": "insufficient_data",
+          "n": 1,
+          "distinct_intensities": 1
+        },
+        "accent:scottish": {
+          "status": "insufficient_data",
+          "n": 1,
+          "distinct_intensities": 1
+        },
+        "emotion:angry": {
+          "status": "insufficient_data",
+          "n": 1,
+          "distinct_intensities": 1
+        },
+        "emotion:happy": {
+          "status": "insufficient_data",
+          "n": 1,
+          "distinct_intensities": 1
+        },
+        "emotion:neutral": {
+          "status": "insufficient_data",
+          "n": 1,
+          "distinct_intensities": 1
+        },
+        "emotion:sad": {
+          "status": "insufficient_data",
+          "n": 1,
+          "distinct_intensities": 1
+        },
+        "emotion:surprised": {
+          "status": "insufficient_data",
+          "n": 1,
+          "distinct_intensities": 1
+        },
+        "emotion:whispered": {
+          "status": "insufficient_data",
+          "n": 1,
+          "distinct_intensities": 1
+        }
+      }
+    },
+    "speaker_preservation": {
+      "status": "computed",
+      "n": 10,
+      "mean": 0.50919,
+      "min": 0.2364,
+      "per_sample": [
+        {
+          "audio": "D:\\voix\\demo\\03_emotions\\emotion_02_happy.wav",
+          "neutral_reference": "D:\\voix\\demo\\03_emotions\\emotion_01_neutral.wav",
+          "control": "emotion",
+          "label": "happy",
+          "speaker_id": "subject_face",
+          "status": "computed",
+          "similarity": 0.3273
+        },
+        {
+          "audio": "D:\\voix\\demo\\03_emotions\\emotion_03_sad.wav",
+          "neutral_reference": "D:\\voix\\demo\\03_emotions\\emotion_01_neutral.wav",
+          "control": "emotion",
+          "label": "sad",
+          "speaker_id": "subject_face",
+          "status": "computed",
+          "similarity": 0.2364
+        },
+        {
+          "audio": "D:\\voix\\demo\\03_emotions\\emotion_04_angry.wav",
+          "neutral_reference": "D:\\voix\\demo\\03_emotions\\emotion_01_neutral.wav",
+          "control": "emotion",
+          "label": "angry",
+          "speaker_id": "subject_face",
+          "status": "computed",
+          "similarity": 0.3658
+        },
+        {
+          "audio": "D:\\voix\\demo\\03_emotions\\emotion_05_whispered.wav",
+          "neutral_reference": "D:\\voix\\demo\\03_emotions\\emotion_01_neutral.wav",
+          "control": "emotion",
+          "label": "whispered",
+          "speaker_id": "subject_face",
+          "status": "computed",
+          "similarity": 0.6357
+        },
+        {
+          "audio": "D:\\voix\\demo\\03_emotions\\emotion_06_surprised.wav",
+          "neutral_reference": "D:\\voix\\demo\\03_emotions\\emotion_01_neutral.wav",
+          "control": "emotion",
+          "label": "surprised",
+          "speaker_id": "subject_face",
+          "status": "computed",
+          "similarity": 0.2644
+        },
+        {
+          "audio": "D:\\voix\\demo\\02_accents\\accent_02_british_rp.wav",
+          "neutral_reference": "D:\\voix\\demo\\02_accents\\accent_01_general_american.wav",
+          "control": "accent",
+          "label": "british_rp",
+          "speaker_id": "subject_face",
+          "status": "computed",
+          "similarity": 0.6186
+        },
+        {
+          "audio": "D:\\voix\\demo\\02_accents\\accent_03_australian.wav",
+          "neutral_reference": "D:\\voix\\demo\\02_accents\\accent_01_general_american.wav",
+          "control": "accent",
+          "label": "australian",
+          "speaker_id": "subject_face",
+          "status": "computed",
+          "similarity": 0.6781
+        },
+        {
+          "audio": "D:\\voix\\demo\\02_accents\\accent_04_indian_english.wav",
+          "neutral_reference": "D:\\voix\\demo\\02_accents\\accent_01_general_american.wav",
+          "control": "accent",
+          "label": "indian_english",
+          "speaker_id": "subject_face",
+          "status": "computed",
+          "similarity": 0.5623
+        },
+        {
+          "audio": "D:\\voix\\demo\\02_accents\\accent_05_irish.wav",
+          "neutral_reference": "D:\\voix\\demo\\02_accents\\accent_01_general_american.wav",
+          "control": "accent",
+          "label": "irish",
+          "speaker_id": "subject_face",
+          "status": "computed",
+          "similarity": 0.6296
+        },
+        {
+          "audio": "D:\\voix\\demo\\02_accents\\accent_06_scottish.wav",
+          "neutral_reference": "D:\\voix\\demo\\02_accents\\accent_01_general_american.wav",
+          "control": "accent",
+          "label": "scottish",
+          "speaker_id": "subject_face",
+          "status": "computed",
+          "similarity": 0.7737
+        }
+      ],
+      "reason": null
+    },
+    "emotion_classifier": {
+      "status": "unavailable",
+      "reason": "no classifier supplied",
+      "accuracy": null
+    },
+    "accent_classifier": {
+      "status": "unavailable",
+      "reason": "no classifier supplied",
+      "accuracy": null
+    },
+    "mos": {
+      "status": "unavailable",
+      "reason": "awaiting real human ratings"
+    },
+    "wer": {
+      "status": "computed",
+      "conditions": {
+        "accent:australian": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 1,
+          "wer": 0.29411764705882354,
+          "wer_std": 0.0,
+          "per_sample_wer": [
+            0.29411764705882354
+          ],
+          "transcripts": [
+            "The human voice rap looks both physical anatomy and live culture carrying the hand. Decades of personal identity."
+          ]
+        },
+        "accent:british_rp": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 1,
+          "wer": 0.29411764705882354,
+          "wer_std": 0.0,
+          "per_sample_wer": [
+            0.29411764705882354
+          ],
+          "transcripts": [
+            "The human voice reflects both physical anatomy and literature and carry, and the unique cadence of personnel identity."
+          ]
+        },
+        "accent:general_american": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 1,
+          "wer": 0.0,
+          "wer_std": 0.0,
+          "per_sample_wer": [
+            0.0
+          ],
+          "transcripts": [
+            "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity."
+          ]
+        },
+        "accent:indian_english": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 1,
+          "wer": 0.35294117647058826,
+          "wer_std": 0.0,
+          "per_sample_wer": [
+            0.35294117647058826
+          ],
+          "transcripts": [
+            "That human voice reflects what physical anatomy and lived culture, carrying dead yet, dictated some personal identity."
+          ]
+        },
+        "accent:irish": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 1,
+          "wer": 0.11764705882352941,
+          "wer_std": 0.0,
+          "per_sample_wer": [
+            0.11764705882352941
+          ],
+          "transcripts": [
+            "The human voice reflects most physical anatomy and lived culture, carrying to unique cadence of personal identity."
+          ]
+        },
+        "accent:scottish": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 1,
+          "wer": 0.11764705882352941,
+          "wer_std": 0.0,
+          "per_sample_wer": [
+            0.11764705882352941
+          ],
+          "transcripts": [
+            "The human voice reflects both physical anatomy and lived cultur, carrying the unique cadence of parasitile identity."
+          ]
+        },
+        "emotion:angry": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 1,
+          "wer": 0.23529411764705882,
+          "wer_std": 0.0,
+          "per_sample_wer": [
+            0.23529411764705882
+          ],
+          "transcripts": [
+            "The human voice reflects both physical anatomy and lived culture, carrying the indiccated personal identity crystal"
+          ]
+        },
+        "emotion:happy": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 1,
+          "wer": 0.11764705882352941,
+          "wer_std": 0.0,
+          "per_sample_wer": [
+            0.11764705882352941
+          ],
+          "transcripts": [
+            "The human voice reflects both physical anatomy and literature, carrying the unique cadence of personal identity."
+          ]
+        },
+        "emotion:neutral": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 1,
+          "wer": 0.0,
+          "wer_std": 0.0,
+          "per_sample_wer": [
+            0.0
+          ],
+          "transcripts": [
+            "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity."
+          ]
+        },
+        "emotion:sad": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 1,
+          "wer": 0.11764705882352941,
+          "wer_std": 0.0,
+          "per_sample_wer": [
+            0.11764705882352941
+          ],
+          "transcripts": [
+            "The human voice reflects both physical anatomy and lived culture, carrying the indicators of personal identity."
+          ]
+        },
+        "emotion:surprised": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 1,
+          "wer": 0.11764705882352941,
+          "wer_std": 0.0,
+          "per_sample_wer": [
+            0.11764705882352941
+          ],
+          "transcripts": [
+            "The human voice reflects both physical anatomy and literature, carrying the unique cadence of personal identity."
+          ]
+        },
+        "emotion:whispered": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 1,
+          "wer": 0.0,
+          "wer_std": 0.0,
+          "per_sample_wer": [
+            0.0
+          ],
+          "transcripts": [
+            "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity."
+          ]
+        }
+      },
+      "mean": 0.14705882352941177,
+      "worst": 0.35294117647058826,
+      "reason": null
+    }
+  },
+  "gates": {
+    "status": "fail",
+    "gates": {
+      "speaker_preservation": {
+        "value": 0.50919,
+        "threshold": 0.8,
+        "passed": false
+      },
+      "emotion_classifier": {
+        "status": "unavailable",
+        "passed": null,
+        "reason": "no classifier supplied"
+      },
+      "accent_classifier": {
+        "status": "unavailable",
+        "passed": null,
+        "reason": "no classifier supplied"
+      },
+      "intensity_monotonicity": {
+        "status": "unavailable",
+        "passed": null,
+        "reason": "no intensity sweeps with expected directions"
+      },
+      "wer": {
+        "value": 0.35294117647058826,
+        "threshold": 0.2,
+        "passed": false
+      }
+    }
+  }
+}

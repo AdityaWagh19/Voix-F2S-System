@@ -1,0 +1,344 @@
+{
+  "schema_version": "voix.accent_g2p_generation.v1",
+  "generated_at": "2026-10-31 14:28:09 UTC",
+  "track": "accent",
+  "experiment": "A2",
+  "level": "exploratory",
+  "manifest": "D:\\voix\\data\\processed\\globe_accent_manifest.csv",
+  "manifest_sha256": "eb02cccebb7ff716216d5f80f8756d355fbfab323046e612b76533592630bba0",
+  "index": "results\\accent\\a2b\\generation_index.csv",
+  "index_sha256": "2a1c462dfd033a949ec6f6f2783b156bb2433b49b7b50c7f739c5278a9339460",
+  "output_dir": "results\\accent\\a2b\\audio",
+  "accents": [
+    "us",
+    "england",
+    "australian",
+    "canadian",
+    "india_south_asia",
+    "irish"
+  ],
+  "trainable_accents": [
+    "us",
+    "england",
+    "australian",
+    "canadian",
+    "india_south_asia"
+  ],
+  "eval_only_accents": [
+    "irish"
+  ],
+  "conditions": [
+    "regex",
+    "g2p"
+  ],
+  "prompts": [
+    "The bath was better than the dance in the car.",
+    "I think this is the right time to tune the new voice.",
+    "Last night the fast train passed the path by the water.",
+    "Both of us can start the task after the film.",
+    "The human voice reflects a personal identity.",
+    "Please ask the staff about the chance of rain."
+  ],
+  "prompt_count": 6,
+  "seeds": [
+    0
+  ],
+  "diffusion_steps": 10,
+  "alpha": 0.18,
+  "beta": 0.22,
+  "disabled_rules": [
+    "india_retroflex_t",
+    "india_retroflex_d",
+    "australian_price"
+  ],
+  "prosody_bias_strength": 0.0,
+  "identity": {
+    "clip_id": "common_voice_en_17993335",
+    "path": "D:\\voix\\data\\processed\\globe_audio\\val\\us\\common_voice_en_17993335.wav",
+    "speaker_id": "4c5a31cad74697cd01562a7e345a826d40dd6cf87bf5ce8e9bca2e8efd0c6189b482292c88863a14304c6b5f5b3370c30cb1beabcadebfde97afaba0b0ae8aa4",
+    "accent_class": "us",
+    "style_sha256": "287d85ca0ec422183d280601c89ffda21913fcc86cb5d4102375a2b2a2e39566",
+    "norm": 3.5405263900756836,
+    "note": "One frozen style vector for every clip; accent is carried only by phonemes."
+  },
+  "rows": 72,
+  "expected_rows": 72,
+  "failures": [],
+  "phoneme_changes": [
+    {
+      "accent": "us",
+      "prompt_id": 0,
+      "base_phonemes": "\u00f0\u0259 b\u02c8\u00e6\u03b8 w\u0259z b\u02c8\u025bt\u025a \u00f0\u0259n \u00f0\u0259 d\u02c8\u00e6ns \u02c8\u026an \u00f0\u0259 k\u02c8\u0251\u0279 \u2016",
+      "g2p_phonemes": "\u00f0\u0259 b\u02c8\u00e6\u03b8 w\u0259z b\u02c8\u025b\u027e\u025a \u00f0\u0259n \u00f0\u0259 d\u02c8\u00e6ns \u02c8\u026an \u00f0\u0259 k\u02c8\u0251\u0279",
+      "changed": true
+    },
+    {
+      "accent": "us",
+      "prompt_id": 1,
+      "base_phonemes": "\u02c8a\u026a \u03b8\u02c8\u026a\u014bk \u00f0\u02c8\u026as \u02c8\u026az \u00f0\u0259 \u0279\u02c8a\u026at t\u02c8a\u026am t\u0259 t\u02c8un \u00f0\u0259 nj\u02c8u v\u02c8\u0254\u026as \u2016",
+      "g2p_phonemes": "\u02c8a\u026a \u03b8\u02c8\u026a\u014bk \u00f0\u02c8\u026as \u02c8\u026az \u00f0\u0259 \u0279\u02c8a\u026at t\u02c8a\u026am t\u0259 t\u02c8un \u00f0\u0259 nj\u02c8u v\u02c8\u0254\u026as",
+      "changed": true
+    },
+    {
+      "accent": "us",
+      "prompt_id": 2,
+      "base_phonemes": "l\u02c8\u00e6st n\u02c8a\u026at \u00f0\u0259 f\u02c8\u00e6st t\u0279\u02c8e\u026an p\u02c8\u00e6st \u00f0\u0259 p\u02c8\u00e6\u03b8 b\u02c8a\u026a \u00f0\u0259 w\u02c8\u0254t\u025a \u2016",
+      "g2p_phonemes": "l\u02c8\u00e6st n\u02c8a\u026at \u00f0\u0259 f\u02c8\u00e6st t\u0279\u02c8e\u026an p\u02c8\u00e6st \u00f0\u0259 p\u02c8\u00e6\u03b8 b\u02c8a\u026a \u00f0\u0259 w\u02c8\u0254\u027e\u025a",
+      "changed": true
+    },
+    {
+      "accent": "us",
+      "prompt_id": 3,
+      "base_phonemes": "b\u02c8o\u028a\u03b8 \u0259v \u02c8\u028cs k\u0259n st\u02c8\u0251\u0279t \u00f0\u0259 t\u02c8\u00e6sk \u02c8\u00e6ft\u025a \u00f0\u0259 f\u02c8\u026alm \u2016",
+      "g2p_phonemes": "b\u02c8o\u028a\u03b8 \u0259v \u02c8\u028cs k\u0259n st\u02c8\u0251\u0279t \u00f0\u0259 t\u02c8\u00e6sk \u02c8\u00e6ft\u025a \u00f0\u0259 f\u02c8\u026alm",
+      "changed": true
+    },
+    {
+      "accent": "us",
+      "prompt_id": 4,
+      "base_phonemes": "\u00f0\u0259 hj\u02c8um\u0259n v\u02c8\u0254\u026as \u0279\u026afl\u02c8\u025bkts \u0259 p\u02c8\u025as\u0259n\u0259l a\u026ad\u02c8\u025bnt\u026ati \u2016",
+      "g2p_phonemes": "\u00f0\u0259 hj\u02c8um\u0259n v\u02c8\u0254\u026as \u0279\u026afl\u02c8\u025bkts \u0259 p\u02c8\u025as\u0259n\u0259l a\u026ad\u02c8\u025bnt\u026a\u027ei",
+      "changed": true
+    },
+    {
+      "accent": "us",
+      "prompt_id": 5,
+      "base_phonemes": "pl\u02c8iz \u02c8\u00e6sk \u00f0\u0259 st\u02c8\u00e6f \u0259b\u02c8a\u028at \u00f0\u0259 t\u0361\u0283\u02c8\u00e6ns \u0259v \u0279\u02c8e\u026an \u2016",
+      "g2p_phonemes": "pl\u02c8iz \u02c8\u00e6sk \u00f0\u0259 st\u02c8\u00e6f \u0259b\u02c8a\u028at \u00f0\u0259 \u02a7\u02c8\u00e6ns \u0259v \u0279\u02c8e\u026an",
+      "changed": true
+    },
+    {
+      "accent": "england",
+      "prompt_id": 0,
+      "base_phonemes": "\u00f0\u0259 b\u02c8\u00e6\u03b8 w\u0259z b\u02c8\u025bt\u025a \u00f0\u0259n \u00f0\u0259 d\u02c8\u00e6ns \u02c8\u026an \u00f0\u0259 k\u02c8\u0251\u0279 \u2016",
+      "g2p_phonemes": "\u00f0\u0259 b\u02c8\u0251\u02d0\u03b8 w\u0259z b\u02c8\u025bt\u025a \u00f0\u0259n \u00f0\u0259 d\u02c8\u0251\u02d0ns \u02c8\u026an \u00f0\u0259 k\u02c8\u0251\u02d0",
+      "changed": true
+    },
+    {
+      "accent": "england",
+      "prompt_id": 1,
+      "base_phonemes": "\u02c8a\u026a \u03b8\u02c8\u026a\u014bk \u00f0\u02c8\u026as \u02c8\u026az \u00f0\u0259 \u0279\u02c8a\u026at t\u02c8a\u026am t\u0259 t\u02c8un \u00f0\u0259 nj\u02c8u v\u02c8\u0254\u026as \u2016",
+      "g2p_phonemes": "\u02c8a\u026a \u03b8\u02c8\u026a\u014bk \u00f0\u02c8\u026as \u02c8\u026az \u00f0\u0259 \u0279\u02c8a\u026at t\u02c8a\u026am t\u0259 t\u02c8jun \u00f0\u0259 nj\u02c8u v\u02c8\u0254\u026as",
+      "changed": true
+    },
+    {
+      "accent": "england",
+      "prompt_id": 2,
+      "base_phonemes": "l\u02c8\u00e6st n\u02c8a\u026at \u00f0\u0259 f\u02c8\u00e6st t\u0279\u02c8e\u026an p\u02c8\u00e6st \u00f0\u0259 p\u02c8\u00e6\u03b8 b\u02c8a\u026a \u00f0\u0259 w\u02c8\u0254t\u025a \u2016",
+      "g2p_phonemes": "l\u02c8\u0251\u02d0st n\u02c8a\u026at \u00f0\u0259 f\u02c8\u0251\u02d0st t\u0279\u02c8e\u026an p\u02c8\u0251\u02d0st \u00f0\u0259 p\u02c8\u0251\u02d0\u03b8 b\u02c8a\u026a \u00f0\u0259 w\u02c8\u0254t\u025a",
+      "changed": true
+    },
+    {
+      "accent": "england",
+      "prompt_id": 3,
+      "base_phonemes": "b\u02c8o\u028a\u03b8 \u0259v \u02c8\u028cs k\u0259n st\u02c8\u0251\u0279t \u00f0\u0259 t\u02c8\u00e6sk \u02c8\u00e6ft\u025a \u00f0\u0259 f\u02c8\u026alm \u2016",
+      "g2p_phonemes": "b\u02c8o\u028a\u03b8 \u0259v \u02c8\u028cs k\u0259n st\u02c8\u0251t \u00f0\u0259 t\u02c8\u0251\u02d0sk \u02c8\u0251\u02d0ft\u025a \u00f0\u0259 f\u02c8\u026alm",
+      "changed": true
+    },
+    {
+      "accent": "england",
+      "prompt_id": 4,
+      "base_phonemes": "\u00f0\u0259 hj\u02c8um\u0259n v\u02c8\u0254\u026as \u0279\u026afl\u02c8\u025bkts \u0259 p\u02c8\u025as\u0259n\u0259l a\u026ad\u02c8\u025bnt\u026ati \u2016",
+      "g2p_phonemes": "\u00f0\u0259 hj\u02c8um\u0259n v\u02c8\u0254\u026as \u0279\u026afl\u02c8\u025bkts \u0259 p\u02c8\u025as\u0259n\u0259l a\u026ad\u02c8\u025bnt\u026ati",
+      "changed": true
+    },
+    {
+      "accent": "england",
+      "prompt_id": 5,
+      "base_phonemes": "pl\u02c8iz \u02c8\u00e6sk \u00f0\u0259 st\u02c8\u00e6f \u0259b\u02c8a\u028at \u00f0\u0259 t\u0361\u0283\u02c8\u00e6ns \u0259v \u0279\u02c8e\u026an \u2016",
+      "g2p_phonemes": "pl\u02c8iz \u02c8\u0251\u02d0sk \u00f0\u0259 st\u02c8\u0251\u02d0f \u0259b\u02c8a\u028at \u00f0\u0259 \u02a7\u02c8\u0251\u02d0ns \u0259v \u0279\u02c8e\u026an",
+      "changed": true
+    },
+    {
+      "accent": "australian",
+      "prompt_id": 0,
+      "base_phonemes": "\u00f0\u0259 b\u02c8\u00e6\u03b8 w\u0259z b\u02c8\u025bt\u025a \u00f0\u0259n \u00f0\u0259 d\u02c8\u00e6ns \u02c8\u026an \u00f0\u0259 k\u02c8\u0251\u0279 \u2016",
+      "g2p_phonemes": "\u00f0\u0259 b\u02c8a\u02d0\u03b8 w\u0259z b\u02c8\u025bt\u025a \u00f0\u0259n \u00f0\u0259 d\u02c8a\u02d0ns \u02c8\u026an \u00f0\u0259 k\u02c8\u0251\u02d0",
+      "changed": true
+    },
+    {
+      "accent": "australian",
+      "prompt_id": 1,
+      "base_phonemes": "\u02c8a\u026a \u03b8\u02c8\u026a\u014bk \u00f0\u02c8\u026as \u02c8\u026az \u00f0\u0259 \u0279\u02c8a\u026at t\u02c8a\u026am t\u0259 t\u02c8un \u00f0\u0259 nj\u02c8u v\u02c8\u0254\u026as \u2016",
+      "g2p_phonemes": "\u02c8\u0254\u026a \u03b8\u02c8\u026a\u014bk \u00f0\u02c8\u026as \u02c8\u026az \u00f0\u0259 \u0279\u02c8\u0254\u026at t\u02c8\u0254\u026am t\u0259 t\u02c8un \u00f0\u0259 nj\u02c8u v\u02c8\u0254\u026as",
+      "changed": true
+    },
+    {
+      "accent": "australian",
+      "prompt_id": 2,
+      "base_phonemes": "l\u02c8\u00e6st n\u02c8a\u026at \u00f0\u0259 f\u02c8\u00e6st t\u0279\u02c8e\u026an p\u02c8\u00e6st \u00f0\u0259 p\u02c8\u00e6\u03b8 b\u02c8a\u026a \u00f0\u0259 w\u02c8\u0254t\u025a \u2016",
+      "g2p_phonemes": "l\u02c8a\u02d0st n\u02c8\u0254\u026at \u00f0\u0259 f\u02c8a\u02d0st t\u0279\u02c8a\u026an p\u02c8a\u02d0st \u00f0\u0259 p\u02c8a\u02d0\u03b8 b\u02c8\u0254\u026a \u00f0\u0259 w\u02c8\u0254t\u025a",
+      "changed": true
+    },
+    {
+      "accent": "australian",
+      "prompt_id": 3,
+      "base_phonemes": "b\u02c8o\u028a\u03b8 \u0259v \u02c8\u028cs k\u0259n st\u02c8\u0251\u0279t \u00f0\u0259 t\u02c8\u00e6sk \u02c8\u00e6ft\u025a \u00f0\u0259 f\u02c8\u026alm \u2016",
+      "g2p_phonemes": "b\u02c8\u0259\u0289\u03b8 \u0259v \u02c8\u028cs k\u0259n st\u02c8\u0251t \u00f0\u0259 t\u02c8a\u02d0sk \u02c8a\u02d0ft\u025a \u00f0\u0259 f\u02c8\u026alm",
+      "changed": true
+    },
+    {
+      "accent": "australian",
+      "prompt_id": 4,
+      "base_phonemes": "\u00f0\u0259 hj\u02c8um\u0259n v\u02c8\u0254\u026as \u0279\u026afl\u02c8\u025bkts \u0259 p\u02c8\u025as\u0259n\u0259l a\u026ad\u02c8\u025bnt\u026ati \u2016",
+      "g2p_phonemes": "\u00f0\u0259 hj\u02c8um\u0259n v\u02c8\u0254\u026as \u0279\u026afl\u02c8\u025bkts \u0259 p\u02c8\u025as\u0259n\u0259l \u0254\u026ad\u02c8\u025bnt\u026ati",
+      "changed": true
+    },
+    {
+      "accent": "australian",
+      "prompt_id": 5,
+      "base_phonemes": "pl\u02c8iz \u02c8\u00e6sk \u00f0\u0259 st\u02c8\u00e6f \u0259b\u02c8a\u028at \u00f0\u0259 t\u0361\u0283\u02c8\u00e6ns \u0259v \u0279\u02c8e\u026an \u2016",
+      "g2p_phonemes": "pl\u02c8iz \u02c8a\u02d0sk \u00f0\u0259 st\u02c8a\u02d0f \u0259b\u02c8a\u028at \u00f0\u0259 \u02a7\u02c8a\u02d0ns \u0259v \u0279\u02c8a\u026an",
+      "changed": true
+    },
+    {
+      "accent": "canadian",
+      "prompt_id": 0,
+      "base_phonemes": "\u00f0\u0259 b\u02c8\u00e6\u03b8 w\u0259z b\u02c8\u025bt\u025a \u00f0\u0259n \u00f0\u0259 d\u02c8\u00e6ns \u02c8\u026an \u00f0\u0259 k\u02c8\u0251\u0279 \u2016",
+      "g2p_phonemes": "\u00f0\u0259 b\u02c8\u00e6\u03b8 w\u0259z b\u02c8\u025b\u027e\u025a \u00f0\u0259n \u00f0\u0259 d\u02c8\u00e6ns \u02c8\u026an \u00f0\u0259 k\u02c8\u0251\u0279",
+      "changed": true
+    },
+    {
+      "accent": "canadian",
+      "prompt_id": 1,
+      "base_phonemes": "\u02c8a\u026a \u03b8\u02c8\u026a\u014bk \u00f0\u02c8\u026as \u02c8\u026az \u00f0\u0259 \u0279\u02c8a\u026at t\u02c8a\u026am t\u0259 t\u02c8un \u00f0\u0259 nj\u02c8u v\u02c8\u0254\u026as \u2016",
+      "g2p_phonemes": "\u02c8a\u026a \u03b8\u02c8\u026a\u014bk \u00f0\u02c8\u026as \u02c8\u026az \u00f0\u0259 \u0279\u02c8\u028c\u026at t\u02c8a\u026am t\u0259 t\u02c8un \u00f0\u0259 nj\u02c8u v\u02c8\u0254\u026as",
+      "changed": true
+    },
+    {
+      "accent": "canadian",
+      "prompt_id": 2,
+      "base_phonemes": "l\u02c8\u00e6st n\u02c8a\u026at \u00f0\u0259 f\u02c8\u00e6st t\u0279\u02c8e\u026an p\u02c8\u00e6st \u00f0\u0259 p\u02c8\u00e6\u03b8 b\u02c8a\u026a \u00f0\u0259 w\u02c8\u0254t\u025a \u2016",
+      "g2p_phonemes": "l\u02c8\u00e6st n\u02c8\u028c\u026at \u00f0\u0259 f\u02c8\u00e6st t\u0279\u02c8e\u026an p\u02c8\u00e6st \u00f0\u0259 p\u02c8\u00e6\u03b8 b\u02c8a\u026a \u00f0\u0259 w\u02c8\u0254\u027e\u025a",
+      "changed": true
+    },
+    {
+      "accent": "canadian",
+      "prompt_id": 3,
+      "base_phonemes": "b\u02c8o\u028a\u03b8 \u0259v \u02c8\u028cs k\u0259n st\u02c8\u0251\u0279t \u00f0\u0259 t\u02c8\u00e6sk \u02c8\u00e6ft\u025a \u00f0\u0259 f\u02c8\u026alm \u2016",
+      "g2p_phonemes": "b\u02c8o\u028a\u03b8 \u0259v \u02c8\u028cs k\u0259n st\u02c8\u0251\u0279t \u00f0\u0259 t\u02c8\u00e6sk \u02c8\u00e6ft\u025a \u00f0\u0259 f\u02c8\u026alm",
+      "changed": true
+    },
+    {
+      "accent": "canadian",
+      "prompt_id": 4,
+      "base_phonemes": "\u00f0\u0259 hj\u02c8um\u0259n v\u02c8\u0254\u026as \u0279\u026afl\u02c8\u025bkts \u0259 p\u02c8\u025as\u0259n\u0259l a\u026ad\u02c8\u025bnt\u026ati \u2016",
+      "g2p_phonemes": "\u00f0\u0259 hj\u02c8um\u0259n v\u02c8\u0254\u026as \u0279\u026afl\u02c8\u025bkts \u0259 p\u02c8\u025as\u0259n\u0259l a\u026ad\u02c8\u025bnt\u026a\u027ei",
+      "changed": true
+    },
+    {
+      "accent": "canadian",
+      "prompt_id": 5,
+      "base_phonemes": "pl\u02c8iz \u02c8\u00e6sk \u00f0\u0259 st\u02c8\u00e6f \u0259b\u02c8a\u028at \u00f0\u0259 t\u0361\u0283\u02c8\u00e6ns \u0259v \u0279\u02c8e\u026an \u2016",
+      "g2p_phonemes": "pl\u02c8iz \u02c8\u00e6sk \u00f0\u0259 st\u02c8\u00e6f \u0259b\u02c8\u028c\u028at \u00f0\u0259 \u02a7\u02c8\u00e6ns \u0259v \u0279\u02c8e\u026an",
+      "changed": true
+    },
+    {
+      "accent": "india_south_asia",
+      "prompt_id": 0,
+      "base_phonemes": "\u00f0\u0259 b\u02c8\u00e6\u03b8 w\u0259z b\u02c8\u025bt\u025a \u00f0\u0259n \u00f0\u0259 d\u02c8\u00e6ns \u02c8\u026an \u00f0\u0259 k\u02c8\u0251\u0279 \u2016",
+      "g2p_phonemes": "\u0256\u0259 b\u02c8a\u0288 \u028b\u0259z b\u02c8\u025b\u0288\u025a \u0256\u0259n \u0256\u0259 \u0256\u02c8ans \u02c8\u026an \u0256\u0259 k\u02c8\u0251\u027e",
+      "changed": true
+    },
+    {
+      "accent": "india_south_asia",
+      "prompt_id": 1,
+      "base_phonemes": "\u02c8a\u026a \u03b8\u02c8\u026a\u014bk \u00f0\u02c8\u026as \u02c8\u026az \u00f0\u0259 \u0279\u02c8a\u026at t\u02c8a\u026am t\u0259 t\u02c8un \u00f0\u0259 nj\u02c8u v\u02c8\u0254\u026as \u2016",
+      "g2p_phonemes": "\u02c8a\u026a \u0288\u02c8\u026a\u014bk \u0256\u02c8\u026as \u02c8\u026az \u0256\u0259 \u027e\u02c8a\u026a\u0288 \u0288\u02c8a\u026am \u0288\u0259 \u0288\u02c8un \u0256\u0259 nj\u02c8u \u028b\u02c8\u0254\u026as",
+      "changed": true
+    },
+    {
+      "accent": "india_south_asia",
+      "prompt_id": 2,
+      "base_phonemes": "l\u02c8\u00e6st n\u02c8a\u026at \u00f0\u0259 f\u02c8\u00e6st t\u0279\u02c8e\u026an p\u02c8\u00e6st \u00f0\u0259 p\u02c8\u00e6\u03b8 b\u02c8a\u026a \u00f0\u0259 w\u02c8\u0254t\u025a \u2016",
+      "g2p_phonemes": "l\u02c8as\u0288 n\u02c8a\u026a\u0288 \u0256\u0259 f\u02c8as\u0288 \u0288\u027e\u02c8e\u02d0n p\u02c8as\u0288 \u0256\u0259 p\u02c8a\u0288 b\u02c8a\u026a \u0256\u0259 \u028b\u02c8\u0254\u0288\u025a",
+      "changed": true
+    },
+    {
+      "accent": "india_south_asia",
+      "prompt_id": 3,
+      "base_phonemes": "b\u02c8o\u028a\u03b8 \u0259v \u02c8\u028cs k\u0259n st\u02c8\u0251\u0279t \u00f0\u0259 t\u02c8\u00e6sk \u02c8\u00e6ft\u025a \u00f0\u0259 f\u02c8\u026alm \u2016",
+      "g2p_phonemes": "b\u02c8o\u02d0\u0288 \u0259\u028b \u02c8\u028cs k\u0259n s\u0288\u02c8\u0251\u027e\u0288 \u0256\u0259 \u0288\u02c8ask \u02c8af\u0288\u025a \u0256\u0259 f\u02c8\u026alm",
+      "changed": true
+    },
+    {
+      "accent": "india_south_asia",
+      "prompt_id": 4,
+      "base_phonemes": "\u00f0\u0259 hj\u02c8um\u0259n v\u02c8\u0254\u026as \u0279\u026afl\u02c8\u025bkts \u0259 p\u02c8\u025as\u0259n\u0259l a\u026ad\u02c8\u025bnt\u026ati \u2016",
+      "g2p_phonemes": "\u0256\u0259 hj\u02c8um\u0259n \u028b\u02c8\u0254\u026as \u027e\u026afl\u02c8\u025bk\u0288s \u0259 p\u02c8\u025as\u0259n\u0259l a\u026a\u0256\u02c8\u025bn\u0288\u026a\u0288i",
+      "changed": true
+    },
+    {
+      "accent": "india_south_asia",
+      "prompt_id": 5,
+      "base_phonemes": "pl\u02c8iz \u02c8\u00e6sk \u00f0\u0259 st\u02c8\u00e6f \u0259b\u02c8a\u028at \u00f0\u0259 t\u0361\u0283\u02c8\u00e6ns \u0259v \u0279\u02c8e\u026an \u2016",
+      "g2p_phonemes": "pl\u02c8iz \u02c8ask \u0256\u0259 s\u0288\u02c8af \u0259b\u02c8a\u028a\u0288 \u0256\u0259 \u02a7\u02c8ans \u0259\u028b \u027e\u02c8e\u02d0n",
+      "changed": true
+    },
+    {
+      "accent": "irish",
+      "prompt_id": 0,
+      "base_phonemes": "\u00f0\u0259 b\u02c8\u00e6\u03b8 w\u0259z b\u02c8\u025bt\u025a \u00f0\u0259n \u00f0\u0259 d\u02c8\u00e6ns \u02c8\u026an \u00f0\u0259 k\u02c8\u0251\u0279 \u2016",
+      "g2p_phonemes": "d\u0259 b\u02c8at w\u0259z b\u02c8\u025bt\u025a d\u0259n d\u0259 d\u02c8ans \u02c8\u026an d\u0259 k\u02c8\u0251\u027e",
+      "changed": true
+    },
+    {
+      "accent": "irish",
+      "prompt_id": 1,
+      "base_phonemes": "\u02c8a\u026a \u03b8\u02c8\u026a\u014bk \u00f0\u02c8\u026as \u02c8\u026az \u00f0\u0259 \u0279\u02c8a\u026at t\u02c8a\u026am t\u0259 t\u02c8un \u00f0\u0259 nj\u02c8u v\u02c8\u0254\u026as \u2016",
+      "g2p_phonemes": "\u02c8\u0251\u026a t\u02c8\u026a\u014bk d\u02c8\u026as \u02c8\u026az d\u0259 \u027e\u02c8\u0251\u026at t\u02c8\u0251\u026am t\u0259 t\u02c8un d\u0259 nj\u02c8u v\u02c8\u0254\u026as",
+      "changed": true
+    },
+    {
+      "accent": "irish",
+      "prompt_id": 2,
+      "base_phonemes": "l\u02c8\u00e6st n\u02c8a\u026at \u00f0\u0259 f\u02c8\u00e6st t\u0279\u02c8e\u026an p\u02c8\u00e6st \u00f0\u0259 p\u02c8\u00e6\u03b8 b\u02c8a\u026a \u00f0\u0259 w\u02c8\u0254t\u025a \u2016",
+      "g2p_phonemes": "l\u02c8ast n\u02c8\u0251\u026at d\u0259 f\u02c8ast t\u027e\u02c8e\u02d0n p\u02c8ast d\u0259 p\u02c8at b\u02c8\u0251\u026a d\u0259 w\u02c8\u0254t\u025a",
+      "changed": true
+    },
+    {
+      "accent": "irish",
+      "prompt_id": 3,
+      "base_phonemes": "b\u02c8o\u028a\u03b8 \u0259v \u02c8\u028cs k\u0259n st\u02c8\u0251\u0279t \u00f0\u0259 t\u02c8\u00e6sk \u02c8\u00e6ft\u025a \u00f0\u0259 f\u02c8\u026alm \u2016",
+      "g2p_phonemes": "b\u02c8o\u02d0t \u0259v \u02c8\u028cs k\u0259n st\u02c8\u0251\u027et d\u0259 t\u02c8ask \u02c8aft\u025a d\u0259 f\u02c8\u026al\u0259m",
+      "changed": true
+    },
+    {
+      "accent": "irish",
+      "prompt_id": 4,
+      "base_phonemes": "\u00f0\u0259 hj\u02c8um\u0259n v\u02c8\u0254\u026as \u0279\u026afl\u02c8\u025bkts \u0259 p\u02c8\u025as\u0259n\u0259l a\u026ad\u02c8\u025bnt\u026ati \u2016",
+      "g2p_phonemes": "d\u0259 hj\u02c8um\u0259n v\u02c8\u0254\u026as \u027e\u026afl\u02c8\u025bkts \u0259 p\u02c8\u025as\u0259n\u0259l \u0251\u026ad\u02c8\u025bnt\u026ati",
+      "changed": true
+    },
+    {
+      "accent": "irish",
+      "prompt_id": 5,
+      "base_phonemes": "pl\u02c8iz \u02c8\u00e6sk \u00f0\u0259 st\u02c8\u00e6f \u0259b\u02c8a\u028at \u00f0\u0259 t\u0361\u0283\u02c8\u00e6ns \u0259v \u0279\u02c8e\u026an \u2016",
+      "g2p_phonemes": "pl\u02c8iz \u02c8ask d\u0259 st\u02c8af \u0259b\u02c8a\u028at d\u0259 \u02a7\u02c8ans \u0259v \u027e\u02c8e\u02d0n",
+      "changed": true
+    }
+  ],
+  "changed_prompts_by_accent": {
+    "us": 6,
+    "england": 6,
+    "australian": 6,
+    "canadian": 6,
+    "india_south_asia": 6,
+    "irish": 6
+  },
+  "notes": [
+    "regex is the canonical gruut phonemizer; g2p is the IPA accent rule path.",
+    "The identity style vector is frozen across every clip.",
+    "Gender/age prosody bias is disabled so phonemes are the only accent variable.",
+    "Irish is evaluation-only and is never a training class."
+  ],
+  "limitations": [
+    "The accent rules are hand-written, not learned G2P.",
+    "Six prompts are enough for a diagnostic, not a confirmatory study.",
+    "No human accent-identification or MOS study was run."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings collected"
+  }
+}

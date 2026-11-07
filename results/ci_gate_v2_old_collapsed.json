@@ -1,0 +1,225 @@
+{
+  "artifacts": {
+    "features": "D:\\voix\\data\\processed\\voxceleb2_v2\\features_v2.h5",
+    "index": "D:\\voix\\data\\processed\\voxceleb2_v2\\index.csv",
+    "scaler": "D:\\voix\\data\\processed\\voxceleb2_v2\\face_scaler_v2.pt",
+    "cfvn": "D:\\voix\\results\\checkpoints\\cfvn_v2_best.pt",
+    "cvae": "D:\\voix\\checkpoints\\cvae_cfvn_face192_latent128_diversity.pt",
+    "adapter": "checkpoints\\style_adapter_cfvn_best.pt",
+    "style_targets": "D:\\voix\\data\\processed\\style_targets_voxceleb2_5clip.pt",
+    "missing": []
+  },
+  "split": "test",
+  "device": "cuda",
+  "retrieval": {
+    "cfvn": {
+      "n_speakers": 118.0,
+      "recall_at_1": 0.8474576473236084,
+      "recall_at_5": 0.8983050584793091,
+      "recall_at_10": 0.9237288236618042,
+      "chance_at_1": 0.00847457627118644,
+      "shuffled_recall_at_1": 0.0,
+      "constant_recall_at_1": 0.008474576286971569
+    },
+    "cfvn_gender_controlled": {
+      "n_speakers": 118.0,
+      "chance_at_1": 0.016949152542372885,
+      "mean_rank": 18.796610169491526,
+      "recall_at_1": 0.07627118644067797,
+      "recall_at_5": 0.2966101694915254,
+      "recall_at_10": 0.4661016949152542
+    },
+    "raw_arcface": {
+      "n_speakers": 118.0,
+      "recall_at_1": 0.9491525292396545,
+      "recall_at_5": 0.9576271176338196,
+      "recall_at_10": 0.9576271176338196,
+      "chance_at_1": 0.00847457627118644
+    },
+    "raw_arcface_gender_controlled": {
+      "n_speakers": 118.0,
+      "chance_at_1": 0.016949152542372885,
+      "mean_rank": 1.805084745762712,
+      "recall_at_1": 0.9491525423728814,
+      "recall_at_5": 0.9576271186440678,
+      "recall_at_10": 0.9661016949152542
+    },
+    "fused_z": {
+      "n_speakers": 118.0,
+      "recall_at_1": 0.9067796468734741,
+      "recall_at_5": 0.9406779408454895,
+      "recall_at_10": 0.9491525292396545,
+      "chance_at_1": 0.00847457627118644
+    }
+  },
+  "health": {
+    "cfvn": {
+      "within_speaker_cosine": 0.633853554725647,
+      "between_speaker_cosine": 0.24431557953357697,
+      "per_dim_std": 0.06234827637672424,
+      "collapse_ratio": 0.8639230595906622
+    }
+  },
+  "cvae": {
+    "decoder_within_face_cosine": 0.3064841330051422,
+    "decoder_across_face_cosine": 0.04126244783401489,
+    "decoder_pairwise_cosine": 0.04126244783401489,
+    "face_margin": 0.2652216851711273,
+    "prior_pairwise_cosine": 0.014420727267861366,
+    "active_units": 128,
+    "prior_active_units": 127
+  },
+  "adapter": {
+    "output_within_face_cosine": 0.9862035512924194,
+    "output_across_face_cosine": 0.955385148525238,
+    "output_pairwise_cosine": 0.955385148525238,
+    "output_per_dim_std": 0.011132171377539635,
+    "output_target_cosine": 0.7996594905853271,
+    "output_target_cosine_timbre": 0.8571227192878723,
+    "output_target_cosine_prosody": 0.7715491056442261,
+    "output_norm_mean": 2.50388240814209,
+    "output_centered_norm_mean": 1.4706566333770752,
+    "target_norm_mean": 2.9420361518859863,
+    "target_centered_norm_mean": 1.3065823316574097,
+    "target_mean_cosine": 0.8953814506530762
+  },
+  "style_targets": {
+    "style_target_speakers": 6111.0,
+    "style_target_clips": 35892.0,
+    "style_target_missing_speakers": 0.0,
+    "style_target_across_cosine": 0.8128116130828857,
+    "style_target_centered_cosine": 0.0013315810356289148,
+    "style_target_mean_norm": 2.7196850776672363,
+    "style_target_centered_norm_mean": 1.3040822744369507,
+    "style_target_per_dim_std": 0.07572036981582642,
+    "style_target_norm_mean": 3.019930839538574,
+    "style_target_mean_clips": 4.839797087219767,
+    "style_target_clips_per_speaker": 5.0
+  },
+  "clips": 354,
+  "speakers": 118,
+  "query_speakers": 118,
+  "scaler": "D:\\voix\\data\\processed\\voxceleb2_v2\\face_scaler_v2.pt",
+  "face_key": "face_features",
+  "face_dim": 560,
+  "voice_health": {
+    "within_speaker_cosine": 0.47919249534606934,
+    "between_speaker_cosine": 0.03235144168138504,
+    "per_dim_std": 0.07076376676559448,
+    "collapse_ratio": 0.9805315149837087
+  },
+  "gate": {
+    "passed": false,
+    "checks": [
+      {
+        "name": "artifacts_present",
+        "value": [],
+        "threshold": [],
+        "passed": true,
+        "message": "missing artifacts: []"
+      },
+      {
+        "name": "cfvn_recall_at_1",
+        "value": 0.8474576473236084,
+        "threshold": 0.05,
+        "passed": true,
+        "message": "cfvn_recall_at_1=0.8475 >= 0.0500 (required >=)"
+      },
+      {
+        "name": "cfvn_chance_multiple",
+        "value": 100.00000238418579,
+        "threshold": 10.0,
+        "passed": true,
+        "message": "cfvn_chance_multiple=100.0000 >= 10.0000 (required >=)"
+      },
+      {
+        "name": "shuffled_control_recall_at_1",
+        "value": 0.0,
+        "threshold": 0.05,
+        "passed": true,
+        "message": "shuffled_control_recall_at_1=0.0000 <= 0.0500 (required <=)"
+      },
+      {
+        "name": "constant_control_recall_at_1",
+        "value": 0.008474576286971569,
+        "threshold": 0.05,
+        "passed": true,
+        "message": "constant_control_recall_at_1=0.0085 <= 0.0500 (required <=)"
+      },
+      {
+        "name": "between_speaker_cosine",
+        "value": 0.24431557953357697,
+        "threshold": 0.8,
+        "passed": true,
+        "message": "between_speaker_cosine=0.2443 <= 0.8000 (required <=)"
+      },
+      {
+        "name": "within_between_margin",
+        "value": 0.38953797519207,
+        "threshold": 0.05,
+        "passed": true,
+        "message": "within_between_margin=0.3895 >= 0.0500 (required >=)"
+      },
+      {
+        "name": "collapse_ratio",
+        "value": 0.8639230595906622,
+        "threshold": 0.5,
+        "passed": true,
+        "message": "collapse_ratio=0.8639 >= 0.5000 (required >=)"
+      },
+      {
+        "name": "cvae_decoder_pairwise_cosine",
+        "value": 0.04126244783401489,
+        "threshold": 0.5,
+        "passed": true,
+        "message": "cvae_decoder_pairwise_cosine=0.0413 <= 0.5000 (required <=)"
+      },
+      {
+        "name": "cvae_face_margin",
+        "value": 0.2652216851711273,
+        "threshold": 0.1,
+        "passed": true,
+        "message": "cvae_face_margin=0.2652 >= 0.1000 (required >=)"
+      },
+      {
+        "name": "cvae_active_units",
+        "value": 128.0,
+        "threshold": 8,
+        "passed": true,
+        "message": "cvae_active_units=128.0000 >= 8.0000 (required >=)"
+      },
+      {
+        "name": "cvae_prior_pairwise_cosine",
+        "value": 0.014420727267861366,
+        "threshold": 0.9,
+        "passed": true,
+        "message": "cvae_prior_pairwise_cosine=0.0144 <= 0.9000 (required <=)"
+      },
+      {
+        "name": "adapter_output_pairwise_cosine",
+        "value": 0.955385148525238,
+        "threshold": 0.9,
+        "passed": false,
+        "message": "adapter_output_pairwise_cosine=0.9554 > 0.9000 (required <=)"
+      },
+      {
+        "name": "adapter_output_per_dim_std",
+        "value": 0.011132171377539635,
+        "threshold": 0.01,
+        "passed": true,
+        "message": "adapter_output_per_dim_std=0.0111 >= 0.0100 (required >=)"
+      },
+      {
+        "name": "adapter_target_cosine",
+        "value": 0.7996594905853271,
+        "threshold": 0.85,
+        "passed": false,
+        "message": "adapter_target_cosine=0.7997 < 0.8500 (required >=)"
+      }
+    ],
+    "failures": [
+      "adapter_output_pairwise_cosine",
+      "adapter_target_cosine"
+    ]
+  }
+}

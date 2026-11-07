@@ -1,0 +1,3752 @@
+{
+  "schema_version": "voix.ecapa_reference.v1",
+  "created_at": "2026-11-05 04:57:38 UTC",
+  "level": "exploratory_reference",
+  "manifest": "D:\\voix\\data\\processed\\ami_naturalness\\manifest.csv",
+  "n_speakers": 16,
+  "n_clips": 32,
+  "clips": [
+    {
+      "clip_id": "ES2002c_FEE005_0111",
+      "speaker_id": "FEE005",
+      "gender": "female",
+      "duration_sec": 9.94,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\ES2002c\\FEE005\\ES2002c_FEE005_0111.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2002c_FEE005_0005",
+      "speaker_id": "FEE005",
+      "gender": "female",
+      "duration_sec": 9.92,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\ES2002c\\FEE005\\ES2002c_FEE005_0005.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2014a_FEE055_0010",
+      "speaker_id": "FEE055",
+      "gender": "female",
+      "duration_sec": 7.08,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\test\\ES2014a\\FEE055\\ES2014a_FEE055_0010.wav",
+      "embedding_norm": 0.9999999999999999
+    },
+    {
+      "clip_id": "ES2014a_FEE055_0007",
+      "speaker_id": "FEE055",
+      "gender": "female",
+      "duration_sec": 5.88,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\test\\ES2014a\\FEE055\\ES2014a_FEE055_0007.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "IS1000d_FIE081_0020",
+      "speaker_id": "FIE081",
+      "gender": "female",
+      "duration_sec": 9.94,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\IS1000d\\FIE081\\IS1000d_FIE081_0020.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "IS1000c_FIE081_0025",
+      "speaker_id": "FIE081",
+      "gender": "female",
+      "duration_sec": 9.62,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\IS1000c\\FIE081\\IS1000c_FIE081_0025.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2002d_MEE006_0086",
+      "speaker_id": "MEE006",
+      "gender": "male",
+      "duration_sec": 9.92,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\ES2002d\\MEE006\\ES2002d_MEE006_0086.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2002c_MEE006_0008",
+      "speaker_id": "MEE006",
+      "gender": "male",
+      "duration_sec": 9.91,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\ES2002c\\MEE006\\ES2002c_MEE006_0008.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2002c_MEE007_0037",
+      "speaker_id": "MEE007",
+      "gender": "male",
+      "duration_sec": 9.56,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\ES2002c\\MEE007\\ES2002c_MEE007_0037.wav",
+      "embedding_norm": 0.9999999999999999
+    },
+    {
+      "clip_id": "ES2002b_MEE007_0003",
+      "speaker_id": "MEE007",
+      "gender": "male",
+      "duration_sec": 9.55,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\ES2002b\\MEE007\\ES2002b_MEE007_0003.wav",
+      "embedding_norm": 0.9999999999999999
+    },
+    {
+      "clip_id": "ES2002a_MEE008_0059",
+      "speaker_id": "MEE008",
+      "gender": "male",
+      "duration_sec": 9.97,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\ES2002a\\MEE008\\ES2002a_MEE008_0059.wav",
+      "embedding_norm": 1.0000000000000002
+    },
+    {
+      "clip_id": "ES2002c_MEE008_0104",
+      "speaker_id": "MEE008",
+      "gender": "male",
+      "duration_sec": 9.86,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\ES2002c\\MEE008\\ES2002c_MEE008_0104.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2003a_MEE009_0065",
+      "speaker_id": "MEE009",
+      "gender": "male",
+      "duration_sec": 8.85,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\val\\ES2003a\\MEE009\\ES2003a_MEE009_0065.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2003a_MEE009_0049",
+      "speaker_id": "MEE009",
+      "gender": "male",
+      "duration_sec": 8.64,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\val\\ES2003a\\MEE009\\ES2003a_MEE009_0049.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2003a_MEE010_0008",
+      "speaker_id": "MEE010",
+      "gender": "male",
+      "duration_sec": 6.51,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\val\\ES2003a\\MEE010\\ES2003a_MEE010_0008.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2003a_MEE010_0013",
+      "speaker_id": "MEE010",
+      "gender": "male",
+      "duration_sec": 5.39,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\val\\ES2003a\\MEE010\\ES2003a_MEE010_0013.wav",
+      "embedding_norm": 0.9999999999999999
+    },
+    {
+      "clip_id": "ES2003a_MEE011_0006",
+      "speaker_id": "MEE011",
+      "gender": "male",
+      "duration_sec": 9.23,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\val\\ES2003a\\MEE011\\ES2003a_MEE011_0006.wav",
+      "embedding_norm": 0.9999999999999999
+    },
+    {
+      "clip_id": "ES2003a_MEE011_0012",
+      "speaker_id": "MEE011",
+      "gender": "male",
+      "duration_sec": 8.88,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\val\\ES2003a\\MEE011\\ES2003a_MEE011_0012.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2003a_MEE012_0008",
+      "speaker_id": "MEE012",
+      "gender": "male",
+      "duration_sec": 9.68,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\val\\ES2003a\\MEE012\\ES2003a_MEE012_0008.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2003a_MEE012_0017",
+      "speaker_id": "MEE012",
+      "gender": "male",
+      "duration_sec": 8.78,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\val\\ES2003a\\MEE012\\ES2003a_MEE012_0017.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2014a_MEE053_0079",
+      "speaker_id": "MEE053",
+      "gender": "male",
+      "duration_sec": 9.13,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\test\\ES2014a\\MEE053\\ES2014a_MEE053_0079.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2014a_MEE053_0022",
+      "speaker_id": "MEE053",
+      "gender": "male",
+      "duration_sec": 8.88,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\test\\ES2014a\\MEE053\\ES2014a_MEE053_0022.wav",
+      "embedding_norm": 1.0000000000000002
+    },
+    {
+      "clip_id": "ES2014a_MEE054_0005",
+      "speaker_id": "MEE054",
+      "gender": "male",
+      "duration_sec": 7.8,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\test\\ES2014a\\MEE054\\ES2014a_MEE054_0005.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2014a_MEE054_0011",
+      "speaker_id": "MEE054",
+      "gender": "male",
+      "duration_sec": 7.26,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\test\\ES2014a\\MEE054\\ES2014a_MEE054_0011.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "ES2014a_MEE056_0007",
+      "speaker_id": "MEE056",
+      "gender": "male",
+      "duration_sec": 9.06,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\test\\ES2014a\\MEE056\\ES2014a_MEE056_0007.wav",
+      "embedding_norm": 1.0000000000000002
+    },
+    {
+      "clip_id": "ES2014a_MEE056_0013",
+      "speaker_id": "MEE056",
+      "gender": "male",
+      "duration_sec": 6.86,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\test\\ES2014a\\MEE056\\ES2014a_MEE056_0013.wav",
+      "embedding_norm": 0.9999999999999999
+    },
+    {
+      "clip_id": "IS1000d_MIO016_0033",
+      "speaker_id": "MIO016",
+      "gender": "male",
+      "duration_sec": 9.98,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\IS1000d\\MIO016\\IS1000d_MIO016_0033.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "IS1000d_MIO016_0077",
+      "speaker_id": "MIO016",
+      "gender": "male",
+      "duration_sec": 9.81,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\IS1000d\\MIO016\\IS1000d_MIO016_0077.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "IS1000d_MIO050_0023",
+      "speaker_id": "MIO050",
+      "gender": "male",
+      "duration_sec": 9.91,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\IS1000d\\MIO050\\IS1000d_MIO050_0023.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "IS1000b_MIO050_0049",
+      "speaker_id": "MIO050",
+      "gender": "male",
+      "duration_sec": 9.67,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\IS1000b\\MIO050\\IS1000b_MIO050_0049.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "IS1000a_MIO082_0106",
+      "speaker_id": "MIO082",
+      "gender": "male",
+      "duration_sec": 9.77,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\IS1000a\\MIO082\\IS1000a_MIO082_0106.wav",
+      "embedding_norm": 1.0
+    },
+    {
+      "clip_id": "IS1000b_MIO082_0030",
+      "speaker_id": "MIO082",
+      "gender": "male",
+      "duration_sec": 9.74,
+      "path": "D:\\voix\\data\\processed\\ami_naturalness\\wav\\train\\IS1000b\\MIO082\\IS1000b_MIO082_0030.wav",
+      "embedding_norm": 1.0
+    }
+  ],
+  "same_speaker": {
+    "n": 16,
+    "min": 0.5492395469033633,
+    "p10": 0.6381201897196853,
+    "median": 0.7790693289510142,
+    "p90": 0.8253883295536946,
+    "max": 0.8329490581088634,
+    "mean": 0.7468433805207453
+  },
+  "between_speaker_same_gender": {
+    "n": 324,
+    "min": -0.15075905587442645,
+    "p10": 0.005451097696786168,
+    "median": 0.11452325327480903,
+    "p90": 0.24983201218313522,
+    "max": 0.4378563828374123,
+    "mean": 0.12277239989866727
+  },
+  "between_speaker_cross_gender": {
+    "n": 156,
+    "min": -0.11918884462167707,
+    "p10": -0.022278666567534328,
+    "median": 0.06251068337590664,
+    "p90": 0.13971060343444075,
+    "max": 0.1931384030355914,
+    "mean": 0.05910941256666243
+  },
+  "same_speaker_pairs": [
+    0.8012845472380539,
+    0.717021138260069,
+    0.8193460054644698,
+    0.8314306536429192,
+    0.8329490581088634,
+    0.7881437556865349,
+    0.7699949022154935,
+    0.5492395469033633,
+    0.6827408234300606,
+    0.7554837817917236,
+    0.7249340830246656,
+    0.5934995560093101,
+    0.794788138240331,
+    0.7963440274180642,
+    0.702399637654904,
+    0.7898944332430982
+  ],
+  "between_speaker_pairs": [
+    {
+      "a": "FEE005",
+      "b": "FEE055",
+      "a_gender": "female",
+      "b_gender": "female",
+      "cosine": 0.25154036660893386
+    },
+    {
+      "a": "FEE005",
+      "b": "FEE055",
+      "a_gender": "female",
+      "b_gender": "female",
+      "cosine": 0.2019020884474621
+    },
+    {
+      "a": "FEE005",
+      "b": "FEE055",
+      "a_gender": "female",
+      "b_gender": "female",
+      "cosine": 0.24107493351566622
+    },
+    {
+      "a": "FEE005",
+      "b": "FEE055",
+      "a_gender": "female",
+      "b_gender": "female",
+      "cosine": 0.19520242967026497
+    },
+    {
+      "a": "FEE005",
+      "b": "FIE081",
+      "a_gender": "female",
+      "b_gender": "female",
+      "cosine": 0.3186043971023773
+    },
+    {
+      "a": "FEE005",
+      "b": "FIE081",
+      "a_gender": "female",
+      "b_gender": "female",
+      "cosine": 0.24033570809840604
+    },
+    {
+      "a": "FEE005",
+      "b": "FIE081",
+      "a_gender": "female",
+      "b_gender": "female",
+      "cosine": 0.2888159162018976
+    },
+    {
+      "a": "FEE005",
+      "b": "FIE081",
+      "a_gender": "female",
+      "b_gender": "female",
+      "cosine": 0.22987414869213318
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE006",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.1388537633360229
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE006",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.16234253902878584
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE006",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.08819470406750335
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE006",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.09641718805773557
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE007",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.06612421472189879
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE007",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.05357945157494792
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE007",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.07061079484756498
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE007",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.008451465959919063
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE008",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.0453873529215381
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE008",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.004951627397459413
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE008",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.12315169412930722
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE008",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.0415052955467891
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE009",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.13186388638148583
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE009",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.12969758683629468
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE009",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.1463174395250636
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE009",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.17366346758168183
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE010",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.08719953200730654
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE010",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.10791807464041561
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE010",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.08273036906070676
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE010",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.10193081278863769
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE011",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.004660104779404373
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE011",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.035964017724912575
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE011",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.09601514121362502
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE011",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.1525258927610117
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE012",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.031008855792809716
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE012",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.10324431394780757
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE012",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.0473407674388317
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE012",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.11160969413535128
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE053",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.05824373295143889
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE053",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.028937000198847825
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE053",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.08650810784527539
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE053",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.05248185040233806
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE054",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.0011374385256981527
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE054",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.08085900499025886
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE054",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.033033428384701295
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE054",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.04167060198956102
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE056",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.12785946586751917
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE056",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.1931384030355914
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE056",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.0748800616560894
+    },
+    {
+      "a": "FEE005",
+      "b": "MEE056",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.13988041955507285
+    },
+    {
+      "a": "FEE005",
+      "b": "MIO016",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.022240101272655095
+    },
+    {
+      "a": "FEE005",
+      "b": "MIO016",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.006773542056694101
+    },
+    {
+      "a": "FEE005",
+      "b": "MIO016",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.02102845721511027
+    },
+    {
+      "a": "FEE005",
+      "b": "MIO016",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.05224629845797429
+    },
+    {
+      "a": "FEE005",
+      "b": "MIO050",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.03679802225383763
+    },
+    {
+      "a": "FEE005",
+      "b": "MIO050",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.05153321700836529
+    },
+    {
+      "a": "FEE005",
+      "b": "MIO050",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.07504103706204371
+    },
+    {
+      "a": "FEE005",
+      "b": "MIO050",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.10336613837212164
+    },
+    {
+      "a": "FEE005",
+      "b": "MIO082",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.19107035041878256
+    },
+    {
+      "a": "FEE005",
+      "b": "MIO082",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.18070126709498502
+    },
+    {
+      "a": "FEE005",
+      "b": "MIO082",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.14870486194648336
+    },
+    {
+      "a": "FEE005",
+      "b": "MIO082",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.08475695647168296
+    },
+    {
+      "a": "FEE055",
+      "b": "FIE081",
+      "a_gender": "female",
+      "b_gender": "female",
+      "cosine": -0.013481197540029495
+    },
+    {
+      "a": "FEE055",
+      "b": "FIE081",
+      "a_gender": "female",
+      "b_gender": "female",
+      "cosine": 0.011001273740831576
+    },
+    {
+      "a": "FEE055",
+      "b": "FIE081",
+      "a_gender": "female",
+      "b_gender": "female",
+      "cosine": 0.0017850656324619948
+    },
+    {
+      "a": "FEE055",
+      "b": "FIE081",
+      "a_gender": "female",
+      "b_gender": "female",
+      "cosine": 0.06263761101604709
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE006",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.06850057025995304
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE006",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.06160341087974773
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE006",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.0674343820786439
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE006",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.037647174615753114
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE007",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.06603413566268371
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE007",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.031592380459216446
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE007",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.06559773439114702
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE007",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.02074261997967325
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE008",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.016697234678536607
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE008",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.03491455717510116
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE008",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.0632483804423388
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE008",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.04014027990970021
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE009",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.04520403069525813
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE009",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.06177298630947448
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE009",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.06123500380890387
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE009",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.05264937965417905
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE010",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.11221363332771621
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE010",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.08361579362336774
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE010",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.15200334528741116
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE010",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.16410924615193123
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE011",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.10668794185079629
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE011",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.10988314972013542
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE011",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.052135777992501665
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE011",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.06077669412102116
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE012",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.10462599470941705
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE012",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.11435646154551024
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE012",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.08256949728424329
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE012",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.06557506967386026
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE053",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.08885117539614944
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE053",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.03942716833748881
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE053",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.10936341554320245
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE053",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.025205678534215493
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE054",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.16331201125049874
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE054",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.10407758499902021
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE054",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.16577527281225723
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE054",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.12190931457838537
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE056",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.11952088844945762
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE056",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.12088097940822301
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE056",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.038410045609027166
+    },
+    {
+      "a": "FEE055",
+      "b": "MEE056",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.07604510566561443
+    },
+    {
+      "a": "FEE055",
+      "b": "MIO016",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.023463186143242
+    },
+    {
+      "a": "FEE055",
+      "b": "MIO016",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.051616873150640584
+    },
+    {
+      "a": "FEE055",
+      "b": "MIO016",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.025613327183441906
+    },
+    {
+      "a": "FEE055",
+      "b": "MIO016",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.10095190687717287
+    },
+    {
+      "a": "FEE055",
+      "b": "MIO050",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.044122967479678
+    },
+    {
+      "a": "FEE055",
+      "b": "MIO050",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.05551817614519679
+    },
+    {
+      "a": "FEE055",
+      "b": "MIO050",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.03097947522309777
+    },
+    {
+      "a": "FEE055",
+      "b": "MIO050",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.08904378875093504
+    },
+    {
+      "a": "FEE055",
+      "b": "MIO082",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.1229540125981794
+    },
+    {
+      "a": "FEE055",
+      "b": "MIO082",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.022976589660153923
+    },
+    {
+      "a": "FEE055",
+      "b": "MIO082",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.05257467705000084
+    },
+    {
+      "a": "FEE055",
+      "b": "MIO082",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.03436671177897474
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE006",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.09275973594278672
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE006",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.08892263296365507
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE006",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.06625069420064214
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE006",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.06804300156371948
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE007",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.06541815904332571
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE007",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.0128900174365882
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE007",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.021643811551434355
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE007",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.010277487918309035
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE008",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.02231723186241356
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE008",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.031168270554911066
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE008",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.018823752138507125
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE008",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.019803342637155143
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE009",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.08839622329994783
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE009",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.1216502726174995
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE009",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.08463514921990592
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE009",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.12714523900716593
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE010",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.03467792373945432
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE010",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.01536351160678091
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE010",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.11918884462167707
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE010",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.04021695862534984
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE011",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.00884235397242103
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE011",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.08854944542402432
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE011",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.019163689739106544
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE011",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.10051818869910124
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE012",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.09706639513475895
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE012",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.10857434441675283
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE012",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.10293091520190804
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE012",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.06597038023243637
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE053",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.036880618829311526
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE053",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.06747828489717969
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE053",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.05539080980116072
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE053",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.004198233375658663
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE054",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.022098584724145588
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE054",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.07186616322959928
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE054",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.023082999500911826
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE054",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.041751916518371165
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE056",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.011443992960008548
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE056",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.006545399458615306
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE056",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.03815675441391135
+    },
+    {
+      "a": "FIE081",
+      "b": "MEE056",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.0029007663374896898
+    },
+    {
+      "a": "FIE081",
+      "b": "MIO016",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.015403555967218041
+    },
+    {
+      "a": "FIE081",
+      "b": "MIO016",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.06487971809613097
+    },
+    {
+      "a": "FIE081",
+      "b": "MIO016",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": -0.014534636394987005
+    },
+    {
+      "a": "FIE081",
+      "b": "MIO016",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.049088024800028336
+    },
+    {
+      "a": "FIE081",
+      "b": "MIO050",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.0953701360820043
+    },
+    {
+      "a": "FIE081",
+      "b": "MIO050",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.13411781997830607
+    },
+    {
+      "a": "FIE081",
+      "b": "MIO050",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.03173413014700882
+    },
+    {
+      "a": "FIE081",
+      "b": "MIO050",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.05013806447404483
+    },
+    {
+      "a": "FIE081",
+      "b": "MIO082",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.13954078731380867
+    },
+    {
+      "a": "FIE081",
+      "b": "MIO082",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.16704000967890265
+    },
+    {
+      "a": "FIE081",
+      "b": "MIO082",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.15633238358397172
+    },
+    {
+      "a": "FIE081",
+      "b": "MIO082",
+      "a_gender": "female",
+      "b_gender": "male",
+      "cosine": 0.16746856750005396
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE007",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.18083304068272196
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE007",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.18056256420486078
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE007",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1341626605539819
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE007",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1590866256314598
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE008",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.30837141247048616
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE008",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.22544688732906557
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE008",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.2974578702289824
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE008",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.21328787033026814
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE009",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.25724947144822274
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE009",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.25229367224061916
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE009",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1774510046022342
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE009",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.24170981217527665
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.07321827089454708
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1361611555519256
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.027430643449955036
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.13101492729762165
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.19784697804459872
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.09976224660742085
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.07660401285328455
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.010950969290656226
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.22339621050283193
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.19280567351730507
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.2483831519071562
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1991705736540946
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.009583922598147752
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08782679325967187
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0783273376440139
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.15268106656390068
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.049140798539753526
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.17419912465318704
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.10802621125371682
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.17580532080042804
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.11182425133077313
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.11165561851673117
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0955029495599211
+    },
+    {
+      "a": "MEE006",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.10142128959771429
+    },
+    {
+      "a": "MEE006",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.02841888709529063
+    },
+    {
+      "a": "MEE006",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.011467116769738175
+    },
+    {
+      "a": "MEE006",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.019700529036722807
+    },
+    {
+      "a": "MEE006",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.039971780927054015
+    },
+    {
+      "a": "MEE006",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08825647970367943
+    },
+    {
+      "a": "MEE006",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.15671039667457629
+    },
+    {
+      "a": "MEE006",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.049646303679875464
+    },
+    {
+      "a": "MEE006",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.11451163889158689
+    },
+    {
+      "a": "MEE006",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.13723413924156896
+    },
+    {
+      "a": "MEE006",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1098288514221431
+    },
+    {
+      "a": "MEE006",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.11219076670994513
+    },
+    {
+      "a": "MEE006",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08943705952448888
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE008",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1775209713868184
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE008",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08255391027685682
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE008",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1370687858143184
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE008",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.06985786403732044
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE009",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.17978093479473667
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE009",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.2236058142387952
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE009",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.21342633139078138
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE009",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.2748721680133801
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.4378563828374123
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.3287306325037138
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.421920448652343
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.3006080229571289
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.2313425418617821
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.29874652377897304
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.17123098967842643
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.2926791647259663
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.09948480263343049
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.07262519578130452
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.07414307140754366
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08769651564706817
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.20040742121993085
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.23423518754934575
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.2707234505886037
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.30528991067985267
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08883289466116802
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.16475178529066947
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.016936635433966424
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1016611800181403
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1450952960808956
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.12361823640006252
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1930056301998983
+    },
+    {
+      "a": "MEE007",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.16813135870633844
+    },
+    {
+      "a": "MEE007",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.12671138459388048
+    },
+    {
+      "a": "MEE007",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.16596153712505746
+    },
+    {
+      "a": "MEE007",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.12708217912251882
+    },
+    {
+      "a": "MEE007",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.17810556511562964
+    },
+    {
+      "a": "MEE007",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.026577676952346658
+    },
+    {
+      "a": "MEE007",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08210506190298474
+    },
+    {
+      "a": "MEE007",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.04552354899548255
+    },
+    {
+      "a": "MEE007",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.021803115816736468
+    },
+    {
+      "a": "MEE007",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08562202167176035
+    },
+    {
+      "a": "MEE007",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.11252728578524315
+    },
+    {
+      "a": "MEE007",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.11453486765803118
+    },
+    {
+      "a": "MEE007",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.13841825585096074
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE009",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.11805350566290616
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE009",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.10917269689036221
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE009",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.06335548154964378
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE009",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0477223170907054
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.2974057243100321
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.2740430817375129
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.2034156021696898
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.09462892777613502
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.11897447208530502
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.14429617978105236
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.10325054001384353
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0466745570052221
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.27464101388739165
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.22862082588198476
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.21478785320657803
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1632074580454598
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1246769580385497
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.20024700400897644
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.15548334597368935
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.13055876753489723
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.04334074944922077
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.09569846648781132
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.02543746329106481
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.056817075650479235
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.3057517627534878
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.20211420243323167
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.37217391348606854
+    },
+    {
+      "a": "MEE008",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.23227841465175378
+    },
+    {
+      "a": "MEE008",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.03184355129157241
+    },
+    {
+      "a": "MEE008",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.0705348167743765
+    },
+    {
+      "a": "MEE008",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.02106560474994338
+    },
+    {
+      "a": "MEE008",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.06131438107918847
+    },
+    {
+      "a": "MEE008",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08766457049303812
+    },
+    {
+      "a": "MEE008",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.07726635166035475
+    },
+    {
+      "a": "MEE008",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1312831859751813
+    },
+    {
+      "a": "MEE008",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.05174257725678286
+    },
+    {
+      "a": "MEE008",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08664085546142751
+    },
+    {
+      "a": "MEE008",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1202073328864807
+    },
+    {
+      "a": "MEE008",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.10905950332644411
+    },
+    {
+      "a": "MEE008",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.12851500627948387
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.03975879483361973
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.16771717032873107
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.03877516682340112
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE010",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.134037544839397
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.23264779398521604
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.25045295230141196
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.14447233346870247
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.19362572249314366
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.14510020112185135
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1416008326065728
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.12720558235413212
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.11571235348791324
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.18580645787462036
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1893002961095951
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.3154705313044232
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.31175868548120933
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.12256132733471548
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.2190156566571641
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.07868204946979802
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.10480047949654131
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1529950488703205
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.15782662152993243
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.04586027327860581
+    },
+    {
+      "a": "MEE009",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.03245751676639755
+    },
+    {
+      "a": "MEE009",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.017082706869997952
+    },
+    {
+      "a": "MEE009",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.002910862937144508
+    },
+    {
+      "a": "MEE009",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0035237079470078064
+    },
+    {
+      "a": "MEE009",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.004998929903327544
+    },
+    {
+      "a": "MEE009",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.010979581101326491
+    },
+    {
+      "a": "MEE009",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0009148816471265461
+    },
+    {
+      "a": "MEE009",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.06742548540738447
+    },
+    {
+      "a": "MEE009",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0634701566758746
+    },
+    {
+      "a": "MEE009",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.3030921730198912
+    },
+    {
+      "a": "MEE009",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.24478758271395096
+    },
+    {
+      "a": "MEE009",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.27681153215490595
+    },
+    {
+      "a": "MEE009",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.23292173967797072
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.24438735183101898
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.26933993187862487
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1518106796603655
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE011",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.16634592090182512
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.13475367522650689
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.10554831253008226
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.112726585701838
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.10296310835883421
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.07112500280385592
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.045069142416170785
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.11485065423379798
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1439039476998212
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.07596235764912773
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.2448112715709151
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.20164039302014494
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.31786129253991113
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.26284856935862655
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.20189335129846514
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.16163170426682752
+    },
+    {
+      "a": "MEE010",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.20710619880408412
+    },
+    {
+      "a": "MEE010",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.07018101070220792
+    },
+    {
+      "a": "MEE010",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.011689000076734353
+    },
+    {
+      "a": "MEE010",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.22159338073566004
+    },
+    {
+      "a": "MEE010",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.14194306508940857
+    },
+    {
+      "a": "MEE010",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.032749424936581104
+    },
+    {
+      "a": "MEE010",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.020454669898649767
+    },
+    {
+      "a": "MEE010",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.02742244671752538
+    },
+    {
+      "a": "MEE010",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.00025880133554913656
+    },
+    {
+      "a": "MEE010",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.15075905587442645
+    },
+    {
+      "a": "MEE010",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.09143058360164485
+    },
+    {
+      "a": "MEE010",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08622436093623315
+    },
+    {
+      "a": "MEE010",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.13455359742987186
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.2270156207864893
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.10184869343733233
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.14333675128015844
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE012",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.15660743012028833
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.17927402034044065
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.06434983192467525
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.20535897932144914
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.18500494383222665
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1449966954480632
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.17607300890908614
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.06668188124590299
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08372065248657676
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.18456065958668785
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.16007398396168152
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.2857030289897824
+    },
+    {
+      "a": "MEE011",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.24307591884983742
+    },
+    {
+      "a": "MEE011",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.03553995320335404
+    },
+    {
+      "a": "MEE011",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0861134941077647
+    },
+    {
+      "a": "MEE011",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.025939132120000506
+    },
+    {
+      "a": "MEE011",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.010269438450205302
+    },
+    {
+      "a": "MEE011",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.19269488299849333
+    },
+    {
+      "a": "MEE011",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.10157863127425762
+    },
+    {
+      "a": "MEE011",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08600833522585569
+    },
+    {
+      "a": "MEE011",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.06472368485171358
+    },
+    {
+      "a": "MEE011",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.05147115724018864
+    },
+    {
+      "a": "MEE011",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.00031544320623037164
+    },
+    {
+      "a": "MEE011",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0065061558815229376
+    },
+    {
+      "a": "MEE011",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.0638497823094646
+    },
+    {
+      "a": "MEE012",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.17014638387375303
+    },
+    {
+      "a": "MEE012",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.14006538625066792
+    },
+    {
+      "a": "MEE012",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.15275628100162794
+    },
+    {
+      "a": "MEE012",
+      "b": "MEE053",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.12138521895559762
+    },
+    {
+      "a": "MEE012",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.20403668387940377
+    },
+    {
+      "a": "MEE012",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.22225694352018166
+    },
+    {
+      "a": "MEE012",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.20626469051603524
+    },
+    {
+      "a": "MEE012",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.20907174909881707
+    },
+    {
+      "a": "MEE012",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.26994559252011396
+    },
+    {
+      "a": "MEE012",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.19106895529753876
+    },
+    {
+      "a": "MEE012",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.3599144528603267
+    },
+    {
+      "a": "MEE012",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.24241367159609464
+    },
+    {
+      "a": "MEE012",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.06303569720579436
+    },
+    {
+      "a": "MEE012",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.053281678697870795
+    },
+    {
+      "a": "MEE012",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.05886494697704951
+    },
+    {
+      "a": "MEE012",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.08975201811484523
+    },
+    {
+      "a": "MEE012",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1974277710410527
+    },
+    {
+      "a": "MEE012",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.15302332188298723
+    },
+    {
+      "a": "MEE012",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.09904975815419043
+    },
+    {
+      "a": "MEE012",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.05533534535776853
+    },
+    {
+      "a": "MEE012",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1219447096208332
+    },
+    {
+      "a": "MEE012",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0260347065366164
+    },
+    {
+      "a": "MEE012",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0940756190598104
+    },
+    {
+      "a": "MEE012",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.03986963427045148
+    },
+    {
+      "a": "MEE053",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.10383711930702547
+    },
+    {
+      "a": "MEE053",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0336966413172835
+    },
+    {
+      "a": "MEE053",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.057975908502114086
+    },
+    {
+      "a": "MEE053",
+      "b": "MEE054",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.028964306994401022
+    },
+    {
+      "a": "MEE053",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.02876675939919783
+    },
+    {
+      "a": "MEE053",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0928588501602211
+    },
+    {
+      "a": "MEE053",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.03586395460162281
+    },
+    {
+      "a": "MEE053",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.06723388770863663
+    },
+    {
+      "a": "MEE053",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.0018682849880098384
+    },
+    {
+      "a": "MEE053",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.009408582345274523
+    },
+    {
+      "a": "MEE053",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.04687105936115388
+    },
+    {
+      "a": "MEE053",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.03676132001389632
+    },
+    {
+      "a": "MEE053",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.07153082495694305
+    },
+    {
+      "a": "MEE053",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.01687659895026137
+    },
+    {
+      "a": "MEE053",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.03715985543338296
+    },
+    {
+      "a": "MEE053",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.06237637536258206
+    },
+    {
+      "a": "MEE053",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.025652377312607735
+    },
+    {
+      "a": "MEE053",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.01794009355764216
+    },
+    {
+      "a": "MEE053",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0361925614152941
+    },
+    {
+      "a": "MEE053",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.03166730681840833
+    },
+    {
+      "a": "MEE054",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.17114779020960746
+    },
+    {
+      "a": "MEE054",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.15680806950543785
+    },
+    {
+      "a": "MEE054",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.19540292600428688
+    },
+    {
+      "a": "MEE054",
+      "b": "MEE056",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.14817988308678604
+    },
+    {
+      "a": "MEE054",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.11231678422063786
+    },
+    {
+      "a": "MEE054",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.13970929954777078
+    },
+    {
+      "a": "MEE054",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08291804189365852
+    },
+    {
+      "a": "MEE054",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.057906565155035075
+    },
+    {
+      "a": "MEE054",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.10934919597978632
+    },
+    {
+      "a": "MEE054",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.003672941992905132
+    },
+    {
+      "a": "MEE054",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.06590822762896538
+    },
+    {
+      "a": "MEE054",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.05493340630990523
+    },
+    {
+      "a": "MEE054",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.06876724149608023
+    },
+    {
+      "a": "MEE054",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.07422517408442507
+    },
+    {
+      "a": "MEE054",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1473005083576126
+    },
+    {
+      "a": "MEE054",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.14186862120609975
+    },
+    {
+      "a": "MEE056",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.19865502497729598
+    },
+    {
+      "a": "MEE056",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.12585364377651237
+    },
+    {
+      "a": "MEE056",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.278239039054924
+    },
+    {
+      "a": "MEE056",
+      "b": "MIO016",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.24412132335102735
+    },
+    {
+      "a": "MEE056",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08991012607078158
+    },
+    {
+      "a": "MEE056",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.06079870332170113
+    },
+    {
+      "a": "MEE056",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0499609020629486
+    },
+    {
+      "a": "MEE056",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.051598928458328606
+    },
+    {
+      "a": "MEE056",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.08345088934141184
+    },
+    {
+      "a": "MEE056",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1409032651127392
+    },
+    {
+      "a": "MEE056",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.10699259731419916
+    },
+    {
+      "a": "MEE056",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.15671851843873916
+    },
+    {
+      "a": "MIO016",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.0083817272534738
+    },
+    {
+      "a": "MIO016",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.050102392468977366
+    },
+    {
+      "a": "MIO016",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.02565781292043637
+    },
+    {
+      "a": "MIO016",
+      "b": "MIO050",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.01116619089060146
+    },
+    {
+      "a": "MIO016",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.056956609718634796
+    },
+    {
+      "a": "MIO016",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.02230968768313704
+    },
+    {
+      "a": "MIO016",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.02705893382602782
+    },
+    {
+      "a": "MIO016",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.055186385973336444
+    },
+    {
+      "a": "MIO050",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.1089536323280393
+    },
+    {
+      "a": "MIO050",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.04530619284199203
+    },
+    {
+      "a": "MIO050",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": 0.020823038686169686
+    },
+    {
+      "a": "MIO050",
+      "b": "MIO082",
+      "a_gender": "male",
+      "b_gender": "male",
+      "cosine": -0.0604354410358152
+    }
+  ],
+  "calibrated_face_pairs": [
+    {
+      "a": "C2_12_black_female_Lupita_Nyongo",
+      "b": "C1_02_young_male_Timothee_Chalamet",
+      "cosine": 0.11936273509491163
+    },
+    {
+      "a": "C2_12_black_female_Lupita_Nyongo",
+      "b": "C1_06_senior_male_Morgan_Freeman",
+      "cosine": 0.4212971232490834
+    },
+    {
+      "a": "C2_12_black_female_Lupita_Nyongo",
+      "b": "C2_09_east_asian_male_Jackie_Chan",
+      "cosine": 0.11411324967909488
+    },
+    {
+      "a": "C2_12_black_female_Lupita_Nyongo",
+      "b": "C2_14_caucasian_female_Scarlett_Johansson",
+      "cosine": 0.618785431756909
+    },
+    {
+      "a": "C1_02_young_male_Timothee_Chalamet",
+      "b": "C1_06_senior_male_Morgan_Freeman",
+      "cosine": 0.33767983253483286
+    },
+    {
+      "a": "C1_02_young_male_Timothee_Chalamet",
+      "b": "C2_09_east_asian_male_Jackie_Chan",
+      "cosine": 0.31606702101411466
+    },
+    {
+      "a": "C1_02_young_male_Timothee_Chalamet",
+      "b": "C2_14_caucasian_female_Scarlett_Johansson",
+      "cosine": 0.1611555191291914
+    },
+    {
+      "a": "C1_06_senior_male_Morgan_Freeman",
+      "b": "C2_09_east_asian_male_Jackie_Chan",
+      "cosine": 0.33714804296511885
+    },
+    {
+      "a": "C1_06_senior_male_Morgan_Freeman",
+      "b": "C2_14_caucasian_female_Scarlett_Johansson",
+      "cosine": 0.376671209531889
+    },
+    {
+      "a": "C2_09_east_asian_male_Jackie_Chan",
+      "b": "C2_14_caucasian_female_Scarlett_Johansson",
+      "cosine": 0.2026590249754587
+    }
+  ],
+  "calibrated_face_pair_summary": {
+    "n": 10,
+    "min": 0.11411324967909488,
+    "p10": 0.11883778655332995,
+    "median": 0.3266075319896168,
+    "p90": 0.4410459540998659,
+    "max": 0.618785431756909,
+    "mean": 0.30049391899306044
+  },
+  "calibrated_face_pair_percentiles_vs_same_gender_between": {
+    "C2_12_black_female_Lupita_Nyongo | C1_02_young_male_Timothee_Chalamet": 51.54320987654321,
+    "C2_12_black_female_Lupita_Nyongo | C1_06_senior_male_Morgan_Freeman": 99.38271604938271,
+    "C2_12_black_female_Lupita_Nyongo | C2_09_east_asian_male_Jackie_Chan": 49.691358024691354,
+    "C2_12_black_female_Lupita_Nyongo | C2_14_caucasian_female_Scarlett_Johansson": 100.0,
+    "C1_02_young_male_Timothee_Chalamet | C1_06_senior_male_Morgan_Freeman": 98.76543209876543,
+    "C1_02_young_male_Timothee_Chalamet | C2_09_east_asian_male_Jackie_Chan": 97.8395061728395,
+    "C1_02_young_male_Timothee_Chalamet | C2_14_caucasian_female_Scarlett_Johansson": 66.9753086419753,
+    "C1_06_senior_male_Morgan_Freeman | C2_09_east_asian_male_Jackie_Chan": 98.76543209876543,
+    "C1_06_senior_male_Morgan_Freeman | C2_14_caucasian_female_Scarlett_Johansson": 99.38271604938271,
+    "C2_09_east_asian_male_Jackie_Chan | C2_14_caucasian_female_Scarlett_Johansson": 79.62962962962963
+  },
+  "notes": [
+    "AMI headset clips are real human speech, resampled to 16 kHz for ECAPA.",
+    "Same-speaker pairs use two different clips from one speaker and are an upper reference for identity preservation, not a perfect ceiling.",
+    "Between-speaker values include all cross-speaker clip pairs; same-gender and cross-gender distributions are reported separately.",
+    "These are speaker-embedding similarities, not human identity judgments."
+  ]
+}

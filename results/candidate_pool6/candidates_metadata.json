@@ -1,0 +1,485 @@
+{
+  "schema_version": "1.0.0",
+  "project": "VOIX \u2013 Probabilistic Face-to-Voice Biometric Synthesis",
+  "audit_timestamp": "2026-10-28 09:24:36 UTC",
+  "input_face_subject": {
+    "input_type": "image_upload",
+    "image_filename": "subject_face.png",
+    "image_resolution": "867x865",
+    "detected_demographics": {
+      "gender": "Female",
+      "gender_code": 0,
+      "estimated_age_years": 26.5
+    },
+    "arcface_identity_embedding": {
+      "model": "ArcFace ResNet-50 (InsightFace buffalo_l w600k_r50.onnx)",
+      "vector_dimension": 512,
+      "l2_norm": 14.7126,
+      "mean": 0.272514,
+      "std": 0.590346,
+      "min_value": -0.169967,
+      "max_value": 3.30411,
+      "top_features_summary": {
+        "first_5_values": [
+          0.6022,
+          1.0414,
+          -0.1436,
+          -0.1601,
+          -0.1551
+        ],
+        "last_5_values": [
+          -0.167,
+          0.3296,
+          -0.1542,
+          1.1701,
+          0.2123
+        ]
+      }
+    },
+    "craniofacial_morphology_32d": {
+      "total_ratios": 32,
+      "normalization_basis": "Inter-Ocular Distance (IOC)",
+      "ratios": {
+        "face_height_to_ioc": {
+          "index": 0,
+          "measured_value": 1.2795,
+          "description": "Ratio of total vertical face height (forehead-to-chin) to inter-ocular distance (VTL proxy)"
+        },
+        "face_width_to_ioc": {
+          "index": 1,
+          "measured_value": 1.4918,
+          "description": "Ratio of bizygomatic cheek width to inter-ocular distance"
+        },
+        "jaw_width_to_ioc": {
+          "index": 2,
+          "measured_value": 1.2804,
+          "description": "Ratio of mandibular jaw width to inter-ocular distance (oral cavity resonant volume)"
+        },
+        "mandible_angle_deg": {
+          "index": 3,
+          "measured_value": 101.2633,
+          "description": "Mandibular vertex angle at chin in degrees (jaw morphology)"
+        },
+        "nose_width_to_ioc": {
+          "index": 4,
+          "measured_value": 0.4568,
+          "description": "Ratio of nasal alar base width to inter-ocular distance (nasal cavity proxy)"
+        },
+        "nose_height_to_ioc": {
+          "index": 5,
+          "measured_value": 0.2626,
+          "description": "Ratio of nasal bridge-to-tip height to inter-ocular distance"
+        },
+        "nose_bridge_length_to_ioc": {
+          "index": 6,
+          "measured_value": 0.8519,
+          "description": "Ratio of brow-to-nose-tip length to inter-ocular distance"
+        },
+        "bizygomatic_width_to_ioc": {
+          "index": 7,
+          "measured_value": 1.4918,
+          "description": "Bizygomatic cheek-to-cheek width to inter-ocular distance (F1/F2 dispersion cue)"
+        },
+        "inner_eye_separation_to_ioc": {
+          "index": 8,
+          "measured_value": 0.3797,
+          "description": "Ratio of inner canthi distance to inter-ocular distance"
+        },
+        "lower_face_ratio": {
+          "index": 9,
+          "measured_value": 0.6185,
+          "description": "Lower facial third ratio (lip-to-chin height over total facial height)"
+        },
+        "upper_face_ratio": {
+          "index": 10,
+          "measured_value": 0.2781,
+          "description": "Upper facial third ratio (forehead-to-brow height over total facial height)"
+        },
+        "lip_width_to_ioc": {
+          "index": 11,
+          "measured_value": 0.7045,
+          "description": "Ratio of horizontal oral inter-commissure width to inter-ocular distance"
+        },
+        "upper_lip_height_to_ioc": {
+          "index": 12,
+          "measured_value": 0.1973,
+          "description": "Ratio of upper vermilion border height to inter-ocular distance"
+        },
+        "lower_lip_height_to_ioc": {
+          "index": 13,
+          "measured_value": 0.1954,
+          "description": "Ratio of lower vermilion border height to inter-ocular distance"
+        },
+        "philtrum_length_to_ioc": {
+          "index": 14,
+          "measured_value": 0.1346,
+          "description": "Ratio of subnasale-to-labiale superius distance to inter-ocular distance"
+        },
+        "left_cheekbone_offset_to_ioc": {
+          "index": 15,
+          "measured_value": 0.7049,
+          "description": "Left zygomatic transverse offset from facial sagittal midline"
+        },
+        "right_cheekbone_offset_to_ioc": {
+          "index": 16,
+          "measured_value": 0.7854,
+          "description": "Right zygomatic transverse offset from facial sagittal midline"
+        },
+        "nose_tip_to_chin_to_ioc": {
+          "index": 17,
+          "measured_value": 0.7914,
+          "description": "Vertical lower facial proportion from subnasale to gnathion"
+        },
+        "nose_tip_to_forehead_to_ioc": {
+          "index": 18,
+          "measured_value": 0.6693,
+          "description": "Vertical upper facial proportion from nasion to trichion"
+        },
+        "brow_span_to_ioc": {
+          "index": 19,
+          "measured_value": 1.248,
+          "description": "Total orbital brow ridge horizontal span relative to inter-ocular distance"
+        },
+        "brow_to_eye_dist_left_to_ioc": {
+          "index": 20,
+          "measured_value": 0.1692,
+          "description": "Left orbital vertical separation between brow and upper eyelid"
+        },
+        "brow_to_eye_dist_right_to_ioc": {
+          "index": 21,
+          "measured_value": 0.1698,
+          "description": "Right orbital vertical separation between brow and upper eyelid"
+        },
+        "eye_width_left_to_ioc": {
+          "index": 22,
+          "measured_value": 0.3127,
+          "description": "Left palpebral fissure horizontal width relative to inter-ocular distance"
+        },
+        "eye_width_right_to_ioc": {
+          "index": 23,
+          "measured_value": 0.3216,
+          "description": "Right palpebral fissure horizontal width relative to inter-ocular distance"
+        },
+        "face_aspect_ratio": {
+          "index": 24,
+          "measured_value": 0.8577,
+          "description": "Facial index: total vertical face height divided by bizygomatic breadth"
+        },
+        "mandible_to_nose_ratio": {
+          "index": 25,
+          "measured_value": 2.8032,
+          "description": "Proportion of mandibular breadth to nasal breadth (vocal tract cavity ratio)"
+        },
+        "lip_to_jaw_ratio": {
+          "index": 26,
+          "measured_value": 0.5502,
+          "description": "Oral aperture to mandibular breadth ratio (lip radiation impedance proxy)"
+        },
+        "nose_to_lip_ratio": {
+          "index": 27,
+          "measured_value": 0.6483,
+          "description": "Nasal breadth to oral aperture ratio (nasalization acoustic coupling)"
+        },
+        "jaw_angle_left_deg": {
+          "index": 28,
+          "measured_value": 78.0064,
+          "description": "Left mandibular gonial angle in degrees"
+        },
+        "jaw_angle_right_deg": {
+          "index": 29,
+          "measured_value": 80.1729,
+          "description": "Right mandibular gonial angle in degrees"
+        },
+        "chin_z_protrusion": {
+          "index": 30,
+          "measured_value": -0.2698,
+          "description": "Anterior-posterior mental projection (chin depth relative to cheek plane)"
+        },
+        "nose_tip_z_protrusion": {
+          "index": 31,
+          "measured_value": -0.0821,
+          "description": "Nasal tip anterior projection depth relative to nasal bridge"
+        }
+      }
+    },
+    "soft_demographics_16d": {
+      "detected_biological_sex": "Female",
+      "estimated_chronological_age_years": 26.5,
+      "sex_posteriors": {
+        "p_male": -0.1575,
+        "p_female": 0.1432
+      },
+      "age_distribution": {
+        "age_bin_00_to_10_prob": 0.5522,
+        "age_bin_11_to_20_prob": -0.1695,
+        "age_bin_21_to_30_prob": 0.2043,
+        "age_bin_31_to_40_prob": 0.4347,
+        "age_bin_41_to_50_prob": 0.197,
+        "age_bin_51_to_60_prob": -0.1417,
+        "age_bin_61_to_70_prob": -0.1695,
+        "age_bin_71_plus_prob": 0.5485
+      },
+      "vocal_age_grouping": {
+        "classification": "Adult",
+        "register_bucket": "f_30"
+      }
+    },
+    "fused_biometric_representation_560d": {
+      "fused_dimension": 560,
+      "composition": "512 (ArcFace) + 32 (FaceMesh) + 16 (Demographics)",
+      "fusion_layer": "L2-normalized per-modality concatenation"
+    }
+  },
+  "model_architecture_and_pipeline": {
+    "backbone_mapping": "ContrastiveFaceVoiceNet (560-D -> 192-D L2-normalised ECAPA space)",
+    "generative_prior": "CVAE (face_dim=192, speaker_dim=192, latent_dim=128)",
+    "style_adaptation": "Dual-head StyleAdapter (192-D -> 256-D [timbre 128 | prosody 128])",
+    "neural_vocoder": "StyleTTS2 Diffusion Decoder & HiFi-GAN Vocoder (24 kHz)",
+    "watermark_engine": "Meta AudioSeal (imperceptible neural watermark; requested per asset)"
+  },
+  "synthesis_configuration": {
+    "mode": "candidates",
+    "num_voices": 6,
+    "alpha": 0.18,
+    "beta": 0.22,
+    "diffusion_steps": 10,
+    "temperature": 0.85,
+    "reference_text": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity."
+  },
+  "total_synthesized_assets": 6,
+  "synthesized_assets": [
+    {
+      "relative_path": "candidate_1.wav",
+      "filename": "candidate_1.wav",
+      "category": "Candidate_Voices",
+      "condition": "Candidate 1",
+      "description": "Stochastic realization mode 1",
+      "parameters": {
+        "candidate_index": 1,
+        "temperature": 0.85,
+        "selection": "diverse",
+        "seed": 42
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 9.223,
+        "peak_amplitude": 0.6446,
+        "rms_energy": 0.0706,
+        "f0_mean_hz": 237.7,
+        "f0_std_hz": 70.7,
+        "voiced_percentage": 47.6
+      },
+      "watermarked": false
+    },
+    {
+      "relative_path": "candidate_2.wav",
+      "filename": "candidate_2.wav",
+      "category": "Candidate_Voices",
+      "condition": "Candidate 2",
+      "description": "Stochastic realization mode 2",
+      "parameters": {
+        "candidate_index": 2,
+        "temperature": 0.85,
+        "selection": "diverse",
+        "seed": 42
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 9.448,
+        "peak_amplitude": 0.7058,
+        "rms_energy": 0.0693,
+        "f0_mean_hz": 252.7,
+        "f0_std_hz": 63.0,
+        "voiced_percentage": 48.3
+      },
+      "watermarked": false
+    },
+    {
+      "relative_path": "candidate_3.wav",
+      "filename": "candidate_3.wav",
+      "category": "Candidate_Voices",
+      "condition": "Candidate 3",
+      "description": "Stochastic realization mode 3",
+      "parameters": {
+        "candidate_index": 3,
+        "temperature": 0.85,
+        "selection": "diverse",
+        "seed": 42
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 9.598,
+        "peak_amplitude": 0.5347,
+        "rms_energy": 0.0696,
+        "f0_mean_hz": 224.2,
+        "f0_std_hz": 64.0,
+        "voiced_percentage": 63.3
+      },
+      "watermarked": false
+    },
+    {
+      "relative_path": "candidate_4.wav",
+      "filename": "candidate_4.wav",
+      "category": "Candidate_Voices",
+      "condition": "Candidate 4",
+      "description": "Stochastic realization mode 4",
+      "parameters": {
+        "candidate_index": 4,
+        "temperature": 0.85,
+        "selection": "diverse",
+        "seed": 42
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 9.198,
+        "peak_amplitude": 0.5189,
+        "rms_energy": 0.0717,
+        "f0_mean_hz": 227.0,
+        "f0_std_hz": 62.0,
+        "voiced_percentage": 70.1
+      },
+      "watermarked": false
+    },
+    {
+      "relative_path": "candidate_5.wav",
+      "filename": "candidate_5.wav",
+      "category": "Candidate_Voices",
+      "condition": "Candidate 5",
+      "description": "Stochastic realization mode 5",
+      "parameters": {
+        "candidate_index": 5,
+        "temperature": 0.85,
+        "selection": "diverse",
+        "seed": 42
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 9.273,
+        "peak_amplitude": 0.4738,
+        "rms_energy": 0.0718,
+        "f0_mean_hz": 227.8,
+        "f0_std_hz": 62.3,
+        "voiced_percentage": 69.7
+      },
+      "watermarked": false
+    },
+    {
+      "relative_path": "candidate_6.wav",
+      "filename": "candidate_6.wav",
+      "category": "Candidate_Voices",
+      "condition": "Candidate 6",
+      "description": "Stochastic realization mode 6",
+      "parameters": {
+        "candidate_index": 6,
+        "temperature": 0.85,
+        "selection": "diverse",
+        "seed": 42
+      },
+      "acoustic_analysis": {
+        "duration_seconds": 8.723,
+        "peak_amplitude": 0.6189,
+        "rms_energy": 0.0685,
+        "f0_mean_hz": 256.3,
+        "f0_std_hz": 69.6,
+        "voiced_percentage": 38.1
+      },
+      "watermarked": false
+    }
+  ],
+  "scope": {
+    "document": "SCOPE.md",
+    "in_scope_categories": [
+      "01_Candidates",
+      "02_Accents",
+      "03_Emotions"
+    ],
+    "out_of_scope_categories_archived": [
+      "04_Speech_Differences",
+      "05_Cross_Lingual",
+      "06_Morphology_Sliders"
+    ],
+    "archive_directory": "legacy\\demo\\out_of_scope_2026-10-27",
+    "note": "Out-of-scope assets were moved, not deleted. They are excluded from the default demo surface and report."
+  },
+  "archived_out_of_scope_assets": [
+    {
+      "relative_path": "04_speech_differences/speech_01_interdental_lisp.wav",
+      "category": "04_Speech_Differences",
+      "condition": "Interdental Lisp",
+      "archived_to": "legacy\\demo\\out_of_scope_2026-10-27\\04_speech_differences"
+    },
+    {
+      "relative_path": "04_speech_differences/speech_02_lateral_lisp.wav",
+      "category": "04_Speech_Differences",
+      "condition": "Lateral Lisp",
+      "archived_to": "legacy\\demo\\out_of_scope_2026-10-27\\04_speech_differences"
+    },
+    {
+      "relative_path": "04_speech_differences/speech_03_rhotacism.wav",
+      "category": "04_Speech_Differences",
+      "condition": "Rhotacism",
+      "archived_to": "legacy\\demo\\out_of_scope_2026-10-27\\04_speech_differences"
+    },
+    {
+      "relative_path": "04_speech_differences/speech_04_stutter_clonic.wav",
+      "category": "04_Speech_Differences",
+      "condition": "Clonic Stuttering",
+      "archived_to": "legacy\\demo\\out_of_scope_2026-10-27\\04_speech_differences"
+    },
+    {
+      "relative_path": "04_speech_differences/speech_05_hypernasality.wav",
+      "category": "04_Speech_Differences",
+      "condition": "Hypernasality",
+      "archived_to": "legacy\\demo\\out_of_scope_2026-10-27\\04_speech_differences"
+    },
+    {
+      "relative_path": "04_speech_differences/speech_06_prolonged_phonemes.wav",
+      "category": "04_Speech_Differences",
+      "condition": "Prolonged Phonemes",
+      "archived_to": "legacy\\demo\\out_of_scope_2026-10-27\\04_speech_differences"
+    },
+    {
+      "relative_path": "05_cross_lingual/lang_01_spanish.wav",
+      "category": "05_Cross_Lingual",
+      "condition": "Spanish",
+      "archived_to": "legacy\\demo\\out_of_scope_2026-10-27\\05_cross_lingual"
+    },
+    {
+      "relative_path": "05_cross_lingual/lang_02_french.wav",
+      "category": "05_Cross_Lingual",
+      "condition": "French",
+      "archived_to": "legacy\\demo\\out_of_scope_2026-10-27\\05_cross_lingual"
+    },
+    {
+      "relative_path": "05_cross_lingual/lang_03_german.wav",
+      "category": "05_Cross_Lingual",
+      "condition": "German",
+      "archived_to": "legacy\\demo\\out_of_scope_2026-10-27\\05_cross_lingual"
+    },
+    {
+      "relative_path": "05_cross_lingual/lang_04_italian.wav",
+      "category": "05_Cross_Lingual",
+      "condition": "Italian",
+      "archived_to": "legacy\\demo\\out_of_scope_2026-10-27\\05_cross_lingual"
+    },
+    {
+      "relative_path": "06_craniofacial_sliders/slider_01_jaw_expanded.wav",
+      "category": "06_Morphology_Sliders",
+      "condition": "Expanded Jaw Width (+0.8)",
+      "archived_to": "legacy\\demo\\out_of_scope_2026-10-27\\06_craniofacial_sliders"
+    },
+    {
+      "relative_path": "06_craniofacial_sliders/slider_02_jaw_narrow.wav",
+      "category": "06_Morphology_Sliders",
+      "condition": "Narrow Jaw Width (-0.8)",
+      "archived_to": "legacy\\demo\\out_of_scope_2026-10-27\\06_craniofacial_sliders"
+    },
+    {
+      "relative_path": "06_craniofacial_sliders/slider_03_face_elongated.wav",
+      "category": "06_Morphology_Sliders",
+      "condition": "Elongated Face Height (+0.8)",
+      "archived_to": "legacy\\demo\\out_of_scope_2026-10-27\\06_craniofacial_sliders"
+    },
+    {
+      "relative_path": "06_craniofacial_sliders/slider_04_face_compact.wav",
+      "category": "06_Morphology_Sliders",
+      "condition": "Compact Face Height (-0.8)",
+      "archived_to": "legacy\\demo\\out_of_scope_2026-10-27\\06_craniofacial_sliders"
+    }
+  ]
+}

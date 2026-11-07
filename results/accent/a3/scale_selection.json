@@ -1,0 +1,733 @@
+{
+  "schema_version": "voix.accent_a3_selection.v1",
+  "track": "accent",
+  "experiment": "A3",
+  "level": "exploratory",
+  "index": "results\\accent\\a3\\generation_index.csv",
+  "index_sha256": "fe661ec395268fb067249f07eca72666baa129ac69fdc70bf6ac0631dafdb0b3",
+  "model": "D:\\voix\\checkpoints\\accent_classifier_globe.joblib",
+  "model_sha256": "20e6b0bef3dde0c7c3668ada39eb01553fba2eae37c6b2628802e3c2f37a9fb0",
+  "baseline_condition": "regex",
+  "proxy_valid": true,
+  "domain_shift": {
+    "status": "computed",
+    "standardized_centroid_distance": 13.27350619787792,
+    "real_val_spread": 14.669457969277461,
+    "ratio": 0.9048395806904992,
+    "threshold": 3.0,
+    "valid": true,
+    "reason": "generated features are within the real-speech spread"
+  },
+  "baseline_accuracy": 0.2,
+  "classifier_by_condition": {
+    "regex": {
+      "n": 30,
+      "prediction_counts": {
+        "us": 5,
+        "england": 20,
+        "australian": 5,
+        "canadian": 0,
+        "india_south_asia": 0
+      },
+      "mean_max_probability": 0.7734579948139068,
+      "trainable_accuracy": 0.2,
+      "per_class_recall": {
+        "us": 0.16666666666666666,
+        "england": 0.6666666666666666,
+        "australian": 0.16666666666666666,
+        "canadian": 0.0,
+        "india_south_asia": 0.0
+      }
+    },
+    "style_s0.1": {
+      "n": 30,
+      "prediction_counts": {
+        "us": 3,
+        "england": 20,
+        "australian": 7,
+        "canadian": 0,
+        "india_south_asia": 0
+      },
+      "mean_max_probability": 0.7436376712926508,
+      "trainable_accuracy": 0.2,
+      "per_class_recall": {
+        "us": 0.0,
+        "england": 0.6666666666666666,
+        "australian": 0.3333333333333333,
+        "canadian": 0.0,
+        "india_south_asia": 0.0
+      }
+    },
+    "style_s0.2": {
+      "n": 30,
+      "prediction_counts": {
+        "us": 3,
+        "england": 24,
+        "australian": 3,
+        "canadian": 0,
+        "india_south_asia": 0
+      },
+      "mean_max_probability": 0.7323270778350267,
+      "trainable_accuracy": 0.2,
+      "per_class_recall": {
+        "us": 0.16666666666666666,
+        "england": 0.8333333333333334,
+        "australian": 0.0,
+        "canadian": 0.0,
+        "india_south_asia": 0.0
+      }
+    },
+    "style_s0.3": {
+      "n": 30,
+      "prediction_counts": {
+        "us": 4,
+        "england": 22,
+        "australian": 4,
+        "canadian": 0,
+        "india_south_asia": 0
+      },
+      "mean_max_probability": 0.7496661663915868,
+      "trainable_accuracy": 0.23333333333333334,
+      "per_class_recall": {
+        "us": 0.16666666666666666,
+        "england": 0.8333333333333334,
+        "australian": 0.16666666666666666,
+        "canadian": 0.0,
+        "india_south_asia": 0.0
+      }
+    }
+  },
+  "candidates": [
+    {
+      "condition": "style_s0.1",
+      "scale": 0.1,
+      "trainable_accuracy": 0.2,
+      "wer_delta": 0.0033333333333333335,
+      "wer_ci_low": 0.0,
+      "wer_ci_high": 0.010000000000000002,
+      "identity_delta": -6.730655829111735e-05,
+      "identity_ci_low": -0.005547220185399052,
+      "identity_ci_high": 0.005599278062582015
+    },
+    {
+      "condition": "style_s0.2",
+      "scale": 0.2,
+      "trainable_accuracy": 0.2,
+      "wer_delta": 0.006666666666666667,
+      "wer_ci_low": 0.0,
+      "wer_ci_high": 0.016666666666666666,
+      "identity_delta": -0.00025104482968648273,
+      "identity_ci_low": -0.005905277778704961,
+      "identity_ci_high": 0.0053710555036862685
+    },
+    {
+      "condition": "style_s0.3",
+      "scale": 0.3,
+      "trainable_accuracy": 0.23333333333333334,
+      "wer_delta": 0.006666666666666667,
+      "wer_ci_low": 0.0,
+      "wer_ci_high": 0.016666666666666666,
+      "identity_delta": 0.00405996044476827,
+      "identity_ci_low": -0.0012091111391782736,
+      "identity_ci_high": 0.009394902785619098
+    }
+  ],
+  "selection": {
+    "status": "selected",
+    "selected_scale": 0.3,
+    "selected_condition": "style_s0.3",
+    "eligible": [
+      {
+        "condition": "style_s0.3",
+        "scale": 0.3,
+        "trainable_accuracy": 0.23333333333333334,
+        "accuracy_gain": 0.033333333333333326,
+        "wer_delta": 0.006666666666666667,
+        "identity_delta": 0.00405996044476827
+      }
+    ],
+    "rule": "highest trainable-classifier accuracy among scales with WER delta <= +0.05 and ECAPA donor delta >= -0.05; ties go to the smaller scale"
+  },
+  "wer": {
+    "status": "computed",
+    "by_accent": {
+      "australian": {
+        "regex": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.1": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.2": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.030555555555555558,
+          "wer_std": 0.04347909956249591,
+          "per_sample_wer": [
+            0.1,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dunce in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.3": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.030555555555555558,
+          "wer_std": 0.04347909956249591,
+          "per_sample_wer": [
+            0.1,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dunce in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        }
+      },
+      "canadian": {
+        "regex": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.1": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.2": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.3": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        }
+      },
+      "england": {
+        "regex": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.1": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.030555555555555558,
+          "wer_std": 0.04347909956249591,
+          "per_sample_wer": [
+            0.1,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dunce in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.2": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.030555555555555558,
+          "wer_std": 0.04347909956249591,
+          "per_sample_wer": [
+            0.1,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dunce in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.3": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.030555555555555558,
+          "wer_std": 0.04347909956249591,
+          "per_sample_wer": [
+            0.1,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dunce in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        }
+      },
+      "india_south_asia": {
+        "regex": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.1": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.2": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.3": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        }
+      },
+      "us": {
+        "regex": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.1": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.2": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        },
+        "style_s0.3": {
+          "status": "computed",
+          "model": "whisper-base",
+          "n": 6,
+          "wer": 0.013888888888888888,
+          "wer_std": 0.03105649968749708,
+          "per_sample_wer": [
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "transcripts": [
+            "The bath was better than the dance in the car.",
+            "I think this is the right time to turn the new voice.",
+            "Last night, the fast train passed the path by the water.",
+            "Both of us can start the task after the film.",
+            "The human voice reflects a personal identity.",
+            "Please ask the staff about the chance of rain."
+          ]
+        }
+      }
+    }
+  },
+  "identity": {
+    "status": "computed",
+    "donor": "D:\\voix\\data\\processed\\globe_audio\\val\\us\\common_voice_en_17993335.wav",
+    "by_accent": {
+      "australian": {
+        "regex": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.4674907922744751
+        },
+        "style_s0.1": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.4717991352081299
+        },
+        "style_s0.2": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.476254940032959
+        },
+        "style_s0.3": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.46846580505371094
+        }
+      },
+      "canadian": {
+        "regex": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.4674907922744751
+        },
+        "style_s0.1": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.47035011649131775
+        },
+        "style_s0.2": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.46609047055244446
+        },
+        "style_s0.3": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.4671250581741333
+        }
+      },
+      "england": {
+        "regex": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.4674907922744751
+        },
+        "style_s0.1": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.46475717425346375
+        },
+        "style_s0.2": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.4574892818927765
+        },
+        "style_s0.3": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.4689747393131256
+        }
+      },
+      "india_south_asia": {
+        "regex": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.4674907922744751
+        },
+        "style_s0.1": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.46523430943489075
+        },
+        "style_s0.2": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.46706724166870117
+        },
+        "style_s0.3": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.4811317026615143
+        }
+      },
+      "us": {
+        "regex": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.4674907922744751
+        },
+        "style_s0.1": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.4649769067764282
+        },
+        "style_s0.2": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.4692969024181366
+        },
+        "style_s0.3": {
+          "n": 6,
+          "mean_ecapa_to_donor": 0.47205647826194763
+        }
+      }
+    }
+  },
+  "limitations": [
+    "The A0 classifier is a proxy trained on real GLOBE speech.",
+    "A3 uses a single validation US donor style; speaker generalization is not measured.",
+    "No human accent-identification or MOS study was run.",
+    "A3 has no Irish residual because Irish speakers are eval-only.",
+    "The residual is a class contrast; accent and speaker identity are confounded because GLOBE has no within-speaker cross-accent pairs."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings collected"
+  }
+}

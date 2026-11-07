@@ -21,7 +21,7 @@ profiles:
     pipeline_mode: "staged_memory_isolated"  # Release face models before vocoder execution
     precision: "fp16"                       # Automatic Mixed Precision
     tts_device: "cuda"                      # Vocoder runs on GPU under 1.4 GB memory envelope
-    diffusion_steps: 20                     # High naturalness without ODE truncation artifacts
+    diffusion_steps: 10                     # Multi-seed ablation: 10 beat 5 in 5/6 pairs, 20 was worse
     batch_voices: false                     # Sequential synthesis: prevents 3.8GB peak OOM crash
     torch_empty_cache_per_sample: true      # Proactively flush CUDA cache between voices
     onnx_execution_provider: "CPUExecutionProvider" # Keeps ONNX out of limited VRAM

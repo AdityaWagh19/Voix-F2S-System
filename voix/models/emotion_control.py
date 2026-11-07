@@ -1,19 +1,26 @@
-"""Emotion and affective tone modulation engine for VOIX.
+"""Discrete emotion profiles and serving-side prosody controls.
 
-Modulates prosodic dynamic range, fundamental frequency F0, speech tempo,
-energy intensity, and spectral acoustic coloration across discrete emotional states.
+Only ``neutral``, ``happy``, ``sad`` and ``angry`` are supported.  These are
+the three non-neutral directions that passed the E1 held-out direction checks
+on CREMA-D; ``whispered`` and ``surprised`` were removed because they have no
+validated direction.
+
+The profiles deliberately keep pitch factors close to 1.0.  Large post-hoc
+pitch shifts damaged ECAPA speaker identity in the audit.  Emotion is carried
+mainly by the E1 prosody residual plus bounded duration and energy shaping.
+Perceptual distinctness is not claimed without a listener study.
 """
-
 from __future__ import annotations
-from pathlib import Path
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Optional, Tuple, Any
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 import numpy as np
-import scipy.signal
 import torch
+
+from voix.utils.audio import limit_true_peak
 
 
 class EmotionType(str, Enum):
@@ -23,8 +30,31 @@ class EmotionType(str, Enum):
     HAPPY = "happy"
     SAD = "sad"
     ANGRY = "angry"
-    WHISPERED = "whispered"
-    SURPRISED = "surprised"
+
+
+EMOTION_ALIASES: Dict[str, str] = {
+    "neutral": "neutral",
+    "default": "neutral",
+    "happy": "happy",
+    "joyful": "happy",
+    "sad": "sad",
+    "angry": "angry",
+    "anger": "angry",
+}
+
+
+def normalize_emotion(emotion: Optional[str]) -> Optional[str]:
+    """Map aliases to a canonical emotion id; ``None`` means no control."""
+    if emotion is None:
+        return None
+    key = str(emotion).strip().lower()
+    if key in ("", "none"):
+        return None
+    if key not in EMOTION_ALIASES:
+        raise ValueError(
+            f"Unknown emotion '{emotion}'. Supported: {sorted(EMOTION_ALIASES)}"
+        )
+    return EMOTION_ALIASES[key]
 
 
 @dataclass(frozen=True)
@@ -33,73 +63,55 @@ class EmotionProfile:
 
     emotion_id: str
     display_name: str
-    pitch_factor: float          # F0 fundamental frequency multiplier
-    pitch_dynamics_factor: float # Intonation and pitch excursion multiplier (beta factor)
-    duration_scale: float        # Speech tempo factor (rate multiplier)
-    energy_scale: float          # Relative acoustic RMS amplitude multiplier
+    pitch_factor: float
+    pitch_dynamics_factor: float
+    duration_scale: float
+    energy_scale: float
     description: str
 
 
 EMOTION_REGISTRY: Dict[str, EmotionProfile] = {
-    EmotionType.NEUTRAL.value: EmotionProfile(
+    "neutral": EmotionProfile(
         emotion_id="neutral",
         display_name="Neutral",
         pitch_factor=1.00,
         pitch_dynamics_factor=1.00,
         duration_scale=1.00,
         energy_scale=1.00,
-        description="Balanced, natural conversational baseline.",
+        description="Balanced conversational baseline.",
     ),
-    EmotionType.HAPPY.value: EmotionProfile(
+    "happy": EmotionProfile(
         emotion_id="happy",
-        display_name="Happy / Joyful",
-        pitch_factor=1.08,
+        display_name="Happy",
+        pitch_factor=1.04,
         pitch_dynamics_factor=1.25,
-        duration_scale=0.92,
-        energy_scale=1.08,
-        description="Elevated pitch, expanded melodic dynamic range, and brisk energetic tempo.",
-    ),
-    EmotionType.SAD.value: EmotionProfile(
-        emotion_id="sad",
-        display_name="Sad / Somber",
-        pitch_factor=0.93,
-        pitch_dynamics_factor=0.72,
-        duration_scale=1.14,
-        energy_scale=0.88,
-        description="Subdued fundamental pitch, reduced melodic variation, and elongated contemplative pacing.",
-    ),
-    EmotionType.ANGRY.value: EmotionProfile(
-        emotion_id="angry",
-        display_name="Angry / Assertive",
-        pitch_factor=1.10,
-        pitch_dynamics_factor=1.18,
-        duration_scale=0.88,
-        energy_scale=1.15,
-        description="Intense vocal tract tension, sharp articulation, high acoustic energy.",
-    ),
-    EmotionType.WHISPERED.value: EmotionProfile(
-        emotion_id="whispered",
-        display_name="Whispered / Intimate",
-        pitch_factor=0.96,
-        pitch_dynamics_factor=0.55,
-        duration_scale=1.08,
-        energy_scale=0.75,
-        description="Unvoiced breathy aspiration, subdued low harmonics, intimate proximity.",
-    ),
-    EmotionType.SURPRISED.value: EmotionProfile(
-        emotion_id="surprised",
-        display_name="Surprised / Excited",
-        pitch_factor=1.14,
-        pitch_dynamics_factor=1.35,
-        duration_scale=0.90,
+        duration_scale=0.94,
         energy_scale=1.10,
-        description="High terminal pitch excursions, wide frequency dynamics, rapid attack.",
+        description="Slightly higher register, wider pitch movement, faster and louder.",
+    ),
+    "sad": EmotionProfile(
+        emotion_id="sad",
+        display_name="Sad",
+        pitch_factor=0.97,
+        pitch_dynamics_factor=0.70,
+        duration_scale=1.10,
+        energy_scale=0.88,
+        description="Flatter and slower delivery with reduced vocal effort.",
+    ),
+    "angry": EmotionProfile(
+        emotion_id="angry",
+        display_name="Angry",
+        pitch_factor=1.05,
+        pitch_dynamics_factor=1.15,
+        duration_scale=0.93,
+        energy_scale=1.15,
+        description="Faster, louder delivery with sharper pitch movement.",
     ),
 }
 
 
 class EmotionModulator:
-    """Manages affective prosody parameters and post-synthesis spectral filtering."""
+    """Compute intensity-scaled prosody, duration and energy modifiers."""
 
     @classmethod
     def get_acoustic_modifiers(
@@ -107,16 +119,8 @@ class EmotionModulator:
         emotion: Optional[str] = None,
         intensity: float = 0.5,
     ) -> Dict[str, float]:
-        """Compute prosodic and vocoder multipliers for the given emotion.
-
-        Args:
-            emotion: Target emotion identifier (e.g. 'happy', 'sad').
-            intensity: Emotional expression strength in [0.0, 1.0].
-
-        Returns:
-            Dictionary of multipliers for beta (pitch factor), duration, and energy.
-        """
-        if not emotion or emotion == EmotionType.NEUTRAL.value:
+        canonical = normalize_emotion(emotion)
+        if canonical is None or canonical == "neutral":
             return {
                 "pitch_factor": 1.0,
                 "beta_mult": 1.0,
@@ -124,23 +128,21 @@ class EmotionModulator:
                 "energy_scale": 1.0,
             }
 
-        profile = EMOTION_REGISTRY.get(emotion.lower())
-        if profile is None:
-            raise ValueError(f"Unknown emotion '{emotion}'. Supported: {list(EMOTION_REGISTRY.keys())}")
-
-        int_val = float(np.clip(intensity, 0.0, 1.0))
-
-        # Modulate parameters linearly by intensity
-        pitch_factor = 1.0 + (profile.pitch_factor - 1.0) * int_val
-        beta_mult = 1.0 + (profile.pitch_dynamics_factor - 1.0) * int_val
-        dur_scale = 1.0 + (profile.duration_scale - 1.0) * int_val
-        energy_scale = 1.0 + (profile.energy_scale - 1.0) * int_val
-
+        profile = EMOTION_REGISTRY[canonical]
+        weight = float(np.clip(intensity, 0.0, 1.0))
         return {
-            "pitch_factor": float(pitch_factor),
-            "beta_mult": float(beta_mult),
-            "duration_scale": float(dur_scale),
-            "energy_scale": float(energy_scale),
+            "pitch_factor": float(
+                1.0 + (profile.pitch_factor - 1.0) * weight
+            ),
+            "beta_mult": float(
+                1.0 + (profile.pitch_dynamics_factor - 1.0) * weight
+            ),
+            "duration_scale": float(
+                1.0 + (profile.duration_scale - 1.0) * weight
+            ),
+            "energy_scale": float(
+                1.0 + (profile.energy_scale - 1.0) * weight
+            ),
         }
 
     @classmethod
@@ -151,132 +153,87 @@ class EmotionModulator:
         emotion: Optional[str] = None,
         intensity: float = 0.5,
     ) -> torch.Tensor:
-        """Apply post-synthesis spectral shaping characteristic of the emotion.
+        """Apply only a true-peak safety limiter.
 
-        Args:
-            waveform: Audio tensor (1, T) or (T,).
-            sample_rate: Audio sampling rate in Hz.
-            emotion: Target emotion name.
-            intensity: Emotional expression strength in [0.0, 1.0].
-
-        Returns:
-            Spectrally modulated audio tensor of shape (1, T).
+        Post-synthesis IIR filters smear phase and damage identity.  Duration,
+        energy and style-space prosody carry the emotion instead.
         """
-        if not emotion or emotion == EmotionType.NEUTRAL.value or intensity <= 0.01:
-            return waveform if waveform.dim() == 2 else waveform.unsqueeze(0)
-
-        int_val = float(np.clip(intensity, 0.0, 1.0))
-        wav_np = waveform.squeeze().cpu().numpy().astype(np.float64)
-
-        if emotion == EmotionType.WHISPERED.value:
-            # Whisper: High-pass attenuation below 400 Hz (suppress vocal cord vibration)
-            # and mild boost in 3 kHz - 6 kHz aspiration band
-            b_hp, a_hp = scipy.signal.butter(N=2, Wn=350.0, btype="highpass", fs=sample_rate)
-            filtered = scipy.signal.lfilter(b_hp, a_hp, wav_np)
-
-            # High-shelf aspiration boost
-            b_asp, a_asp = scipy.signal.iirpeak(w0=4200.0, Q=1.5, fs=sample_rate)
-            asp = scipy.signal.lfilter(b_asp, a_asp, wav_np)
-
-            blend = min(0.70, int_val * 0.75)
-            output = (1.0 - blend) * wav_np + blend * (filtered + 0.3 * asp)
-
-        elif emotion == EmotionType.ANGRY.value:
-            # Angry: Boost aggressive presence in 2.8 kHz - 4.5 kHz band
-            b_pres, a_pres = scipy.signal.iirpeak(w0=3400.0, Q=2.0, fs=sample_rate)
-            pres = scipy.signal.lfilter(b_pres, a_pres, wav_np)
-
-            blend = min(0.35, int_val * 0.40)
-            output = wav_np + blend * pres * 0.6
-
-        elif emotion == EmotionType.SAD.value:
-            # Sad: Mild low-pass roll-off above 4.5 kHz (somber, de-emphasized brightness)
-            b_lp, a_lp = scipy.signal.butter(N=2, Wn=4200.0, btype="lowpass", fs=sample_rate)
-            filtered = scipy.signal.lfilter(b_lp, a_lp, wav_np)
-
-            blend = min(0.40, int_val * 0.45)
-            output = (1.0 - blend) * wav_np + blend * filtered
-
-        elif emotion == EmotionType.HAPPY.value:
-            # Happy: Mild brightness boost around 3.5 kHz (smiling acoustic resonance)
-            b_br, a_br = scipy.signal.iirpeak(w0=3500.0, Q=1.8, fs=sample_rate)
-            bright = scipy.signal.lfilter(b_br, a_br, wav_np)
-
-            blend = min(0.25, int_val * 0.30)
-            output = wav_np + blend * bright * 0.4
-
-        else:
-            output = wav_np
-
-        # Energy scaling from profile
-        profile = EMOTION_REGISTRY.get(emotion)
-        if profile:
-            e_mult = 1.0 + (profile.energy_scale - 1.0) * int_val
-            output = output * e_mult
-
-        # Peak normalization safety guard (avoid digital clipping)
-        peak = np.abs(output).max()
-        if peak > 0.95:
-            output = output / peak * 0.92
-
-        out_tensor = torch.from_numpy(output.astype(np.float32)).unsqueeze(0)
-        return out_tensor.to(waveform.device)
+        if waveform.dim() == 1:
+            waveform = waveform.unsqueeze(0)
+        wav_np = waveform.detach().cpu().numpy().squeeze()
+        return (
+            torch.from_numpy(limit_true_peak(wav_np))
+            .unsqueeze(0)
+            .to(waveform.device)
+        )
 
 
 def list_available_emotions() -> List[Dict[str, Any]]:
-    """List all supported affective emotion profiles."""
+    """List supported emotion profiles."""
     return [
         {
-            "emotion_id": p.emotion_id,
-            "display_name": p.display_name,
-            "pitch_factor": p.pitch_factor,
-            "pitch_dynamics_factor": p.pitch_dynamics_factor,
-            "duration_scale": p.duration_scale,
-            "energy_scale": p.energy_scale,
-            "description": p.description,
+            "emotion_id": profile.emotion_id,
+            "display_name": profile.display_name,
+            "pitch_factor": profile.pitch_factor,
+            "pitch_dynamics_factor": profile.pitch_dynamics_factor,
+            "duration_scale": profile.duration_scale,
+            "energy_scale": profile.energy_scale,
+            "description": profile.description,
         }
-        for p in EMOTION_REGISTRY.values()
+        for profile in EMOTION_REGISTRY.values()
     ]
 
-# ---------------------------------------------------------------------------
-# Style-Space Emotion Delta Functions
-# ---------------------------------------------------------------------------
-_EMOTION_DELTA_DIR = Path(__file__).resolve().parent.parent.parent / "checkpoints" / "emotion_deltas"
-_EMOTION_DELTA_CACHE: dict = {}
 
-def get_emotion_style_delta(emotion_id: str, device: str = "cpu") -> torch.Tensor | None:
-    """Retrieve precomputed 256-D style delta tensor for given emotion."""
-    if emotion_id in _EMOTION_DELTA_CACHE:
-        return _EMOTION_DELTA_CACHE[emotion_id].to(device)
-    path = _EMOTION_DELTA_DIR / f"{emotion_id}.pt"
+_EMOTION_DELTA_DIR = (
+    Path(__file__).resolve().parent.parent.parent / "checkpoints" / "emotion_deltas"
+)
+_EMOTION_DELTA_CACHE: Dict[str, torch.Tensor] = {}
+
+
+def get_emotion_style_delta(
+    emotion_id: str, device: str = "cpu"
+) -> Optional[torch.Tensor]:
+    """Load the optional fixed emotion delta for reproducibility/compatibility."""
+    canonical = normalize_emotion(emotion_id)
+    if canonical is None or canonical == "neutral":
+        return None
+    if canonical in _EMOTION_DELTA_CACHE:
+        return _EMOTION_DELTA_CACHE[canonical].to(device)
+    path = _EMOTION_DELTA_DIR / f"{canonical}.pt"
     if not path.exists():
         return None
     try:
-        data = torch.load(path, map_location=device, weights_only=False)
-        delta = data.get("delta", None)
-        if delta is not None and isinstance(delta, torch.Tensor):
-            _EMOTION_DELTA_CACHE[emotion_id] = delta.cpu()
+        payload = torch.load(path, map_location=device, weights_only=False)
+        delta = payload.get("delta") if isinstance(payload, dict) else None
+        if isinstance(delta, torch.Tensor):
+            _EMOTION_DELTA_CACHE[canonical] = delta.detach().cpu()
             return delta.to(device)
     except Exception:
         return None
     return None
 
-def apply_emotion_style_delta(ref_s: torch.Tensor, emotion_id: str, intensity: float = 1.0) -> torch.Tensor:
-    """Modulate the prosody half [128:] of a 256-D reference style vector with soft scaling."""
-    if intensity <= 0.0 or emotion_id in ("neutral", "default"):
+
+def apply_emotion_style_delta(
+    ref_s: torch.Tensor, emotion_id: str, intensity: float = 1.0
+) -> torch.Tensor:
+    """Apply the legacy fixed emotion delta with a small prosody-only scale."""
+    canonical = normalize_emotion(emotion_id)
+    if intensity <= 0.0 or canonical is None or canonical == "neutral":
         return ref_s
-    delta = get_emotion_style_delta(emotion_id, device=str(ref_s.device))
+    delta = get_emotion_style_delta(canonical, device=str(ref_s.device))
     if delta is None:
         return ref_s
-    is_1d = (ref_s.dim() == 1)
+    is_1d = ref_s.dim() == 1
     if is_1d:
         ref_s = ref_s.unsqueeze(0)
-    s_mod = ref_s.clone()
-    # Soft scaling (0.22) ensures emotion inflects expression without deflecting speaker identity
-    eff_strength = float(intensity) * 0.22
-    if s_mod.shape[-1] >= 256:
-        d_prosody = delta[128:256] if delta.shape[0] >= 256 else delta
-        s_mod[:, 128:256] = s_mod[:, 128:256] + eff_strength * d_prosody.to(s_mod.device)
+    adjusted = ref_s.clone()
+    effective = float(intensity) * 0.18
+    if adjusted.shape[-1] >= 256:
+        adjusted[:, 128:256] = (
+            adjusted[:, 128:256] + effective * delta[128:256].to(adjusted.device)
+        )
     else:
-        s_mod = s_mod + eff_strength * delta[:128].to(s_mod.device)
-    return s_mod.squeeze(0) if is_1d else s_mod
+        adjusted = adjusted + effective * delta[: adjusted.shape[-1]].to(
+            adjusted.device
+        )
+    return adjusted.squeeze(0) if is_1d else adjusted

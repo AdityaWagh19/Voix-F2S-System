@@ -1,0 +1,283 @@
+{
+  "schema_version": "voix.research_report.v1",
+  "track": "naturalness",
+  "level": "exploratory",
+  "run_id": "n0a_smoke",
+  "git_commit": "3bbf21d35dbccd15c0548f6e0c86291c32f01900",
+  "config_sha256": "b8abdd0496557a993e6789e372c95d43c70621ece06d67cf773566f3a7c2069f",
+  "manifest_sha256": "not_applicable",
+  "seeds": [
+    0
+  ],
+  "metrics": {
+    "f0_std_st": {
+      "status": "unavailable",
+      "reason": "fewer than two complete prompt pairs"
+    },
+    "f0_range_st": {
+      "status": "unavailable",
+      "reason": "fewer than two complete prompt pairs"
+    },
+    "words_per_second": {
+      "status": "unavailable",
+      "reason": "fewer than two complete prompt pairs"
+    },
+    "energy_std_db": {
+      "status": "unavailable",
+      "reason": "fewer than two complete prompt pairs"
+    },
+    "pause_ratio": {
+      "status": "unavailable",
+      "reason": "fewer than two complete prompt pairs"
+    },
+    "spectral_tilt_db_per_khz": {
+      "status": "unavailable",
+      "reason": "fewer than two complete prompt pairs"
+    },
+    "style_embedding_consistency": {
+      "status": "computed",
+      "value": {
+        "consistent": true,
+        "n_pair_seed_cells": 1,
+        "n_mismatches": 0
+      },
+      "note": "The canonical adapter/style path is text-independent; a mismatch would mean the audit did not hold identity conditioning fixed."
+    },
+    "ecapa_prompt_consistency": {
+      "status": "unavailable",
+      "reason": "identity check disabled by --no-identity-check"
+    }
+  },
+  "gates": {
+    "n0a_any_prompt_sensitivity": false,
+    "n0a_core_prompt_sensitivity": false,
+    "n0a_robust_prompt_sensitivity": false,
+    "n0a_style_conditioning_consistent": true,
+    "n0a_decision": "No delivery proxy has a paired CI excluding zero across these ten prompt pairs. Prompt wording alone is not a demonstrated lever in this setup."
+  },
+  "status": "completed",
+  "limitations": [
+    "N0a is exploratory; no human MOS/CMOS was collected. Perceptual naturalness remains unmeasured.",
+    "One real VoxCeleb2 face is used; prompt effects may not generalize to other faces, voices, or accents.",
+    "Ten prompt pairs are used. Lexical and phonetic content differs between registers, so the contrast is register phrasing as realized in these pairs, not a word-level causal effect.",
+    "Seed noise includes CVAE identity resampling. The effect-to-noise ratio is therefore conservative and descriptive, not a formal power calculation.",
+    "Diffusion sampling noise is not exactly controlled across registers; three seeds per cell average it only partially.",
+    "AMI is not used. N0b/N2 conversational adaptation remains data-blocked and untrained.",
+    "The ECAPA prompt-consistency check is generated-domain only; it is not a real-speaker verification score and does not replace the CFVN identity guardrail.",
+    "Watermarking is disabled so the measurement is not contaminated by an audio watermark.",
+    "The pilot100 face-feature store is a 382-clip pilot, not the full VoxCeleb2 corpus.",
+    "No checkpoint, adapter, CVAE, or CFVN artifact is modified by this run."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings were collected for this run"
+  },
+  "artifacts": {
+    "clips_csv": "results\\naturalness\\n0a_smoke\\clips.csv",
+    "clips_csv_sha256": "04c85df7303932bfa6f0d599b40d9e83983346347ca1f7b9313519861c2dc202",
+    "audio_dir": "results\\naturalness\\n0a_smoke\\audio",
+    "prompt_config": "D:\\voix\\configs\\research\\n0a_prompt_pairs.json",
+    "prompt_config_sha256": "b8abdd0496557a993e6789e372c95d43c70621ece06d67cf773566f3a7c2069f",
+    "face_features": "D:\\voix\\data\\processed\\voxceleb2_v2\\pilot100_features.h5",
+    "face_features_sha256": "be767576b47402be3b1eca43cd06ff3f168b0b0bf4ab7d409775ec45055e4e28"
+  },
+  "design": {
+    "prompt_pairs": 1,
+    "registers": [
+      "formal",
+      "conversational"
+    ],
+    "generation_seeds": [
+      0
+    ],
+    "diffusion_steps": 5,
+    "temperature": 0.85,
+    "alpha": 0.18,
+    "beta": 0.22,
+    "watermark": false,
+    "device": "cuda",
+    "level_note": "exploratory inference-time audit; no training"
+  },
+  "face": {
+    "features_path": "D:\\voix\\data\\processed\\voxceleb2_v2\\pilot100_features.h5",
+    "features_sha256": "be767576b47402be3b1eca43cd06ff3f168b0b0bf4ab7d409775ec45055e4e28",
+    "split": "val",
+    "speaker_id": "id06637",
+    "clip_id": "dev/id06637/OLO2xEIjbC0/00012",
+    "face_features_sha256": "94cabedb4dcde1e7d0efc55e64773311ed712ea7c5ae1ac659c698e0860e665a",
+    "face_gender": 1,
+    "face_age": 38.75,
+    "face_age_raw": 38.75,
+    "quality_vector": [
+      17.0,
+      2.0,
+      16.0,
+      0.6697303056716919,
+      0.0011163169983774424,
+      0.07834334671497345,
+      0.3839138150215149,
+      0.8280964493751526,
+      0.7891436815261841,
+      0.6905856728553772,
+      0.720964789390564,
+      4.0
+    ],
+    "quality_score": 0.720964789390564,
+    "av_sync": 0.6697303056716919,
+    "face_area": 0.3839138150215149
+  },
+  "prompt_pairs": [
+    {
+      "pair_id": "meeting_time",
+      "topic": "scheduling",
+      "formal": "I would like to schedule the meeting for tomorrow afternoon.",
+      "conversational": "Hey, can we set up the meeting for tomorrow afternoon?"
+    }
+  ],
+  "paired_effects": {
+    "metrics": {
+      "f0_std_st": {
+        "status": "unavailable",
+        "reason": "fewer than two complete prompt pairs",
+        "n_pairs": 1
+      },
+      "f0_range_st": {
+        "status": "unavailable",
+        "reason": "fewer than two complete prompt pairs",
+        "n_pairs": 1
+      },
+      "words_per_second": {
+        "status": "unavailable",
+        "reason": "fewer than two complete prompt pairs",
+        "n_pairs": 1
+      },
+      "energy_std_db": {
+        "status": "unavailable",
+        "reason": "fewer than two complete prompt pairs",
+        "n_pairs": 1
+      },
+      "pause_ratio": {
+        "status": "unavailable",
+        "reason": "fewer than two complete prompt pairs",
+        "n_pairs": 1
+      },
+      "spectral_tilt_db_per_khz": {
+        "status": "unavailable",
+        "reason": "fewer than two complete prompt pairs",
+        "n_pairs": 1
+      }
+    },
+    "pairs": [
+      {
+        "pair_id": "meeting_time",
+        "n_seeds": 1,
+        "deltas": {
+          "f0_std_st": 1.9624465763343761,
+          "f0_range_st": 10.68,
+          "words_per_second": 0.14997818499127424,
+          "energy_std_db": 0.5287761688232422,
+          "pause_ratio": 0.0,
+          "spectral_tilt_db_per_khz": -0.27493849133265824
+        }
+      }
+    ],
+    "skipped_pairs": [],
+    "n_pairs": 1,
+    "registers": [
+      "formal",
+      "conversational"
+    ],
+    "seed_noise_definition": "pooled within-cell SD across seeds; difference noise = sqrt(2) * within-cell SD",
+    "n_resamples": 10000,
+    "confidence": 0.95,
+    "seed": 0
+  },
+  "summary": {
+    "metrics_computed": [],
+    "metrics_detected": [],
+    "metrics_robustly_detected": [],
+    "n_metrics_computed": 0,
+    "n_metrics_detected": 0,
+    "n_metrics_robustly_detected": 0
+  },
+  "identity": {
+    "status": "unavailable",
+    "reason": "identity check disabled by --no-identity-check"
+  },
+  "style_consistency": {
+    "consistent": true,
+    "n_pair_seed_cells": 1,
+    "mismatches": []
+  },
+  "canonical_hashes": {
+    "status": "computed",
+    "passed": true,
+    "files": {
+      "cfvn": {
+        "path": "results/checkpoints/cfvn_v2_best.pt",
+        "expected_sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b",
+        "actual_sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b",
+        "match": true
+      },
+      "cvae": {
+        "path": "checkpoints/cvae_cfvn_face192_latent128_diversity.pt",
+        "expected_sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b",
+        "actual_sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b",
+        "match": true
+      },
+      "style_adapter": {
+        "path": "checkpoints/style_adapter_cfvn_best.pt",
+        "expected_sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+        "actual_sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+        "match": true
+      }
+    },
+    "missing": [],
+    "mismatched": []
+  },
+  "pipeline_provenance": {
+    "project_root": "D:\\voix",
+    "runtime": {
+      "python": "3.12.1",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "device": "cuda",
+      "backend": "neural",
+      "schema_version": "FaceFeatureV2",
+      "torch": "2.4.1+cu121",
+      "cuda_available": true,
+      "cuda_version": "12.1",
+      "gpu": "NVIDIA GeForce GTX 1650"
+    },
+    "artifacts": {
+      "face_scaler": {
+        "role": "face_scaler",
+        "path": "D:\\voix\\data\\processed\\voxceleb2_v2\\face_scaler_v2.pt",
+        "exists": true,
+        "bytes": 6146,
+        "sha256": "2656d9b3cf2886c721acdd07a2289538be28c3ed65a033ffa3462671e85d9e87"
+      },
+      "cfvn": {
+        "role": "cfvn",
+        "path": "D:\\voix\\results\\checkpoints\\cfvn_v2_best.pt",
+        "exists": true,
+        "bytes": 2971901,
+        "sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b"
+      },
+      "cvae": {
+        "role": "cvae",
+        "path": "D:\\voix\\checkpoints\\cvae_cfvn_face192_latent128_diversity.pt",
+        "exists": true,
+        "bytes": 5766056,
+        "sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b"
+      },
+      "style_adapter": {
+        "role": "style_adapter",
+        "path": "D:\\voix\\checkpoints\\style_adapter_cfvn_best.pt",
+        "exists": true,
+        "bytes": 735522,
+        "sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c"
+      }
+    }
+  },
+  "failures": []
+}

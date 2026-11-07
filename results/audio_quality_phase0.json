@@ -1,0 +1,328 @@
+{
+  "schema_version": "voix.audio_quality_diagnostics.v1",
+  "generated_at": "2026-10-28 07:51:40 UTC",
+  "face": "D:\\voix\\demo\\subject_face.png",
+  "text": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+  "device": "cuda",
+  "seed": 42,
+  "diffusion_steps_tested": [
+    5
+  ],
+  "emotion": "whispered",
+  "emotion_intensity": 0.9,
+  "primary_style_reference": "candidate 1 from the diverse pool (seed fixed)",
+  "notes": [
+    "noise_floor_dbfs is the 10th percentile of 25 ms frame RMS; snr_proxy_db is p90 - p10.",
+    "These are diagnostic proxies, not calibrated noise or perceptual quality measurements.",
+    "save_peak_normalized reproduces the legacy save_audio_sample(), which peak-normalized to 0.90 after the backend's LUFS normalization.",
+    "save_current reproduces the fixed save_audio_sample(): no peak normalization, only a -1 dBTP true-peak safety limiter.",
+    "neutral_dsp_* isolates librosa pitch/time stretch from the style-space emotion delta.",
+    "Watermarking is disabled to match the demo's watermark=False generation path."
+  ],
+  "conditions": [
+    {
+      "label": "neutral_steps5",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "measurement": {
+        "raw": {
+          "status": "computed",
+          "duration_seconds": 9.323,
+          "peak": 0.64185,
+          "clipping_fraction": 0.0,
+          "rms_dbfs": -23.01,
+          "crest_factor_db": 19.16,
+          "lufs": -23.0,
+          "noise_floor_dbfs": -45.7,
+          "speech_level_dbfs": -18.29,
+          "snr_proxy_db": 27.42,
+          "silence_fraction_below_minus_60db": 0.0376,
+          "voiced_frame_fraction": 0.8301,
+          "spectral_flatness_mean": 0.009867,
+          "spectral_centroid_mean_hz": 1667.3,
+          "hf_energy_ratio_above_8khz": 4e-05,
+          "f0_median_hz": 195.44
+        },
+        "save_peak_normalized": {
+          "status": "computed",
+          "duration_seconds": 9.323,
+          "peak": 0.9,
+          "clipping_fraction": 0.0,
+          "rms_dbfs": -20.07,
+          "crest_factor_db": 19.16,
+          "lufs": -20.06,
+          "noise_floor_dbfs": -42.77,
+          "speech_level_dbfs": -15.35,
+          "snr_proxy_db": 27.42,
+          "silence_fraction_below_minus_60db": 0.0376,
+          "voiced_frame_fraction": 0.8301,
+          "spectral_flatness_mean": 0.009867,
+          "spectral_centroid_mean_hz": 1667.3,
+          "hf_energy_ratio_above_8khz": 4e-05,
+          "f0_median_hz": 195.44
+        },
+        "delta_save_normalization": {
+          "noise_floor_dbfs": 2.93,
+          "speech_level_dbfs": 2.94,
+          "snr_proxy_db": 0.0,
+          "lufs": 2.94,
+          "crest_factor_db": 0.0
+        },
+        "save_current": {
+          "status": "computed",
+          "duration_seconds": 9.323,
+          "peak": 0.64185,
+          "clipping_fraction": 0.0,
+          "rms_dbfs": -23.01,
+          "crest_factor_db": 19.16,
+          "lufs": -23.0,
+          "noise_floor_dbfs": -45.7,
+          "speech_level_dbfs": -18.29,
+          "snr_proxy_db": 27.42,
+          "silence_fraction_below_minus_60db": 0.0376,
+          "voiced_frame_fraction": 0.8301,
+          "spectral_flatness_mean": 0.009867,
+          "spectral_centroid_mean_hz": 1667.3,
+          "hf_energy_ratio_above_8khz": 4e-05,
+          "f0_median_hz": 195.44
+        },
+        "delta_save_current": {
+          "noise_floor_dbfs": 0.0,
+          "speech_level_dbfs": 0.0,
+          "snr_proxy_db": 0.0,
+          "lufs": 0.0,
+          "crest_factor_db": 0.0
+        }
+      }
+    },
+    {
+      "label": "whispered_steps5",
+      "diffusion_steps": 5,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "measurement": {
+        "raw": {
+          "status": "computed",
+          "duration_seconds": 10.101,
+          "peak": 0.49621,
+          "clipping_fraction": 0.0,
+          "rms_dbfs": -25.65,
+          "crest_factor_db": 19.57,
+          "lufs": -25.73,
+          "noise_floor_dbfs": -43.99,
+          "speech_level_dbfs": -21.85,
+          "snr_proxy_db": 22.14,
+          "silence_fraction_below_minus_60db": 0.0308,
+          "voiced_frame_fraction": 0.7798,
+          "spectral_flatness_mean": 0.004233,
+          "spectral_centroid_mean_hz": 1668.1,
+          "hf_energy_ratio_above_8khz": 0.000116,
+          "f0_median_hz": 185.3
+        },
+        "save_peak_normalized": {
+          "status": "computed",
+          "duration_seconds": 10.101,
+          "peak": 0.9,
+          "clipping_fraction": 0.0,
+          "rms_dbfs": -20.48,
+          "crest_factor_db": 19.57,
+          "lufs": -20.56,
+          "noise_floor_dbfs": -38.82,
+          "speech_level_dbfs": -16.68,
+          "snr_proxy_db": 22.14,
+          "silence_fraction_below_minus_60db": 0.0288,
+          "voiced_frame_fraction": 0.7798,
+          "spectral_flatness_mean": 0.003995,
+          "spectral_centroid_mean_hz": 1668.1,
+          "hf_energy_ratio_above_8khz": 0.000116,
+          "f0_median_hz": 184.88
+        },
+        "delta_save_normalization": {
+          "noise_floor_dbfs": 5.17,
+          "speech_level_dbfs": 5.17,
+          "snr_proxy_db": 0.0,
+          "lufs": 5.17,
+          "crest_factor_db": 0.0
+        },
+        "save_current": {
+          "status": "computed",
+          "duration_seconds": 10.101,
+          "peak": 0.49621,
+          "clipping_fraction": 0.0,
+          "rms_dbfs": -25.65,
+          "crest_factor_db": 19.57,
+          "lufs": -25.73,
+          "noise_floor_dbfs": -43.99,
+          "speech_level_dbfs": -21.85,
+          "snr_proxy_db": 22.14,
+          "silence_fraction_below_minus_60db": 0.0308,
+          "voiced_frame_fraction": 0.7798,
+          "spectral_flatness_mean": 0.004233,
+          "spectral_centroid_mean_hz": 1668.1,
+          "hf_energy_ratio_above_8khz": 0.000116,
+          "f0_median_hz": 185.3
+        },
+        "delta_save_current": {
+          "noise_floor_dbfs": 0.0,
+          "speech_level_dbfs": 0.0,
+          "snr_proxy_db": 0.0,
+          "lufs": 0.0,
+          "crest_factor_db": 0.0
+        }
+      }
+    },
+    {
+      "label": "neutral_dsp_control",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "measurement": {
+        "raw": {
+          "status": "computed",
+          "duration_seconds": 9.348,
+          "peak": 0.63079,
+          "clipping_fraction": 0.0,
+          "rms_dbfs": -23.07,
+          "crest_factor_db": 19.07,
+          "lufs": -23.0,
+          "noise_floor_dbfs": -46.26,
+          "speech_level_dbfs": -18.44,
+          "snr_proxy_db": 27.82,
+          "silence_fraction_below_minus_60db": 0.0386,
+          "voiced_frame_fraction": 0.8242,
+          "spectral_flatness_mean": 0.013142,
+          "spectral_centroid_mean_hz": 1719.9,
+          "hf_energy_ratio_above_8khz": 0.000101,
+          "f0_median_hz": 190.61
+        },
+        "save_peak_normalized": {
+          "status": "computed",
+          "duration_seconds": 9.348,
+          "peak": 0.9,
+          "clipping_fraction": 0.0,
+          "rms_dbfs": -19.98,
+          "crest_factor_db": 19.07,
+          "lufs": -19.91,
+          "noise_floor_dbfs": -43.17,
+          "speech_level_dbfs": -15.35,
+          "snr_proxy_db": 27.82,
+          "silence_fraction_below_minus_60db": 0.0386,
+          "voiced_frame_fraction": 0.8242,
+          "spectral_flatness_mean": 0.013142,
+          "spectral_centroid_mean_hz": 1719.9,
+          "hf_energy_ratio_above_8khz": 0.000101,
+          "f0_median_hz": 190.61
+        },
+        "delta_save_normalization": {
+          "noise_floor_dbfs": 3.09,
+          "speech_level_dbfs": 3.09,
+          "snr_proxy_db": 0.0,
+          "lufs": 3.09,
+          "crest_factor_db": 0.0
+        },
+        "save_current": {
+          "status": "computed",
+          "duration_seconds": 9.348,
+          "peak": 0.63079,
+          "clipping_fraction": 0.0,
+          "rms_dbfs": -23.07,
+          "crest_factor_db": 19.07,
+          "lufs": -23.0,
+          "noise_floor_dbfs": -46.26,
+          "speech_level_dbfs": -18.44,
+          "snr_proxy_db": 27.82,
+          "silence_fraction_below_minus_60db": 0.0386,
+          "voiced_frame_fraction": 0.8242,
+          "spectral_flatness_mean": 0.013142,
+          "spectral_centroid_mean_hz": 1719.9,
+          "hf_energy_ratio_above_8khz": 0.000101,
+          "f0_median_hz": 190.61
+        },
+        "delta_save_current": {
+          "noise_floor_dbfs": 0.0,
+          "speech_level_dbfs": 0.0,
+          "snr_proxy_db": 0.0,
+          "lufs": 0.0,
+          "crest_factor_db": 0.0
+        }
+      }
+    },
+    {
+      "label": "neutral_dsp_pitch116_time092",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "pitch+time_stretch",
+      "measurement": {
+        "raw": {
+          "status": "computed",
+          "duration_seconds": 8.577,
+          "peak": 0.56802,
+          "clipping_fraction": 0.0,
+          "rms_dbfs": -23.18,
+          "crest_factor_db": 18.27,
+          "lufs": -23.0,
+          "noise_floor_dbfs": -40.72,
+          "speech_level_dbfs": -18.84,
+          "snr_proxy_db": 21.88,
+          "silence_fraction_below_minus_60db": 0.0292,
+          "voiced_frame_fraction": 0.771,
+          "spectral_flatness_mean": 0.009173,
+          "spectral_centroid_mean_hz": 2022.0,
+          "hf_energy_ratio_above_8khz": 0.001102,
+          "f0_median_hz": 226.97
+        },
+        "save_peak_normalized": {
+          "status": "computed",
+          "duration_seconds": 8.577,
+          "peak": 0.9,
+          "clipping_fraction": 0.0,
+          "rms_dbfs": -19.19,
+          "crest_factor_db": 18.27,
+          "lufs": -19.0,
+          "noise_floor_dbfs": -36.72,
+          "speech_level_dbfs": -14.84,
+          "snr_proxy_db": 21.88,
+          "silence_fraction_below_minus_60db": 0.0269,
+          "voiced_frame_fraction": 0.771,
+          "spectral_flatness_mean": 0.009097,
+          "spectral_centroid_mean_hz": 2022.0,
+          "hf_energy_ratio_above_8khz": 0.001102,
+          "f0_median_hz": 226.97
+        },
+        "delta_save_normalization": {
+          "noise_floor_dbfs": 4.0,
+          "speech_level_dbfs": 4.0,
+          "snr_proxy_db": 0.0,
+          "lufs": 4.0,
+          "crest_factor_db": 0.0
+        },
+        "save_current": {
+          "status": "computed",
+          "duration_seconds": 8.577,
+          "peak": 0.56802,
+          "clipping_fraction": 0.0,
+          "rms_dbfs": -23.18,
+          "crest_factor_db": 18.27,
+          "lufs": -23.0,
+          "noise_floor_dbfs": -40.72,
+          "speech_level_dbfs": -18.84,
+          "snr_proxy_db": 21.88,
+          "silence_fraction_below_minus_60db": 0.0292,
+          "voiced_frame_fraction": 0.771,
+          "spectral_flatness_mean": 0.009173,
+          "spectral_centroid_mean_hz": 2022.0,
+          "hf_energy_ratio_above_8khz": 0.001102,
+          "f0_median_hz": 226.97
+        },
+        "delta_save_current": {
+          "noise_floor_dbfs": 0.0,
+          "speech_level_dbfs": 0.0,
+          "snr_proxy_db": 0.0,
+          "lufs": 0.0,
+          "crest_factor_db": 0.0
+        }
+      }
+    }
+  ]
+}

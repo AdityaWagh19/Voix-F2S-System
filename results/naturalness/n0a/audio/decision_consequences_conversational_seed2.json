@@ -1,0 +1,14 @@
+{
+  "audio_id": "decision_consequences_conversational_seed2",
+  "prompt_pair_id": "decision_consequences",
+  "register": "conversational",
+  "seed": 2,
+  "text": "We should think about what happens if we do this.",
+  "sample_rate": 24000,
+  "backend": "neural",
+  "watermark": false,
+  "style_embedding_sha256": "89a17ce9e22639fc25144a68402844be0e0a069e3d8c230e9f699a760c8d01ae",
+  "speaker_embedding_sha256": "60761d49e7f9a8fb6ab1285081df6bcb20712a1b269c62a0e9f8ae13f0b8ecec",
+  "diffusion_steps": 10,
+  "temperature": 0.85
+}

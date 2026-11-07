@@ -1,0 +1,37 @@
+{
+  "features": "data\\processed\\voxceleb2_v2\\pilot100_features_v2fix.h5",
+  "index": "data\\processed\\voxceleb2_v2\\pilot100_index.csv",
+  "face_key": "face_features",
+  "epochs": 2,
+  "seed": 42,
+  "results": [
+    {
+      "fraction": 0.5,
+      "train_speakers": 48,
+      "train_clips": 181,
+      "val_r1": 0.4000000059604645,
+      "val_r10": 1.0,
+      "val_chance_r1": 0.2,
+      "val_chance_multiple": 2.0000000298023224,
+      "cfvn_face_face_r1": 1.0,
+      "raw_face_face_r1": 1.0,
+      "within_speaker_cosine": 0.46949195861816406,
+      "between_speaker_cosine": 0.0433320477604866,
+      "seconds": 3.1
+    },
+    {
+      "fraction": 1.0,
+      "train_speakers": 95,
+      "train_clips": 363,
+      "val_r1": 0.20000000298023224,
+      "val_r10": 1.0,
+      "val_chance_r1": 0.2,
+      "val_chance_multiple": 1.0000000149011612,
+      "cfvn_face_face_r1": 1.0,
+      "raw_face_face_r1": 1.0,
+      "within_speaker_cosine": 0.4735253155231476,
+      "between_speaker_cosine": 0.011466828174889088,
+      "seconds": 0.2
+    }
+  ]
+}

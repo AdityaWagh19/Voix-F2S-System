@@ -1,55 +1,61 @@
-"""Test if CFVN produces diverse ECAPA embeddings for different faces after amplification fix."""
+"""End-to-end check that distinct faces map to distinct speaker embeddings.
+
+This used to run model construction at import time and print diagnostics.  It is
+now an artifact-gated test: a missing V2 checkpoint skips, and a collapsed
+CFVN fails instead of printing numbers nobody asserts on.
+"""
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
 import numpy as np
-
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT))
+import pytest
 
 from voix.inference.pipeline import VoixPipeline
+from voix.utils.paths import project_path
 
-pipeline = VoixPipeline(device="cpu", enable_watermarking=False)
-
-test_faces = [
-    ("C1_01_young_female_Zendaya.jpg", "Young female"),
-    ("C1_02_young_male_Timothee_Chalamet.jpg", "Young male"),
-    ("C2_08_south_asian_female_Priyanka_Chopra.jpg", "South Asian female"),
-    ("C2_11_black_male_Barack_Obama.jpg", "Black male"),
-    ("C2_15_latino_male_Pedro_Pascal.jpg", "Latino male"),
-    ("C3_17_prominent_jaw_Arnold_Schwarzenegger.jpg", "Prominent jaw male"),
-    ("SD_07_rhotacism_Barbara_Walters.jpg", "Rhoticism female"),
+FACES = [
+    "C1_01_young_female_Zendaya.jpg",
+    "C1_02_young_male_Timothee_Chalamet.jpg",
+    "C2_11_black_male_Barack_Obama.jpg",
 ]
 
-text = "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity."
+TEXT = (
+    "The human voice reflects both physical anatomy and lived culture, "
+    "carrying the unique cadence of personal identity."
+)
 
-ecapa_embeddings = {}
-for face_file, desc in test_faces:
-    face_path = ROOT / "data" / "test_subjects" / face_file
-    if not face_path.exists():
-        print(f"SKIP: {face_file} not found")
-        continue
-    results = pipeline.generate(
-        face_input=str(face_path),
-        text=text,
-        num_voices=1,
-        temperature=1.0,
-        watermark=False,
+
+@pytest.mark.neural
+def test_distinct_faces_produce_distinct_speaker_embeddings(v2_artifacts):
+    pipeline = VoixPipeline(
+        device="cpu",
+        enable_watermarking=False,
+        tts_use_neural=False,
     )
-    e_s = results[0]["speaker_embedding"].numpy().flatten()
-    ecapa_embeddings[desc] = e_s
-    print(f"{desc}: ECAPA norm={np.linalg.norm(e_s):.6f}, first 5: {np.round(e_s[:5], 4)}")
 
-print()
-print("Pairwise ECAPA cosine similarity:")
-names = list(ecapa_embeddings.keys())
-for i in range(len(names)):
-    for j in range(i + 1, len(names)):
-        v1 = ecapa_embeddings[names[i]]
-        v2 = ecapa_embeddings[names[j]]
-        sim = float(np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2)))
-        print(f"  {names[i]:25s} vs {names[j]:25s}: {sim:.6f}")
+    embeddings = {}
+    for face_name in FACES:
+        face_path = project_path("data", "test_subjects", face_name)
+        if not face_path.exists():
+            pytest.skip(f"face fixture missing: {face_path}")
+        results = pipeline.generate(
+            face_input=str(face_path),
+            text=TEXT,
+            num_voices=1,
+            temperature=1.0,
+            watermark=False,
+        )
+        embeddings[face_name] = results[0]["speaker_embedding"].numpy().flatten()
 
-print("\nDone!")
+    names = list(embeddings)
+    for i in range(len(names)):
+        for j in range(i + 1, len(names)):
+            a = embeddings[names[i]]
+            b = embeddings[names[j]]
+            cosine = float(
+                np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+            )
+            assert np.isfinite(cosine)
+            assert cosine < 0.99, (
+                f"{names[i]} and {names[j]} map to nearly identical "
+                f"embeddings (cosine={cosine:.4f})"
+            )

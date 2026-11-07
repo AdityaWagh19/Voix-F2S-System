@@ -1,0 +1,180 @@
+{
+  "face": "demo/subject_face.png",
+  "n": 29,
+  "samples": [
+    {
+      "audio": "demo\\01_candidates\\candidate_1_primary.wav",
+      "group": "01_Candidates",
+      "condition": "Candidate 1 (Primary / Most Likely)",
+      "face_voice_cosine": 0.1042
+    },
+    {
+      "audio": "demo\\01_candidates\\candidate_2_alternative.wav",
+      "group": "01_Candidates",
+      "condition": "Candidate 2 (Alternative Timbre)",
+      "face_voice_cosine": 0.128
+    },
+    {
+      "audio": "demo\\01_candidates\\candidate_3_contrasting.wav",
+      "group": "01_Candidates",
+      "condition": "Candidate 3 (Contrasting Cadence)",
+      "face_voice_cosine": 0.0812
+    },
+    {
+      "audio": "demo\\02_accents\\accent_01_general_american.wav",
+      "group": "02_Accents",
+      "condition": "General American",
+      "face_voice_cosine": 0.1451
+    },
+    {
+      "audio": "demo\\02_accents\\accent_02_british_rp.wav",
+      "group": "02_Accents",
+      "condition": "British Received Pronunciation",
+      "face_voice_cosine": 0.1378
+    },
+    {
+      "audio": "demo\\02_accents\\accent_03_australian.wav",
+      "group": "02_Accents",
+      "condition": "Australian English",
+      "face_voice_cosine": 0.0879
+    },
+    {
+      "audio": "demo\\02_accents\\accent_04_indian_english.wav",
+      "group": "02_Accents",
+      "condition": "Indian English",
+      "face_voice_cosine": 0.0793
+    },
+    {
+      "audio": "demo\\02_accents\\accent_05_irish.wav",
+      "group": "02_Accents",
+      "condition": "Irish English",
+      "face_voice_cosine": 0.1272
+    },
+    {
+      "audio": "demo\\02_accents\\accent_06_scottish.wav",
+      "group": "02_Accents",
+      "condition": "Scottish English",
+      "face_voice_cosine": 0.1537
+    },
+    {
+      "audio": "demo\\03_emotions\\emotion_01_neutral.wav",
+      "group": "03_Emotions",
+      "condition": "Neutral / Conversational",
+      "face_voice_cosine": 0.1099
+    },
+    {
+      "audio": "demo\\03_emotions\\emotion_02_happy.wav",
+      "group": "03_Emotions",
+      "condition": "Happy / Cheerful",
+      "face_voice_cosine": 0.1211
+    },
+    {
+      "audio": "demo\\03_emotions\\emotion_03_sad.wav",
+      "group": "03_Emotions",
+      "condition": "Sad / Somber",
+      "face_voice_cosine": 0.1513
+    },
+    {
+      "audio": "demo\\03_emotions\\emotion_04_angry.wav",
+      "group": "03_Emotions",
+      "condition": "Angry / Assertive",
+      "face_voice_cosine": 0.1473
+    },
+    {
+      "audio": "demo\\03_emotions\\emotion_05_whispered.wav",
+      "group": "03_Emotions",
+      "condition": "Whispered / Soft",
+      "face_voice_cosine": 0.1299
+    },
+    {
+      "audio": "demo\\03_emotions\\emotion_06_surprised.wav",
+      "group": "03_Emotions",
+      "condition": "Surprised / Inquisitive",
+      "face_voice_cosine": 0.1007
+    },
+    {
+      "audio": "demo\\04_speech_differences\\speech_01_interdental_lisp.wav",
+      "group": "04_Speech_Differences",
+      "condition": "Interdental Lisp",
+      "face_voice_cosine": 0.1184
+    },
+    {
+      "audio": "demo\\04_speech_differences\\speech_02_lateral_lisp.wav",
+      "group": "04_Speech_Differences",
+      "condition": "Lateral Lisp",
+      "face_voice_cosine": 0.0685
+    },
+    {
+      "audio": "demo\\04_speech_differences\\speech_03_rhotacism.wav",
+      "group": "04_Speech_Differences",
+      "condition": "Rhotacism",
+      "face_voice_cosine": 0.1385
+    },
+    {
+      "audio": "demo\\04_speech_differences\\speech_04_stutter_clonic.wav",
+      "group": "04_Speech_Differences",
+      "condition": "Clonic Stuttering",
+      "face_voice_cosine": 0.1506
+    },
+    {
+      "audio": "demo\\04_speech_differences\\speech_05_hypernasality.wav",
+      "group": "04_Speech_Differences",
+      "condition": "Hypernasality",
+      "face_voice_cosine": 0.1126
+    },
+    {
+      "audio": "demo\\04_speech_differences\\speech_06_prolonged_phonemes.wav",
+      "group": "04_Speech_Differences",
+      "condition": "Prolonged Phonemes",
+      "face_voice_cosine": 0.1224
+    },
+    {
+      "audio": "demo\\05_cross_lingual\\lang_01_spanish.wav",
+      "group": "05_Cross_Lingual",
+      "condition": "Spanish",
+      "face_voice_cosine": 0.1259
+    },
+    {
+      "audio": "demo\\05_cross_lingual\\lang_02_french.wav",
+      "group": "05_Cross_Lingual",
+      "condition": "French",
+      "face_voice_cosine": 0.1129
+    },
+    {
+      "audio": "demo\\05_cross_lingual\\lang_03_german.wav",
+      "group": "05_Cross_Lingual",
+      "condition": "German",
+      "face_voice_cosine": 0.0567
+    },
+    {
+      "audio": "demo\\05_cross_lingual\\lang_04_italian.wav",
+      "group": "05_Cross_Lingual",
+      "condition": "Italian",
+      "face_voice_cosine": 0.1309
+    },
+    {
+      "audio": "demo\\06_craniofacial_sliders\\slider_01_jaw_expanded.wav",
+      "group": "06_Morphology_Sliders",
+      "condition": "Expanded Jaw Width (+0.8)",
+      "face_voice_cosine": 0.1938
+    },
+    {
+      "audio": "demo\\06_craniofacial_sliders\\slider_02_jaw_narrow.wav",
+      "group": "06_Morphology_Sliders",
+      "condition": "Narrow Jaw Width (-0.8)",
+      "face_voice_cosine": 0.0199
+    },
+    {
+      "audio": "demo\\06_craniofacial_sliders\\slider_03_face_elongated.wav",
+      "group": "06_Morphology_Sliders",
+      "condition": "Elongated Face Height (+0.8)",
+      "face_voice_cosine": 0.1142
+    },
+    {
+      "audio": "demo\\06_craniofacial_sliders\\slider_04_face_compact.wav",
+      "group": "06_Morphology_Sliders",
+      "condition": "Compact Face Height (-0.8)",
+      "face_voice_cosine": 0.121
+    }
+  ]
+}

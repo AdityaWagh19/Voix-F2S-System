@@ -1,0 +1,671 @@
+{
+  "schema_version": "voix.research_report.v1",
+  "track": "naturalness",
+  "level": "exploratory",
+  "run_id": "n0a_prompt_audit",
+  "git_commit": "3bbf21d35dbccd15c0548f6e0c86291c32f01900",
+  "config_sha256": "b8abdd0496557a993e6789e372c95d43c70621ece06d67cf773566f3a7c2069f",
+  "manifest_sha256": "not_applicable",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "metrics": {
+    "f0_std_st": {
+      "status": "computed",
+      "value": {
+        "mean_delta": 0.17733566015646723,
+        "ci_low": -0.650034287672557,
+        "ci_high": 1.0916716332519179,
+        "n_pairs": 10,
+        "direction": "conversational_higher"
+      },
+      "unit": "semitones",
+      "formal_mean": 2.079328956242969,
+      "conversational_mean": 2.256664616399436,
+      "seed_noise_sd": 1.2030377471906755,
+      "seed_difference_noise_sd": 1.7013522981238283,
+      "effect_to_noise": 0.10423218069063339,
+      "cohens_dz": 0.12095953230997109,
+      "sign_consistency": 0.6,
+      "detected": false,
+      "robustly_detected": false
+    },
+    "f0_range_st": {
+      "status": "computed",
+      "value": {
+        "mean_delta": 0.6410000000000002,
+        "ci_low": -2.035883333333333,
+        "ci_high": 3.647345833333335,
+        "n_pairs": 10,
+        "direction": "conversational_higher"
+      },
+      "unit": "semitones (p95-p5)",
+      "formal_mean": 6.511333333333331,
+      "conversational_mean": 7.152333333333332,
+      "seed_noise_sd": 3.8918008363738252,
+      "seed_difference_noise_sd": 5.503837524854818,
+      "effect_to_noise": 0.11646419377485324,
+      "cohens_dz": 0.13433612601790798,
+      "sign_consistency": 0.5,
+      "detected": false,
+      "robustly_detected": false
+    },
+    "words_per_second": {
+      "status": "computed",
+      "value": {
+        "mean_delta": 0.3711245857819677,
+        "ci_low": 0.12248821998368584,
+        "ci_high": 0.6544546495938425,
+        "n_pairs": 10,
+        "direction": "conversational_higher"
+      },
+      "unit": "words/s of speech span",
+      "formal_mean": 2.3598575437021125,
+      "conversational_mean": 2.730982129484081,
+      "seed_noise_sd": 0.06986897537295743,
+      "seed_difference_noise_sd": 0.09880965256154818,
+      "effect_to_noise": 3.7559547692043096,
+      "cohens_dz": 0.8081470012645556,
+      "sign_consistency": 0.7,
+      "detected": true,
+      "robustly_detected": true
+    },
+    "energy_std_db": {
+      "status": "computed",
+      "value": {
+        "mean_delta": 0.05667517979939779,
+        "ci_low": -0.16916655421257012,
+        "ci_high": 0.2798444577058156,
+        "n_pairs": 10,
+        "direction": "conversational_higher"
+      },
+      "unit": "dB",
+      "formal_mean": 6.640160671869913,
+      "conversational_mean": 6.696835851669311,
+      "seed_noise_sd": 0.7345611514247176,
+      "seed_difference_noise_sd": 1.0388263427372324,
+      "effect_to_noise": 0.054556933596873164,
+      "cohens_dz": 0.1486384389905301,
+      "sign_consistency": 0.7,
+      "detected": false,
+      "robustly_detected": false
+    },
+    "pause_ratio": {
+      "status": "computed",
+      "value": {
+        "mean_delta": 1.5878773160709832e-05,
+        "ci_low": -0.009167432512928307,
+        "ci_high": 0.009299119157823221,
+        "n_pairs": 10,
+        "direction": "conversational_higher"
+      },
+      "unit": "ratio",
+      "formal_mean": 0.010218491815303462,
+      "conversational_mean": 0.01023437058846417,
+      "seed_noise_sd": 0.010487940616779002,
+      "seed_difference_noise_sd": 0.014832187861612509,
+      "effect_to_noise": 0.0010705617612763664,
+      "cohens_dz": 0.0010354939249035014,
+      "sign_consistency": 0.5,
+      "detected": false,
+      "robustly_detected": false
+    },
+    "spectral_tilt_db_per_khz": {
+      "status": "computed",
+      "value": {
+        "mean_delta": 0.061493128717328274,
+        "ci_low": -0.059168769935247306,
+        "ci_high": 0.1866111713937808,
+        "n_pairs": 10,
+        "direction": "conversational_higher"
+      },
+      "unit": "dB/kHz",
+      "formal_mean": -3.366256389969953,
+      "conversational_mean": -3.3047632612526243,
+      "seed_noise_sd": 0.39649873786746576,
+      "seed_difference_noise_sd": 0.5607338925559848,
+      "effect_to_noise": 0.1096654394066053,
+      "cohens_dz": 0.290771386600201,
+      "sign_consistency": 0.6,
+      "detected": false,
+      "robustly_detected": false
+    },
+    "style_embedding_consistency": {
+      "status": "computed",
+      "value": {
+        "consistent": true,
+        "n_pair_seed_cells": 30,
+        "n_mismatches": 0
+      },
+      "note": "The canonical adapter/style path is text-independent; a mismatch would mean the audit did not hold identity conditioning fixed."
+    },
+    "ecapa_prompt_consistency": {
+      "status": "computed",
+      "value": 0.7332862774531047,
+      "ci_low": 0.6736260932683945,
+      "ci_high": 0.788370066632827,
+      "min_cosine": 0.4854154586791992,
+      "n_prompt_pairs": 10,
+      "n_pair_seed_observations": 30,
+      "note": "Generated-domain consistency only; not a real-speaker verification score and not the CFVN identity guardrail."
+    }
+  },
+  "gates": {
+    "n0a_any_prompt_sensitivity": true,
+    "n0a_core_prompt_sensitivity": false,
+    "n0a_robust_prompt_sensitivity": true,
+    "n0a_style_conditioning_consistent": true,
+    "n0a_decision": "Prompt register shifts at least one delivery proxy, but not both F0 variability and speech rate. Do not assume prompt wording alone fixes audiobook-like delivery."
+  },
+  "status": "completed",
+  "limitations": [
+    "N0a is exploratory; no human MOS/CMOS was collected. Perceptual naturalness remains unmeasured.",
+    "One real VoxCeleb2 face is used; prompt effects may not generalize to other faces, voices, or accents.",
+    "Ten prompt pairs are used. Lexical and phonetic content differs between registers, so the contrast is register phrasing as realized in these pairs, not a word-level causal effect.",
+    "Seed noise includes CVAE identity resampling. The effect-to-noise ratio is therefore conservative and descriptive, not a formal power calculation.",
+    "Diffusion sampling noise is not exactly controlled across registers; three seeds per cell average it only partially.",
+    "AMI is not used. N0b/N2 conversational adaptation remains data-blocked and untrained.",
+    "The ECAPA prompt-consistency check is generated-domain only; it is not a real-speaker verification score and does not replace the CFVN identity guardrail.",
+    "Watermarking is disabled so the measurement is not contaminated by an audio watermark.",
+    "The pilot100 face-feature store is a 382-clip pilot, not the full VoxCeleb2 corpus.",
+    "No checkpoint, adapter, CVAE, or CFVN artifact is modified by this run."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings were collected for this run"
+  },
+  "artifacts": {
+    "clips_csv": "D:\\voix\\results\\naturalness\\n0a\\clips.csv",
+    "clips_csv_sha256": "842f843c609d1a31bda62ce01752051a262827025ccf796f2c9f05b7900cf393",
+    "audio_dir": "D:\\voix\\results\\naturalness\\n0a\\audio",
+    "prompt_config": "D:\\voix\\configs\\research\\n0a_prompt_pairs.json",
+    "prompt_config_sha256": "b8abdd0496557a993e6789e372c95d43c70621ece06d67cf773566f3a7c2069f",
+    "face_features": "D:\\voix\\data\\processed\\voxceleb2_v2\\pilot100_features.h5",
+    "face_features_sha256": "be767576b47402be3b1eca43cd06ff3f168b0b0bf4ab7d409775ec45055e4e28"
+  },
+  "design": {
+    "prompt_pairs": 10,
+    "registers": [
+      "formal",
+      "conversational"
+    ],
+    "generation_seeds": [
+      0,
+      1,
+      2
+    ],
+    "diffusion_steps": 10,
+    "temperature": 0.85,
+    "alpha": 0.18,
+    "beta": 0.22,
+    "watermark": false,
+    "device": "cuda",
+    "level_note": "exploratory inference-time audit; no training"
+  },
+  "face": {
+    "features_path": "D:\\voix\\data\\processed\\voxceleb2_v2\\pilot100_features.h5",
+    "features_sha256": "be767576b47402be3b1eca43cd06ff3f168b0b0bf4ab7d409775ec45055e4e28",
+    "split": "val",
+    "speaker_id": "id06637",
+    "clip_id": "dev/id06637/OLO2xEIjbC0/00012",
+    "face_features_sha256": "94cabedb4dcde1e7d0efc55e64773311ed712ea7c5ae1ac659c698e0860e665a",
+    "face_gender": 1,
+    "face_age": 38.75,
+    "face_age_raw": 38.75,
+    "quality_vector": [
+      17.0,
+      2.0,
+      16.0,
+      0.6697303056716919,
+      0.0011163169983774424,
+      0.07834334671497345,
+      0.3839138150215149,
+      0.8280964493751526,
+      0.7891436815261841,
+      0.6905856728553772,
+      0.720964789390564,
+      4.0
+    ],
+    "quality_score": 0.720964789390564,
+    "av_sync": 0.6697303056716919,
+    "face_area": 0.3839138150215149
+  },
+  "prompt_pairs": [
+    {
+      "pair_id": "meeting_time",
+      "topic": "scheduling",
+      "formal": "I would like to schedule the meeting for tomorrow afternoon.",
+      "conversational": "Hey, can we set up the meeting for tomorrow afternoon?"
+    },
+    {
+      "pair_id": "train_departure",
+      "topic": "travel",
+      "formal": "The train departs from platform four at six o'clock.",
+      "conversational": "So the train leaves from platform four at six."
+    },
+    {
+      "pair_id": "report_ready",
+      "topic": "work status",
+      "formal": "Please inform me when the report is ready.",
+      "conversational": "Just let me know when the report's ready."
+    },
+    {
+      "pair_id": "proposal_review",
+      "topic": "review",
+      "formal": "I believe the proposal requires further review.",
+      "conversational": "I think we need to take another look at the proposal."
+    },
+    {
+      "pair_id": "restaurant_location",
+      "topic": "directions",
+      "formal": "The restaurant is located on the corner of Fifth Street.",
+      "conversational": "The restaurant's right on the corner of Fifth Street."
+    },
+    {
+      "pair_id": "question_clarity",
+      "topic": "comprehension",
+      "formal": "I am not certain that I understand the question.",
+      "conversational": "I'm not really sure what you're asking."
+    },
+    {
+      "pair_id": "decision_consequences",
+      "topic": "decision making",
+      "formal": "We should consider the consequences of this decision.",
+      "conversational": "We should think about what happens if we do this."
+    },
+    {
+      "pair_id": "weekend_weather",
+      "topic": "weather",
+      "formal": "The weather is expected to improve by the weekend.",
+      "conversational": "Apparently it's supposed to clear up by the weekend."
+    },
+    {
+      "pair_id": "assistance_request",
+      "topic": "request",
+      "formal": "I would appreciate your assistance with this task.",
+      "conversational": "Could you give me a hand with this?"
+    },
+    {
+      "pair_id": "presentation_start",
+      "topic": "schedule",
+      "formal": "The presentation will begin promptly at nine o'clock.",
+      "conversational": "The presentation starts at nine sharp."
+    }
+  ],
+  "paired_effects": {
+    "metrics": {
+      "f0_std_st": {
+        "status": "computed",
+        "mean_delta": 0.17733566015646723,
+        "ci_low": -0.650034287672557,
+        "ci_high": 1.0916716332519179,
+        "n_pairs": 10,
+        "n_resamples": 10000,
+        "confidence": 0.95,
+        "bootstrap_seed": 0,
+        "sd_delta": 1.4660742875726949,
+        "cohens_dz": 0.12095953230997109,
+        "seed_noise_sd": 1.2030377471906755,
+        "seed_difference_noise_sd": 1.7013522981238283,
+        "effect_to_noise": 0.10423218069063339,
+        "sign_consistency": 0.6,
+        "detected": false,
+        "exceeds_seed_noise": false,
+        "robustly_detected": false,
+        "direction": "conversational_higher"
+      },
+      "f0_range_st": {
+        "status": "computed",
+        "mean_delta": 0.6410000000000002,
+        "ci_low": -2.035883333333333,
+        "ci_high": 3.647345833333335,
+        "n_pairs": 10,
+        "n_resamples": 10000,
+        "confidence": 0.95,
+        "bootstrap_seed": 0,
+        "sd_delta": 4.771612960720263,
+        "cohens_dz": 0.13433612601790798,
+        "seed_noise_sd": 3.8918008363738252,
+        "seed_difference_noise_sd": 5.503837524854818,
+        "effect_to_noise": 0.11646419377485324,
+        "sign_consistency": 0.5,
+        "detected": false,
+        "exceeds_seed_noise": false,
+        "robustly_detected": false,
+        "direction": "conversational_higher"
+      },
+      "words_per_second": {
+        "status": "computed",
+        "mean_delta": 0.3711245857819677,
+        "ci_low": 0.12248821998368584,
+        "ci_high": 0.6544546495938425,
+        "n_pairs": 10,
+        "n_resamples": 10000,
+        "confidence": 0.95,
+        "bootstrap_seed": 0,
+        "sd_delta": 0.4592290575863637,
+        "cohens_dz": 0.8081470012645556,
+        "seed_noise_sd": 0.06986897537295743,
+        "seed_difference_noise_sd": 0.09880965256154818,
+        "effect_to_noise": 3.7559547692043096,
+        "sign_consistency": 0.7,
+        "detected": true,
+        "exceeds_seed_noise": true,
+        "robustly_detected": true,
+        "direction": "conversational_higher"
+      },
+      "energy_std_db": {
+        "status": "computed",
+        "mean_delta": 0.05667517979939779,
+        "ci_low": -0.16916655421257012,
+        "ci_high": 0.2798444577058156,
+        "n_pairs": 10,
+        "n_resamples": 10000,
+        "confidence": 0.95,
+        "bootstrap_seed": 0,
+        "sd_delta": 0.38129557996103974,
+        "cohens_dz": 0.1486384389905301,
+        "seed_noise_sd": 0.7345611514247176,
+        "seed_difference_noise_sd": 1.0388263427372324,
+        "effect_to_noise": 0.054556933596873164,
+        "sign_consistency": 0.7,
+        "detected": false,
+        "exceeds_seed_noise": false,
+        "robustly_detected": false,
+        "direction": "conversational_higher"
+      },
+      "pause_ratio": {
+        "status": "computed",
+        "mean_delta": 1.5878773160709832e-05,
+        "ci_low": -0.009167432512928307,
+        "ci_high": 0.009299119157823221,
+        "n_pairs": 10,
+        "n_resamples": 10000,
+        "confidence": 0.95,
+        "bootstrap_seed": 0,
+        "sd_delta": 0.015334491858259419,
+        "cohens_dz": 0.0010354939249035014,
+        "seed_noise_sd": 0.010487940616779002,
+        "seed_difference_noise_sd": 0.014832187861612509,
+        "effect_to_noise": 0.0010705617612763664,
+        "sign_consistency": 0.5,
+        "detected": false,
+        "exceeds_seed_noise": false,
+        "robustly_detected": false,
+        "direction": "conversational_higher"
+      },
+      "spectral_tilt_db_per_khz": {
+        "status": "computed",
+        "mean_delta": 0.061493128717328274,
+        "ci_low": -0.059168769935247306,
+        "ci_high": 0.1866111713937808,
+        "n_pairs": 10,
+        "n_resamples": 10000,
+        "confidence": 0.95,
+        "bootstrap_seed": 0,
+        "sd_delta": 0.2114827371301113,
+        "cohens_dz": 0.290771386600201,
+        "seed_noise_sd": 0.39649873786746576,
+        "seed_difference_noise_sd": 0.5607338925559848,
+        "effect_to_noise": 0.1096654394066053,
+        "sign_consistency": 0.6,
+        "detected": false,
+        "exceeds_seed_noise": false,
+        "robustly_detected": false,
+        "direction": "conversational_higher"
+      }
+    },
+    "pairs": [
+      {
+        "pair_id": "assistance_request",
+        "n_seeds": 3,
+        "deltas": {
+          "f0_std_st": -2.347611481858698,
+          "f0_range_st": -7.426666666666669,
+          "words_per_second": 1.0101190388549852,
+          "energy_std_db": -0.4046759605407715,
+          "pause_ratio": -0.00196078431372549,
+          "spectral_tilt_db_per_khz": -0.0893471152853406
+        }
+      },
+      {
+        "pair_id": "decision_consequences",
+        "n_seeds": 3,
+        "deltas": {
+          "f0_std_st": -0.03431381387776011,
+          "f0_range_st": -0.026666666666666988,
+          "words_per_second": 0.8738634930145502,
+          "energy_std_db": -0.356569766998291,
+          "pause_ratio": -0.029192790490033076,
+          "spectral_tilt_db_per_khz": -0.21471696566562226
+        }
+      },
+      {
+        "pair_id": "meeting_time",
+        "n_seeds": 3,
+        "deltas": {
+          "f0_std_st": 0.1374949938764387,
+          "f0_range_st": 0.588333333333335,
+          "words_per_second": 0.14109869081346046,
+          "energy_std_db": 0.7430097262064616,
+          "pause_ratio": 0.029661348376432178,
+          "spectral_tilt_db_per_khz": -0.048600647844290634
+        }
+      },
+      {
+        "pair_id": "presentation_start",
+        "n_seeds": 3,
+        "deltas": {
+          "f0_std_st": 0.026747565842332916,
+          "f0_range_st": -0.30666666666666514,
+          "words_per_second": -0.014173080267551116,
+          "energy_std_db": 0.15172131856282553,
+          "pause_ratio": -0.006980802792321117,
+          "spectral_tilt_db_per_khz": 0.3896674693614875
+        }
+      },
+      {
+        "pair_id": "proposal_review",
+        "n_seeds": 3,
+        "deltas": {
+          "f0_std_st": -0.7898728508466341,
+          "f0_range_st": -2.806666666666666,
+          "words_per_second": 1.1358817322395123,
+          "energy_std_db": 0.033650716145833336,
+          "pause_ratio": 0.013942352454167436,
+          "spectral_tilt_db_per_khz": 0.02514726176526209
+        }
+      },
+      {
+        "pair_id": "question_clarity",
+        "n_seeds": 3,
+        "deltas": {
+          "f0_std_st": 1.2007530902025294,
+          "f0_range_st": 4.358333333333334,
+          "words_per_second": -0.061781991657056036,
+          "energy_std_db": -0.48995351791381836,
+          "pause_ratio": 0.00290575127973502,
+          "spectral_tilt_db_per_khz": -0.2191289647044088
+        }
+      },
+      {
+        "pair_id": "report_ready",
+        "n_seeds": 3,
+        "deltas": {
+          "f0_std_st": -0.03540757360909604,
+          "f0_range_st": 0.47333333333333244,
+          "words_per_second": 0.28802547390850747,
+          "energy_std_db": 0.30594555536905926,
+          "pause_ratio": -0.006468574099081203,
+          "spectral_tilt_db_per_khz": 0.3214510698774675
+        }
+      },
+      {
+        "pair_id": "restaurant_location",
+        "n_seeds": 3,
+        "deltas": {
+          "f0_std_st": 0.058636966471991604,
+          "f0_range_st": 0.5366666666666676,
+          "words_per_second": 0.11932386508423454,
+          "energy_std_db": 0.07549015680948894,
+          "pause_ratio": -0.007413317952533642,
+          "spectral_tilt_db_per_khz": 0.059133158063855294
+        }
+      },
+      {
+        "pair_id": "train_departure",
+        "n_seeds": 3,
+        "deltas": {
+          "f0_std_st": 3.4711687166048044,
+          "f0_range_st": 11.225000000000003,
+          "words_per_second": 0.2768833126169146,
+          "energy_std_db": 0.20395660400390625,
+          "pause_ratio": 0.0,
+          "spectral_tilt_db_per_khz": 0.19709540035831688
+        }
+      },
+      {
+        "pair_id": "weekend_weather",
+        "n_seeds": 3,
+        "deltas": {
+          "f0_std_st": 0.08576098875876374,
+          "f0_range_st": -0.20500000000000318,
+          "words_per_second": -0.057994676787880874,
+          "energy_std_db": 0.3041769663492839,
+          "pause_ratio": 0.005665605268966992,
+          "spectral_tilt_db_per_khz": 0.1942306212465558
+        }
+      }
+    ],
+    "skipped_pairs": [],
+    "n_pairs": 10,
+    "registers": [
+      "formal",
+      "conversational"
+    ],
+    "seed_noise_definition": "pooled within-cell SD across seeds; difference noise = sqrt(2) * within-cell SD",
+    "n_resamples": 10000,
+    "confidence": 0.95,
+    "seed": 0
+  },
+  "summary": {
+    "metrics_computed": [
+      "energy_std_db",
+      "f0_range_st",
+      "f0_std_st",
+      "pause_ratio",
+      "spectral_tilt_db_per_khz",
+      "words_per_second"
+    ],
+    "metrics_detected": [
+      "words_per_second"
+    ],
+    "metrics_robustly_detected": [
+      "words_per_second"
+    ],
+    "n_metrics_computed": 6,
+    "n_metrics_detected": 1,
+    "n_metrics_robustly_detected": 1
+  },
+  "identity": {
+    "status": "computed",
+    "method": "ECAPA cosine between formal and conversational audio at the same seed",
+    "mean_cosine": 0.7332862774531047,
+    "ci_low": 0.6736260932683945,
+    "ci_high": 0.788370066632827,
+    "min_cosine": 0.4854154586791992,
+    "n_pair_seed_observations": 30,
+    "n_prompt_pairs": 10,
+    "per_pair": {
+      "assistance_request": 0.6680124004681905,
+      "decision_consequences": 0.7243812282880148,
+      "meeting_time": 0.8386220335960388,
+      "presentation_start": 0.7777980367342631,
+      "proposal_review": 0.5965992013613383,
+      "question_clarity": 0.5755206147829691,
+      "report_ready": 0.6914945840835571,
+      "restaurant_location": 0.8382976452509562,
+      "train_departure": 0.8334669868151346,
+      "weekend_weather": 0.7886700431505839
+    },
+    "note": "Generated-domain consistency only; not a real-speaker verification score and not the CFVN identity guardrail."
+  },
+  "style_consistency": {
+    "consistent": true,
+    "n_pair_seed_cells": 30,
+    "mismatches": []
+  },
+  "canonical_hashes": {
+    "status": "computed",
+    "passed": true,
+    "files": {
+      "cfvn": {
+        "path": "results/checkpoints/cfvn_v2_best.pt",
+        "expected_sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b",
+        "actual_sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b",
+        "match": true
+      },
+      "cvae": {
+        "path": "checkpoints/cvae_cfvn_face192_latent128_diversity.pt",
+        "expected_sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b",
+        "actual_sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b",
+        "match": true
+      },
+      "style_adapter": {
+        "path": "checkpoints/style_adapter_cfvn_best.pt",
+        "expected_sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+        "actual_sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+        "match": true
+      }
+    },
+    "missing": [],
+    "mismatched": []
+  },
+  "pipeline_provenance": {
+    "project_root": "D:\\voix",
+    "runtime": {
+      "python": "3.12.1",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "device": "cuda",
+      "backend": "neural",
+      "schema_version": "FaceFeatureV2",
+      "torch": "2.4.1+cu121",
+      "cuda_available": true,
+      "cuda_version": "12.1",
+      "gpu": "NVIDIA GeForce GTX 1650"
+    },
+    "artifacts": {
+      "face_scaler": {
+        "role": "face_scaler",
+        "path": "D:\\voix\\data\\processed\\voxceleb2_v2\\face_scaler_v2.pt",
+        "exists": true,
+        "bytes": 6146,
+        "sha256": "2656d9b3cf2886c721acdd07a2289538be28c3ed65a033ffa3462671e85d9e87"
+      },
+      "cfvn": {
+        "role": "cfvn",
+        "path": "D:\\voix\\results\\checkpoints\\cfvn_v2_best.pt",
+        "exists": true,
+        "bytes": 2971901,
+        "sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b"
+      },
+      "cvae": {
+        "role": "cvae",
+        "path": "D:\\voix\\checkpoints\\cvae_cfvn_face192_latent128_diversity.pt",
+        "exists": true,
+        "bytes": 5766056,
+        "sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b"
+      },
+      "style_adapter": {
+        "role": "style_adapter",
+        "path": "D:\\voix\\checkpoints\\style_adapter_cfvn_best.pt",
+        "exists": true,
+        "bytes": 735522,
+        "sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c"
+      }
+    }
+  },
+  "failures": []
+}

@@ -1,0 +1,250 @@
+{
+  "n_samples": 29,
+  "device": "cuda",
+  "metrics": {
+    "wer": {
+      "status": "computed",
+      "model": "whisper-base",
+      "n": 29,
+      "wer": 0.3260077447907062,
+      "wer_std": 0.443101644842433,
+      "per_sample_wer": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.35294117647058826,
+        0.29411764705882354,
+        0.35294117647058826,
+        0.9411764705882353,
+        0.17647058823529413,
+        0.0,
+        0.29411764705882354,
+        0.35294117647058826,
+        0.23529411764705882,
+        0.058823529411764705,
+        0.47058823529411764,
+        0.0,
+        0.0,
+        0.23529411764705882,
+        0.35294117647058826,
+        0.0,
+        0.35294117647058826,
+        1.8636363636363635,
+        1.0,
+        1.12,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "transcripts": [
+        "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+        "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+        "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+        "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+        "The human voice reflects both physical and ambient culture and carry. And the unique kittens of personal identity.",
+        "The human voice ref, one small physical anatomy and literature carrying the unique cadence of personal identity.",
+        "Not even voice reflects but physical anatomy and lived culture. Sharing dying makes cadence of personal identity.",
+        "Prepare to invoice reflects onset of political activity and royalty.udes to innocent acts of supposed identity IN orchestra",
+        "The human voice air reflects both physical anatomy and web culture, carrying the unique feelings of personal identity.",
+        "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+        "The human release reflects most physical and ambient culture carrying the unique chance of personal identity.",
+        "Your human voice reflects both physical anatomy and whimsical chart, carrying the end, aching ends of personal identity.",
+        "The human voice reflects both physical and ambient live culture, hearing the unique cadence of personal identity.",
+        "The human voice reflects both physical anatomy and life culture, carrying the unique cadence of personal identity.",
+        "For human voice from flat-spot physical anatomy and lip culture, sharing the indicateness of personal identity.",
+        "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+        "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+        "For human voice, weft. Let's both physical anatomy and lived culture, carrying the nick cadence of personal identity.",
+        "The human voice, right, right, reflects both physical anatomy and lived culture, carrying the unique CAD CAD CAD cadence of pure personal identity.",
+        "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+        "The human voice reflects this recycled omen at Mio and lips culture, carrying the unique cadence of personal identity.",
+        "Why do you not recognize me? And now tell me I have physical culture. Have you seen that? You have not seen that? And you have seen that? You have not seen that? I have not seen that? First of all.",
+        "Love The Words WHY? nane reflet aloff sixty las'anwat Em be physics At la culture vacuum portantler kadentunicta Left accented prison",
+        "The men's much dim-spangled so old, defy-ish, and at-em-hals, Arch the galloped culture-wider, untrake the A.N. The Gordidge-Kaden's their personal-looking identity.",
+        "Wow, Fraktion Monagref,\u6e90 Seele- abs so sign i was I had excellent eventually know all",
+        "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+        "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+        "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+        "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity."
+      ]
+    },
+    "speaker_similarity": {
+      "status": "unavailable",
+      "n": 0,
+      "mean": null,
+      "reason": "no sample had a readable reference_wav"
+    },
+    "face_voice_consistency": {
+      "status": "unavailable",
+      "n": 0,
+      "mean": null,
+      "reason": "no sample had a face or CFVN/scaler"
+    },
+    "fad_proxy": {
+      "status": "computed",
+      "metric": "mel-spectrogram frechet proxy (not VGGish FAD)",
+      "n_reference": 120,
+      "n_generated": 29,
+      "fad_proxy": 1906.1953237098937
+    },
+    "diversity": {
+      "01_Candidates": {
+        "status": "computed",
+        "n": 3,
+        "pairwise_cosine": 0.6302761435508728,
+        "pairwise_cosine_distance": 0.3697238564491272
+      },
+      "02_Accents": {
+        "status": "computed",
+        "n": 6,
+        "pairwise_cosine": 0.706513524055481,
+        "pairwise_cosine_distance": 0.29348647594451904
+      },
+      "03_Emotions": {
+        "status": "computed",
+        "n": 6,
+        "pairwise_cosine": 0.4130745828151703,
+        "pairwise_cosine_distance": 0.5869254171848297
+      },
+      "04_Speech_Differences": {
+        "status": "computed",
+        "n": 6,
+        "pairwise_cosine": 0.6318039298057556,
+        "pairwise_cosine_distance": 0.3681960701942444
+      },
+      "05_Cross_Lingual": {
+        "status": "computed",
+        "n": 4,
+        "pairwise_cosine": 0.723852276802063,
+        "pairwise_cosine_distance": 0.276147723197937
+      },
+      "06_Morphology_Sliders": {
+        "status": "computed",
+        "n": 4,
+        "pairwise_cosine": 0.4159519672393799,
+        "pairwise_cosine_distance": 0.5840480327606201
+      }
+    }
+  },
+  "per_sample": [
+    {
+      "audio": "D:\\voix\\demo\\01_candidates\\candidate_1_primary.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\01_candidates\\candidate_2_alternative.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\01_candidates\\candidate_3_contrasting.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\02_accents\\accent_01_general_american.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\02_accents\\accent_02_british_rp.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\02_accents\\accent_03_australian.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\02_accents\\accent_04_indian_english.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\02_accents\\accent_05_irish.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\02_accents\\accent_06_scottish.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\03_emotions\\emotion_01_neutral.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\03_emotions\\emotion_02_happy.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\03_emotions\\emotion_03_sad.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\03_emotions\\emotion_04_angry.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\03_emotions\\emotion_05_whispered.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\03_emotions\\emotion_06_surprised.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\04_speech_differences\\speech_01_interdental_lisp.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\04_speech_differences\\speech_02_lateral_lisp.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\04_speech_differences\\speech_03_rhotacism.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\04_speech_differences\\speech_04_stutter_clonic.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\04_speech_differences\\speech_05_hypernasality.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\04_speech_differences\\speech_06_prolonged_phonemes.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\05_cross_lingual\\lang_01_spanish.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\05_cross_lingual\\lang_02_french.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\05_cross_lingual\\lang_03_german.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\05_cross_lingual\\lang_04_italian.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\06_craniofacial_sliders\\slider_01_jaw_expanded.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\06_craniofacial_sliders\\slider_02_jaw_narrow.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\06_craniofacial_sliders\\slider_03_face_elongated.wav",
+      "face_voice_consistency": null
+    },
+    {
+      "audio": "D:\\voix\\demo\\06_craniofacial_sliders\\slider_04_face_compact.wav",
+      "face_voice_consistency": null
+    }
+  ]
+}

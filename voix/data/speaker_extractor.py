@@ -140,3 +140,58 @@ class ECAPAExtractor:
             waveform = waveform.mean(dim=0, keepdim=True)
 
         return self.extract(waveform)
+
+    def extract_batch_from_paths(
+        self,
+        audio_paths: list[str],
+        *,
+        max_seconds: float | None = None,
+    ) -> list[np.ndarray]:
+        """Extract ECAPA embeddings for several WAV files in one forward pass.
+
+        The waveforms are padded to the longest clip in the batch.  This is the
+        batch path used by the VoxCeleb2 extraction pipeline; it avoids one
+        Python/SpeechBrain call per clip.
+        """
+        import soundfile as sf
+        import torch
+
+        if not audio_paths:
+            return []
+        if not self._loaded:
+            self._load()
+
+        waves: list[torch.Tensor] = []
+        for path in audio_paths:
+            audio, sample_rate = sf.read(path, dtype="float32", always_2d=False)
+            if sample_rate != self.SAMPLE_RATE:
+                raise ValueError(
+                    f"{path}: expected {self.SAMPLE_RATE} Hz, got {sample_rate} Hz"
+                )
+            if audio.ndim > 1:
+                audio = audio.mean(axis=1)
+            if max_seconds is not None:
+                audio = audio[: int(round(float(max_seconds) * self.SAMPLE_RATE))]
+            if audio.size == 0:
+                raise ValueError(f"{path}: empty audio")
+            waves.append(torch.from_numpy(np.ascontiguousarray(audio)))
+
+        max_len = max(int(w.shape[0]) for w in waves)
+        padded = torch.zeros(len(waves), max_len, dtype=torch.float32)
+        for i, wave in enumerate(waves):
+            padded[i, : wave.shape[0]] = wave
+
+        device = self.device
+        if device.startswith("cuda") and not torch.cuda.is_available():
+            device = "cpu"
+        padded = padded.to(device)
+
+        with torch.inference_mode():
+            if device.startswith("cuda"):
+                with torch.cuda.amp.autocast():
+                    embeddings = self._classifier.encode_batch(padded)
+            else:
+                embeddings = self._classifier.encode_batch(padded)
+
+        embeddings = embeddings.squeeze(1).float().cpu().numpy()
+        return [embeddings[i].astype(np.float32) for i in range(len(waves))]

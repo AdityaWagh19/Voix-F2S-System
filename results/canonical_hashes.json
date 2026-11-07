@@ -1,0 +1,21 @@
+{
+  "schema_version": "voix.canonical_hashes.v1",
+  "generated_at": "2026-10-29 08:19:41 UTC",
+  "files": {
+    "cfvn": {
+      "path": "results/checkpoints/cfvn_v2_best.pt",
+      "sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b",
+      "size_bytes": 2971901
+    },
+    "cvae": {
+      "path": "checkpoints/cvae_cfvn_face192_latent128_diversity.pt",
+      "sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b",
+      "size_bytes": 5766056
+    },
+    "style_adapter": {
+      "path": "checkpoints/style_adapter_cfvn_best.pt",
+      "sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+      "size_bytes": 735522
+    }
+  }
+}

@@ -148,13 +148,11 @@ class CVAEDecoder(nn.Module):
         speaker_dim: int = 192,
         hidden_dims: Tuple[int, ...] = (512, 384, 256),  # larger since no skip
         normalize_output: bool = True,
-        skip_scale: float = 0.3,  # Learnable skip connection scale for face-specific info
     ) -> None:
         super().__init__()
         self.in_dim = in_dim
         self.speaker_dim = speaker_dim
         self.normalize_output = normalize_output
-        self.skip_scale = nn.Parameter(torch.tensor(skip_scale))  # Learnable skip scale
 
         blocks: list[nn.Module] = []
         prev_dim = in_dim
@@ -175,12 +173,7 @@ class CVAEDecoder(nn.Module):
 
     def forward(self, cond_z: torch.Tensor) -> torch.Tensor:
         # Decoder path: latent -> MLP -> output projection
-        decoded = self.output_proj(self.net(cond_z))
-        # Skip connection: add scaled latent if dimensions match
-        if cond_z.shape[-1] == decoded.shape[-1]:
-            e_s_hat = decoded + self.skip_scale * cond_z
-        else:
-            e_s_hat = decoded
+        e_s_hat = self.output_proj(self.net(cond_z))
         if self.normalize_output:
             e_s_hat = F.normalize(e_s_hat, p=2, dim=-1)
         return e_s_hat
@@ -190,11 +183,11 @@ class CVAE(nn.Module):
     """Unified True Conditional Variational Autoencoder (CVAE v2).
 
     Args:
-        face_dim: Input face feature dimensionality (default: 560).
+        face_dim: Input face/CFVN embedding dimensionality (default: 560).
         speaker_dim: Target speaker embedding dimensionality (default: 192).
         latent_dim: Latent space dimensionality (default: 192).
         dropout: Encoder dropout rate (default: 0.0).
-        normalize_output: Whether to L2-normalize e_s_hat (default: False).
+        normalize_output: Whether to L2-normalize e_s_hat (default: True).
     """
 
     def __init__(
@@ -305,33 +298,40 @@ class CVAE(nn.Module):
         num_samples: int = 5,
         temperature: float = 1.0,
     ) -> torch.Tensor:
-        """Generate K diverse candidate voice embeddings for a single face image.
+        """Generate K diverse candidate voice embeddings per input face.
 
         Samples K distinct latents from the conditional prior p_psi(z | e_f),
         and decodes them conditioned on the input facial biometrics.
 
         Args:
-            e_f: Face representation tensor of shape (1, 560) or (560,).
-            num_samples: Number of diverse voice candidates K.
+            e_f: Face representation tensor of shape (B, D) or (D,).
+            num_samples: Number of diverse voice candidates K per face.
             temperature: Sampling temperature (higher = more diverse).
 
         Returns:
-            Tensor of shape (K, 192) containing K candidate speaker embeddings.
+            Tensor of shape (B * K, 192), ordered face-major: the first K rows
+            belong to face 0, the next K to face 1, and so on. For B == 1 this
+            is exactly the historical (K, 192) output.
         """
         self.eval()
         if e_f.ndim == 1:
-            e_f = e_f.unsqueeze(0)  # (1, 560)
+            e_f = e_f.unsqueeze(0)  # (1, D)
+        if e_f.ndim != 2:
+            raise ValueError(f"e_f must be 1-D or 2-D, got shape {tuple(e_f.shape)}")
+        if num_samples < 1:
+            raise ValueError(f"num_samples must be >= 1, got {num_samples}")
 
-        # Predict conditional prior distribution from face
-        mu_prior, logvar_prior = self.prior_net(e_f)  # (1, 192)
+        # Predict conditional prior distribution from each face
+        mu_prior, logvar_prior = self.prior_net(e_f)  # (B, 192)
         std_prior = torch.exp(0.5 * logvar_prior)
 
-        # Expand for K candidate voices
-        mu_exp  = mu_prior.expand(num_samples, -1)   # (K, 192)
-        std_exp = std_prior.expand(num_samples, -1)  # (K, 192)
-        eps = torch.randn_like(std_exp)              # (K, 192)
+        # Expand each face's distribution K times along a new leading axis,
+        # then flatten so B == 1 keeps the original (K, 192) contract.
+        mu_exp = mu_prior.unsqueeze(1).expand(-1, num_samples, -1).reshape(-1, mu_prior.shape[-1])
+        std_exp = std_prior.unsqueeze(1).expand(-1, num_samples, -1).reshape(-1, std_prior.shape[-1])
+        eps = torch.randn_like(std_exp)              # (B*K, 192)
 
-        z = mu_exp + eps * std_exp * temperature     # (K, 192)
+        z = mu_exp + eps * std_exp * temperature     # (B*K, 192)
 
         # Decode from z only — no e_f skip
         e_s_candidates = self.decoder(z)              # (K, 192)

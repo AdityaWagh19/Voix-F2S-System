@@ -19,10 +19,153 @@ import numpy as np
 import torch
 
 from voix.data.demographics import SoftDemographicEstimator
-from voix.data.morphology import apply_craniofacial_sliders
+from voix.data.feature_contract import FACE_DIM
 from voix.models.fusion import FaceFusionLayer
+from voix.utils.paths import project_path
 
-PRESETS_DIR = Path("D:/voix/data/presets")
+PRESETS_DIR = project_path("data", "presets")
+
+# Preset caches are representation artifacts.  The V1 files were bare 560-D
+# tensors produced by the old fusion layer (pairwise cosine ~0.9997 across all
+# eight presets), so a bare tensor is explicitly treated as stale and rebuilt.
+PRESET_SCHEMA_VERSION = "FaceFeatureV2"
+
+# Deterministic preset geometry: a fixed trait table applied to the canonical
+# 32-D craniofacial ratio vector before fusion.  This is face-feature
+# generation only.  The interactive craniofacial sliders and craniofacial
+# style modulation were removed from the serving path.
+_PRESET_TRAIT_SPECS: Dict[str, Dict[str, Any]] = {
+    "jaw_width": {
+        "target_indices": [2],
+        "correlated_indices": {26: -0.25},
+        "relative_delta_scale": 0.35,
+        "anatomical_bounds": (0.3, 4.0),
+    },
+    "face_height": {
+        "target_indices": [0],
+        "correlated_indices": {24: 0.30, 9: 0.15},
+        "relative_delta_scale": 0.30,
+        "anatomical_bounds": (0.5, 5.0),
+    },
+    "midface_length": {
+        "target_indices": [5, 6],
+        "correlated_indices": {9: -0.15, 10: -0.15},
+        "relative_delta_scale": 0.30,
+        "anatomical_bounds": (0.2, 3.0),
+    },
+    "lip_fullness": {
+        "target_indices": [12, 13],
+        "correlated_indices": {26: 0.20, 27: -0.20},
+        "relative_delta_scale": 0.40,
+        "anatomical_bounds": (0.05, 1.5),
+    },
+    "lip_width": {
+        "target_indices": [11],
+        "correlated_indices": {26: 0.25},
+        "relative_delta_scale": 0.30,
+        "anatomical_bounds": (0.3, 3.0),
+    },
+    "nose_width": {
+        "target_indices": [4],
+        "correlated_indices": {25: -0.20, 27: 0.20},
+        "relative_delta_scale": 0.35,
+        "anatomical_bounds": (0.2, 2.5),
+    },
+    "face_width": {
+        "target_indices": [1, 7],
+        "correlated_indices": {15: 0.50, 16: 0.50, 24: -0.30},
+        "relative_delta_scale": 0.30,
+        "anatomical_bounds": (0.5, 4.5),
+    },
+    "chin_prominence": {
+        "target_indices": [30],
+        "correlated_indices": {17: 0.20},
+        "delta_mode": "absolute",
+        "absolute_delta_scale": 0.04,
+        "anatomical_bounds": (-1.0, 1.5),
+    },
+    "mandible_angle": {
+        "target_indices": [3],
+        "correlated_indices": {28: 0.25, 29: 0.25},
+        "delta_mode": "absolute",
+        "absolute_delta_scale": 15.0,
+        "anatomical_bounds": (55.0, 140.0),
+    },
+}
+
+
+def _apply_preset_traits(
+    e_geo: np.ndarray, traits: Dict[str, float]
+) -> np.ndarray:
+    """Apply the canonical preset trait table to a 32-D ratio vector."""
+    if e_geo is None:
+        return np.zeros(32, dtype=np.float32)
+    geo = np.array(e_geo, dtype=np.float32, copy=True)
+    if geo.shape != (32,) or not traits:
+        return geo
+    for name, raw_value in traits.items():
+        spec = _PRESET_TRAIT_SPECS.get(str(name))
+        if spec is None:
+            raise ValueError(
+                f"Unknown preset trait {name!r}; expected one of: "
+                f"{', '.join(sorted(_PRESET_TRAIT_SPECS))}"
+            )
+        value = float(np.clip(float(raw_value), -1.0, 1.0))
+        if abs(value) < 1e-6:
+            continue
+        low_bound, high_bound = spec["anatomical_bounds"]
+        absolute = spec.get("delta_mode") == "absolute"
+        for index in spec["target_indices"]:
+            current = geo[index]
+            if absolute:
+                delta = value * spec["absolute_delta_scale"]
+            else:
+                delta = current * value * spec["relative_delta_scale"]
+            geo[index] = float(np.clip(current + delta, low_bound, high_bound))
+        for index, corr_scale in spec.get("correlated_indices", {}).items():
+            current = geo[index]
+            if absolute:
+                delta = value * spec["absolute_delta_scale"] * corr_scale
+            else:
+                delta = current * value * corr_scale
+            geo[index] = float(max(0.01, current + delta))
+    return geo
+
+
+def save_preset_embedding(path: str | Path, embedding: torch.Tensor) -> None:
+    """Write a versioned preset cache instead of a bare tensor."""
+    payload = {
+        "schema_version": PRESET_SCHEMA_VERSION,
+        "embedding": embedding.detach().cpu().float(),
+    }
+    torch.save(payload, path)
+
+
+def load_preset_embedding(path: str | Path, device: str | torch.device = "cpu") -> torch.Tensor:
+    """Load a versioned preset cache and reject stale V1 tensors."""
+    payload = torch.load(path, map_location=device, weights_only=True)
+    if not isinstance(payload, dict):
+        raise ValueError(
+            f"preset cache {path} is an unversioned tensor from the V1 fusion "
+            f"contract; regenerate it with the {PRESET_SCHEMA_VERSION} builder"
+        )
+    if payload.get("schema_version") != PRESET_SCHEMA_VERSION:
+        raise ValueError(
+            f"preset cache {path} has schema {payload.get('schema_version')!r}, "
+            f"expected {PRESET_SCHEMA_VERSION!r}"
+        )
+    embedding = payload.get("embedding")
+    if not torch.is_tensor(embedding):
+        raise ValueError(f"preset cache {path} has no tensor embedding")
+    embedding = embedding.float()
+    if embedding.shape != (1, FACE_DIM):
+        raise ValueError(
+            f"preset cache {path} has shape {tuple(embedding.shape)}, expected "
+            f"(1, {FACE_DIM})"
+        )
+    if not torch.isfinite(embedding).all():
+        raise ValueError(f"preset cache {path} contains non-finite values")
+    return embedding.to(device)
 
 
 @dataclass
@@ -37,6 +180,7 @@ class DemographicPreset:
     pitch_target_hz: float
     craniofacial_traits: Dict[str, float] = field(default_factory=dict)
     embedding: Optional[torch.Tensor] = None
+    geometry: Optional[np.ndarray] = None
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert preset metadata to dictionary (excluding tensor)."""
@@ -197,8 +341,8 @@ class PresetRegistry:
         gender: int,
         age: float,
         traits: Dict[str, float],
-    ) -> torch.Tensor:
-        """Deterministically generate fused 560-D face vector for a preset."""
+    ) -> tuple[torch.Tensor, np.ndarray]:
+        """Deterministically generate fused 560-D face vector and raw geometry."""
         rng = np.random.default_rng(seed)
 
         # 1. 512-D ArcFace identity vector (L2 normalized)
@@ -229,19 +373,49 @@ class PresetRegistry:
         e_geo[30] = 0.05 # chin protrusion
 
         if traits:
-            e_geo = apply_craniofacial_sliders(e_geo, traits)
+            e_geo = _apply_preset_traits(e_geo, traits)
 
         # 3. 16-D Demographic probability vector
         e_demo = self.demog.estimate_from_attributes(gender=gender, age=age)
 
-        # 4. Fusion 560-D
+        # 4. Canonical FaceFeatureV2 fusion (per-modality L2 normalization)
         with torch.no_grad():
             e_id_t = torch.from_numpy(e_id).unsqueeze(0).to(self.device)
             e_geo_t = torch.from_numpy(e_geo).unsqueeze(0).to(self.device)
             e_demo_t = torch.from_numpy(e_demo).unsqueeze(0).to(self.device)
             e_f = self.fusion(e_id_t, e_geo_t, e_demo_t)
 
-        return e_f
+        return e_f, np.asarray(e_geo, dtype=np.float32)
+
+    def build_preset_face(
+        self,
+        preset_id: str,
+        extra_traits: Optional[Dict[str, float]] = None,
+    ) -> tuple[torch.Tensor, np.ndarray]:
+        """Re-fuse a preset, optionally applying extra craniofacial sliders.
+
+        The cached preset embedding is the base definition.  When the caller
+        supplies sliders, the geometry and the fused vector must be rebuilt
+        together; otherwise the slider would be silently ignored.
+        """
+        definition = next(
+            (p for p in CANONICAL_PRESETS_DEF if p["preset_id"] == preset_id),
+            None,
+        )
+        if definition is None:
+            raise KeyError(
+                f"Preset '{preset_id}' not found. Available presets: "
+                f"{[p['preset_id'] for p in CANONICAL_PRESETS_DEF]}"
+            )
+        traits = dict(definition["craniofacial_traits"])
+        if extra_traits:
+            traits.update(extra_traits)
+        return self._generate_synthetic_face_vector(
+            seed=definition["seed"],
+            gender=definition["gender"],
+            age=definition["age"],
+            traits=traits,
+        )
 
     def _initialize_presets(self) -> None:
         """Load or generate all canonical presets."""
@@ -253,24 +427,35 @@ class PresetRegistry:
 
             if pt_path.exists():
                 try:
-                    e_f = torch.load(pt_path, map_location=self.device, weights_only=True)
-                except Exception:
-                    e_f = self._generate_synthetic_face_vector(
+                    e_f = load_preset_embedding(pt_path, self.device)
+                    _, e_geo = self._generate_synthetic_face_vector(
                         seed=p_def["seed"],
                         gender=p_def["gender"],
                         age=p_def["age"],
                         traits=p_def["craniofacial_traits"],
                     )
-                    torch.save(e_f, pt_path)
+                except Exception:
+                    # Stale/unreadable V1 cache: rebuild from the canonical
+                    # definitions and overwrite it with the versioned payload.
+                    e_f, e_geo = self._generate_synthetic_face_vector(
+                        seed=p_def["seed"],
+                        gender=p_def["gender"],
+                        age=p_def["age"],
+                        traits=p_def["craniofacial_traits"],
+                    )
+                    try:
+                        save_preset_embedding(pt_path, e_f)
+                    except Exception:
+                        pass
             else:
-                e_f = self._generate_synthetic_face_vector(
+                e_f, e_geo = self._generate_synthetic_face_vector(
                     seed=p_def["seed"],
                     gender=p_def["gender"],
                     age=p_def["age"],
                     traits=p_def["craniofacial_traits"],
                 )
                 try:
-                    torch.save(e_f, pt_path)
+                    save_preset_embedding(pt_path, e_f)
                 except Exception:
                     pass
 
@@ -283,6 +468,7 @@ class PresetRegistry:
                 pitch_target_hz=p_def["pitch_target_hz"],
                 craniofacial_traits=p_def["craniofacial_traits"],
                 embedding=e_f,
+                geometry=e_geo,
             )
             self._presets[pid] = preset
 
@@ -312,3 +498,14 @@ def list_demographic_presets() -> List[Dict[str, Any]]:
 def get_demographic_preset(preset_id: str) -> DemographicPreset:
     """Retrieve demographic preset by ID."""
     return PresetRegistry.get_instance().get_preset(preset_id)
+
+
+def build_preset_face(
+    preset_id: str,
+    extra_traits: Optional[Dict[str, float]] = None,
+    device: str = "cpu",
+) -> tuple[torch.Tensor, np.ndarray]:
+    """Re-fuse a preset with optional extra craniofacial sliders."""
+    return PresetRegistry.get_instance(device=device).build_preset_face(
+        preset_id, extra_traits
+    )

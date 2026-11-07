@@ -1,0 +1,322 @@
+{
+  "schema_version": "voix.emotion_holm_sensitivity.v1",
+  "method": "One-sample t test reconstructed from reported paired mean, SD, and n_pairs; Holm correction across six direction checks per run. Post-hoc sensitivity only; the pre-registered gate remains the paired bootstrap CI.",
+  "runs": {
+    "e1_class_mean_prosody": {
+      "report": "results\\emotion\\e1c\\report_prosody.json",
+      "status": "completed",
+      "n_checks": 6,
+      "checks": {
+        "happy:f0_mean_hz": {
+          "mean_delta": 16.19388888888889,
+          "sd_delta": 35.10165642531165,
+          "n_pairs": 108,
+          "t_statistic": 4.794412774342168,
+          "p_value": 5.296926112859472e-06,
+          "cohens_dz": 0.4613425843121052,
+          "expected_direction": 1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": true,
+          "holm_adjusted_p": 1.0593852225718945e-05,
+          "holm_pass_0_05": true,
+          "holm_pass_expected_direction": true
+        },
+        "happy:duration_seconds": {
+          "mean_delta": -0.054861111111111124,
+          "sd_delta": 0.03720025583605459,
+          "n_pairs": 108,
+          "t_statistic": -15.326061017897109,
+          "p_value": 9.444607376525166e-29,
+          "cohens_dz": -1.4747509090499207,
+          "expected_direction": -1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": true,
+          "holm_adjusted_p": 5.6667644259151e-28,
+          "holm_pass_0_05": true,
+          "holm_pass_expected_direction": true
+        },
+        "sad:f0_mean_hz": {
+          "mean_delta": -11.585925925925928,
+          "sd_delta": 36.4034816820301,
+          "n_pairs": 108,
+          "t_statistic": -3.307498859320223,
+          "p_value": 0.0012824776927603464,
+          "cohens_dz": -0.31826422612881844,
+          "expected_direction": -1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": true,
+          "holm_adjusted_p": 0.0012824776927603464,
+          "holm_pass_0_05": true,
+          "holm_pass_expected_direction": true
+        },
+        "sad:duration_seconds": {
+          "mean_delta": 0.04768518518518517,
+          "sd_delta": 0.04179626780908942,
+          "n_pairs": 108,
+          "t_statistic": 11.856536648630136,
+          "p_value": 3.27066936164547e-21,
+          "cohens_dz": 1.1408957709572118,
+          "expected_direction": 1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": true,
+          "holm_adjusted_p": 1.308267744658188e-20,
+          "holm_pass_0_05": true,
+          "holm_pass_expected_direction": true
+        },
+        "angry:f0_mean_hz": {
+          "mean_delta": 18.132314814814816,
+          "sd_delta": 32.45770978516655,
+          "n_pairs": 108,
+          "t_statistic": 5.80560194652661,
+          "p_value": 6.6398549754431e-08,
+          "cohens_dz": 0.5586443077724923,
+          "expected_direction": 1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": true,
+          "holm_adjusted_p": 1.9919564926329297e-07,
+          "holm_pass_0_05": true,
+          "holm_pass_expected_direction": true
+        },
+        "angry:duration_seconds": {
+          "mean_delta": -0.05439814814814815,
+          "sd_delta": 0.04084800634923104,
+          "n_pairs": 108,
+          "t_statistic": -13.839650673481417,
+          "p_value": 1.3807708573482173e-25,
+          "cohens_dz": -1.3317210069708136,
+          "expected_direction": -1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": true,
+          "holm_adjusted_p": 6.903854286741087e-25,
+          "holm_pass_0_05": true,
+          "holm_pass_expected_direction": true
+        }
+      },
+      "holm_passed_two_sided": [
+        "angry:duration_seconds",
+        "angry:f0_mean_hz",
+        "happy:duration_seconds",
+        "happy:f0_mean_hz",
+        "sad:duration_seconds",
+        "sad:f0_mean_hz"
+      ],
+      "holm_passed_expected_direction": [
+        "angry:duration_seconds",
+        "angry:f0_mean_hz",
+        "happy:duration_seconds",
+        "happy:f0_mean_hz",
+        "sad:duration_seconds",
+        "sad:f0_mean_hz"
+      ],
+      "all_holm_pass_two_sided": true,
+      "all_holm_pass_expected_direction": true
+    },
+    "e2_learned_residual": {
+      "report": "results\\emotion\\e2c\\report_main.json",
+      "status": "partial",
+      "n_checks": 6,
+      "checks": {
+        "happy:f0_mean_hz": {
+          "mean_delta": 18.63287037037037,
+          "sd_delta": 39.7848340768828,
+          "n_pairs": 108,
+          "t_statistic": 4.867142807728132,
+          "p_value": 3.92511834066355e-06,
+          "cohens_dz": 0.468341035037698,
+          "expected_direction": 1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": true,
+          "holm_adjusted_p": 1.1775355021990652e-05,
+          "holm_pass_0_05": true,
+          "holm_pass_expected_direction": true
+        },
+        "happy:duration_seconds": {
+          "mean_delta": -0.033564814814814804,
+          "sd_delta": 0.04032027693036205,
+          "n_pairs": 108,
+          "t_statistic": -8.651125790575433,
+          "p_value": 5.647798536088043e-14,
+          "cohens_dz": -0.83245496733034,
+          "expected_direction": -1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": true,
+          "holm_adjusted_p": 3.388679121652826e-13,
+          "holm_pass_0_05": true,
+          "holm_pass_expected_direction": true
+        },
+        "sad:f0_mean_hz": {
+          "mean_delta": 4.206203703703703,
+          "sd_delta": 29.897967164903218,
+          "n_pairs": 108,
+          "t_statistic": 1.4620442550391273,
+          "p_value": 0.14665993542755731,
+          "cohens_dz": 0.1406852740356643,
+          "expected_direction": -1,
+          "direction_match": false,
+          "pre_registered_ci_excludes_zero": false,
+          "holm_adjusted_p": 0.14665993542755731,
+          "holm_pass_0_05": false,
+          "holm_pass_expected_direction": false
+        },
+        "sad:duration_seconds": {
+          "mean_delta": 0.015740740740740725,
+          "sd_delta": 0.054856715717031934,
+          "n_pairs": 108,
+          "t_statistic": 2.981997265643897,
+          "p_value": 0.0035465396560112623,
+          "cohens_dz": 0.2869428206737053,
+          "expected_direction": 1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": false,
+          "holm_adjusted_p": 0.0070930793120225245,
+          "holm_pass_0_05": true,
+          "holm_pass_expected_direction": true
+        },
+        "angry:f0_mean_hz": {
+          "mean_delta": 20.32324074074074,
+          "sd_delta": 33.494028197776764,
+          "n_pairs": 108,
+          "t_statistic": 6.305760297846749,
+          "p_value": 6.5731030635578915e-09,
+          "cohens_dz": 0.606772067567846,
+          "expected_direction": 1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": true,
+          "holm_adjusted_p": 2.6292412254231566e-08,
+          "holm_pass_0_05": true,
+          "holm_pass_expected_direction": true
+        },
+        "angry:duration_seconds": {
+          "mean_delta": -0.026851851851851846,
+          "sd_delta": 0.03723876354764326,
+          "n_pairs": 108,
+          "t_statistic": -7.493606218995409,
+          "p_value": 2.0350953382839644e-11,
+          "cohens_dz": -0.7210725946230089,
+          "expected_direction": -1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": true,
+          "holm_adjusted_p": 1.0175476691419823e-10,
+          "holm_pass_0_05": true,
+          "holm_pass_expected_direction": true
+        }
+      },
+      "holm_passed_two_sided": [
+        "angry:duration_seconds",
+        "angry:f0_mean_hz",
+        "happy:duration_seconds",
+        "happy:f0_mean_hz",
+        "sad:duration_seconds"
+      ],
+      "holm_passed_expected_direction": [
+        "angry:duration_seconds",
+        "angry:f0_mean_hz",
+        "happy:duration_seconds",
+        "happy:f0_mean_hz",
+        "sad:duration_seconds"
+      ],
+      "all_holm_pass_two_sided": false,
+      "all_holm_pass_expected_direction": false
+    },
+    "e2_corrected_label_null": {
+      "report": "results\\emotion\\e2c\\report_label_shuffled.json",
+      "status": "partial",
+      "n_checks": 6,
+      "checks": {
+        "happy:f0_mean_hz": {
+          "mean_delta": 12.935092592592593,
+          "sd_delta": 36.71379723575296,
+          "n_pairs": 108,
+          "t_statistic": 3.6614416254105646,
+          "p_value": 0.00039153317539583084,
+          "cohens_dz": 0.3523223846754817,
+          "expected_direction": 1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": true,
+          "holm_adjusted_p": 0.002349199052374985,
+          "holm_pass_0_05": true,
+          "holm_pass_expected_direction": true
+        },
+        "happy:duration_seconds": {
+          "mean_delta": -0.00532407407407407,
+          "sd_delta": 0.05458540914619961,
+          "n_pairs": 108,
+          "t_statistic": -1.0136298630490577,
+          "p_value": 0.31304600923618675,
+          "cohens_dz": -0.09753657904833615,
+          "expected_direction": -1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": false,
+          "holm_adjusted_p": 0.9391380277085603,
+          "holm_pass_0_05": false,
+          "holm_pass_expected_direction": false
+        },
+        "sad:f0_mean_hz": {
+          "mean_delta": 9.808240740740741,
+          "sd_delta": 38.051252544963184,
+          "n_pairs": 108,
+          "t_statistic": 2.6787614324793685,
+          "p_value": 0.008556227287127051,
+          "cohens_dz": 0.2577639390227918,
+          "expected_direction": -1,
+          "direction_match": false,
+          "pre_registered_ci_excludes_zero": false,
+          "holm_adjusted_p": 0.042781136435635254,
+          "holm_pass_0_05": true,
+          "holm_pass_expected_direction": false
+        },
+        "sad:duration_seconds": {
+          "mean_delta": -0.005324074074074068,
+          "sd_delta": 0.056788150123610735,
+          "n_pairs": 108,
+          "t_statistic": -0.9743124344938793,
+          "p_value": 0.33209896685839757,
+          "cohens_dz": -0.09375325772164014,
+          "expected_direction": 1,
+          "direction_match": false,
+          "pre_registered_ci_excludes_zero": false,
+          "holm_adjusted_p": 0.9391380277085603,
+          "holm_pass_0_05": false,
+          "holm_pass_expected_direction": false
+        },
+        "angry:f0_mean_hz": {
+          "mean_delta": 7.943055555555556,
+          "sd_delta": 39.67211524433127,
+          "n_pairs": 108,
+          "t_statistic": 2.0807222964795606,
+          "p_value": 0.039846924716967005,
+          "cohens_dz": 0.20021759633022176,
+          "expected_direction": 1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": false,
+          "holm_adjusted_p": 0.15938769886786802,
+          "holm_pass_0_05": false,
+          "holm_pass_expected_direction": false
+        },
+        "angry:duration_seconds": {
+          "mean_delta": -0.003472222222222218,
+          "sd_delta": 0.055897345553034876,
+          "n_pairs": 108,
+          "t_statistic": -0.645547502611104,
+          "p_value": 0.5199543853831452,
+          "cohens_dz": -0.06211783740120193,
+          "expected_direction": -1,
+          "direction_match": true,
+          "pre_registered_ci_excludes_zero": false,
+          "holm_adjusted_p": 0.9391380277085603,
+          "holm_pass_0_05": false,
+          "holm_pass_expected_direction": false
+        }
+      },
+      "holm_passed_two_sided": [
+        "happy:f0_mean_hz",
+        "sad:f0_mean_hz"
+      ],
+      "holm_passed_expected_direction": [
+        "happy:f0_mean_hz"
+      ],
+      "all_holm_pass_two_sided": false,
+      "all_holm_pass_expected_direction": false
+    }
+  }
+}

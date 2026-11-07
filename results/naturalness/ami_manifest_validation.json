@@ -1,0 +1,35 @@
+{
+  "schema_version": "voix.research_manifest_validation.v1",
+  "generated_at": "2026-10-30 13:38:57 UTC",
+  "manifest": "data\\processed\\ami_naturalness\\manifest.csv",
+  "kind": "ami_naturalness",
+  "passed": true,
+  "errors": [],
+  "warnings": [],
+  "summary": {
+    "rows": 3315,
+    "speakers": 16,
+    "splits": {
+      "test": {
+        "rows": 188,
+        "speakers": 4,
+        "hours": 0.22400555555555557
+      },
+      "train": {
+        "rows": 2993,
+        "speakers": 8,
+        "hours": 3.8476444444444446
+      },
+      "val": {
+        "rows": 134,
+        "speakers": 4,
+        "hours": 0.17888055555555557
+      }
+    },
+    "labels": {},
+    "trainable_labels": [],
+    "evaluation_only_labels": [],
+    "audio_checked": 0,
+    "audio_errors": 0
+  }
+}

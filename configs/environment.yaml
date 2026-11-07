@@ -1,48 +1,39 @@
 seed: 42
 device: "cuda"
-checkpoint_dir: "D:/voix/checkpoints"
-cache_dir: "D:/voix/checkpoints/hf_cache"
+checkpoint_dir: "checkpoints"
+cache_dir: "checkpoints/hf_cache"
 
+# Filesystem entries are project-relative.  ``load_config`` resolves them
+# against the repository root so a clean checkout runs without editing YAML.
+# Model identifiers (arcface_model, ecapa_model, ...) are intentionally not
+# resolved as paths.
 paths:
-  project_root: "D:/voix"
-  data_root: "D:/voix/data"
-  checkpoints: "D:/voix/checkpoints"
-  artifacts: "D:/voix/artifacts"
-  features_h5: "D:/voix/data/processed/features.h5"
-  training_index_csv: "D:/voix/data/processed/training_index.csv"
-  feature_scaler: "D:/voix/data/processed/feature_scaler.pt"
-  style_pairs: "D:/voix/data/processed/style_pairs.pt"
-  face_fusion_checkpoint: "D:/voix/checkpoints/face_fusion.pt"
-  cvae_checkpoint: "D:/voix/checkpoints/cvae_best.pt"
-  adapter_checkpoint: "D:/voix/checkpoints/style_adapter_best.pt"
-  librispeech_root: "D:/voix/data/raw/librispeech_ref/LibriSpeech/dev-clean-2"
-  mediapipe_model: "D:/voix/checkpoints/mediapipe/face_landmarker.task"
+  project_root: "."
+  data_root: "data"
+  checkpoints: "checkpoints"
+  artifacts: "artifacts"
+  features_h5: "data/processed/voxceleb2_v2/features_v2.h5"
+  training_index_csv: "data/processed/voxceleb2_v2/index.csv"
+  feature_scaler: "data/processed/voxceleb2_v2/face_scaler_v2.pt"
+  style_pairs: "data/processed/style_pairs.pt"
+  cvae_checkpoint: "checkpoints/cvae_cfvn_face192_latent128_diversity.pt"
+  adapter_checkpoint: "checkpoints/style_adapter_cfvn_best.pt"
+  cfvn_checkpoint: "results/checkpoints/cfvn_v2_best.pt"
+  mediapipe_model: "checkpoints/mediapipe/face_landmarker.task"
   arcface_model: "buffalo_l"
-  arcface_cache: "D:/voix/checkpoints"
+  arcface_cache: "checkpoints"
   ecapa_model: "speechbrain/spkrec-ecapa-voxceleb"
-  ecapa_savedir: "D:/voix/checkpoints/speechbrain/spkrec-ecapa"
+  ecapa_savedir: "checkpoints/speechbrain/spkrec-ecapa"
   whisper_model: "openai/whisper-large-v3"
   audioseal_generator: "audioseal_wm_16bits"
   audioseal_detector: "audioseal_detector_16bits"
 
-# LibriSpeech reference anchors for demographic-matched synthesis.
-# Paths are relative to paths.librispeech_root.
-# Selected by measured pyin pitch from LibriSpeech dev-clean-2.
-anchors:
-  male_young:   "1988/147956/1988-147956-0000.flac"  # 148.3 Hz -- energetic adult male
-  male_mid:     "5694/64038/5694-64038-0000.flac"    # 130.5 Hz -- classic mid-range male
-  male_senior:  "251/118436/251-118436-0000.flac"    # 118.5 Hz -- deep baritone
-  female_young: "1993/147964/1993-147964-0000.flac"  # 201.8 Hz -- adult female
-  female_mid:   "84/121550/84-121550-0000.flac"      # 221.5 Hz -- mid-range female
-  male_young_age_threshold: 35
-  male_senior_age_threshold: 60
-  female_mid_age_threshold: 40
-
 inference:
-  blend_weight: 0.35
-  alpha: 0.25
-  beta: 0.70
-  diffusion_steps: 25
+  # null = use the hardware profile's tuned step count.  A fixed 25 here
+  # silently overrode the CPU profile (8 steps) and the budget-GPU profile (20).
+  diffusion_steps: null
+  alpha: 0.18
+  beta: 0.22
   num_voices: 3
   temperature: 0.85
   loudness_target_lufs: -23.0
@@ -77,8 +68,6 @@ training:
     seed: 42
     grad_clip_norm: 1.0
 
-hardware:
-  max_vram_gb: 6.0
-  tts_device: "cpu"
-  onnx_device_id: -1
-  num_workers: 0
+# Hardware is auto-detected from configs/hardware.yaml at load time.  The
+# resolved profile is attached to ``config["hardware"]`` by
+# voix.utils.config.load_config; do not pin tts_device or diffusion_steps here.

@@ -18,7 +18,7 @@ import soundfile as sf
 import torch
 
 from voix.inference.pipeline import VoixPipeline
-from voix.utils.hardware import detect_hardware
+from voix.utils.config import get_hardware_profile
 
 
 def _compute_quick_metrics(wav: np.ndarray, sample_rate: int = 24000) -> Dict[str, float]:
@@ -61,27 +61,41 @@ class SynthesisRequest:
     seed: Optional[int] = None
     gender: Optional[int] = None  # 0=female, 1=male, None=auto-detect
     age: Optional[float] = None
-    craniofacial_sliders: Optional[Dict[str, float]] = None
     accent: Optional[str] = None
-    accent_strength: float = 0.5
+    accent_strength: float = 1.0
     emotion: Optional[str] = None
-    emotion_intensity: float = 0.5
-    language: str = "en"
-    speech_difference: Optional[str] = None
-    speech_severity: float = 0.5
+    emotion_intensity: float = 1.0
     watermark: bool = True
 
     def validate(self) -> None:
         """Validate request invariants before passing to neural models."""
-        p = Path(self.face_image)
-        if not p.exists():
-            raise FileNotFoundError(f"Input face image not found at '{self.face_image}'")
+        face_ref = str(self.face_image)
+        if not Path(face_ref).exists():
+            # Preset IDs are valid virtual face inputs and must not be treated
+            # as missing files. Import the lightweight registry definitions only.
+            from voix.data.presets import CANONICAL_PRESETS_DEF
+            preset_ids = {p["preset_id"] for p in CANONICAL_PRESETS_DEF}
+            if face_ref not in preset_ids:
+                raise FileNotFoundError(
+                    f"Input face image not found at '{self.face_image}' and it is "
+                    f"not a known demographic preset. Available presets: {sorted(preset_ids)}"
+                )
         if not self.text.strip():
             raise ValueError("Synthesis text prompt cannot be empty.")
         if self.num_voices < 1 or self.num_voices > 10:
             raise ValueError(f"num_voices must be between 1 and 10, got {self.num_voices}")
         if self.temperature <= 0.0 or self.temperature > 3.0:
             raise ValueError(f"temperature must be between 0.1 and 3.0, got {self.temperature}")
+        from voix.models.accent_control import normalize_accent
+        from voix.models.emotion_control import normalize_emotion
+
+        if self.accent:
+            normalize_accent(self.accent)
+        normalize_emotion(self.emotion)
+        if not 0.0 <= float(self.accent_strength) <= 1.0:
+            raise ValueError("accent_strength must be between 0.0 and 1.0")
+        if not 0.0 <= float(self.emotion_intensity) <= 1.0:
+            raise ValueError("emotion_intensity must be between 0.0 and 1.0")
 
 
 @dataclass
@@ -96,6 +110,8 @@ class VoiceCandidate:
     rms_energy: float = 0.0
     peak_amplitude: float = 0.0
     file_path: Optional[str] = None
+    backend: str = ""
+    watermark_status: str = "disabled"
 
     def save(self, path: Union[str, Path], normalize_peak: bool = True) -> Path:
         """Persist waveform to disk as a 24 kHz WAV file."""
@@ -123,6 +139,8 @@ class VoiceCandidate:
             "rms_energy": self.rms_energy,
             "peak_amplitude": self.peak_amplitude,
             "file_path": self.file_path,
+            "backend": self.backend,
+            "watermark_status": self.watermark_status,
         }
 
 
@@ -137,18 +155,41 @@ class SynthesisResponse:
     saved_files: List[str] = field(default_factory=list)
 
     def save_all(self, destination: Union[str, Path]) -> List[Path]:
-        """Save all generated candidates to a file or directory."""
+        """Save all generated candidates to a file or directory.
+
+        A single candidate may target ``out.wav`` directly. Multiple candidates
+        require a directory destination; silently creating a directory named
+        ``out.wav`` is never acceptable.
+        """
         dest = Path(destination)
         out_paths = []
+        if len(self.candidates) == 0:
+            raise ValueError("No candidates to save.")
+
         if len(self.candidates) == 1:
             if dest.suffix.lower() == ".wav":
+                if dest.exists() and dest.is_dir():
+                    raise IsADirectoryError(f"Destination is a directory: {dest}")
                 p = self.candidates[0].save(dest)
                 out_paths.append(p)
             else:
+                if dest.exists() and not dest.is_dir():
+                    raise NotADirectoryError(
+                        f"Destination exists and is not a directory: {dest}"
+                    )
                 dest.mkdir(parents=True, exist_ok=True)
                 p = self.candidates[0].save(dest / "voice_candidate_1.wav")
                 out_paths.append(p)
         else:
+            if dest.suffix.lower() == ".wav":
+                raise ValueError(
+                    f"Cannot save {len(self.candidates)} candidates to the single "
+                    f"file path '{dest}'. Pass a directory instead."
+                )
+            if dest.exists() and not dest.is_dir():
+                raise NotADirectoryError(
+                    f"Destination exists and is not a directory: {dest}"
+                )
             dest.mkdir(parents=True, exist_ok=True)
             for cand in self.candidates:
                 p = cand.save(dest / f"voice_candidate_{cand.index}.wav")
@@ -201,21 +242,21 @@ class VoixService:
             temperature=request.temperature,
             gender=request.gender,
             age=request.age,
-            craniofacial_sliders=request.craniofacial_sliders,
             accent=request.accent,
             accent_strength=request.accent_strength,
             emotion=request.emotion,
             emotion_intensity=request.emotion_intensity,
-            language=request.language,
-            speech_difference=request.speech_difference,
-            speech_severity=request.speech_severity,
             watermark=request.watermark,
         )
         latency = time.time() - t0
 
         candidates = []
         for raw in raw_results:
-            wav_np = raw["waveform"].numpy().squeeze().astype(np.float32)
+            waveform = raw["waveform"]
+            if isinstance(waveform, torch.Tensor):
+                wav_np = waveform.detach().cpu().numpy().squeeze().astype(np.float32)
+            else:
+                wav_np = np.asarray(waveform, dtype=np.float32).squeeze()
             metrics = _compute_quick_metrics(wav_np, raw["sample_rate"])
             cand = VoiceCandidate(
                 index=raw["voice_index"],
@@ -226,6 +267,8 @@ class VoixService:
                 f0_mean_hz=metrics["f0_mean_hz"],
                 rms_energy=metrics["rms_energy"],
                 peak_amplitude=metrics["peak_amplitude"],
+                backend=raw.get("backend", ""),
+                watermark_status=raw.get("watermark_status", "disabled"),
             )
             candidates.append(cand)
 
@@ -259,35 +302,33 @@ class VoixService:
         return responses
 
     def get_capabilities(self) -> Dict[str, Any]:
-        """Query available system capabilities (accents, emotions, languages, sliders)."""
+        """Query available system capabilities (accents and emotions)."""
+        from voix.models.accent_control import list_available_accents
+        from voix.models.emotion_control import list_available_emotions
+
         return {
             "accents": [
-                "general_american", "british_rp", "australian",
-                "indian_english", "irish", "scottish"
+                a["accent_id"] if isinstance(a, dict) else a
+                for a in list_available_accents()
             ],
             "emotions": [
-                "neutral", "happy", "sad", "angry", "whispered", "surprised"
-            ],
-            "languages": ["en", "es", "fr", "de", "it"],
-            "speech_differences": [
-                "stutter", "lisp", "lateral_lisp", "rhotacism", "hypernasal", "cleft_palate", "prolongation"
-            ],
-            "craniofacial_sliders": [
-                "face_height_to_ioc", "face_width_to_ioc", "jaw_width_to_ioc", "mandible_angle_deg"
+                e["emotion_id"] if isinstance(e, dict) else e
+                for e in list_available_emotions()
             ],
         }
 
     def get_diagnostics(self) -> Dict[str, Any]:
         """Return structured hardware and checkpoint status."""
-        profile = detect_hardware()
+        profile = get_hardware_profile()
         root_dir = Path(__file__).resolve().parent.parent
 
         checkpoints = [
             ("ArcFace (InsightFace)", "checkpoints/models/buffalo_l/w600k_r50.onnx"),
             ("MediaPipe FaceLandmarker", "checkpoints/mediapipe/face_landmarker.task"),
             ("ECAPA-TDNN (SpeechBrain)", "checkpoints/speechbrain/spkrec-ecapa/embedding_model.ckpt"),
+            ("ContrastiveFaceVoiceNet", "results/checkpoints/D_joint_infonce_best.pt"),
             ("CVAE Diversity Model", "checkpoints/cvae_cfvn_face192_latent128_diversity.pt"),
-            ("StyleAdapter Checkpoint", "checkpoints/style_adapter_best.pt"),
+            ("StyleAdapter Checkpoint", "checkpoints/style_adapter_cfvn_best.pt"),
             ("Environment Config", "configs/environment.yaml"),
         ]
 

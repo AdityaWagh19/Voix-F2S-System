@@ -1,0 +1,316 @@
+{
+  "schema_version": "voix.accent_classifier_report.v1",
+  "generated_at": "2026-11-01 06:34:37 UTC",
+  "level": "exploratory",
+  "track": "accent",
+  "experiment": "A0",
+  "features": "data\\processed\\globe_accent_ssl_features_full.npz",
+  "features_sha256": "1f9f791f0b5d1557c383c26087d3809a9e8b7cac03b349496f5eeb296fd3ce53",
+  "model": "checkpoints\\accent_classifier_globe_ssl.joblib",
+  "model_sha256": "4e8576301c94a5c5af58e36cea7b108e28b7b0ddb192ee926ba3dc53dba87b3f",
+  "classes": [
+    "us",
+    "england",
+    "australian",
+    "canadian",
+    "india_south_asia"
+  ],
+  "feature_dim": 768,
+  "feature_key": "ssl",
+  "excluded_zero_ssl_rows": 0,
+  "ssl_config": {
+    "bundle": "WAV2VEC2_BASE",
+    "feature_dim": 768,
+    "l2_normalize": true,
+    "max_seconds": 12.0,
+    "num_layers": 8,
+    "pooling": "mean",
+    "sample_rate": 16000
+  },
+  "train": {
+    "clips": 7682,
+    "speakers": 699,
+    "per_class": {
+      "us": 1349,
+      "england": 1577,
+      "australian": 1584,
+      "canadian": 1586,
+      "india_south_asia": 1586
+    }
+  },
+  "validation": {
+    "clips": 392,
+    "speakers": 48,
+    "metrics": {
+      "status": "computed",
+      "n": 392,
+      "n_speakers": 48,
+      "accuracy": 0.5331632653061225,
+      "macro_f1": 0.4968362503295958,
+      "per_class": {
+        "us": {
+          "precision": 0.6821705426356589,
+          "recall": 0.4971751412429379,
+          "f1": 0.5751633986928105,
+          "support": 177
+        },
+        "england": {
+          "precision": 0.375,
+          "recall": 0.44680851063829785,
+          "f1": 0.4077669902912622,
+          "support": 47
+        },
+        "australian": {
+          "precision": 0.24242424242424243,
+          "recall": 0.26666666666666666,
+          "f1": 0.253968253968254,
+          "support": 30
+        },
+        "canadian": {
+          "precision": 0.38095238095238093,
+          "recall": 0.5063291139240507,
+          "f1": 0.43478260869565216,
+          "support": 79
+        },
+        "india_south_asia": {
+          "precision": 0.7536231884057971,
+          "recall": 0.8813559322033898,
+          "f1": 0.8124999999999999,
+          "support": 59
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "us",
+          "england",
+          "australian",
+          "canadian",
+          "india_south_asia"
+        ],
+        "matrix": [
+          [
+            88,
+            17,
+            8,
+            53,
+            11
+          ],
+          [
+            7,
+            21,
+            7,
+            11,
+            1
+          ],
+          [
+            1,
+            15,
+            8,
+            1,
+            5
+          ],
+          [
+            31,
+            3,
+            5,
+            40,
+            0
+          ],
+          [
+            2,
+            0,
+            5,
+            0,
+            52
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "computed",
+        "accuracy_low": 0.40490673356349816,
+        "accuracy_high": 0.651482932184277,
+        "confidence": 0.95,
+        "n_resamples": 10000,
+        "seed": 0
+      }
+    },
+    "majority_baseline": {
+      "label": "canadian",
+      "metrics": {
+        "status": "computed",
+        "n": 392,
+        "n_speakers": 48,
+        "accuracy": 0.20153061224489796,
+        "macro_f1": 0.06709129511677284,
+        "per_class": {
+          "us": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 177
+          },
+          "england": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 47
+          },
+          "australian": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 30
+          },
+          "canadian": {
+            "precision": 0.20153061224489796,
+            "recall": 1.0,
+            "f1": 0.33545647558386416,
+            "support": 79
+          },
+          "india_south_asia": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 59
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "us",
+            "england",
+            "australian",
+            "canadian",
+            "india_south_asia"
+          ],
+          "matrix": [
+            [
+              0,
+              0,
+              0,
+              177,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              47,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              30,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              79,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              59,
+              0
+            ]
+          ]
+        },
+        "speaker_cluster_ci": {
+          "status": "computed",
+          "accuracy_low": 0.02536953220379359,
+          "accuracy_high": 0.39579292688735407,
+          "confidence": 0.95,
+          "n_resamples": 10000,
+          "seed": 0
+        }
+      }
+    }
+  },
+  "model_selection": {
+    "grid": [
+      0.01,
+      0.1,
+      1.0,
+      10.0
+    ],
+    "criterion": "validation macro-F1, then accuracy, then smaller C",
+    "selected_C": 0.01,
+    "results": [
+      {
+        "C": 0.01,
+        "val_accuracy": 0.5331632653061225,
+        "val_macro_f1": 0.4968362503295958
+      },
+      {
+        "C": 0.1,
+        "val_accuracy": 0.4897959183673469,
+        "val_macro_f1": 0.45711477775387116
+      },
+      {
+        "C": 1.0,
+        "val_accuracy": 0.461734693877551,
+        "val_macro_f1": 0.4253089762710843
+      },
+      {
+        "C": 10.0,
+        "val_accuracy": 0.4846938775510204,
+        "val_macro_f1": 0.4485861862787573
+      }
+    ]
+  },
+  "speaker_probe": {
+    "status": "computed",
+    "n_train_clips": 6012,
+    "n_val_clips": 1578,
+    "n_speakers": 607,
+    "accuracy": 0.632446134347275,
+    "chance": 0.0016474464579901153,
+    "train_fraction": 0.8,
+    "seed": 0
+  },
+  "speaker_centered_diagnostic": null,
+  "gates": {
+    "beats_majority": {
+      "accuracy": 0.5331632653061225,
+      "majority_accuracy": 0.20153061224489796,
+      "passed": true
+    },
+    "beats_2x_chance": {
+      "accuracy": 0.5331632653061225,
+      "chance": 0.2,
+      "threshold": 0.4,
+      "passed": true
+    },
+    "ssl_fallback": {
+      "validation_macro_f1": 0.4968362503295958,
+      "threshold": 0.55,
+      "triggered": true,
+      "note": "A macro-F1 below 0.55 triggers the frozen SSL feature fallback before any generated-audio accent evaluation."
+    }
+  },
+  "test": {
+    "status": "not_evaluated",
+    "reason": "pass --evaluate-test for the one-time final evaluation"
+  },
+  "irish": {
+    "status": "not_evaluated",
+    "reason": "pass --evaluate-irish for the evaluation-only check"
+  },
+  "notes": [
+    "Model selection used validation speakers only.",
+    "Labels are self-reported GLOBE accent classes; predicted_accent was not used.",
+    "The speaker probe measures feature speaker-discriminability, not accent leakage directly.",
+    "The speaker-centered diagnostic is transductive and not deployable.",
+    "No human accent-identification study was run."
+  ],
+  "limitations": [
+    "GLOBE is read speech from Common Voice, not conversational speech.",
+    "Per-class test speakers are few; speaker-cluster intervals are wide.",
+    "Generated-audio accent accuracy is a proxy, not proof of real-world accent quality."
+  ]
+}

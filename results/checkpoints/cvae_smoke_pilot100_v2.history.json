@@ -1,0 +1,42 @@
+{
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 7.2172239102815325,
+      "train_recon": 1.0034374205689682,
+      "train_prior_recon": 1.0132640851171393,
+      "val_loss": 5.148244857788086,
+      "val_recon": 1.0201383829116821,
+      "val_prior_recon": 1.0107080936431885,
+      "val_nce": 3.2571017742156982,
+      "val_separation": 0.27784305810928345,
+      "val_diversity": 0.4025777578353882,
+      "val_variance": 0.0019634782802313566,
+      "val_covariance": 0.00012116319703636691,
+      "val_active_units": 128,
+      "val_n_speakers": 5.0,
+      "val_recall_at_1": 0.20000000298023224,
+      "val_recall_at_5": 1.0,
+      "val_recall_at_10": 1.0,
+      "val_chance_at_1": 0.2,
+      "prediction_target_cosine_mean": -0.010708147659897804,
+      "prediction_target_cosine_p10": -0.08605919778347015,
+      "prediction_target_cosine_p50": -0.022600416094064713,
+      "prediction_target_cosine_p90": 0.08111537992954254,
+      "prior_latent_within_cosine": 0.48352867364883423,
+      "prior_latent_across_cosine": 0.27784305810928345,
+      "prior_latent_identity_margin": 0.20568561553955078,
+      "prior_latent_per_dim_std": 0.07182448357343674,
+      "decoder_within_cosine": 0.5171912312507629,
+      "decoder_across_cosine": 0.3856799006462097,
+      "decoder_identity_margin": 0.13151133060455322,
+      "decoder_per_dim_std": 0.05457698181271553,
+      "best": true
+    }
+  ],
+  "best_epoch": 1,
+  "best_val_loss": 5.148244857788086,
+  "best_val_r1": 0.20000000298023224,
+  "best_val_r10": 1.0,
+  "elapsed_sec": 0.15946173667907715
+}

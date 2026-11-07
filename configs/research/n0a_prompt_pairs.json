@@ -1,0 +1,66 @@
+{
+  "schema_version": "voix.n0a_prompts.v1",
+  "description": "Ten formal/conversational prompt pairs for the N0a delivery audit. Each pair preserves the underlying request or statement while changing register. Lexical content is not fully controlled; prompt pairs, not words, are the independent unit.",
+  "pairs": [
+    {
+      "pair_id": "meeting_time",
+      "topic": "scheduling",
+      "formal": "I would like to schedule the meeting for tomorrow afternoon.",
+      "conversational": "Hey, can we set up the meeting for tomorrow afternoon?"
+    },
+    {
+      "pair_id": "train_departure",
+      "topic": "travel",
+      "formal": "The train departs from platform four at six o'clock.",
+      "conversational": "So the train leaves from platform four at six."
+    },
+    {
+      "pair_id": "report_ready",
+      "topic": "work status",
+      "formal": "Please inform me when the report is ready.",
+      "conversational": "Just let me know when the report's ready."
+    },
+    {
+      "pair_id": "proposal_review",
+      "topic": "review",
+      "formal": "I believe the proposal requires further review.",
+      "conversational": "I think we need to take another look at the proposal."
+    },
+    {
+      "pair_id": "restaurant_location",
+      "topic": "directions",
+      "formal": "The restaurant is located on the corner of Fifth Street.",
+      "conversational": "The restaurant's right on the corner of Fifth Street."
+    },
+    {
+      "pair_id": "question_clarity",
+      "topic": "comprehension",
+      "formal": "I am not certain that I understand the question.",
+      "conversational": "I'm not really sure what you're asking."
+    },
+    {
+      "pair_id": "decision_consequences",
+      "topic": "decision making",
+      "formal": "We should consider the consequences of this decision.",
+      "conversational": "We should think about what happens if we do this."
+    },
+    {
+      "pair_id": "weekend_weather",
+      "topic": "weather",
+      "formal": "The weather is expected to improve by the weekend.",
+      "conversational": "Apparently it's supposed to clear up by the weekend."
+    },
+    {
+      "pair_id": "assistance_request",
+      "topic": "request",
+      "formal": "I would appreciate your assistance with this task.",
+      "conversational": "Could you give me a hand with this?"
+    },
+    {
+      "pair_id": "presentation_start",
+      "topic": "schedule",
+      "formal": "The presentation will begin promptly at nine o'clock.",
+      "conversational": "The presentation starts at nine sharp."
+    }
+  ]
+}

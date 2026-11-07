@@ -1,0 +1,91 @@
+{
+  "schema_version": "voix.accent_style_residual_generation.v1",
+  "generated_at": "2026-11-02 14:24:01 UTC",
+  "track": "accent",
+  "experiment": "A3",
+  "level": "exploratory",
+  "manifest": "data\\processed\\globe_accent_manifest.csv",
+  "manifest_sha256": "eb02cccebb7ff716216d5f80f8756d355fbfab323046e612b76533592630bba0",
+  "residual_artifact": "checkpoints\\accent_residuals\\class_mean.pt",
+  "residual_artifact_sha256": "4781e800d756242ce82a0058291fbcaf7ba5a46e55aeaaef95a332ed2838de32",
+  "index": "D:\\voix\\results\\accent\\a3\\generation_index.csv",
+  "index_sha256": "fe661ec395268fb067249f07eca72666baa129ac69fdc70bf6ac0631dafdb0b3",
+  "output_dir": "D:\\voix\\results\\accent\\a3\\audio",
+  "accents": [
+    "us",
+    "england",
+    "australian",
+    "canadian",
+    "india_south_asia"
+  ],
+  "trainable_accents": [
+    "us",
+    "england",
+    "australian",
+    "canadian",
+    "india_south_asia"
+  ],
+  "eval_only_accents": [],
+  "conditions": [
+    "regex",
+    "style_s0.1",
+    "style_s0.2",
+    "style_s0.3"
+  ],
+  "scales": [
+    0.1,
+    0.2,
+    0.3
+  ],
+  "timbre_weight": 0.25,
+  "prompts": [
+    "The bath was better than the dance in the car.",
+    "I think this is the right time to tune the new voice.",
+    "Last night the fast train passed the path by the water.",
+    "Both of us can start the task after the film.",
+    "The human voice reflects a personal identity.",
+    "Please ask the staff about the chance of rain."
+  ],
+  "prompt_count": 6,
+  "seeds": [
+    0
+  ],
+  "diffusion_steps": 10,
+  "alpha": 0.18,
+  "beta": 0.22,
+  "prosody_bias_strength": 0.0,
+  "identity": {
+    "clip_id": "common_voice_en_17993335",
+    "path": "D:\\voix\\data\\processed\\globe_audio\\val\\us\\common_voice_en_17993335.wav",
+    "speaker_id": "4c5a31cad74697cd01562a7e345a826d40dd6cf87bf5ce8e9bca2e8efd0c6189b482292c88863a14304c6b5f5b3370c30cb1beabcadebfde97afaba0b0ae8aa4",
+    "accent_class": "us",
+    "base_style_sha256": "287d85ca0ec422183d280601c89ffda21913fcc86cb5d4102375a2b2a2e39566",
+    "base_style_norm": 3.5405263900756836
+  },
+  "rows": 120,
+  "expected_rows": 120,
+  "failures": [],
+  "residual_norms": {
+    "us": 0.2511744797229767,
+    "england": 0.36683890223503113,
+    "australian": 0.19196443259716034,
+    "canadian": 0.3154783546924591,
+    "india_south_asia": 0.46336519718170166
+  },
+  "notes": [
+    "The canonical gruut phonemizer is used for every clip; no G2P is applied.",
+    "The identity style vector is frozen across every clip.",
+    "The residual is a class contrast built from GLOBE train speakers only.",
+    "Timbre half is down-weighted; the prosody half carries the accent signal.",
+    "Gender/age prosody bias is disabled so the residual is the only accent variable."
+  ],
+  "limitations": [
+    "Six prompts are enough for a diagnostic, not a confirmatory study.",
+    "The classifier proxy was trained on real speech and may not respond to generated accent.",
+    "No human accent-identification or MOS study was run."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings collected"
+  }
+}

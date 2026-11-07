@@ -1,0 +1,2091 @@
+{
+  "schema_version": "voix.research_report.v1",
+  "track": "emotion",
+  "level": "exploratory",
+  "run_id": "crema_e0_1seed",
+  "git_commit": "3bbf21d35dbccd15c0548f6e0c86291c32f01900",
+  "config_sha256": "d42ed9766b92b8eb68d7f4949988dc3f8fb6ecdd6d4fd256443a89764358c21d",
+  "manifest_sha256": "b782e6a5a9d3d5b88f669e5836803182573fac4df42bddc892fb8e42da6b6912",
+  "seeds": [
+    0
+  ],
+  "metrics": {
+    "classifier_accuracy": {
+      "status": "computed",
+      "value": 0.0,
+      "n": 8,
+      "n_speakers": 1,
+      "ci": {
+        "status": "unavailable",
+        "reason": "fewer than two speakers"
+      }
+    },
+    "classifier_macro_f1": {
+      "status": "computed",
+      "value": 0.0,
+      "n": 8
+    },
+    "classifier_target_recall": {
+      "status": "computed",
+      "value": {
+        "neutral:neutral": {
+          "status": "computed",
+          "n": 2,
+          "target_recall": 0.0,
+          "predicted_counts": {
+            "fear": 2
+          }
+        },
+        "fixed_delta:happy": {
+          "status": "computed",
+          "n": 2,
+          "target_recall": 0.0,
+          "predicted_counts": {
+            "fear": 2
+          }
+        },
+        "fixed_delta:sad": {
+          "status": "computed",
+          "n": 2,
+          "target_recall": 0.0,
+          "predicted_counts": {
+            "fear": 2
+          }
+        },
+        "fixed_delta:angry": {
+          "status": "computed",
+          "n": 2,
+          "target_recall": 0.0,
+          "predicted_counts": {
+            "fear": 2
+          }
+        }
+      }
+    },
+    "f0_mean_hz": {
+      "status": "computed",
+      "value": {
+        "neutral:neutral": 177.36,
+        "fixed_delta:happy": 266.11,
+        "fixed_delta:sad": 143.36,
+        "fixed_delta:angry": 255.35500000000002
+      }
+    },
+    "f0_std_hz": {
+      "status": "computed",
+      "value": {
+        "neutral:neutral": 74.255,
+        "fixed_delta:happy": 26.29,
+        "fixed_delta:sad": 32.045,
+        "fixed_delta:angry": 26.13
+      }
+    },
+    "duration_seconds": {
+      "status": "computed",
+      "value": {
+        "neutral:neutral": 1.7730000000000001,
+        "fixed_delta:happy": 1.5275,
+        "fixed_delta:sad": 2.2065,
+        "fixed_delta:angry": 1.516
+      }
+    },
+    "energy_mean": {
+      "status": "computed",
+      "value": {
+        "neutral:neutral": 0.051045,
+        "fixed_delta:happy": 0.059345,
+        "fixed_delta:sad": 0.04678,
+        "fixed_delta:angry": 0.062255000000000005
+      }
+    },
+    "ecapa_generated_neutral": {
+      "status": "computed",
+      "value": {
+        "neutral:neutral": 1.0,
+        "fixed_delta:happy": 0.299476757645607,
+        "fixed_delta:sad": 0.16539503633975983,
+        "fixed_delta:angry": 0.2256520763039589
+      }
+    },
+    "ecapa_identity_reference": {
+      "status": "computed",
+      "value": {
+        "neutral:neutral": 0.15223300457000732,
+        "fixed_delta:happy": 0.10911864042282104,
+        "fixed_delta:sad": 0.03707088436931372,
+        "fixed_delta:angry": 0.030443213880062103
+      }
+    },
+    "neutral_zero_max_abs_error": {
+      "status": "computed",
+      "value": 0.0,
+      "tolerance": 1e-07
+    },
+    "wer": {
+      "status": "unavailable",
+      "reason": "WER was not requested; pass --compute-wer"
+    }
+  },
+  "gates": {
+    "e0_directions": {
+      "status": "computed",
+      "checks": {
+        "happy": {
+          "f0_mean_hz": {
+            "status": "computed",
+            "mean_delta": 88.75000000000001,
+            "expected_direction": 1,
+            "direction_match": true,
+            "ci_excludes_zero_in_expected_direction": false,
+            "passed": false
+          },
+          "duration_seconds": {
+            "status": "computed",
+            "mean_delta": -0.24549999999999994,
+            "expected_direction": -1,
+            "direction_match": true,
+            "ci_excludes_zero_in_expected_direction": false,
+            "passed": false
+          }
+        },
+        "sad": {
+          "f0_mean_hz": {
+            "status": "computed",
+            "mean_delta": -33.99999999999999,
+            "expected_direction": -1,
+            "direction_match": true,
+            "ci_excludes_zero_in_expected_direction": false,
+            "passed": false
+          },
+          "duration_seconds": {
+            "status": "computed",
+            "mean_delta": 0.4334999999999999,
+            "expected_direction": 1,
+            "direction_match": true,
+            "ci_excludes_zero_in_expected_direction": false,
+            "passed": false
+          }
+        },
+        "angry": {
+          "f0_mean_hz": {
+            "status": "computed",
+            "mean_delta": 77.995,
+            "expected_direction": 1,
+            "direction_match": true,
+            "ci_excludes_zero_in_expected_direction": false,
+            "passed": false
+          },
+          "duration_seconds": {
+            "status": "computed",
+            "mean_delta": -0.257,
+            "expected_direction": -1,
+            "direction_match": true,
+            "ci_excludes_zero_in_expected_direction": false,
+            "passed": false
+          }
+        }
+      },
+      "passed": false,
+      "failures": [
+        "happy: f0_mean_hz direction is correct but the CI includes zero",
+        "happy: duration_seconds direction is correct but the CI includes zero",
+        "sad: f0_mean_hz direction is correct but the CI includes zero",
+        "sad: duration_seconds direction is correct but the CI includes zero",
+        "angry: f0_mean_hz direction is correct but the CI includes zero",
+        "angry: duration_seconds direction is correct but the CI includes zero"
+      ]
+    },
+    "identity": {
+      "passed": false,
+      "failures": [
+        "angry: ECAPA neutral 0.2257 < 0.8000",
+        "angry: reference drop +0.1218 exceeds 0.0500",
+        "happy: ECAPA neutral 0.2995 < 0.8000",
+        "sad: ECAPA neutral 0.1654 < 0.8000",
+        "sad: reference drop +0.1152 exceeds 0.0500"
+      ],
+      "warnings": [
+        "generated neutral ECAPA reference 0.15223300457000732 is below 0.5; condition comparisons are relative only (domain shift)"
+      ],
+      "neutral_sanity": {
+        "status": "computed",
+        "mean": 0.15223300457000732,
+        "threshold": 0.5,
+        "passed": false
+      },
+      "thresholds": {
+        "min_ecapa_neutral": 0.8,
+        "max_reference_drop": 0.05,
+        "max_canonical_drop": 0.05,
+        "cfvn_tolerance": 0.005,
+        "min_pairwise_diversity": null,
+        "min_neutral_reference": 0.5
+      }
+    },
+    "neutral_zero": {
+      "passed": true,
+      "max_abs_error": 0.0,
+      "tolerance": 1e-07
+    },
+    "classifier_above_chance": {
+      "passed": false,
+      "accuracy": 0.0,
+      "chance": 0.16666666666666666
+    }
+  },
+  "status": "partial",
+  "limitations": [
+    "Exploratory: CREMA-D is acted speech and every emotion class is below the 2 h confirmatory gate.",
+    "Only 1 validation actor(s); speaker-cluster intervals are provisional.",
+    "No human MOS or emotion-identification study was run; perceptual quality is unmeasured.",
+    "Fear and disgust have no fixed-delta artifact in this checkout and are reported as unavailable for E0.",
+    "The emotion classifier is an evaluator, not a learned control; real-speech calibration is train-only.",
+    "The canonical face-to-voice artifacts are frozen and were not used to generate these clips.",
+    "The identity base is StyleTTS2's frozen style/predictor encoder, not the face-to-voice adapter.",
+    "Generated neutral ECAPA similarity to the real speaker is 0.152 < 0.500; condition comparisons are relative only (domain shift).",
+    "One generation seed; multi-seed stability is not established."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings were collected for this run"
+  },
+  "per_class": {
+    "generated_confusion_matrix": {
+      "labels": [
+        "neutral",
+        "happy",
+        "sad",
+        "angry",
+        "fear"
+      ],
+      "matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "generated_per_class": {
+      "neutral": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 2
+      },
+      "happy": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 2
+      },
+      "sad": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 2
+      },
+      "angry": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 2
+      },
+      "fear": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 0
+      }
+    },
+    "real_val_calibration": {
+      "status": "computed",
+      "n": 80,
+      "n_speakers": 1,
+      "accuracy": 0.5875,
+      "macro_f1": 0.5639848878979313,
+      "per_class": {
+        "neutral": {
+          "precision": 0.6666666666666666,
+          "recall": 0.3333333333333333,
+          "f1": 0.4444444444444444,
+          "support": 12
+        },
+        "happy": {
+          "precision": 0.7777777777777778,
+          "recall": 0.5,
+          "f1": 0.6086956521739131,
+          "support": 14
+        },
+        "sad": {
+          "precision": 0.625,
+          "recall": 0.7142857142857143,
+          "f1": 0.6666666666666666,
+          "support": 14
+        },
+        "angry": {
+          "precision": 0.7058823529411765,
+          "recall": 0.9230769230769231,
+          "f1": 0.8000000000000002,
+          "support": 13
+        },
+        "fear": {
+          "precision": 0.4230769230769231,
+          "recall": 0.8461538461538461,
+          "f1": 0.5641025641025641,
+          "support": 13
+        },
+        "disgust": {
+          "precision": 0.5,
+          "recall": 0.21428571428571427,
+          "f1": 0.3,
+          "support": 14
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry",
+          "fear",
+          "disgust"
+        ],
+        "matrix": [
+          [
+            4,
+            0,
+            2,
+            0,
+            5,
+            1
+          ],
+          [
+            1,
+            7,
+            1,
+            2,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            10,
+            0,
+            3,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            12,
+            0,
+            1
+          ],
+          [
+            0,
+            2,
+            0,
+            0,
+            11,
+            0
+          ],
+          [
+            1,
+            0,
+            3,
+            3,
+            4,
+            3
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "unavailable",
+        "reason": "fewer than two speakers"
+      }
+    },
+    "real_val_saved_model_in_sample": {
+      "status": "computed",
+      "n": 80,
+      "n_speakers": 1,
+      "accuracy": 0.7,
+      "macro_f1": 0.6781363166420636,
+      "per_class": {
+        "neutral": {
+          "precision": 0.625,
+          "recall": 0.4166666666666667,
+          "f1": 0.5,
+          "support": 12
+        },
+        "happy": {
+          "precision": 0.8461538461538461,
+          "recall": 0.7857142857142857,
+          "f1": 0.8148148148148148,
+          "support": 14
+        },
+        "sad": {
+          "precision": 0.6190476190476191,
+          "recall": 0.9285714285714286,
+          "f1": 0.742857142857143,
+          "support": 14
+        },
+        "angry": {
+          "precision": 0.8571428571428571,
+          "recall": 0.9230769230769231,
+          "f1": 0.888888888888889,
+          "support": 13
+        },
+        "fear": {
+          "precision": 0.6875,
+          "recall": 0.8461538461538461,
+          "f1": 0.7586206896551724,
+          "support": 13
+        },
+        "disgust": {
+          "precision": 0.5,
+          "recall": 0.2857142857142857,
+          "f1": 0.36363636363636365,
+          "support": 14
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry",
+          "fear",
+          "disgust"
+        ],
+        "matrix": [
+          [
+            5,
+            0,
+            4,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            11,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            13,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            12,
+            0,
+            1
+          ],
+          [
+            0,
+            2,
+            0,
+            0,
+            11,
+            0
+          ],
+          [
+            3,
+            0,
+            3,
+            2,
+            2,
+            4
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "unavailable",
+        "reason": "fewer than two speakers"
+      }
+    },
+    "generated_saved_model": {
+      "status": "computed",
+      "n": 8,
+      "n_speakers": 1,
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "per_class": {
+        "neutral": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2
+        },
+        "happy": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2
+        },
+        "sad": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2
+        },
+        "angry": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2
+        },
+        "fear": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 0
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry",
+          "fear"
+        ],
+        "matrix": [
+          [
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "unavailable",
+        "reason": "fewer than two speakers"
+      }
+    }
+  },
+  "artifacts": {
+    "generation_index": "results\\emotion\\e0_smoke_v2\\generation_index.csv",
+    "generation_report": "results\\emotion\\e0_smoke_v2\\generation_report.json",
+    "audio_dir": "results\\emotion\\e0_smoke_v2\\audio\\neutral",
+    "classifier": "D:\\voix\\checkpoints\\emotion_classifier_crema_d.joblib",
+    "features_cache": "D:\\voix\\data\\processed\\crema_d_features.npz",
+    "canonical_hashes": "D:\\voix\\results\\canonical_hashes.json"
+  },
+  "config": {
+    "index": "results\\emotion\\e0_smoke_v2\\generation_index.csv",
+    "manifest": "D:\\voix\\data\\processed\\crema_d_paired_eval_val.csv",
+    "classifier": "D:\\voix\\checkpoints\\emotion_classifier_crema_d.joblib",
+    "features_cache": "D:\\voix\\data\\processed\\crema_d_features.npz",
+    "device": "cuda",
+    "workers": 2,
+    "n_resamples": 200,
+    "seed": 0,
+    "min_ecapa_neutral": 0.8,
+    "compute_wer": false,
+    "wer_model": "base"
+  },
+  "generation": {
+    "seeds": [
+      0
+    ],
+    "diffusion_steps": 10,
+    "emotions_generated": [
+      "happy",
+      "sad",
+      "angry"
+    ],
+    "emotions_unavailable": {},
+    "neutral_zero": {
+      "max_abs_error": 0.0,
+      "tolerance": 1e-07,
+      "passed": true,
+      "failures": []
+    },
+    "counts": {
+      "fixed_delta:angry": {
+        "rows": 2,
+        "actors": 1,
+        "pairs": 2,
+        "audio_seconds": 3.0323333333333333,
+        "mean_generation_seconds": 0.371
+      },
+      "fixed_delta:happy": {
+        "rows": 2,
+        "actors": 1,
+        "pairs": 2,
+        "audio_seconds": 3.0551666666666666,
+        "mean_generation_seconds": 0.4175
+      },
+      "fixed_delta:sad": {
+        "rows": 2,
+        "actors": 1,
+        "pairs": 2,
+        "audio_seconds": 4.41275,
+        "mean_generation_seconds": 0.3855
+      },
+      "neutral:neutral": {
+        "rows": 2,
+        "actors": 1,
+        "pairs": 2,
+        "audio_seconds": 3.5458333333333334,
+        "mean_generation_seconds": 1.0355
+      }
+    }
+  },
+  "conditions": {
+    "neutral:neutral": {
+      "condition": "neutral",
+      "emotion": "neutral",
+      "n": 2,
+      "actors": 1,
+      "metrics": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "mean": 177.36,
+          "std": 7.580184694319788,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "mean": 74.255,
+          "std": 10.31668793751173,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "mean": 1.7730000000000001,
+          "std": 0.03535533905932741,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "energy_mean": {
+          "status": "computed",
+          "mean": 0.051045,
+          "std": 0.002580939751330899,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "energy_std": {
+          "status": "computed",
+          "mean": 0.04708,
+          "std": 0.0014566399692442875,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "mean": 1.0,
+          "std": 0.0,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "mean": 0.15223300457000732,
+          "std": 0.0013386682024030163,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "mean": 0.11745018698275089,
+          "std": 0.10213853306986491,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        }
+      }
+    },
+    "fixed_delta:happy": {
+      "condition": "fixed_delta",
+      "emotion": "happy",
+      "n": 2,
+      "actors": 1,
+      "metrics": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "mean": 266.11,
+          "std": 1.3293607486307062,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "mean": 26.29,
+          "std": 3.309259735953042,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "mean": 1.5275,
+          "std": 0.048790367901871745,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "energy_mean": {
+          "status": "computed",
+          "mean": 0.059345,
+          "std": 0.002156675682618968,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "energy_std": {
+          "status": "computed",
+          "mean": 0.050754999999999995,
+          "std": 0.0029203510063004427,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "mean": 0.299476757645607,
+          "std": 0.040277867587102695,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "mean": 0.10911864042282104,
+          "std": 0.001103467714287972,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "mean": -0.008135434240102768,
+          "std": 0.06940500141559486,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        }
+      }
+    },
+    "fixed_delta:sad": {
+      "condition": "fixed_delta",
+      "emotion": "sad",
+      "n": 2,
+      "actors": 1,
+      "metrics": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "mean": 143.36,
+          "std": 46.23064135397649,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "mean": 32.045,
+          "std": 17.260476528763625,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "mean": 2.2065,
+          "std": 0.10111626970967647,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "energy_mean": {
+          "status": "computed",
+          "mean": 0.04678,
+          "std": 0.0008626702730475872,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "energy_std": {
+          "status": "computed",
+          "mean": 0.039135,
+          "std": 0.0017889801564019636,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "mean": 0.16539503633975983,
+          "std": 0.02869528141358135,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "mean": 0.03707088436931372,
+          "std": 0.03359965861079204,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "mean": -0.031553372740745544,
+          "std": 0.07069413126592937,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        }
+      }
+    },
+    "fixed_delta:angry": {
+      "condition": "fixed_delta",
+      "emotion": "angry",
+      "n": 2,
+      "actors": 1,
+      "metrics": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "mean": 255.35500000000002,
+          "std": 4.886107857999041,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "mean": 26.13,
+          "std": 0.15556349186103965,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "mean": 1.516,
+          "std": 0.0,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "energy_mean": {
+          "status": "computed",
+          "mean": 0.062255000000000005,
+          "std": 0.001958685783886738,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "energy_std": {
+          "status": "computed",
+          "mean": 0.051915,
+          "std": 0.002552655480083433,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "mean": 0.2256520763039589,
+          "std": 0.08211642243785167,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "mean": 0.030443213880062103,
+          "std": 0.01817540168348188,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "mean": -0.017679845914244652,
+          "std": 0.10323804424874891,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        }
+      }
+    }
+  },
+  "paired_effects": {
+    "status": "computed",
+    "effects": {
+      "fixed_delta:happy": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": 88.75000000000001,
+          "sd_delta": 8.909545442950495,
+          "cohens_dz": 9.961226481000972,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers",
+          "expected_direction": 1,
+          "direction_match": true
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -47.964999999999996,
+          "sd_delta": 7.007428201558693,
+          "cohens_dz": -6.844879265310336,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -0.24549999999999994,
+          "sd_delta": 0.013435028842544336,
+          "cohens_dz": -18.273127871715605,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers",
+          "expected_direction": -1,
+          "direction_match": true
+        },
+        "energy_mean": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": 0.008300000000000002,
+          "sd_delta": 0.00042426406871193083,
+          "cohens_dz": 19.56328761282771,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "energy_std": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": 0.0036749999999999977,
+          "sd_delta": 0.001463711037056155,
+          "cohens_dz": 2.5107414694304904,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -0.700523242354393,
+          "sd_delta": 0.040277867587102695,
+          "cohens_dz": -17.3922624091129,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -0.04311436414718628,
+          "sd_delta": 0.0024421359166909885,
+          "cohens_dz": -17.65436716790308,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -0.12558562122285366,
+          "sd_delta": 0.17154353448545975,
+          "cohens_dz": -0.7320918366264539,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        }
+      },
+      "fixed_delta:sad": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -33.99999999999999,
+          "sd_delta": 38.6504566596567,
+          "cohens_dz": -0.8796791277110356,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers",
+          "expected_direction": -1,
+          "direction_match": true
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -42.209999999999994,
+          "sd_delta": 6.9437885912518915,
+          "cohens_dz": -6.078814100587411,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": 0.4334999999999999,
+          "sd_delta": 0.06576093065034906,
+          "cohens_dz": 6.592059992351992,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers",
+          "expected_direction": 1,
+          "direction_match": true
+        },
+        "energy_mean": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -0.004264999999999998,
+          "sd_delta": 0.0017182694782833115,
+          "cohens_dz": -2.482148495276232,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "energy_std": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -0.007945,
+          "sd_delta": 0.003245620125646251,
+          "cohens_dz": -2.4479143252841498,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -0.8346049636602402,
+          "sd_delta": 0.02869528141358135,
+          "cohens_dz": -29.085094222676812,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -0.11516212020069361,
+          "sd_delta": 0.03493832681319505,
+          "cohens_dz": -3.2961544156487963,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -0.14900355972349644,
+          "sd_delta": 0.031444401803935526,
+          "cohens_dz": -4.738635533681783,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        }
+      },
+      "fixed_delta:angry": {
+        "f0_mean_hz": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": 77.995,
+          "sd_delta": 12.46629255231883,
+          "cohens_dz": 6.256471173981258,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers",
+          "expected_direction": 1,
+          "direction_match": true
+        },
+        "f0_std_hz": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -48.125,
+          "sd_delta": 10.47225142937277,
+          "cohens_dz": -4.595477899338635,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "duration_seconds": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -0.257,
+          "sd_delta": 0.03535533905932741,
+          "cohens_dz": -7.269057710597702,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers",
+          "expected_direction": -1,
+          "direction_match": true
+        },
+        "energy_mean": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": 0.011210000000000001,
+          "sd_delta": 0.000622253967444161,
+          "cohens_dz": 18.015152311593656,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "energy_std": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": 0.004834999999999999,
+          "sd_delta": 0.0010960155108391458,
+          "cohens_dz": 4.411433918757375,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_generated_neutral": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -0.7743479236960411,
+          "sd_delta": 0.08211642243785167,
+          "cohens_dz": -9.429878953653787,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_identity_reference": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -0.12178979068994522,
+          "sd_delta": 0.019514069885884895,
+          "cohens_dz": -6.241127115058627,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        },
+        "ecapa_real_neutral": {
+          "status": "computed",
+          "n_pairs": 2,
+          "n_speakers": 1,
+          "mean_delta": -0.13513003289699554,
+          "sd_delta": 0.20537657731861383,
+          "cohens_dz": -0.6579622401991814,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "ci_reason": "fewer than two speakers"
+        }
+      }
+    }
+  },
+  "classification": {
+    "generated_calibration_model": {
+      "status": "computed",
+      "n": 8,
+      "n_speakers": 1,
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "per_class": {
+        "neutral": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2
+        },
+        "happy": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2
+        },
+        "sad": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2
+        },
+        "angry": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2
+        },
+        "fear": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 0
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry",
+          "fear"
+        ],
+        "matrix": [
+          [
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "unavailable",
+        "reason": "fewer than two speakers"
+      }
+    },
+    "generated_saved_model": {
+      "status": "computed",
+      "n": 8,
+      "n_speakers": 1,
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "per_class": {
+        "neutral": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2
+        },
+        "happy": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2
+        },
+        "sad": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2
+        },
+        "angry": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2
+        },
+        "fear": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 0
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry",
+          "fear"
+        ],
+        "matrix": [
+          [
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "unavailable",
+        "reason": "fewer than two speakers"
+      }
+    },
+    "target_recall": {
+      "neutral:neutral": {
+        "status": "computed",
+        "n": 2,
+        "target_recall": 0.0,
+        "predicted_counts": {
+          "fear": 2
+        }
+      },
+      "fixed_delta:happy": {
+        "status": "computed",
+        "n": 2,
+        "target_recall": 0.0,
+        "predicted_counts": {
+          "fear": 2
+        }
+      },
+      "fixed_delta:sad": {
+        "status": "computed",
+        "n": 2,
+        "target_recall": 0.0,
+        "predicted_counts": {
+          "fear": 2
+        }
+      },
+      "fixed_delta:angry": {
+        "status": "computed",
+        "n": 2,
+        "target_recall": 0.0,
+        "predicted_counts": {
+          "fear": 2
+        }
+      }
+    },
+    "real_val_calibration": {
+      "status": "computed",
+      "n": 80,
+      "n_speakers": 1,
+      "accuracy": 0.5875,
+      "macro_f1": 0.5639848878979313,
+      "per_class": {
+        "neutral": {
+          "precision": 0.6666666666666666,
+          "recall": 0.3333333333333333,
+          "f1": 0.4444444444444444,
+          "support": 12
+        },
+        "happy": {
+          "precision": 0.7777777777777778,
+          "recall": 0.5,
+          "f1": 0.6086956521739131,
+          "support": 14
+        },
+        "sad": {
+          "precision": 0.625,
+          "recall": 0.7142857142857143,
+          "f1": 0.6666666666666666,
+          "support": 14
+        },
+        "angry": {
+          "precision": 0.7058823529411765,
+          "recall": 0.9230769230769231,
+          "f1": 0.8000000000000002,
+          "support": 13
+        },
+        "fear": {
+          "precision": 0.4230769230769231,
+          "recall": 0.8461538461538461,
+          "f1": 0.5641025641025641,
+          "support": 13
+        },
+        "disgust": {
+          "precision": 0.5,
+          "recall": 0.21428571428571427,
+          "f1": 0.3,
+          "support": 14
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry",
+          "fear",
+          "disgust"
+        ],
+        "matrix": [
+          [
+            4,
+            0,
+            2,
+            0,
+            5,
+            1
+          ],
+          [
+            1,
+            7,
+            1,
+            2,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            10,
+            0,
+            3,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            12,
+            0,
+            1
+          ],
+          [
+            0,
+            2,
+            0,
+            0,
+            11,
+            0
+          ],
+          [
+            1,
+            0,
+            3,
+            3,
+            4,
+            3
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "unavailable",
+        "reason": "fewer than two speakers"
+      }
+    },
+    "real_val_saved_model_in_sample": {
+      "status": "computed",
+      "n": 80,
+      "n_speakers": 1,
+      "accuracy": 0.7,
+      "macro_f1": 0.6781363166420636,
+      "per_class": {
+        "neutral": {
+          "precision": 0.625,
+          "recall": 0.4166666666666667,
+          "f1": 0.5,
+          "support": 12
+        },
+        "happy": {
+          "precision": 0.8461538461538461,
+          "recall": 0.7857142857142857,
+          "f1": 0.8148148148148148,
+          "support": 14
+        },
+        "sad": {
+          "precision": 0.6190476190476191,
+          "recall": 0.9285714285714286,
+          "f1": 0.742857142857143,
+          "support": 14
+        },
+        "angry": {
+          "precision": 0.8571428571428571,
+          "recall": 0.9230769230769231,
+          "f1": 0.888888888888889,
+          "support": 13
+        },
+        "fear": {
+          "precision": 0.6875,
+          "recall": 0.8461538461538461,
+          "f1": 0.7586206896551724,
+          "support": 13
+        },
+        "disgust": {
+          "precision": 0.5,
+          "recall": 0.2857142857142857,
+          "f1": 0.36363636363636365,
+          "support": 14
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "neutral",
+          "happy",
+          "sad",
+          "angry",
+          "fear",
+          "disgust"
+        ],
+        "matrix": [
+          [
+            5,
+            0,
+            4,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            11,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            13,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            12,
+            0,
+            1
+          ],
+          [
+            0,
+            2,
+            0,
+            0,
+            11,
+            0
+          ],
+          [
+            3,
+            0,
+            3,
+            2,
+            2,
+            4
+          ]
+        ]
+      },
+      "speaker_cluster_ci": {
+        "status": "unavailable",
+        "reason": "fewer than two speakers"
+      }
+    }
+  },
+  "identity": {
+    "schema_version": "voix.identity_guardrail.v1",
+    "thresholds": {
+      "min_ecapa_neutral": 0.8,
+      "max_reference_drop": 0.05,
+      "max_canonical_drop": 0.05,
+      "cfvn_tolerance": 0.005,
+      "min_pairwise_diversity": null,
+      "min_neutral_reference": 0.5
+    },
+    "conditions": {
+      "angry": {
+        "n": 2,
+        "ecapa_neutral": {
+          "status": "computed",
+          "mean": 0.2256520763039589,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "reason": "fewer than two speakers; cluster CI unavailable"
+        },
+        "ecapa_reference": {
+          "status": "computed",
+          "mean": 0.030443213880062103,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "reason": "fewer than two speakers; cluster CI unavailable"
+        },
+        "reference_drop": {
+          "status": "computed",
+          "mean": 0.12178979068994522,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "reason": "fewer than two speakers; cluster CI unavailable"
+        },
+        "canonical_drop": {
+          "status": "unavailable",
+          "reason": "no rows contain both 'ecapa_neutral' and 'canonical_ecapa'"
+        },
+        "pairwise_diversity": {
+          "status": "unavailable",
+          "reason": "no finite 'pairwise_diversity' values"
+        },
+        "passed": false,
+        "failures": [
+          "ECAPA neutral 0.2257 < 0.8000",
+          "reference drop +0.1218 exceeds 0.0500"
+        ]
+      },
+      "happy": {
+        "n": 2,
+        "ecapa_neutral": {
+          "status": "computed",
+          "mean": 0.299476757645607,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "reason": "fewer than two speakers; cluster CI unavailable"
+        },
+        "ecapa_reference": {
+          "status": "computed",
+          "mean": 0.10911864042282104,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "reason": "fewer than two speakers; cluster CI unavailable"
+        },
+        "reference_drop": {
+          "status": "computed",
+          "mean": 0.04311436414718628,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "reason": "fewer than two speakers; cluster CI unavailable"
+        },
+        "canonical_drop": {
+          "status": "unavailable",
+          "reason": "no rows contain both 'ecapa_neutral' and 'canonical_ecapa'"
+        },
+        "pairwise_diversity": {
+          "status": "unavailable",
+          "reason": "no finite 'pairwise_diversity' values"
+        },
+        "passed": false,
+        "failures": [
+          "ECAPA neutral 0.2995 < 0.8000"
+        ]
+      },
+      "neutral": {
+        "n": 2,
+        "ecapa_neutral": {
+          "status": "computed",
+          "mean": 1.0,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "reason": "fewer than two speakers; cluster CI unavailable"
+        },
+        "ecapa_reference": {
+          "status": "computed",
+          "mean": 0.15223300457000732,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "reason": "fewer than two speakers; cluster CI unavailable"
+        },
+        "reference_drop": {
+          "status": "not_applicable",
+          "reason": "neutral is the reference baseline",
+          "mean": 0.0,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "not_applicable"
+        },
+        "canonical_drop": {
+          "status": "unavailable",
+          "reason": "no rows contain both 'ecapa_neutral' and 'canonical_ecapa'"
+        },
+        "pairwise_diversity": {
+          "status": "unavailable",
+          "reason": "no finite 'pairwise_diversity' values"
+        },
+        "passed": true,
+        "failures": []
+      },
+      "sad": {
+        "n": 2,
+        "ecapa_neutral": {
+          "status": "computed",
+          "mean": 0.16539503633975983,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "reason": "fewer than two speakers; cluster CI unavailable"
+        },
+        "ecapa_reference": {
+          "status": "computed",
+          "mean": 0.03707088436931372,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "reason": "fewer than two speakers; cluster CI unavailable"
+        },
+        "reference_drop": {
+          "status": "computed",
+          "mean": 0.11516212020069361,
+          "n": 2,
+          "n_speakers": 1,
+          "ci_low": null,
+          "ci_high": null,
+          "ci_status": "unavailable",
+          "reason": "fewer than two speakers; cluster CI unavailable"
+        },
+        "canonical_drop": {
+          "status": "unavailable",
+          "reason": "no rows contain both 'ecapa_neutral' and 'canonical_ecapa'"
+        },
+        "pairwise_diversity": {
+          "status": "unavailable",
+          "reason": "no finite 'pairwise_diversity' values"
+        },
+        "passed": false,
+        "failures": [
+          "ECAPA neutral 0.1654 < 0.8000",
+          "reference drop +0.1152 exceeds 0.0500"
+        ]
+      }
+    },
+    "neutral_sanity": {
+      "status": "computed",
+      "mean": 0.15223300457000732,
+      "threshold": 0.5,
+      "passed": false
+    },
+    "cfvn": {
+      "status": "not_applicable",
+      "reason": "this experiment is identity-conditioned and does not execute the face-to-voice CFVN",
+      "passed": true
+    },
+    "canonical_hashes": {
+      "status": "computed",
+      "passed": true,
+      "files": {
+        "cfvn": {
+          "path": "results/checkpoints/cfvn_v2_best.pt",
+          "expected_sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b",
+          "actual_sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b",
+          "match": true
+        },
+        "cvae": {
+          "path": "checkpoints/cvae_cfvn_face192_latent128_diversity.pt",
+          "expected_sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b",
+          "actual_sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b",
+          "match": true
+        },
+        "style_adapter": {
+          "path": "checkpoints/style_adapter_cfvn_best.pt",
+          "expected_sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+          "actual_sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+          "match": true
+        }
+      },
+      "missing": [],
+      "mismatched": []
+    },
+    "passed": false,
+    "failures": [
+      "angry: ECAPA neutral 0.2257 < 0.8000",
+      "angry: reference drop +0.1218 exceeds 0.0500",
+      "happy: ECAPA neutral 0.2995 < 0.8000",
+      "sad: ECAPA neutral 0.1654 < 0.8000",
+      "sad: reference drop +0.1152 exceeds 0.0500"
+    ],
+    "warnings": [
+      "generated neutral ECAPA reference 0.15223300457000732 is below 0.5; condition comparisons are relative only (domain shift)"
+    ]
+  },
+  "wer": {
+    "status": "unavailable",
+    "reason": "WER was not requested; pass --compute-wer",
+    "conditions": {},
+    "mean": null,
+    "worst": null
+  },
+  "unavailable": [
+    "human MOS",
+    "human emotion-identification",
+    "fear fixed delta",
+    "disgust fixed delta"
+  ]
+}

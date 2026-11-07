@@ -1,0 +1,127 @@
+{
+  "schema_version": "voix.crema_generation.v3",
+  "generated_at": "2026-10-29 14:12:10 UTC",
+  "level": "exploratory",
+  "condition": "class_mean_prosody_smoke",
+  "scope": "Identity-conditioned CREMA-D evaluation. No face, CFVN, CVAE, or canonical face-to-voice style adapter is used. The identity base is the frozen StyleTTS2 style/predictor encoder applied to one real neutral clip per actor. The style residual is class_mean_prosody_smoke.",
+  "manifest": "D:\\voix\\data\\processed\\crema_d_paired_eval_val.csv",
+  "manifest_sha256": "b782e6a5a9d3d5b88f669e5836803182573fac4df42bddc892fb8e42da6b6912",
+  "index": "results\\emotion\\e1_smoke\\generation_index.csv",
+  "index_sha256": "f0cf56f67c554a5f86fdf5e17ca8c7bc4b39d4aac3b394d291a87935c9065bc4",
+  "identity_style_source": "styletts2_style_encoder",
+  "residual_artifact": "D:\\voix\\checkpoints\\emotion_residuals\\class_mean.pt",
+  "residual_artifact_sha256": "6bb4f17ff4bfaf4a9fe4b69514ba3b2e83f4dfe4c8a80f8706c9172cf4bb4408",
+  "residual_variant": "prosody_only",
+  "residual_scale": 0.28,
+  "match_fixed_norm": true,
+  "fixed_delta_norms": {
+    "happy": 1.5636495351791382,
+    "sad": 1.655294418334961,
+    "angry": 1.7691807746887207
+  },
+  "mean_fixed_delta_norm": 1.6627082427342732,
+  "device": "cuda",
+  "seeds": [
+    0
+  ],
+  "diffusion_steps": 10,
+  "alpha": 0.18,
+  "beta": 0.22,
+  "duration_scale": 1.0,
+  "sample_rate": 24000,
+  "backend": "neural",
+  "emotions_requested": [
+    "happy",
+    "sad",
+    "angry",
+    "fear",
+    "disgust"
+  ],
+  "emotions_generated": [
+    "happy",
+    "sad",
+    "angry",
+    "fear",
+    "disgust"
+  ],
+  "emotions_unavailable": {},
+  "identity_styles": {
+    "1010": {
+      "clip_id": "1010_IWL_NEU_XX",
+      "path": "data\\raw\\crema_d\\AudioWAV\\1010_IWL_NEU_XX.wav",
+      "sha256": "2896ec8b9a4e5e7cabc7acd6483ad95076a76e0b36079e94940ab096488998de",
+      "norm": 3.579190731048584,
+      "source": "styletts2_style_encoder"
+    }
+  },
+  "counts": {
+    "class_mean_prosody_smoke:angry": {
+      "rows": 1,
+      "actors": 1,
+      "pairs": 1,
+      "audio_seconds": 1.4501666666666666,
+      "mean_style_delta_l2": 0.49537062644958496,
+      "mean_generation_seconds": 0.402
+    },
+    "class_mean_prosody_smoke:disgust": {
+      "rows": 1,
+      "actors": 1,
+      "pairs": 1,
+      "audio_seconds": 1.8479166666666667,
+      "mean_style_delta_l2": 0.4655582904815674,
+      "mean_generation_seconds": 0.385
+    },
+    "class_mean_prosody_smoke:fear": {
+      "rows": 1,
+      "actors": 1,
+      "pairs": 1,
+      "audio_seconds": 1.6979166666666667,
+      "mean_style_delta_l2": 0.4655582904815674,
+      "mean_generation_seconds": 0.386
+    },
+    "class_mean_prosody_smoke:happy": {
+      "rows": 1,
+      "actors": 1,
+      "pairs": 1,
+      "audio_seconds": 1.5160833333333332,
+      "mean_style_delta_l2": 0.4378218650817871,
+      "mean_generation_seconds": 0.629
+    },
+    "class_mean_prosody_smoke:sad": {
+      "rows": 1,
+      "actors": 1,
+      "pairs": 1,
+      "audio_seconds": 2.078125,
+      "mean_style_delta_l2": 0.46348243951797485,
+      "mean_generation_seconds": 0.452
+    },
+    "neutral:neutral": {
+      "rows": 1,
+      "actors": 1,
+      "pairs": 1,
+      "audio_seconds": 1.7479166666666666,
+      "mean_style_delta_l2": null,
+      "mean_generation_seconds": 1.512
+    }
+  },
+  "neutral_zero": {
+    "max_abs_error": 0.0,
+    "tolerance": 1e-07,
+    "passed": true,
+    "failures": []
+  },
+  "failures": [],
+  "elapsed_seconds": 3.83,
+  "notes": [
+    "Neutral is generated once per (actor, sentence, seed) and shared by emotion rows.",
+    "The class-mean condition applies a speaker-balanced mean style residual estimated from real CREMA-D train actors.",
+    "Class-mean residuals are rescaled to the fixed-delta norm for matched strength.",
+    "Fear and disgust are available in the class-mean artifact.",
+    "Fear/disgust use the neutral post-synthesis scalar profile; the class-mean style residual carries the emotion. The index records scalar_modifier_source for every row.",
+    "No human MOS is claimed; perceptual quality is unmeasured."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings were collected for this generation run"
+  }
+}

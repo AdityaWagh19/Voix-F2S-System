@@ -1,0 +1,14 @@
+{
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.828935,
+      "train_clips": 4,
+      "val_loss": 0.689683,
+      "val_clips": 2,
+      "lr": 1e-05,
+      "global_step": 4
+    }
+  ],
+  "best_epoch": 1
+}

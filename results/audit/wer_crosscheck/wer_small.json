@@ -1,0 +1,190 @@
+{
+  "schema_version": "voix.wer_crosscheck.v1",
+  "level": "exploratory",
+  "source_report": "D:\\voix\\results\\demo\\research_v2\\report.json",
+  "source_report_sha256": "4bd55cf42fa8979d18bd615efc92c7da41cfe5a8a042b739862d09546d5471a4",
+  "audio": [
+    {
+      "name": "C2_12__neutral",
+      "path": "results\\demo\\research_v2\\audio\\C2_12__neutral.wav",
+      "sha256": "b460ad1937283cfbed1e97acb815b7e1ae211908a4fa05df8657276221a0da9a",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C2_12__emotion_happy",
+      "path": "results\\demo\\research_v2\\audio\\C2_12__emotion_happy.wav",
+      "sha256": "db16732c961644a9fc7b01ee3d27f3b928448fd84d74a07af3ab04d826d53749",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C2_12__emotion_sad",
+      "path": "results\\demo\\research_v2\\audio\\C2_12__emotion_sad.wav",
+      "sha256": "27b0df7a2676c0778890c2961f670f4cd047adf74d3454d2f4bbf7abef868378",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C2_12__emotion_angry",
+      "path": "results\\demo\\research_v2\\audio\\C2_12__emotion_angry.wav",
+      "sha256": "2aaad6740fd650631550a5e1e0cae0752c14a3497cbe5a2757a0cd7775c78167",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C2_12__accent_us",
+      "path": "results\\demo\\research_v2\\audio\\C2_12__accent_us.wav",
+      "sha256": "2fe16823efd1dce8c032ed70e3783e756c47c855633e824779c5cc88151ac523",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C2_12__accent_england",
+      "path": "results\\demo\\research_v2\\audio\\C2_12__accent_england.wav",
+      "sha256": "f525d786fece94d6f5800207988555c1338f776a83c33f0c35e6050f340fc63d",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C2_12__accent_australian",
+      "path": "results\\demo\\research_v2\\audio\\C2_12__accent_australian.wav",
+      "sha256": "d6a7668b914e2477464e428d8d7e50244a7606b25b8b71fc11e2e56860544153",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C1_02__neutral",
+      "path": "results\\demo\\research_v2\\audio\\C1_02__neutral.wav",
+      "sha256": "6aae4d6c4592729d41f1e80092d83b316841f1edff95ce924b01ef5b80e2cf57",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C1_02__emotion_happy",
+      "path": "results\\demo\\research_v2\\audio\\C1_02__emotion_happy.wav",
+      "sha256": "f2e9fb1f6eb745d54b9c0c8fa649aed7636756bbfee609a54dbef189a96949d1",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C1_02__emotion_sad",
+      "path": "results\\demo\\research_v2\\audio\\C1_02__emotion_sad.wav",
+      "sha256": "162307b9a5b10fe27bdd80563bb71bddab84961fbba912a645a55265a6beb21b",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C1_02__emotion_angry",
+      "path": "results\\demo\\research_v2\\audio\\C1_02__emotion_angry.wav",
+      "sha256": "5486fe808b19e0cf231a53ad7a8c7765568e12f8d8cffbbafbe6e8a964531769",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C1_02__accent_us",
+      "path": "results\\demo\\research_v2\\audio\\C1_02__accent_us.wav",
+      "sha256": "34d378f83146d4d25d2c46e47ae1eb9e6db13fca49b3cce3aa12ac28afe64721",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C1_02__accent_england",
+      "path": "results\\demo\\research_v2\\audio\\C1_02__accent_england.wav",
+      "sha256": "641f6ab4e14663dc109849cbfb0f6ddf030c859457bec735f96ebe3e70ea764f",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C1_02__accent_australian",
+      "path": "results\\demo\\research_v2\\audio\\C1_02__accent_australian.wav",
+      "sha256": "043239e551be4c866996dfeaa6d1cb9f6ec3fd259a75b8e8d2c0282206e40794",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C2_09__neutral",
+      "path": "results\\demo\\research_v2\\audio\\C2_09__neutral.wav",
+      "sha256": "663d6bc184811a0fdb489089f7fe2b33f8a6bc2a0ce1b171ade2bf1e5607539b",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C2_09__emotion_happy",
+      "path": "results\\demo\\research_v2\\audio\\C2_09__emotion_happy.wav",
+      "sha256": "bb2c3123d48d249d956524f53e0c4fd9f323f485b1f6e066d5ce822b5c346b3f",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C2_09__emotion_sad",
+      "path": "results\\demo\\research_v2\\audio\\C2_09__emotion_sad.wav",
+      "sha256": "9b35745de1fe5c63069a0ced6c363295e08cade73c25350eda18707361954058",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C2_09__emotion_angry",
+      "path": "results\\demo\\research_v2\\audio\\C2_09__emotion_angry.wav",
+      "sha256": "63aff81a6fe1b1ce0c0a2c295d9e1930bf96c9d4c117ef6ff08d92578bca5f69",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C2_09__accent_us",
+      "path": "results\\demo\\research_v2\\audio\\C2_09__accent_us.wav",
+      "sha256": "15d5e7e93d5ce70ec7628c7c37c18fd5de6e80832a6285bd28898d53f3f56a12",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C2_09__accent_england",
+      "path": "results\\demo\\research_v2\\audio\\C2_09__accent_england.wav",
+      "sha256": "4fcaba86aeca659f6e8a43a68b1d6a59dc3160fd01b579856a896779d940a0f3",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    },
+    {
+      "name": "C2_09__accent_australian",
+      "path": "results\\demo\\research_v2\\audio\\C2_09__accent_australian.wav",
+      "sha256": "bfcce0d6ec1e87f036fade34f9c01eb0aee6953aabfacb4575fd6e6bba57837f",
+      "reference": "The human voice carries identity, emotion, and the rhythm of lived experience."
+    }
+  ],
+  "model": "whisper-small",
+  "n": 21,
+  "mean_wer": 0.0,
+  "std_wer": 0.0,
+  "max_wer": 0.0,
+  "per_sample_wer": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "transcripts": [
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience.",
+    "The human voice carries identity, emotion, and the rhythm of lived experience."
+  ],
+  "notes": [
+    "This is an ASR cross-check, not a human intelligibility or naturalness rating.",
+    "The reference text is identical for all 21 clips.",
+    "A zero WER does not establish naturalness, emotion recognition, or accent recognition."
+  ]
+}

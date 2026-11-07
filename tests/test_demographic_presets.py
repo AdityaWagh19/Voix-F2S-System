@@ -7,15 +7,21 @@ Validates:
   - VoixPipeline integration via preset ID resolution and generate_from_preset()
 """
 
+import itertools
+
 import numpy as np
 import pytest
 import torch
+import torch.nn.functional as F
 
 from voix.data.presets import (
     CANONICAL_PRESETS_DEF,
+    PRESET_SCHEMA_VERSION,
     PresetRegistry,
     get_demographic_preset,
     list_demographic_presets,
+    load_preset_embedding,
+    save_preset_embedding,
 )
 
 
@@ -64,19 +70,85 @@ class TestDemographicPresetsRegistry:
         assert l2_dist > 0.1
         assert not torch.allclose(female_preset.embedding, male_preset.embedding, atol=1e-3)
 
+    def test_preset_embeddings_are_not_v1_collapsed(self):
+        """The V1 fusion made every preset cosine ~0.9997; V2 must not."""
+        embeddings = [
+            get_demographic_preset(p["preset_id"]).embedding.reshape(-1)
+            for p in CANONICAL_PRESETS_DEF
+        ]
+        cosines = [
+            float(F.cosine_similarity(a, b, dim=0))
+            for a, b in itertools.combinations(embeddings, 2)
+        ]
+        assert max(cosines) < 0.99, max(cosines)
+
     def test_unknown_preset_raises_keyerror(self):
         """Querying an unknown preset ID must raise a descriptive KeyError."""
         with pytest.raises(KeyError, match="not found"):
             get_demographic_preset("non_existent_preset_xyz")
+
+    def test_trait_regeneration_changes_geometry_and_embedding(self):
+        from voix.data.presets import build_preset_face
+
+        base_embedding, base_geometry = build_preset_face("young_female_resonant")
+        slider_embedding, slider_geometry = build_preset_face(
+            "young_female_resonant", {"jaw_width": 0.8}
+        )
+        assert not np.allclose(base_geometry, slider_geometry)
+        assert not torch.allclose(base_embedding, slider_embedding)
+
+
+class TestPresetCacheContract:
+    """A bare V1 tensor cache must never be loaded as a V2 preset."""
+
+    def test_versioned_roundtrip(self, tmp_path):
+        path = tmp_path / "preset.pt"
+        embedding = torch.randn(1, 560)
+        save_preset_embedding(path, embedding)
+        loaded = load_preset_embedding(path)
+        assert torch.allclose(loaded, embedding)
+        payload = torch.load(path, map_location="cpu", weights_only=True)
+        assert payload["schema_version"] == PRESET_SCHEMA_VERSION
+
+    def test_bare_tensor_is_rejected(self, tmp_path):
+        path = tmp_path / "preset.pt"
+        torch.save(torch.randn(1, 560), path)
+        with pytest.raises(ValueError, match="unversioned"):
+            load_preset_embedding(path)
+
+    def test_wrong_schema_is_rejected(self, tmp_path):
+        path = tmp_path / "preset.pt"
+        torch.save(
+            {"schema_version": "FaceFeatureV1", "embedding": torch.randn(1, 560)},
+            path,
+        )
+        with pytest.raises(ValueError, match="expected"):
+            load_preset_embedding(path)
+
+    def test_wrong_shape_is_rejected(self, tmp_path):
+        path = tmp_path / "preset.pt"
+        torch.save(
+            {
+                "schema_version": PRESET_SCHEMA_VERSION,
+                "embedding": torch.randn(1, 512),
+            },
+            path,
+        )
+        with pytest.raises(ValueError, match="shape"):
+            load_preset_embedding(path)
 
 
 class TestPipelinePresetIntegration:
     """Verify end-to-end synthesis using demographic presets."""
 
     @pytest.fixture(scope="class")
-    def pipeline(self):
+    def pipeline(self, v2_artifacts):
         from voix.inference.pipeline import VoixPipeline
-        return VoixPipeline(device="cpu", enable_watermarking=False)
+        return VoixPipeline(
+            device="cpu",
+            enable_watermarking=False,
+            tts_use_neural=False,
+        )
 
     def test_pipeline_generate_from_preset(self, pipeline):
         """Verify generate_from_preset synthesizes valid candidate voices."""

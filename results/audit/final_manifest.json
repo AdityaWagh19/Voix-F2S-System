@@ -1,0 +1,1005 @@
+{
+  "schema_version": "voix.final_manifest.v1",
+  "created_at": "2026-11-06 04:12:22 UTC",
+  "level": "exploratory",
+  "source_report": {
+    "path": "results/demo/research_v2/report.json",
+    "sha256": "4bd55cf42fa8979d18bd615efc92c7da41cfe5a8a042b739862d09546d5471a4",
+    "schema_version": "voix.research_demo.v2",
+    "created_at": "2026-11-05 13:13:27 UTC",
+    "conditions": 21
+  },
+  "design": {
+    "voices": [
+      "C2_12_black_female_Lupita_Nyongo",
+      "C1_02_young_male_Timothee_Chalamet",
+      "C2_09_east_asian_male_Jackie_Chan"
+    ],
+    "emotions": [
+      "happy",
+      "sad",
+      "angry"
+    ],
+    "accents": [
+      "us",
+      "england",
+      "australian"
+    ],
+    "clip_count": 21,
+    "seed": 42,
+    "diffusion_steps": 10,
+    "calibration": {
+      "path": "results/audit/style_calibration/calibration.json",
+      "sha256": "2676efbe1792c4e5a1b885b1b55eb5364a3871e4b097617305d9102d6a803aca",
+      "report_sha256": "2676efbe1792c4e5a1b885b1b55eb5364a3871e4b097617305d9102d6a803aca",
+      "match": true,
+      "method": "gender_matched_mean_translation",
+      "alpha": 1.0
+    }
+  },
+  "git": {
+    "branch": "main",
+    "commit": "3bbf21d35dbccd15c0548f6e0c86291c32f01900",
+    "dirty_tree": {
+      "modified": 60,
+      "deleted": 33,
+      "untracked": 305,
+      "total": 398
+    },
+    "note": "The dirty tree is pre-existing user work; this audit did not commit or revert it."
+  },
+  "verification": {
+    "canonical_checkpoints": {
+      "passed": true,
+      "checks": {
+        "cfvn": {
+          "path": "results/checkpoints/cfvn_v2_best.pt",
+          "expected_sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b",
+          "sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b",
+          "match": true
+        },
+        "cvae": {
+          "path": "checkpoints/cvae_cfvn_face192_latent128_diversity.pt",
+          "expected_sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b",
+          "sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b",
+          "match": true
+        },
+        "style_adapter": {
+          "path": "checkpoints/style_adapter_cfvn_best.pt",
+          "expected_sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+          "sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+          "match": true
+        }
+      }
+    },
+    "report_artifacts": {
+      "passed": true,
+      "checks": {
+        "face_report": {
+          "path": "results/audit/face_voice_diversity/face_voice_diversity.json",
+          "recorded_sha256": "6b260d95568d85fd3fede4e6929da3dbf90f614edf1cd87eefddf0b23fa6cf32",
+          "sha256": "6b260d95568d85fd3fede4e6929da3dbf90f614edf1cd87eefddf0b23fa6cf32",
+          "match": true
+        },
+        "emotion_residual": {
+          "path": "checkpoints/emotion_residuals/class_mean.pt",
+          "recorded_sha256": "6bb4f17ff4bfaf4a9fe4b69514ba3b2e83f4dfe4c8a80f8706c9172cf4bb4408",
+          "sha256": "6bb4f17ff4bfaf4a9fe4b69514ba3b2e83f4dfe4c8a80f8706c9172cf4bb4408",
+          "match": true
+        },
+        "accent_residual": {
+          "path": "checkpoints/accent_residuals/class_mean.pt",
+          "recorded_sha256": "4781e800d756242ce82a0058291fbcaf7ba5a46e55aeaaef95a332ed2838de32",
+          "sha256": "4781e800d756242ce82a0058291fbcaf7ba5a46e55aeaaef95a332ed2838de32",
+          "match": true
+        },
+        "cfvn": {
+          "path": "results/checkpoints/cfvn_v2_best.pt",
+          "recorded_sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b",
+          "sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b",
+          "match": true
+        },
+        "cvae": {
+          "path": "checkpoints/cvae_cfvn_face192_latent128_diversity.pt",
+          "recorded_sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b",
+          "sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b",
+          "match": true
+        },
+        "style_adapter": {
+          "path": "checkpoints/style_adapter_cfvn_best.pt",
+          "recorded_sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+          "sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+          "match": true
+        }
+      }
+    },
+    "audio_hashes": {
+      "passed": true,
+      "n": 21,
+      "checks": [
+        {
+          "name": "C2_12__neutral",
+          "recorded_sha256": "b460ad1937283cfbed1e97acb815b7e1ae211908a4fa05df8657276221a0da9a",
+          "sha256": "b460ad1937283cfbed1e97acb815b7e1ae211908a4fa05df8657276221a0da9a",
+          "match": true
+        },
+        {
+          "name": "C2_12__emotion_happy",
+          "recorded_sha256": "db16732c961644a9fc7b01ee3d27f3b928448fd84d74a07af3ab04d826d53749",
+          "sha256": "db16732c961644a9fc7b01ee3d27f3b928448fd84d74a07af3ab04d826d53749",
+          "match": true
+        },
+        {
+          "name": "C2_12__emotion_sad",
+          "recorded_sha256": "27b0df7a2676c0778890c2961f670f4cd047adf74d3454d2f4bbf7abef868378",
+          "sha256": "27b0df7a2676c0778890c2961f670f4cd047adf74d3454d2f4bbf7abef868378",
+          "match": true
+        },
+        {
+          "name": "C2_12__emotion_angry",
+          "recorded_sha256": "2aaad6740fd650631550a5e1e0cae0752c14a3497cbe5a2757a0cd7775c78167",
+          "sha256": "2aaad6740fd650631550a5e1e0cae0752c14a3497cbe5a2757a0cd7775c78167",
+          "match": true
+        },
+        {
+          "name": "C2_12__accent_us",
+          "recorded_sha256": "2fe16823efd1dce8c032ed70e3783e756c47c855633e824779c5cc88151ac523",
+          "sha256": "2fe16823efd1dce8c032ed70e3783e756c47c855633e824779c5cc88151ac523",
+          "match": true
+        },
+        {
+          "name": "C2_12__accent_england",
+          "recorded_sha256": "f525d786fece94d6f5800207988555c1338f776a83c33f0c35e6050f340fc63d",
+          "sha256": "f525d786fece94d6f5800207988555c1338f776a83c33f0c35e6050f340fc63d",
+          "match": true
+        },
+        {
+          "name": "C2_12__accent_australian",
+          "recorded_sha256": "d6a7668b914e2477464e428d8d7e50244a7606b25b8b71fc11e2e56860544153",
+          "sha256": "d6a7668b914e2477464e428d8d7e50244a7606b25b8b71fc11e2e56860544153",
+          "match": true
+        },
+        {
+          "name": "C1_02__neutral",
+          "recorded_sha256": "6aae4d6c4592729d41f1e80092d83b316841f1edff95ce924b01ef5b80e2cf57",
+          "sha256": "6aae4d6c4592729d41f1e80092d83b316841f1edff95ce924b01ef5b80e2cf57",
+          "match": true
+        },
+        {
+          "name": "C1_02__emotion_happy",
+          "recorded_sha256": "f2e9fb1f6eb745d54b9c0c8fa649aed7636756bbfee609a54dbef189a96949d1",
+          "sha256": "f2e9fb1f6eb745d54b9c0c8fa649aed7636756bbfee609a54dbef189a96949d1",
+          "match": true
+        },
+        {
+          "name": "C1_02__emotion_sad",
+          "recorded_sha256": "162307b9a5b10fe27bdd80563bb71bddab84961fbba912a645a55265a6beb21b",
+          "sha256": "162307b9a5b10fe27bdd80563bb71bddab84961fbba912a645a55265a6beb21b",
+          "match": true
+        },
+        {
+          "name": "C1_02__emotion_angry",
+          "recorded_sha256": "5486fe808b19e0cf231a53ad7a8c7765568e12f8d8cffbbafbe6e8a964531769",
+          "sha256": "5486fe808b19e0cf231a53ad7a8c7765568e12f8d8cffbbafbe6e8a964531769",
+          "match": true
+        },
+        {
+          "name": "C1_02__accent_us",
+          "recorded_sha256": "34d378f83146d4d25d2c46e47ae1eb9e6db13fca49b3cce3aa12ac28afe64721",
+          "sha256": "34d378f83146d4d25d2c46e47ae1eb9e6db13fca49b3cce3aa12ac28afe64721",
+          "match": true
+        },
+        {
+          "name": "C1_02__accent_england",
+          "recorded_sha256": "641f6ab4e14663dc109849cbfb0f6ddf030c859457bec735f96ebe3e70ea764f",
+          "sha256": "641f6ab4e14663dc109849cbfb0f6ddf030c859457bec735f96ebe3e70ea764f",
+          "match": true
+        },
+        {
+          "name": "C1_02__accent_australian",
+          "recorded_sha256": "043239e551be4c866996dfeaa6d1cb9f6ec3fd259a75b8e8d2c0282206e40794",
+          "sha256": "043239e551be4c866996dfeaa6d1cb9f6ec3fd259a75b8e8d2c0282206e40794",
+          "match": true
+        },
+        {
+          "name": "C2_09__neutral",
+          "recorded_sha256": "663d6bc184811a0fdb489089f7fe2b33f8a6bc2a0ce1b171ade2bf1e5607539b",
+          "sha256": "663d6bc184811a0fdb489089f7fe2b33f8a6bc2a0ce1b171ade2bf1e5607539b",
+          "match": true
+        },
+        {
+          "name": "C2_09__emotion_happy",
+          "recorded_sha256": "bb2c3123d48d249d956524f53e0c4fd9f323f485b1f6e066d5ce822b5c346b3f",
+          "sha256": "bb2c3123d48d249d956524f53e0c4fd9f323f485b1f6e066d5ce822b5c346b3f",
+          "match": true
+        },
+        {
+          "name": "C2_09__emotion_sad",
+          "recorded_sha256": "9b35745de1fe5c63069a0ced6c363295e08cade73c25350eda18707361954058",
+          "sha256": "9b35745de1fe5c63069a0ced6c363295e08cade73c25350eda18707361954058",
+          "match": true
+        },
+        {
+          "name": "C2_09__emotion_angry",
+          "recorded_sha256": "63aff81a6fe1b1ce0c0a2c295d9e1930bf96c9d4c117ef6ff08d92578bca5f69",
+          "sha256": "63aff81a6fe1b1ce0c0a2c295d9e1930bf96c9d4c117ef6ff08d92578bca5f69",
+          "match": true
+        },
+        {
+          "name": "C2_09__accent_us",
+          "recorded_sha256": "15d5e7e93d5ce70ec7628c7c37c18fd5de6e80832a6285bd28898d53f3f56a12",
+          "sha256": "15d5e7e93d5ce70ec7628c7c37c18fd5de6e80832a6285bd28898d53f3f56a12",
+          "match": true
+        },
+        {
+          "name": "C2_09__accent_england",
+          "recorded_sha256": "4fcaba86aeca659f6e8a43a68b1d6a59dc3160fd01b579856a896779d940a0f3",
+          "sha256": "4fcaba86aeca659f6e8a43a68b1d6a59dc3160fd01b579856a896779d940a0f3",
+          "match": true
+        },
+        {
+          "name": "C2_09__accent_australian",
+          "recorded_sha256": "bfcce0d6ec1e87f036fade34f9c01eb0aee6953aabfacb4575fd6e6bba57837f",
+          "sha256": "bfcce0d6ec1e87f036fade34f9c01eb0aee6953aabfacb4575fd6e6bba57837f",
+          "match": true
+        }
+      ]
+    },
+    "face_images": {
+      "passed": true,
+      "n": 3,
+      "checks": [
+        {
+          "label": "C2_12_black_female_Lupita_Nyongo",
+          "source": "data/test_subjects/C2_12_black_female_Lupita_Nyongo.jpg",
+          "copied": "results/demo/research_v2/faces/C2_12.jpg",
+          "recorded_sha256": "a4fb9c93d235fd472463efef8589728231b53a1501d360277bd6fbe5d2198e2b",
+          "sha256": "a4fb9c93d235fd472463efef8589728231b53a1501d360277bd6fbe5d2198e2b",
+          "copied_sha256": "a4fb9c93d235fd472463efef8589728231b53a1501d360277bd6fbe5d2198e2b",
+          "source_match": true,
+          "copy_match": true
+        },
+        {
+          "label": "C1_02_young_male_Timothee_Chalamet",
+          "source": "data/test_subjects/C1_02_young_male_Timothee_Chalamet.jpg",
+          "copied": "results/demo/research_v2/faces/C1_02.jpg",
+          "recorded_sha256": "f0e9e3110439130e6ce1cf785e0845b7093bd8e7daf258839c0148d979864726",
+          "sha256": "f0e9e3110439130e6ce1cf785e0845b7093bd8e7daf258839c0148d979864726",
+          "copied_sha256": "f0e9e3110439130e6ce1cf785e0845b7093bd8e7daf258839c0148d979864726",
+          "source_match": true,
+          "copy_match": true
+        },
+        {
+          "label": "C2_09_east_asian_male_Jackie_Chan",
+          "source": "data/test_subjects/C2_09_east_asian_male_Jackie_Chan.jpg",
+          "copied": "results/demo/research_v2/faces/C2_09.jpg",
+          "recorded_sha256": "cdd385cda5133da2f98ff4882b03e59f2943596017e64ad9a60b247c81b90804",
+          "sha256": "cdd385cda5133da2f98ff4882b03e59f2943596017e64ad9a60b247c81b90804",
+          "copied_sha256": "cdd385cda5133da2f98ff4882b03e59f2943596017e64ad9a60b247c81b90804",
+          "source_match": true,
+          "copy_match": true
+        }
+      ]
+    },
+    "calibration": {
+      "path": "results/audit/style_calibration/calibration.json",
+      "sha256": "2676efbe1792c4e5a1b885b1b55eb5364a3871e4b097617305d9102d6a803aca",
+      "report_sha256": "2676efbe1792c4e5a1b885b1b55eb5364a3871e4b097617305d9102d6a803aca",
+      "match": true,
+      "method": "gender_matched_mean_translation",
+      "alpha": 1.0
+    },
+    "wer_cross_check": {
+      "path": "results/audit/wer_crosscheck/wer_small.json",
+      "source_report_sha256": "4bd55cf42fa8979d18bd615efc92c7da41cfe5a8a042b739862d09546d5471a4",
+      "source_report_match": true,
+      "model": "whisper-small",
+      "n": 21,
+      "mean_wer": 0.0,
+      "max_wer": 0.0,
+      "audio_hashes_match": true,
+      "audio_count_match": true
+    },
+    "counts": {
+      "demo_files": 4,
+      "demo_audio": 21,
+      "demo_faces": 3,
+      "before_after_audio": 15,
+      "audit_evidence": 19,
+      "audit_documents": 4,
+      "v1_snapshot_files": 14
+    },
+    "passed": true
+  },
+  "entries": {
+    "demo": [
+      {
+        "path": "results/demo/research_v2/report.json",
+        "bytes": 226507,
+        "sha256": "4bd55cf42fa8979d18bd615efc92c7da41cfe5a8a042b739862d09546d5471a4",
+        "category": "demo"
+      },
+      {
+        "path": "results/demo/research_v2/index.csv",
+        "bytes": 12573,
+        "sha256": "159e914fe85e5ca94d6dcb83247c2c295ac1fbf1864af00b2dc533aba43ba0fc",
+        "category": "demo"
+      },
+      {
+        "path": "results/demo/research_v2/README.md",
+        "bytes": 8396,
+        "sha256": "649862c23df6cd4e63b02cc584d518f7eed0c36ebc0d275003420e265231a292",
+        "category": "demo"
+      },
+      {
+        "path": "results/demo/research_v2/index.html",
+        "bytes": 28617,
+        "sha256": "80152ec1d4822711847b03d0da282fa79e8bbe51c5a91cac77ca7bd89a7e6b00",
+        "category": "demo"
+      }
+    ],
+    "demo_audio": [
+      {
+        "path": "results/demo/research_v2/audio/C1_02__accent_australian.wav",
+        "bytes": 337144,
+        "sha256": "043239e551be4c866996dfeaa6d1cb9f6ec3fd259a75b8e8d2c0282206e40794",
+        "category": "demo_audio",
+        "note": "C1_02__accent_australian"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C1_02__accent_england.wav",
+        "bytes": 344344,
+        "sha256": "641f6ab4e14663dc109849cbfb0f6ddf030c859457bec735f96ebe3e70ea764f",
+        "category": "demo_audio",
+        "note": "C1_02__accent_england"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C1_02__accent_us.wav",
+        "bytes": 341944,
+        "sha256": "34d378f83146d4d25d2c46e47ae1eb9e6db13fca49b3cce3aa12ac28afe64721",
+        "category": "demo_audio",
+        "note": "C1_02__accent_us"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C1_02__emotion_angry.wav",
+        "bytes": 314344,
+        "sha256": "5486fe808b19e0cf231a53ad7a8c7765568e12f8d8cffbbafbe6e8a964531769",
+        "category": "demo_audio",
+        "note": "C1_02__emotion_angry"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C1_02__emotion_happy.wav",
+        "bytes": 333544,
+        "sha256": "f2e9fb1f6eb745d54b9c0c8fa649aed7636756bbfee609a54dbef189a96949d1",
+        "category": "demo_audio",
+        "note": "C1_02__emotion_happy"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C1_02__emotion_sad.wav",
+        "bytes": 357544,
+        "sha256": "162307b9a5b10fe27bdd80563bb71bddab84961fbba912a645a55265a6beb21b",
+        "category": "demo_audio",
+        "note": "C1_02__emotion_sad"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C1_02__neutral.wav",
+        "bytes": 345544,
+        "sha256": "6aae4d6c4592729d41f1e80092d83b316841f1edff95ce924b01ef5b80e2cf57",
+        "category": "demo_audio",
+        "note": "C1_02__neutral"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C2_09__accent_australian.wav",
+        "bytes": 355144,
+        "sha256": "bfcce0d6ec1e87f036fade34f9c01eb0aee6953aabfacb4575fd6e6bba57837f",
+        "category": "demo_audio",
+        "note": "C2_09__accent_australian"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C2_09__accent_england.wav",
+        "bytes": 371944,
+        "sha256": "4fcaba86aeca659f6e8a43a68b1d6a59dc3160fd01b579856a896779d940a0f3",
+        "category": "demo_audio",
+        "note": "C2_09__accent_england"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C2_09__accent_us.wav",
+        "bytes": 370744,
+        "sha256": "15d5e7e93d5ce70ec7628c7c37c18fd5de6e80832a6285bd28898d53f3f56a12",
+        "category": "demo_audio",
+        "note": "C2_09__accent_us"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C2_09__emotion_angry.wav",
+        "bytes": 323944,
+        "sha256": "63aff81a6fe1b1ce0c0a2c295d9e1930bf96c9d4c117ef6ff08d92578bca5f69",
+        "category": "demo_audio",
+        "note": "C2_09__emotion_angry"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C2_09__emotion_happy.wav",
+        "bytes": 351544,
+        "sha256": "bb2c3123d48d249d956524f53e0c4fd9f323f485b1f6e066d5ce822b5c346b3f",
+        "category": "demo_audio",
+        "note": "C2_09__emotion_happy"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C2_09__emotion_sad.wav",
+        "bytes": 388744,
+        "sha256": "9b35745de1fe5c63069a0ced6c363295e08cade73c25350eda18707361954058",
+        "category": "demo_audio",
+        "note": "C2_09__emotion_sad"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C2_09__neutral.wav",
+        "bytes": 365944,
+        "sha256": "663d6bc184811a0fdb489089f7fe2b33f8a6bc2a0ce1b171ade2bf1e5607539b",
+        "category": "demo_audio",
+        "note": "C2_09__neutral"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C2_12__accent_australian.wav",
+        "bytes": 357544,
+        "sha256": "d6a7668b914e2477464e428d8d7e50244a7606b25b8b71fc11e2e56860544153",
+        "category": "demo_audio",
+        "note": "C2_12__accent_australian"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C2_12__accent_england.wav",
+        "bytes": 363544,
+        "sha256": "f525d786fece94d6f5800207988555c1338f776a83c33f0c35e6050f340fc63d",
+        "category": "demo_audio",
+        "note": "C2_12__accent_england"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C2_12__accent_us.wav",
+        "bytes": 365944,
+        "sha256": "2fe16823efd1dce8c032ed70e3783e756c47c855633e824779c5cc88151ac523",
+        "category": "demo_audio",
+        "note": "C2_12__accent_us"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C2_12__emotion_angry.wav",
+        "bytes": 337144,
+        "sha256": "2aaad6740fd650631550a5e1e0cae0752c14a3497cbe5a2757a0cd7775c78167",
+        "category": "demo_audio",
+        "note": "C2_12__emotion_angry"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C2_12__emotion_happy.wav",
+        "bytes": 350344,
+        "sha256": "db16732c961644a9fc7b01ee3d27f3b928448fd84d74a07af3ab04d826d53749",
+        "category": "demo_audio",
+        "note": "C2_12__emotion_happy"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C2_12__emotion_sad.wav",
+        "bytes": 369544,
+        "sha256": "27b0df7a2676c0778890c2961f670f4cd047adf74d3454d2f4bbf7abef868378",
+        "category": "demo_audio",
+        "note": "C2_12__emotion_sad"
+      },
+      {
+        "path": "results/demo/research_v2/audio/C2_12__neutral.wav",
+        "bytes": 362344,
+        "sha256": "b460ad1937283cfbed1e97acb815b7e1ae211908a4fa05df8657276221a0da9a",
+        "category": "demo_audio",
+        "note": "C2_12__neutral"
+      }
+    ],
+    "demo_faces": [
+      {
+        "path": "results/demo/research_v2/faces/C2_12.jpg",
+        "bytes": 338300,
+        "sha256": "a4fb9c93d235fd472463efef8589728231b53a1501d360277bd6fbe5d2198e2b",
+        "category": "demo_face",
+        "note": "C2_12_black_female_Lupita_Nyongo"
+      },
+      {
+        "path": "results/demo/research_v2/faces/C1_02.jpg",
+        "bytes": 337054,
+        "sha256": "f0e9e3110439130e6ce1cf785e0845b7093bd8e7daf258839c0148d979864726",
+        "category": "demo_face",
+        "note": "C1_02_young_male_Timothee_Chalamet"
+      },
+      {
+        "path": "results/demo/research_v2/faces/C2_09.jpg",
+        "bytes": 619710,
+        "sha256": "cdd385cda5133da2f98ff4882b03e59f2943596017e64ad9a60b247c81b90804",
+        "category": "demo_face",
+        "note": "C2_09_east_asian_male_Jackie_Chan"
+      }
+    ],
+    "before_after": [
+      {
+        "path": "results/audit/before_after/index.html",
+        "bytes": 9271,
+        "sha256": "049b956c705cf471016c760ff12200b0db069800c7de8c4a36b49de03cc67986",
+        "category": "before_after"
+      },
+      {
+        "path": "results/audit/before_after/comparison.csv",
+        "bytes": 4529,
+        "sha256": "63704f50822fb2a705bdf814425141f8c48a7e479c6fb49baf3b9ae8a4f97a12",
+        "category": "before_after"
+      },
+      {
+        "path": "results/audit/before_after/comparison.json",
+        "bytes": 9926,
+        "sha256": "bf32e73f1613d257390fab9ed34f9f1e7ffc8afb13f2dd22971ace2ba788e1f1",
+        "category": "before_after"
+      },
+      {
+        "path": "results/audit/before_after/audio/controlled/C1_02__alpha0.wav",
+        "bytes": 611880,
+        "sha256": "9fc903e5df70d04153dc3b43318daf0f54f065928fc716754643b6e618652eda",
+        "category": "before_after_audio"
+      },
+      {
+        "path": "results/audit/before_after/audio/controlled/C1_02__alpha1.wav",
+        "bytes": 691080,
+        "sha256": "6895844fa0d678960de6a5c08fcae4ef9b5529504c6dec1b81fa1cc71cb65e63",
+        "category": "before_after_audio"
+      },
+      {
+        "path": "results/audit/before_after/audio/controlled/C2_09__alpha0.wav",
+        "bytes": 614280,
+        "sha256": "1894f5c6e3c81e71c66efffd66f809865ffc979155bbbaf6b12ae9fdb9e8267a",
+        "category": "before_after_audio"
+      },
+      {
+        "path": "results/audit/before_after/audio/controlled/C2_09__alpha1.wav",
+        "bytes": 731880,
+        "sha256": "bdc38bdf1256faf80d50435f08a52b830bc63d1a3c350cd9900cdefdaa3e6fe2",
+        "category": "before_after_audio"
+      },
+      {
+        "path": "results/audit/before_after/audio/controlled/C2_12__alpha0.wav",
+        "bytes": 662280,
+        "sha256": "5ab1597820608dda40868aa2fd4d7aa801e92e0f44ef0c020725f35139f80ee5",
+        "category": "before_after_audio"
+      },
+      {
+        "path": "results/audit/before_after/audio/controlled/C2_12__alpha1.wav",
+        "bytes": 724680,
+        "sha256": "765c417ed68f4cbc6230b111e93f95ddbc8433727dd8239dab333555f0960431",
+        "category": "before_after_audio"
+      },
+      {
+        "path": "results/audit/before_after/audio/controls/base.wav",
+        "bytes": 640680,
+        "sha256": "12448e7e992c1bafbfa3b02d395f84c7f97ebee4236b3a71d5dc6c13bbde3301",
+        "category": "before_after_audio"
+      },
+      {
+        "path": "results/audit/before_after/audio/controls/lora.wav",
+        "bytes": 645480,
+        "sha256": "ef1754590f23c3b522206d3449ecce772c2eb8af63b7fdc63b101894b3795ea6",
+        "category": "before_after_audio"
+      },
+      {
+        "path": "results/audit/before_after/audio/controls/real_ref.wav",
+        "bytes": 760680,
+        "sha256": "11353639a301ea8f022c99c5fa2d046d4d9cdcac62f8ac8767a7cecc2c940024",
+        "category": "before_after_audio"
+      },
+      {
+        "path": "results/audit/before_after/audio/controls/steps30.wav",
+        "bytes": 621480,
+        "sha256": "1803cc37db3d01351ec1a05cea1b74b201d7855fc74491b3d02538eaf0a1ecd1",
+        "category": "before_after_audio"
+      },
+      {
+        "path": "results/audit/before_after/audio/controls/steps5.wav",
+        "bytes": 640680,
+        "sha256": "6df4e510a8b025cdf3f5dd72b9673cbdc6d750d572c0f1ab4156ecdb913d2f31",
+        "category": "before_after_audio"
+      },
+      {
+        "path": "results/audit/before_after/audio/demo/v1__neutral.wav",
+        "bytes": 320344,
+        "sha256": "778220314c2f6400e81a74a823d7c4a14dac2fbffc3c29bd386f2bc8a7ea2675",
+        "category": "before_after_audio"
+      },
+      {
+        "path": "results/audit/before_after/audio/demo/v2__C1_02__neutral.wav",
+        "bytes": 345544,
+        "sha256": "6aae4d6c4592729d41f1e80092d83b316841f1edff95ce924b01ef5b80e2cf57",
+        "category": "before_after_audio"
+      },
+      {
+        "path": "results/audit/before_after/audio/demo/v2__C2_09__neutral.wav",
+        "bytes": 365944,
+        "sha256": "663d6bc184811a0fdb489089f7fe2b33f8a6bc2a0ce1b171ade2bf1e5607539b",
+        "category": "before_after_audio"
+      },
+      {
+        "path": "results/audit/before_after/audio/demo/v2__C2_12__neutral.wav",
+        "bytes": 362344,
+        "sha256": "b460ad1937283cfbed1e97acb815b7e1ae211908a4fa05df8657276221a0da9a",
+        "category": "before_after_audio"
+      }
+    ],
+    "audit_evidence": [
+      {
+        "path": "results/audit/face_voice_diversity/face_voice_diversity.json",
+        "bytes": 680748,
+        "sha256": "6b260d95568d85fd3fede4e6929da3dbf90f614edf1cd87eefddf0b23fa6cf32",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/condition_response/condition_response.json",
+        "bytes": 316314,
+        "sha256": "8a5d8a258214fb44b630cd97fb445c6eb1af019cbf55f007e7a5709e7f1b8a9f",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/demo_settings/demo_settings.json",
+        "bytes": 263803,
+        "sha256": "a0982bd9d697acadcc7646c149b9a82b0af7c9d1338b2433cfec74aa7c2ac6d6",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/synthesis_matrix/synthesis_matrix.json",
+        "bytes": 741925,
+        "sha256": "1629eaef818d69dacadf68c6930e373992276d4aa02d2fbf6d5f3bf0f8f1b92f",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/ecapa_reference/ecapa_reference.json",
+        "bytes": 86472,
+        "sha256": "bd59b214ca4eabccb08e48d038642e1fc37d22e4cebf0fbd74297d510d200b95",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/style_geometry/style_geometry.json",
+        "bytes": 31833,
+        "sha256": "4a292d9d902ace584db3abe52ff3906c675811fae2f3f876c8ddce47f2802618",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/baseline_audio/audio_metrics.json",
+        "bytes": 341287,
+        "sha256": "1ce73d0aa00c3fa8a5332529a799d2e2ae47898834e1b8a11bb31c82051136fd",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/baseline_audio/long_term_spectra.json",
+        "bytes": 190981,
+        "sha256": "19735da8d20bc84182ee22b5dde87ac05457e02a37c20563bd2d794a0edc462c",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/legacy_demo_audio/audio_metrics.json",
+        "bytes": 425912,
+        "sha256": "fc9f70ed99f43aaa2556213d37070d257a8dcf63dad9f3791974906e7b3073e0",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/legacy_demo_audio/long_term_spectra.json",
+        "bytes": 236531,
+        "sha256": "92f94e157ac5ff94683eebfe65596371569adf4067d3d821e8794787c234c881",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/reference_audio_metrics/audio_metrics.json",
+        "bytes": 226882,
+        "sha256": "dfa84470466a55a2efbd080c7893486710b1bb65860a88b5fa38a39752ce3aea",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/reference_audio_metrics/long_term_spectra.json",
+        "bytes": 129075,
+        "sha256": "f7014add4db702bc1047db44865a94709c20c5de81bf4832cb2feca5c5f195b0",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/style_calibration/calibration.json",
+        "bytes": 50645,
+        "sha256": "2676efbe1792c4e5a1b885b1b55eb5364a3871e4b097617305d9102d6a803aca",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/style_calibration/real_style_bank.json",
+        "bytes": 362153,
+        "sha256": "edd3428481f53ddfcf12de7eea0145b92f7c5217a3d857afbc919b4150a61959",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/style_calibration/style_calibration_audit.json",
+        "bytes": 1425302,
+        "sha256": "c42cf66993df7d1bb804d1db7cfc91916ab869828c064c85b34b86031d9b73f9",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/cleanup/README.md",
+        "bytes": 482,
+        "sha256": "46613292ed2d8e9ea30d8f30024636c54929e54cc8bd676f980cf36dd76e142e",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/cleanup/archive_manifest.json",
+        "bytes": 2822640,
+        "sha256": "ff472ff4382c0cdaf679c159b2d0714cdb0b860dbe850bbf91df4ff0693abd79",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/cleanup/deletion_manifest.json",
+        "bytes": 40460,
+        "sha256": "f492a71db418ea824d5ad4712faedcaa8b0853e729ebd2584a5b6f097c527350",
+        "category": "audit_evidence"
+      },
+      {
+        "path": "results/audit/wer_crosscheck/wer_small.json",
+        "bytes": 9349,
+        "sha256": "64cc5c8089e0caf138796679f0d062a5e0e7fdc049b28a3a160fdf779d418dec",
+        "category": "audit_evidence"
+      }
+    ],
+    "audit_documents": [
+      {
+        "path": "results/audit/AUDIT_REPORT.md",
+        "bytes": 29930,
+        "sha256": "ce9103e3ae96dab79ddd94097d25b3756e82842cb61b3b0d222eace88650693e",
+        "category": "audit_document"
+      },
+      {
+        "path": "results/audit/BEFORE_AFTER.md",
+        "bytes": 6607,
+        "sha256": "f7eb79f693e7afa1479b0906588d885d23060ff0035507efd63d058e18a2b2b1",
+        "category": "audit_document"
+      },
+      {
+        "path": "results/audit/REMEDIATION_PLAN.md",
+        "bytes": 13637,
+        "sha256": "95fb8c98d574a6a96da03fff78a009724e1846680d200ef80e587da617f29671",
+        "category": "audit_document"
+      },
+      {
+        "path": "results/audit/CLEANUP_INVENTORY.md",
+        "bytes": 12600,
+        "sha256": "e736ee41558bb3657d456f4bdfff134b745ef14024bd64532245bb51be2a3922",
+        "category": "audit_document"
+      }
+    ],
+    "scripts": [
+      {
+        "path": "scripts/generate_research_demo.py",
+        "bytes": 80562,
+        "sha256": "d9d3d4db2a39c7c8d271e6e4c8193006711c81a65f3bb555ee2b33357a805c4d",
+        "category": "script"
+      },
+      {
+        "path": "scripts/build_before_after.py",
+        "bytes": 11713,
+        "sha256": "2be6af581607c3ec105e381084e0ac61259e8c92a769a865103616e9efb4c642",
+        "category": "script"
+      },
+      {
+        "path": "scripts/audit_wer_crosscheck.py",
+        "bytes": 3084,
+        "sha256": "0b68f02c01726325f0c1e03531d28e9d4d8318b03909a1587f7f29ea785a4b16",
+        "category": "script"
+      },
+      {
+        "path": "scripts/audit_audio_quality.py",
+        "bytes": 16307,
+        "sha256": "72b5738005eab2fd715af732f50dbea320ddcded3099c237e754121ac4db78c3",
+        "category": "script"
+      },
+      {
+        "path": "scripts/audit_face_voice_diversity.py",
+        "bytes": 14543,
+        "sha256": "d3884f9f21fa473f36eedcc70afeb38d53e278ee5b83d0fcc027891f41a86bed",
+        "category": "script"
+      },
+      {
+        "path": "scripts/audit_synthesis_matrix.py",
+        "bytes": 16605,
+        "sha256": "818edcdbf8c22a95213c781010820bae5c1ff9caeb3a10b1e8755e9959e3909e",
+        "category": "script"
+      },
+      {
+        "path": "scripts/audit_style_calibration.py",
+        "bytes": 10845,
+        "sha256": "7667df8026b365a23c11f245b47331948a66814f81dad4984f993a84b5ebf87a",
+        "category": "script"
+      },
+      {
+        "path": "scripts/build_style_calibration.py",
+        "bytes": 5068,
+        "sha256": "bd96ab6212367fee9a0443011266d1db51f7dfd804e3dbcda9926522fd47cb43",
+        "category": "script"
+      },
+      {
+        "path": "scripts/audit_ecapa_reference.py",
+        "bytes": 9670,
+        "sha256": "497340059f7dd68c5fa02f9d948d62003de98f55859b519e9c99997b84299d2c",
+        "category": "script"
+      },
+      {
+        "path": "scripts/audit_condition_response.py",
+        "bytes": 17506,
+        "sha256": "be21babf21903394ba91a5368ca134e73071e181c820509b660074478608343f",
+        "category": "script"
+      },
+      {
+        "path": "scripts/audit_demo_settings.py",
+        "bytes": 18575,
+        "sha256": "fb4a241735a6ba9f87ac352c3bcb797d8270b91dac945e6c60ed9a91bffddbd4",
+        "category": "script"
+      },
+      {
+        "path": "scripts/build_final_manifest.py",
+        "bytes": 16089,
+        "sha256": "79fb324a13c9b1199cd1fae93808829c77dc99b1acb2462937182467108c1926",
+        "category": "script"
+      },
+      {
+        "path": "scripts/execute_cleanup.py",
+        "bytes": 14234,
+        "sha256": "9a14c1af64689ed47e56501cad031fa215de67daecb5770f330a93e3afa32496",
+        "category": "script"
+      },
+      {
+        "path": "voix/models/style_calibration.py",
+        "bytes": 8012,
+        "sha256": "aabcf8ea29abc3e321c5c448bfcbcb4dabebcd553e6f6198e4e3674a658ca3f5",
+        "category": "script"
+      }
+    ],
+    "tests": [
+      {
+        "path": "tests/test_generate_research_demo.py",
+        "bytes": 16617,
+        "sha256": "aa4bc2ca470d8fa551d81c7194014c5a06b844f066539677581463128e82b5ce",
+        "category": "test"
+      },
+      {
+        "path": "tests/test_style_calibration.py",
+        "bytes": 3970,
+        "sha256": "c3439aa512f20929b91a925b07b710ae4254e5da72a5ece0182d0b297d2a3338",
+        "category": "test"
+      }
+    ],
+    "supporting_evidence": [
+      {
+        "path": "results/emotion/FINDINGS.md",
+        "bytes": 17888,
+        "sha256": "ac0fa4bbd3309bc7946e66f56cc0ee83ae80518df618544314850f9b1fd8c2f6",
+        "category": "supporting_evidence"
+      },
+      {
+        "path": "results/accent/a3/scale_selection.json",
+        "bytes": 23979,
+        "sha256": "c422717aee48a729a3cb4eb424770ba1816bce491405ef38c27268902a74f376",
+        "category": "supporting_evidence"
+      }
+    ],
+    "v1_snapshot": [
+      {
+        "path": "results/audit/baseline_audio/snapshot_20261105/audio/accent_australian.wav",
+        "bytes": 319144,
+        "sha256": "57323c4a47f6f68d54198a48d92f84cc9945bde06c00d4eb610ea6bbad61dd4d",
+        "category": "v1_snapshot"
+      },
+      {
+        "path": "results/audit/baseline_audio/snapshot_20261105/audio/accent_canadian.wav",
+        "bytes": 319144,
+        "sha256": "e555719b7dcd4c0aa7b0cabafb80a266caea2f4389c65d99276359528d8ad374",
+        "category": "v1_snapshot"
+      },
+      {
+        "path": "results/audit/baseline_audio/snapshot_20261105/audio/accent_england.wav",
+        "bytes": 320344,
+        "sha256": "a0bdf1abe8e83b23342ecfae6b37f8143021eb7a13c4bdc6466b1aacbb890932",
+        "category": "v1_snapshot"
+      },
+      {
+        "path": "results/audit/baseline_audio/snapshot_20261105/audio/accent_india_south_asia.wav",
+        "bytes": 323944,
+        "sha256": "4df3837d84fe2b91ba8ed651f84a9e19ca6b1b97ff4c39cf2081838a89d38bc0",
+        "category": "v1_snapshot"
+      },
+      {
+        "path": "results/audit/baseline_audio/snapshot_20261105/audio/accent_us.wav",
+        "bytes": 321544,
+        "sha256": "45f9e873688503d5cd8e869aa9a7e30ad20dae2857dd9900a109d61120d74aca",
+        "category": "v1_snapshot"
+      },
+      {
+        "path": "results/audit/baseline_audio/snapshot_20261105/audio/emotion_angry.wav",
+        "bytes": 314344,
+        "sha256": "cb6625d1e362d47742e641bfaeaee1f87ffd5e94dff1959c9c5d4808b1a864ca",
+        "category": "v1_snapshot"
+      },
+      {
+        "path": "results/audit/baseline_audio/snapshot_20261105/audio/emotion_disgust.wav",
+        "bytes": 322744,
+        "sha256": "c4cb6921822bf9dd313d2ab3166d254a23db3d60875133f7267306fdf398f2e9",
+        "category": "v1_snapshot"
+      },
+      {
+        "path": "results/audit/baseline_audio/snapshot_20261105/audio/emotion_fear.wav",
+        "bytes": 320344,
+        "sha256": "ea5fb2509a92fe331ee02d9ff6754f70a25239e007719630297e47e62c24c54a",
+        "category": "v1_snapshot"
+      },
+      {
+        "path": "results/audit/baseline_audio/snapshot_20261105/audio/emotion_happy.wav",
+        "bytes": 316744,
+        "sha256": "0194109e52edb83fd236952486785d6cffd980598cbdf0070130b9a91d8d7051",
+        "category": "v1_snapshot"
+      },
+      {
+        "path": "results/audit/baseline_audio/snapshot_20261105/audio/emotion_sad.wav",
+        "bytes": 322744,
+        "sha256": "046f4e7bad8bf2b5be842cd032ce7db069858e9b60f5f7f337046c36a121bb6b",
+        "category": "v1_snapshot"
+      },
+      {
+        "path": "results/audit/baseline_audio/snapshot_20261105/audio/naturalness_lora.wav",
+        "bytes": 322744,
+        "sha256": "335406526be5d5288b2647d1867d7324258b76ec382fe8cfbcb1e15448953044",
+        "category": "v1_snapshot"
+      },
+      {
+        "path": "results/audit/baseline_audio/snapshot_20261105/audio/neutral.wav",
+        "bytes": 320344,
+        "sha256": "778220314c2f6400e81a74a823d7c4a14dac2fbffc3c29bd386f2bc8a7ea2675",
+        "category": "v1_snapshot"
+      },
+      {
+        "path": "results/audit/baseline_audio/snapshot_20261105/README.md",
+        "bytes": 4975,
+        "sha256": "c93e66e87d01752f5816f88009dd99c42ee9c6dd66da529aa6ddd4060fa7d1a4",
+        "category": "v1_snapshot"
+      },
+      {
+        "path": "results/audit/baseline_audio/snapshot_20261105/report.json",
+        "bytes": 19693,
+        "sha256": "aaf5ce7bfc4663a111ca318a972a22b6553657d465a660a4e3f116c9d1a23978",
+        "category": "v1_snapshot"
+      }
+    ],
+    "canonical_checkpoints": [
+      {
+        "path": "results/checkpoints/cfvn_v2_best.pt",
+        "bytes": 2971901,
+        "sha256": "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b",
+        "category": "canonical_checkpoint",
+        "note": "cfvn"
+      },
+      {
+        "path": "checkpoints/cvae_cfvn_face192_latent128_diversity.pt",
+        "bytes": 5766056,
+        "sha256": "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b",
+        "category": "canonical_checkpoint",
+        "note": "cvae"
+      },
+      {
+        "path": "checkpoints/style_adapter_cfvn_best.pt",
+        "bytes": 735522,
+        "sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+        "category": "canonical_checkpoint",
+        "note": "style_adapter"
+      }
+    ]
+  },
+  "known_gaps": [
+    "No human MOS, CMOS, emotion-identification, accent-identification, or voice-triad study exists.",
+    "The demo noise floor is reduced but remains about 12.7 dB above the human AMI median.",
+    "Timothee-Jackie is at the 97.8th percentile of real same-gender between-speaker pairs; the pass uses the observed real maximum.",
+    "Accent labels are applied timbre conditions, not perceptually validated accents.",
+    "Sad is duration-only on the calibrated face styles.",
+    "The config files do not describe the actual run (diffusion_steps null, tts_device cpu).",
+    "The report does not embed the git commit, dirty-tree flag, or exact command line.",
+    "The approved 2026-11-05 cleanup was executed; v1 remains alongside v2. Per-file records are in results/audit/cleanup/."
+  ],
+  "notes": [
+    "Every entry was re-hashed from disk when this manifest was built.",
+    "The manifest does not include itself, so it is not a fixed point.",
+    "The before/after audio files are copies; the original v1 snapshot and source audit audio remain unchanged.",
+    "No canonical checkpoint was modified and no experimental adapter was wired into serving."
+  ]
+}

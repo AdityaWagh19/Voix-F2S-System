@@ -63,6 +63,10 @@ python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-v --tb=short"
+markers = [
+    "neural: requires the real StyleTTS2 neural backend (set VOIX_RUN_NEURAL_TESTS=1)",
+    "watermark: requires the real AudioSeal watermark model",
+]
 
 [tool.black]
 line-length = 99

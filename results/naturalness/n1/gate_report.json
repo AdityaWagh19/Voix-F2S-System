@@ -1,0 +1,313 @@
+{
+  "schema_version": "voix.n1_gate.v1",
+  "track": "naturalness",
+  "level": "exploratory",
+  "source_eval": "results\\naturalness\\n1\\eval_pilot_merged.json",
+  "n_clips": 104,
+  "n_paired_clips": 104,
+  "direct_metrics": {
+    "wer": {
+      "status": "computed",
+      "n_pairs": 104,
+      "n_speakers": 4,
+      "n_clusters": 4,
+      "mean_delta": 0.0077818282145205205,
+      "ci_low": -0.0008394383394383425,
+      "ci_high": 0.02643009768009768,
+      "ci_confidence": 0.95,
+      "ci_n_resamples": 10000,
+      "ci_seed": 0,
+      "by_speaker": {
+        "MEE009": {
+          "n_pairs": 52,
+          "mean_delta": 0.001994399830938294
+        },
+        "MEE010": {
+          "n_pairs": 12,
+          "mean_delta": 0.01636904761904762
+        },
+        "MEE011": {
+          "n_pairs": 18,
+          "mean_delta": 0.03313746438746438
+        },
+        "MEE012": {
+          "n_pairs": 22,
+          "mean_delta": -0.0039682539682539715
+        }
+      }
+    },
+    "speaker_similarity_target": {
+      "status": "computed",
+      "n_pairs": 104,
+      "n_speakers": 4,
+      "n_clusters": 4,
+      "mean_delta": 0.018141346153846154,
+      "ci_low": 0.00469880952380952,
+      "ci_high": 0.03521666666666668,
+      "ci_confidence": 0.95,
+      "ci_n_resamples": 10000,
+      "ci_seed": 0,
+      "by_speaker": {
+        "MEE009": {
+          "n_pairs": 52,
+          "mean_delta": 0.01740384615384615
+        },
+        "MEE010": {
+          "n_pairs": 12,
+          "mean_delta": 0.03645
+        },
+        "MEE011": {
+          "n_pairs": 18,
+          "mean_delta": 0.03439444444444446
+        },
+        "MEE012": {
+          "n_pairs": 22,
+          "mean_delta": -0.0034000000000000067
+        }
+      }
+    },
+    "speaker_similarity_ref": {
+      "status": "computed",
+      "n_pairs": 104,
+      "n_speakers": 4,
+      "n_clusters": 4,
+      "mean_delta": 0.027407692307692303,
+      "ci_low": 0.01221271186440678,
+      "ci_high": 0.052263333333333335,
+      "ci_confidence": 0.95,
+      "ci_n_resamples": 10000,
+      "ci_seed": 0,
+      "by_speaker": {
+        "MEE009": {
+          "n_pairs": 52,
+          "mean_delta": 0.023138461538461535
+        },
+        "MEE010": {
+          "n_pairs": 12,
+          "mean_delta": 0.03839166666666666
+        },
+        "MEE011": {
+          "n_pairs": 18,
+          "mean_delta": 0.06151111111111112
+        },
+        "MEE012": {
+          "n_pairs": 22,
+          "mean_delta": 0.0036045454545454575
+        }
+      }
+    }
+  },
+  "naturalness_metrics": {
+    "f0_median_hz": {
+      "status": "computed",
+      "n_pairs": 103,
+      "n_speakers": 4,
+      "n_clusters": 4,
+      "mean_delta": -0.9267639531914642,
+      "ci_low": -2.700882140669924,
+      "ci_high": -0.0765459572050054,
+      "ci_confidence": 0.95,
+      "ci_n_resamples": 10000,
+      "ci_seed": 0,
+      "mean_signed_delta": 1.0412738168241722,
+      "closer_to_ami": true,
+      "by_speaker": {
+        "MEE009": {
+          "n_pairs": 52,
+          "mean_delta": -0.5853585456593245
+        },
+        "MEE010": {
+          "n_pairs": 12,
+          "mean_delta": 0.6096160787947511
+        },
+        "MEE011": {
+          "n_pairs": 17,
+          "mean_delta": -3.671498838792103
+        },
+        "MEE012": {
+          "n_pairs": 22,
+          "mean_delta": -0.45081615865941804
+        }
+      }
+    },
+    "f0_range_st": {
+      "status": "computed",
+      "n_pairs": 103,
+      "n_speakers": 4,
+      "n_clusters": 4,
+      "mean_delta": 0.24101941747572722,
+      "ci_low": -0.492191011235956,
+      "ci_high": 1.5281034482758613,
+      "ci_confidence": 0.95,
+      "ci_n_resamples": 10000,
+      "ci_seed": 0,
+      "mean_signed_delta": -0.2895631067961163,
+      "closer_to_ami": false,
+      "by_speaker": {
+        "MEE009": {
+          "n_pairs": 52,
+          "mean_delta": -0.655000000000001
+        },
+        "MEE010": {
+          "n_pairs": 12,
+          "mean_delta": 1.298333333333332
+        },
+        "MEE011": {
+          "n_pairs": 17,
+          "mean_delta": 1.690294117647058
+        },
+        "MEE012": {
+          "n_pairs": 22,
+          "mean_delta": 0.6622727272727263
+        }
+      }
+    },
+    "words_per_second": {
+      "status": "computed",
+      "n_pairs": 104,
+      "n_speakers": 4,
+      "n_clusters": 4,
+      "mean_delta": 0.035526296428241566,
+      "ci_low": 0.0039302581459946095,
+      "ci_high": 0.05472718685706155,
+      "ci_confidence": 0.95,
+      "ci_n_resamples": 10000,
+      "ci_seed": 0,
+      "mean_signed_delta": -0.04810477605499102,
+      "closer_to_ami": false,
+      "by_speaker": {
+        "MEE009": {
+          "n_pairs": 52,
+          "mean_delta": 0.043003251391699845
+        },
+        "MEE010": {
+          "n_pairs": 12,
+          "mean_delta": 0.0634936977349128
+        },
+        "MEE011": {
+          "n_pairs": 18,
+          "mean_delta": 0.048882846271827374
+        },
+        "MEE012": {
+          "n_pairs": 22,
+          "mean_delta": -0.008329538615596144
+        }
+      }
+    },
+    "energy_std_db": {
+      "status": "computed",
+      "n_pairs": 104,
+      "n_speakers": 4,
+      "n_clusters": 4,
+      "mean_delta": 0.004032350503481352,
+      "ci_low": -0.050806972113522614,
+      "ci_high": 0.05384671688079834,
+      "ci_confidence": 0.95,
+      "ci_n_resamples": 10000,
+      "ci_seed": 0,
+      "mean_signed_delta": -0.1257591201708867,
+      "closer_to_ami": false,
+      "by_speaker": {
+        "MEE009": {
+          "n_pairs": 52,
+          "mean_delta": -0.0070432607944195084
+        },
+        "MEE010": {
+          "n_pairs": 12,
+          "mean_delta": -0.11402122179667155
+        },
+        "MEE011": {
+          "n_pairs": 18,
+          "mean_delta": 0.0899004406399197
+        },
+        "MEE012": {
+          "n_pairs": 22,
+          "mean_delta": 0.024348215623335404
+        }
+      }
+    },
+    "pause_ratio": {
+      "status": "computed",
+      "n_pairs": 104,
+      "n_speakers": 4,
+      "n_clusters": 4,
+      "mean_delta": -0.0032833316987445904,
+      "ci_low": -0.013252472517865987,
+      "ci_high": 0.002664893419090877,
+      "ci_confidence": 0.95,
+      "ci_n_resamples": 10000,
+      "ci_seed": 0,
+      "mean_signed_delta": 0.006262806151341355,
+      "closer_to_ami": false,
+      "by_speaker": {
+        "MEE009": {
+          "n_pairs": 52,
+          "mean_delta": -0.0017393786666654325
+        },
+        "MEE010": {
+          "n_pairs": 12,
+          "mean_delta": 0.006076561737594208
+        },
+        "MEE011": {
+          "n_pairs": 18,
+          "mean_delta": -0.0189791767917736
+        },
+        "MEE012": {
+          "n_pairs": 22,
+          "mean_delta": 0.0008039834271799687
+        }
+      }
+    },
+    "spectral_tilt_db_per_khz": {
+      "status": "computed",
+      "n_pairs": 104,
+      "n_speakers": 4,
+      "n_clusters": 4,
+      "mean_delta": 0.072312402790208,
+      "ci_low": -0.03784687517038657,
+      "ci_high": 0.22110069933261317,
+      "ci_confidence": 0.95,
+      "ci_n_resamples": 10000,
+      "ci_seed": 0,
+      "mean_signed_delta": -0.49345849807392067,
+      "closer_to_ami": false,
+      "by_speaker": {
+        "MEE009": {
+          "n_pairs": 52,
+          "mean_delta": 0.06854171154533967
+        },
+        "MEE010": {
+          "n_pairs": 12,
+          "mean_delta": 0.13247938620150887
+        },
+        "MEE011": {
+          "n_pairs": 18,
+          "mean_delta": 0.28018157475334937
+        },
+        "MEE012": {
+          "n_pairs": 22,
+          "mean_delta": -0.12166818591611027
+        }
+      }
+    }
+  },
+  "gate": {
+    "wer_within_base_plus_0.05": true,
+    "target_ecapa_within_base_minus_0.05": true,
+    "reference_ecapa_within_base_minus_0.05": true,
+    "improved_prosody_metrics": [
+      "f0_median_hz"
+    ],
+    "at_least_one_prosody_ci_below_zero": true,
+    "minimum_paired_clips": 104,
+    "paired_clip_coverage_sufficient": true,
+    "passed": true
+  },
+  "notes": [
+    "Naturalness metrics compare generated audio with the real AMI target clip.",
+    "Absolute error is |generated - target|; a negative delta means LoRA is closer to AMI.",
+    "The gate requires the full paired-clip coverage, not just a subset with a favorable CI.",
+    "The gate is a proxy result, not MOS/CMOS.",
+    "The trainer adapts model.diffusion.unet only, not model.predictor."
+  ]
+}

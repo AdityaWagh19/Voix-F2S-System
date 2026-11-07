@@ -1,0 +1,198 @@
+{
+  "schema_version": "voix.candidate_identity.v1",
+  "generated_at": "2026-10-28 08:00:02 UTC",
+  "manifest": "demo/synthesis_manifest.json",
+  "face": "D:\\voix\\demo\\subject_face.png",
+  "primary_audio": "D:\\voix\\demo\\01_candidates\\candidate_1_primary.wav",
+  "device": "cuda",
+  "candidates": [
+    {
+      "audio": "D:\\voix\\demo\\01_candidates\\candidate_1_primary.wav",
+      "group": "01_Candidates",
+      "condition": "Candidate 1 (Primary / Most Likely)",
+      "face_voice_cosine": 0.0953,
+      "speaker_similarity_to_primary": 1.0
+    },
+    {
+      "audio": "D:\\voix\\demo\\01_candidates\\candidate_2_alternative.wav",
+      "group": "01_Candidates",
+      "condition": "Candidate 2 (Alternative Timbre)",
+      "face_voice_cosine": 0.1017,
+      "speaker_similarity_to_primary": 0.7612
+    },
+    {
+      "audio": "D:\\voix\\demo\\01_candidates\\candidate_3_contrasting.wav",
+      "group": "01_Candidates",
+      "condition": "Candidate 3 (Contrasting Cadence)",
+      "face_voice_cosine": 0.1087,
+      "speaker_similarity_to_primary": 0.5408
+    }
+  ],
+  "candidate_pairwise_similarity": {
+    "status": "computed",
+    "n": 3,
+    "total": 3,
+    "mean": 0.7236,
+    "min": 0.5408,
+    "max": 0.8688,
+    "n_pairs": 3,
+    "matrix": [
+      [
+        1.0,
+        0.7612,
+        0.5408
+      ],
+      [
+        0.7612,
+        1.0,
+        0.8688
+      ],
+      [
+        0.5408,
+        0.8688,
+        1.0
+      ]
+    ],
+    "pairs": [
+      {
+        "a": "candidate_1_primary.wav",
+        "b": "candidate_2_alternative.wav",
+        "similarity": 0.7612
+      },
+      {
+        "a": "candidate_1_primary.wav",
+        "b": "candidate_3_contrasting.wav",
+        "similarity": 0.5408
+      },
+      {
+        "a": "candidate_2_alternative.wav",
+        "b": "candidate_3_contrasting.wav",
+        "similarity": 0.8688
+      }
+    ]
+  },
+  "candidate_face_voice": {
+    "status": "computed",
+    "n": 3,
+    "total": 3,
+    "mean": 0.1019,
+    "min": 0.0953,
+    "max": 0.1087
+  },
+  "candidate_to_primary": {
+    "status": "computed",
+    "n": 2,
+    "total": 2,
+    "mean": 0.651,
+    "min": 0.5408,
+    "max": 0.7612
+  },
+  "expressions": [
+    {
+      "audio": "D:\\voix\\demo\\02_accents\\accent_01_general_american.wav",
+      "group": "02_Accents",
+      "condition": "General American",
+      "face_voice_cosine": 0.1077,
+      "speaker_similarity_to_primary": 0.9536
+    },
+    {
+      "audio": "D:\\voix\\demo\\02_accents\\accent_02_british_rp.wav",
+      "group": "02_Accents",
+      "condition": "British Received Pronunciation",
+      "face_voice_cosine": 0.0804,
+      "speaker_similarity_to_primary": 0.5835
+    },
+    {
+      "audio": "D:\\voix\\demo\\02_accents\\accent_03_australian.wav",
+      "group": "02_Accents",
+      "condition": "Australian English",
+      "face_voice_cosine": 0.0803,
+      "speaker_similarity_to_primary": 0.6371
+    },
+    {
+      "audio": "D:\\voix\\demo\\02_accents\\accent_04_indian_english.wav",
+      "group": "02_Accents",
+      "condition": "Indian English",
+      "face_voice_cosine": 0.07,
+      "speaker_similarity_to_primary": 0.544
+    },
+    {
+      "audio": "D:\\voix\\demo\\02_accents\\accent_05_irish.wav",
+      "group": "02_Accents",
+      "condition": "Irish English",
+      "face_voice_cosine": 0.042,
+      "speaker_similarity_to_primary": 0.6164
+    },
+    {
+      "audio": "D:\\voix\\demo\\02_accents\\accent_06_scottish.wav",
+      "group": "02_Accents",
+      "condition": "Scottish English",
+      "face_voice_cosine": 0.121,
+      "speaker_similarity_to_primary": 0.7791
+    },
+    {
+      "audio": "D:\\voix\\demo\\03_emotions\\emotion_01_neutral.wav",
+      "group": "03_Emotions",
+      "condition": "Neutral / Conversational",
+      "face_voice_cosine": 0.1056,
+      "speaker_similarity_to_primary": 0.9737
+    },
+    {
+      "audio": "D:\\voix\\demo\\03_emotions\\emotion_02_happy.wav",
+      "group": "03_Emotions",
+      "condition": "Happy / Cheerful",
+      "face_voice_cosine": 0.0521,
+      "speaker_similarity_to_primary": 0.3286
+    },
+    {
+      "audio": "D:\\voix\\demo\\03_emotions\\emotion_03_sad.wav",
+      "group": "03_Emotions",
+      "condition": "Sad / Somber",
+      "face_voice_cosine": 0.1328,
+      "speaker_similarity_to_primary": 0.2577
+    },
+    {
+      "audio": "D:\\voix\\demo\\03_emotions\\emotion_04_angry.wav",
+      "group": "03_Emotions",
+      "condition": "Angry / Assertive",
+      "face_voice_cosine": 0.0551,
+      "speaker_similarity_to_primary": 0.3727
+    },
+    {
+      "audio": "D:\\voix\\demo\\03_emotions\\emotion_05_whispered.wav",
+      "group": "03_Emotions",
+      "condition": "Whispered / Soft",
+      "face_voice_cosine": 0.0969,
+      "speaker_similarity_to_primary": 0.6496
+    },
+    {
+      "audio": "D:\\voix\\demo\\03_emotions\\emotion_06_surprised.wav",
+      "group": "03_Emotions",
+      "condition": "Surprised / Inquisitive",
+      "face_voice_cosine": 0.0843,
+      "speaker_similarity_to_primary": 0.2618
+    }
+  ],
+  "expression_face_voice": {
+    "status": "computed",
+    "n": 12,
+    "total": 12,
+    "mean": 0.0857,
+    "min": 0.042,
+    "max": 0.1328
+  },
+  "expression_identity_preservation": {
+    "status": "computed",
+    "n": 12,
+    "total": 12,
+    "mean": 0.5798,
+    "min": 0.2577,
+    "max": 0.9737
+  },
+  "notes": [
+    "Candidates are intended to be distinct plausible identities; lower pairwise similarity is more diverse, not worse.",
+    "Expression variants are intended to preserve the primary identity; higher similarity to the primary is better.",
+    "Face-to-voice cosine is a CFVN retrieval score, not a probability and not a MOS.",
+    "Unavailable metrics are reported as unavailable, never as zero."
+  ]
+}

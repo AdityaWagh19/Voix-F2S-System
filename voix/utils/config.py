@@ -105,9 +105,11 @@ def load_config(config_path: str | Path | None = None, force_reload: bool = Fals
 
     # Inference overrides
     _apply_nested_env_override(config, "VOIX_BETA", ["inference", "beta"], cast=float)
-    _apply_nested_env_override(config, "VOIX_BLEND_WEIGHT", ["inference", "blend_weight"], cast=float)
     _apply_nested_env_override(config, "VOIX_DIFFUSION_STEPS", ["inference", "diffusion_steps"], cast=int)
     _apply_nested_env_override(config, "VOIX_NUM_VOICES", ["inference", "num_voices"], cast=int)
+
+    # Resolve project-relative filesystem entries once, at the config boundary.
+    _resolve_config_paths(config)
 
     # Training overrides
     _apply_nested_env_override(config, "VOIX_BETA_MAX", ["training", "cvae", "beta_max"], cast=float)
@@ -146,48 +148,53 @@ def get_cfg(key_path: str, config: dict[str, Any] | None = None) -> Any:
     return node
 
 
-def get_anchor_path(anchor_key: str, config: dict[str, Any] | None = None) -> str:
-    """Resolve a named anchor to its full absolute path."""
-    cfg = config if config is not None else load_config()
-    anchors = cfg.get("anchors", {})
-    librispeech_root = cfg.get("paths", {}).get("librispeech_root", "")
+# Filesystem keys in the ``paths`` block.  Everything else there is a model
+# identifier (e.g. "buffalo_l") that must not be turned into an absolute path.
+_PATH_FIELDS: tuple[str, ...] = (
+    "project_root",
+    "data_root",
+    "checkpoints",
+    "artifacts",
+    "features_h5",
+    "training_index_csv",
+    "feature_scaler",
+    "style_pairs",
+    "cvae_checkpoint",
+    "adapter_checkpoint",
+    "cfvn_checkpoint",
+    "mediapipe_model",
+    "arcface_cache",
+    "ecapa_savedir",
+    "librispeech_root",
+)
 
-    if anchor_key not in anchors:
-        raise KeyError(
-            f"Anchor '{anchor_key}' not in config. "
-            f"Valid keys: {[k for k in anchors if not k.endswith('threshold')]}"
-        )
-
-    relative = anchors[anchor_key]
-    full_path = os.path.join(librispeech_root, relative)
-
-    if not os.path.exists(full_path):
-        raise FileNotFoundError(f"Anchor file not found: {full_path}")
-
-    return full_path
+_TOP_LEVEL_PATH_FIELDS: tuple[str, ...] = ("checkpoint_dir", "cache_dir")
 
 
-def select_anchor_key(gender: int, age: float, config: dict[str, Any] | None = None) -> str:
-    """Select the appropriate anchor key based on detected gender and age."""
-    cfg = config if config is not None else load_config()
-    anchors = cfg.get("anchors", {})
+def _resolve_one_path(value: Any) -> Any:
+    """Resolve one filesystem entry against the repository root."""
+    if not isinstance(value, str) or not value:
+        return value
+    path = Path(value).expanduser()
+    if not path.is_absolute():
+        path = _PROJECT_ROOT / path
+    return str(path.resolve())
 
-    male_young_thresh = anchors.get("male_young_age_threshold", 35)
-    male_senior_thresh = anchors.get("male_senior_age_threshold", 60)
-    female_mid_thresh = anchors.get("female_mid_age_threshold", 40)
 
-    if gender == 1:  # Male
-        if age < male_young_thresh:
-            return "male_young"
-        elif age < male_senior_thresh:
-            return "male_mid"
-        else:
-            return "male_senior"
-    else:           # Female
-        if age < female_mid_thresh:
-            return "female_young"
-        else:
-            return "female_mid"
+def _resolve_config_paths(config: dict[str, Any]) -> None:
+    """Make every filesystem config entry absolute and checkout-relative.
+
+    The previous YAML hardcoded ``D:/voix``.  Resolving at load time keeps the
+    config portable while callers continue to receive absolute paths.
+    """
+    for key in _TOP_LEVEL_PATH_FIELDS:
+        if key in config:
+            config[key] = _resolve_one_path(config[key])
+    paths = config.get("paths")
+    if isinstance(paths, dict):
+        for key in _PATH_FIELDS:
+            if key in paths:
+                paths[key] = _resolve_one_path(paths[key])
 
 
 def _apply_env_override(

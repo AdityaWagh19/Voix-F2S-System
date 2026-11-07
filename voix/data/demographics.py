@@ -13,6 +13,16 @@ from typing import Optional, Union
 import numpy as np
 
 
+def aspect_ratio_from_bbox(bbox: np.ndarray | list[float] | tuple[float, ...]) -> float:
+    """Return face height/width from an InsightFace bbox ``[x1, y1, x2, y2]``."""
+    values = np.asarray(bbox, dtype=np.float64).reshape(-1)
+    if values.size < 4:
+        raise ValueError(f"bbox must have four coordinates, got {values.size}")
+    width = max(1.0, float(values[2] - values[0]))
+    height = max(1.0, float(values[3] - values[1]))
+    return height / width
+
+
 class SoftDemographicEstimator:
     """Soft demographic prior estimator predicting 16-D probability vectors.
 
@@ -91,14 +101,23 @@ class SoftDemographicEstimator:
         arcface_embedding: np.ndarray,
         gender: Optional[int | float] = None,
         age: Optional[float] = None,
+        aspect_ratio: float = 1.35,
     ) -> np.ndarray:
         """Estimate 16-D soft demographic distribution.
 
         If real gender/age attributes are available, uses them directly.
         Otherwise estimates from the 512-D ArcFace embedding representation.
+
+        ``aspect_ratio`` must be the detected face height/width ratio when it
+        is available.  The corpus extractor uses the speaking face's bbox;
+        inference uses the same helper so the build-proxy dimensions match.
         """
         if gender is not None and age is not None:
-            return self.estimate_from_attributes(gender=gender, age=age)
+            return self.estimate_from_attributes(
+                gender=gender,
+                age=age,
+                aspect_ratio=aspect_ratio,
+            )
 
         # Estimate from embedding projections (derived from VoxCeleb2 demographic distribution)
         # ArcFace dimension 0 and 1 have highest empirical correlation with gender/age
@@ -110,6 +129,7 @@ class SoftDemographicEstimator:
         return self.estimate_from_attributes(
             gender=1 if p_male >= 0.5 else 0,
             age=est_age,
+            aspect_ratio=aspect_ratio,
         )
 
 
@@ -184,8 +204,10 @@ class ViTAgeEstimator:
         crop_rgb = cv2.cvtColor(crop, cv2.COLOR_BGR2RGB)
         crop_pil = Image.fromarray(crop_rgb).resize((224, 224), Image.Resampling.BILINEAR)
 
-        # Standard ViT normalization: (x - 0.5) / 0.5
-        arr = (np.array(crop_pil, dtype=np.float32) / 255.0 - 0.5) / 0.5
+        # ViT ImageNet per-channel normalization
+        mean = np.array([0.485, 0.456, 0.406], dtype=np.float32)
+        std = np.array([0.229, 0.224, 0.225], dtype=np.float32)
+        arr = (np.array(crop_pil, dtype=np.float32) / 255.0 - mean) / std
         tensor = torch.from_numpy(arr).permute(2, 0, 1).unsqueeze(0).to(self.device)
 
         with torch.no_grad():

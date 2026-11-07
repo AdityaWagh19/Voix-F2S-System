@@ -1,0 +1,38 @@
+{
+  "schema_version": "voix.accent_style_subset.v1",
+  "source_manifest": "D:\\voix\\data\\processed\\globe_accent_manifest.csv",
+  "output": "D:\\voix\\data\\processed\\globe_accent_style_subset.csv",
+  "selection": "first 3 clips (sorted by clip_id) for every train speaker with at least two selected clips",
+  "split": "train",
+  "classes": [
+    "us",
+    "england",
+    "australian",
+    "canadian",
+    "india_south_asia"
+  ],
+  "rows": 1765,
+  "by_class": {
+    "australian": {
+      "clips": 280,
+      "speakers": 94
+    },
+    "canadian": {
+      "clips": 260,
+      "speakers": 87
+    },
+    "england": {
+      "clips": 400,
+      "speakers": 137
+    },
+    "india_south_asia": {
+      "clips": 346,
+      "speakers": 121
+    },
+    "us": {
+      "clips": 479,
+      "speakers": 168
+    }
+  },
+  "note": "Speaker-balanced compute subset; it is not a new data split and does not use val or test speakers.  At least two clips per speaker are required so the speaker-centered residual is non-zero."
+}

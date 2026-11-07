@@ -1,0 +1,346 @@
+{
+  "status": "computed",
+  "summary": {
+    "status": "computed",
+    "n": 8,
+    "conditions": {
+      "base": {
+        "n": 4,
+        "metrics": {
+          "wer": {
+            "mean": 0.255245,
+            "std": 0.247463,
+            "n": 4
+          },
+          "speaker_similarity_target": {
+            "mean": 0.3668,
+            "std": 0.050884,
+            "n": 4
+          },
+          "speaker_similarity_ref": {
+            "mean": 0.379275,
+            "std": 0.055737,
+            "n": 4
+          },
+          "f0_mean_hz": {
+            "mean": 99.51,
+            "std": 2.834175,
+            "n": 4
+          },
+          "f0_std_hz": {
+            "mean": 24.51,
+            "std": 10.364878,
+            "n": 4
+          },
+          "f0_range_hz": {
+            "mean": 111.0225,
+            "std": 22.435632,
+            "n": 4
+          },
+          "f0_voiced_ratio": {
+            "mean": 0.57925,
+            "std": 0.119571,
+            "n": 4
+          },
+          "duration_seconds": {
+            "mean": 8.6855,
+            "std": 3.391649,
+            "n": 4
+          },
+          "energy_mean": {
+            "mean": 0.036397,
+            "std": 0.004679,
+            "n": 4
+          },
+          "energy_std": {
+            "mean": 0.051728,
+            "std": 0.003911,
+            "n": 4
+          }
+        }
+      },
+      "lora": {
+        "n": 4,
+        "metrics": {
+          "wer": {
+            "mean": 0.255245,
+            "std": 0.247463,
+            "n": 4
+          },
+          "speaker_similarity_target": {
+            "mean": 0.373525,
+            "std": 0.053666,
+            "n": 4
+          },
+          "speaker_similarity_ref": {
+            "mean": 0.3883,
+            "std": 0.04896,
+            "n": 4
+          },
+          "f0_mean_hz": {
+            "mean": 100.835,
+            "std": 3.294848,
+            "n": 4
+          },
+          "f0_std_hz": {
+            "mean": 23.835,
+            "std": 11.01401,
+            "n": 4
+          },
+          "f0_range_hz": {
+            "mean": 108.25,
+            "std": 19.996356,
+            "n": 4
+          },
+          "f0_voiced_ratio": {
+            "mean": 0.5645,
+            "std": 0.130997,
+            "n": 4
+          },
+          "duration_seconds": {
+            "mean": 8.698,
+            "std": 3.409408,
+            "n": 4
+          },
+          "energy_mean": {
+            "mean": 0.036185,
+            "std": 0.004855,
+            "n": 4
+          },
+          "energy_std": {
+            "mean": 0.051435,
+            "std": 0.00426,
+            "n": 4
+          }
+        }
+      }
+    },
+    "delta_lora_minus_base": {
+      "wer": 0.0,
+      "speaker_similarity_target": 0.006725,
+      "speaker_similarity_ref": 0.009025,
+      "f0_mean_hz": 1.325,
+      "f0_std_hz": -0.675,
+      "f0_range_hz": -2.7725,
+      "f0_voiced_ratio": -0.01475,
+      "duration_seconds": 0.0125,
+      "energy_mean": -0.000212,
+      "energy_std": -0.000293
+    },
+    "paired_delta_lora_minus_base": {
+      "wer": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n": 4
+      },
+      "speaker_similarity_target": {
+        "mean": 0.006725,
+        "std": 0.007561,
+        "n": 4
+      },
+      "speaker_similarity_ref": {
+        "mean": 0.009025,
+        "std": 0.012154,
+        "n": 4
+      },
+      "f0_mean_hz": {
+        "mean": 1.325,
+        "std": 1.584811,
+        "n": 4
+      },
+      "f0_std_hz": {
+        "mean": -0.675,
+        "std": 1.243795,
+        "n": 4
+      },
+      "f0_range_hz": {
+        "mean": -2.7725,
+        "std": 3.40563,
+        "n": 4
+      },
+      "f0_voiced_ratio": {
+        "mean": -0.01475,
+        "std": 0.015562,
+        "n": 4
+      },
+      "duration_seconds": {
+        "mean": 0.0125,
+        "std": 0.021651,
+        "n": 4
+      },
+      "energy_mean": {
+        "mean": -0.000212,
+        "std": 0.000221,
+        "n": 4
+      },
+      "energy_std": {
+        "mean": -0.000292,
+        "std": 0.000355,
+        "n": 4
+      }
+    },
+    "wer_status": {
+      "base": {
+        "status": "computed",
+        "model": "whisper-base",
+        "n": 4,
+        "wer": 0.25524475524475526,
+        "wer_std": 0.2474625493597272
+      },
+      "lora": {
+        "status": "computed",
+        "model": "whisper-base",
+        "n": 4,
+        "wer": 0.25524475524475526,
+        "wer_std": 0.2474625493597272
+      }
+    },
+    "elapsed_sec": 80.9
+  },
+  "rows": [
+    {
+      "clip_id": "ES2003a_MEE009_0009",
+      "speaker_id": "MEE009",
+      "condition": "base",
+      "text": "And you're going to be the User Interface, is it?",
+      "wav_path": "results\\naturalness\\n1\\eval_smoke\\ES2003a_MEE009_0009__base.wav",
+      "wer": 0.0,
+      "speaker_similarity_target": 0.2945,
+      "speaker_similarity_ref": 0.3698,
+      "duration_seconds": 4.573,
+      "f0_mean_hz": 101.17,
+      "f0_std_hz": 24.68,
+      "f0_range_hz": 98.11,
+      "f0_voiced_ratio": 0.674,
+      "f0_smoothness": 5.498,
+      "energy_mean": 0.03584,
+      "energy_std": 0.05425
+    },
+    {
+      "clip_id": "ES2003a_MEE009_0009",
+      "speaker_id": "MEE009",
+      "condition": "lora",
+      "text": "And you're going to be the User Interface, is it?",
+      "wav_path": "results\\naturalness\\n1\\eval_smoke\\ES2003a_MEE009_0009__lora.wav",
+      "wer": 0.0,
+      "speaker_similarity_target": 0.2919,
+      "speaker_similarity_ref": 0.3806,
+      "duration_seconds": 4.573,
+      "f0_mean_hz": 101.2,
+      "f0_std_hz": 25.18,
+      "f0_range_hz": 98.11,
+      "f0_voiced_ratio": 0.651,
+      "f0_smoothness": 5.516,
+      "energy_mean": 0.03583,
+      "energy_std": 0.05428
+    },
+    {
+      "clip_id": "ES2003a_MEE011_0003",
+      "speaker_id": "MEE011",
+      "condition": "base",
+      "text": "The one f uh in fact this is a somewhat oblique reference in fact to uh well my I have a three uh three y year old daughter who h who who who is affectionately known as Miss Monkey.",
+      "wav_path": "results\\naturalness\\n1\\eval_smoke\\ES2003a_MEE011_0003__base.wav",
+      "wer": 0.3076923076923077,
+      "speaker_similarity_target": 0.4382,
+      "speaker_similarity_ref": 0.4642,
+      "duration_seconds": 13.498,
+      "f0_mean_hz": 96.9,
+      "f0_std_hz": 41.08,
+      "f0_range_hz": 127.75,
+      "f0_voiced_ratio": 0.387,
+      "f0_smoothness": 4.941,
+      "energy_mean": 0.02925,
+      "energy_std": 0.04523
+    },
+    {
+      "clip_id": "ES2003a_MEE011_0003",
+      "speaker_id": "MEE011",
+      "condition": "lora",
+      "text": "The one f uh in fact this is a somewhat oblique reference in fact to uh well my I have a three uh three y year old daughter who h who who who is affectionately known as Miss Monkey.",
+      "wav_path": "results\\naturalness\\n1\\eval_smoke\\ES2003a_MEE011_0003__lora.wav",
+      "wer": 0.3076923076923077,
+      "speaker_similarity_target": 0.4426,
+      "speaker_similarity_ref": 0.468,
+      "duration_seconds": 13.548,
+      "f0_mean_hz": 100.36,
+      "f0_std_hz": 41.22,
+      "f0_range_hz": 125.98,
+      "f0_voiced_ratio": 0.352,
+      "f0_smoothness": 5.106,
+      "energy_mean": 0.0287,
+      "energy_std": 0.04438
+    },
+    {
+      "clip_id": "ES2003a_MEE009_0023",
+      "speaker_id": "MEE009",
+      "condition": "base",
+      "text": "Ebenezer, you wanna have a you wanna draw your favourite animal?",
+      "wav_path": "results\\naturalness\\n1\\eval_smoke\\ES2003a_MEE009_0023__base.wav",
+      "wer": 0.6363636363636364,
+      "speaker_similarity_target": 0.3712,
+      "speaker_similarity_ref": 0.3753,
+      "duration_seconds": 6.648,
+      "f0_mean_hz": 103.31,
+      "f0_std_hz": 18.88,
+      "f0_range_hz": 81.19,
+      "f0_voiced_ratio": 0.571,
+      "f0_smoothness": 2.835,
+      "energy_mean": 0.04205,
+      "energy_std": 0.05525
+    },
+    {
+      "clip_id": "ES2003a_MEE009_0023",
+      "speaker_id": "MEE009",
+      "condition": "lora",
+      "text": "Ebenezer, you wanna have a you wanna draw your favourite animal?",
+      "wav_path": "results\\naturalness\\n1\\eval_smoke\\ES2003a_MEE009_0023__lora.wav",
+      "wer": 0.6363636363636364,
+      "speaker_similarity_target": 0.3779,
+      "speaker_similarity_ref": 0.3694,
+      "duration_seconds": 6.648,
+      "f0_mean_hz": 105.53,
+      "f0_std_hz": 16.17,
+      "f0_range_hz": 80.44,
+      "f0_voiced_ratio": 0.564,
+      "f0_smoothness": 3.004,
+      "energy_mean": 0.04203,
+      "energy_std": 0.05525
+    },
+    {
+      "clip_id": "ES2003a_MEE012_0017",
+      "speaker_id": "MEE012",
+      "condition": "base",
+      "text": "but our remote controls would get worn out really easily, and the remote control was not a great kind of keyboar, um keypad, for playing games.",
+      "wav_path": "results\\naturalness\\n1\\eval_smoke\\ES2003a_MEE012_0017__base.wav",
+      "wer": 0.07692307692307693,
+      "speaker_similarity_target": 0.3633,
+      "speaker_similarity_ref": 0.3078,
+      "duration_seconds": 10.023,
+      "f0_mean_hz": 96.66,
+      "f0_std_hz": 13.4,
+      "f0_range_hz": 137.04,
+      "f0_voiced_ratio": 0.685,
+      "f0_smoothness": 3.175,
+      "energy_mean": 0.03845,
+      "energy_std": 0.05218
+    },
+    {
+      "clip_id": "ES2003a_MEE012_0017",
+      "speaker_id": "MEE012",
+      "condition": "lora",
+      "text": "but our remote controls would get worn out really easily, and the remote control was not a great kind of keyboar, um keypad, for playing games.",
+      "wav_path": "results\\naturalness\\n1\\eval_smoke\\ES2003a_MEE012_0017__lora.wav",
+      "wer": 0.07692307692307693,
+      "speaker_similarity_target": 0.3817,
+      "speaker_similarity_ref": 0.3352,
+      "duration_seconds": 10.023,
+      "f0_mean_hz": 96.25,
+      "f0_std_hz": 12.77,
+      "f0_range_hz": 128.47,
+      "f0_voiced_ratio": 0.691,
+      "f0_smoothness": 3.323,
+      "energy_mean": 0.03818,
+      "energy_std": 0.05183
+    }
+  ]
+}

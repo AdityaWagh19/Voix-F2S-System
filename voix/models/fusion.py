@@ -30,9 +30,11 @@ from typing import Optional
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
+from voix.utils.paths import project_path
 from voix.utils.seed import set_global_seed
 
-DEFAULT_FUSION_CHECKPOINT = Path("D:/voix/checkpoints/face_fusion.pt")
+DEFAULT_FUSION_CHECKPOINT = project_path("checkpoints", "face_fusion.pt")
 
 
 class FaceFusionLayer(nn.Module):
@@ -106,6 +108,16 @@ class FaceFusionLayer(nn.Module):
         Returns:
             Fused face representation of shape (..., out_dim).
         """
+        # Each modality has a very different numerical scale: ArcFace is
+        # already L2-normalized, craniofacial ratios are ~0.5-5.0, and soft
+        # demographics are ~0-1.  Without per-modality normalization the
+        # geometry/demographics dominate the projection and the fused vector
+        # becomes nearly identical for every face.  Normalizing each stream
+        # first keeps ArcFace identity dominant while still exposing the
+        # auxiliary cues to the layer.
+        e_id = F.normalize(e_id, p=2, dim=-1)
+        e_geo = F.normalize(e_geo, p=2, dim=-1)
+        e_demo = F.normalize(e_demo, p=2, dim=-1)
         x = torch.cat([e_id, e_geo, e_demo], dim=-1)
         return self.act(self.norm(self.proj(x)))
 

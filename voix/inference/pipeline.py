@@ -1,22 +1,20 @@
-from __future__ import annotations
-
-from voix.models.speech_simulation import SpeechSimulator
-from voix.models.accent_control import AccentTransformer, list_available_accents
-from voix.models.emotion_control import EmotionModulator, list_available_emotions
-from voix.models.cross_lingual import MultilingualPhoneticAdapter, list_supported_languages
-"""End-to-End Face-to-Voice Inference Pipeline for VOIX (Phase 4 & 7).
+"""End-to-End Face-to-Voice Inference Pipeline for VOIX.
 
 Connects the full generative stack with dynamic cross-platform hardware auto-configuration:
     Face Image / Embedding (560-D)
         -> CVAE / Contrastive Mapper (192-D speaker embeddings, K samples)
         -> StyleAdapter (128-D StyleTTS 2 style space)
+        -> Optional accent/emotion style residuals + phonemizer
         -> StyleTTS 2 Neural Vocoder (24 kHz speech synthesis, CUDA / MPS / CPU adaptive)
         -> AudioSeal Neural Watermarking (provenance embedding)
         -> Auditory Speech Waveforms (Voice 1, Voice 2, ..., Voice K)
 """
 
+from __future__ import annotations
 
+import logging
 import os
+from contextlib import nullcontext
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
@@ -25,13 +23,49 @@ import soundfile as sf
 import torch
 import torch.nn.functional as F
 
+from voix.models.accent_control import (
+    AccentTransformer,
+    list_available_accents,
+    normalize_accent,
+)
+from voix.models.accent_residual import apply_accent_residual
 from voix.models.adapter import StyleAdapter
-from voix.models.craniofacial_style import apply_craniofacial_to_style
 from voix.models.cvae import CVAE
+from voix.models.emotion_control import (
+    EmotionModulator,
+    list_available_emotions,
+    normalize_emotion,
+)
+from voix.models.emotion_residual import (
+    apply_style_residual,
+    load_artifact,
+    residual_from_artifact,
+)
 from voix.models.contrastive_net import ContrastiveFaceVoiceNet
 from voix.models.tts_backend import StyleTTS2Backend
 from voix.models.watermarking import AudioSealWatermarker
-from voix.utils.hardware import HardwareProfile, detect_hardware, free_memory
+from voix.inference.candidate_selection import select_diverse_embeddings
+from voix.data.feature_contract import (
+    FACE_DIM,
+    SCHEMA_VERSION,
+    FaceFeatureBuilder,
+    canonicalize,
+    load_face_scaler,
+)
+from voix.utils.audio import limit_true_peak
+from voix.utils.hardware import HardwareProfile, free_memory
+from voix.utils.paths import project_path
+from voix.utils.provenance import checkpoint_provenance
+
+logger = logging.getLogger("voix.pipeline")
+
+# Serving-side application strengths.  These are the scales at which the
+# residuals were validated, not the larger exploratory demo scales:
+# * E1 emotion class-mean prosody residual: 0.28.
+# * A3 accent class-contrast residual: 0.3 with a 0.25 timbre weight.
+EMOTION_RESIDUAL_SCALE = 0.28
+ACCENT_RESIDUAL_SCALE = 0.3
+ACCENT_TIMBRE_WEIGHT = 0.25
 
 
 class VoixPipeline:
@@ -48,15 +82,35 @@ class VoixPipeline:
 
     def __init__(
         self,
-        cvae_checkpoint: str = "D:/voix/checkpoints/cvae_cfvn_face192_latent128_diversity.pt",
-        adapter_checkpoint: str = "D:/voix/checkpoints/style_adapter_best.pt",
-        scaler_path: str = "D:/voix/data/processed/face_scaler.pt",
+        cvae_checkpoint: str = str(
+            project_path("checkpoints", "cvae_cfvn_face192_latent128_diversity.pt")
+        ),
+        adapter_checkpoint: str = str(
+            project_path("checkpoints", "style_adapter_cfvn_best.pt")
+        ),
+        scaler_path: str = str(
+            project_path("data", "processed", "voxceleb2_v2", "face_scaler_v2.pt")
+        ),
+        cfvn_checkpoint: str = str(
+            project_path("results", "checkpoints", "cfvn_v2_best.pt")
+        ),
         device: Optional[str] = None,
         enable_watermarking: bool = True,
         hardware_profile: Optional[HardwareProfile] = None,
+        tts_use_neural: Optional[bool] = None,
+        tts_allow_fallback: Optional[bool] = None,
+        validate_artifacts: bool = True,
     ) -> None:
-        # 1. Resolve Hardware Auto-Configuration
-        self.hardware = hardware_profile or detect_hardware()
+        # 1. Resolve Hardware Auto-Configuration.  Use the YAML-aware resolver:
+        # calling detect_hardware() with no path silently ignored
+        # configs/hardware.yaml and fell back to conservative defaults (5
+        # diffusion steps instead of the budget-GPU profile's 20).
+        if hardware_profile is not None:
+            self.hardware = hardware_profile
+        else:
+            from voix.utils.config import get_hardware_profile
+
+            self.hardware = get_hardware_profile()
         if device is not None:
             self.device = torch.device(device)
             tts_device = device
@@ -66,124 +120,208 @@ class VoixPipeline:
 
         self.enable_watermarking = enable_watermarking
 
+        # 0. Fail fast when required learned artifacts are missing. Silent
+        # fallbacks to random weights make every downstream metric meaningless.
+        self.cvae_checkpoint = str(cvae_checkpoint)
+        self.adapter_checkpoint = str(adapter_checkpoint)
+        self.scaler_path = str(scaler_path)
+        self.cfvn_checkpoint = str(cfvn_checkpoint)
+        if validate_artifacts:
+            required = {
+                "CVAE checkpoint": self.cvae_checkpoint,
+                "StyleAdapter checkpoint": self.adapter_checkpoint,
+                "face scaler": self.scaler_path,
+                "CFVN checkpoint": self.cfvn_checkpoint,
+            }
+            missing = [f"{name}: {path}" for name, path in required.items() if not os.path.exists(path)]
+            if missing:
+                raise FileNotFoundError(
+                    "[VoixPipeline] Missing required model artifact(s):\n  - "
+                    + "\n  - ".join(missing)
+                    + "\nRetrain or restore these artifacts before starting the pipeline."
+                )
+
         # Initialize visual extractors lazily
         self._arcface = None
         self._facemesh = None
         self._demog = None
         self._fusion = None
+        self._emotion_residual_payload: Optional[Dict[str, Any]] = None
+        self._accent_residual_payload: Optional[Dict[str, Any]] = None
 
-        # 2. Load Scaler (supports both face_scaler.pt and legacy feature_scaler.pt)
-        self.scaler = None
-        alt_scaler = "D:/voix/data/processed/feature_scaler.pt"
-        target_scaler = scaler_path if os.path.exists(scaler_path) else alt_scaler
-        if os.path.exists(target_scaler):
-            self.scaler = torch.load(target_scaler, weights_only=False)
-            if "face_mean" in self.scaler:
-                self.face_mean = self.scaler["face_mean"].to(self.device)
-                self.face_std  = self.scaler["face_std"].to(self.device)
-            elif "mean" in self.scaler:
-                self.face_mean = self.scaler["mean"].to(self.device)
-                self.face_std  = self.scaler["scale"].to(self.device)
+        # 2. Load the canonical FaceFeatureV2 scaler (speaker-disjoint train split)
+        self.scaler = load_face_scaler(self.scaler_path)
+        self.face_mean = self.scaler["face_mean"].to(self.device)
+        self.face_std = self.scaler["face_std"].to(self.device)
+        self._feature_builder: Optional[FaceFeatureBuilder] = None
 
-        # Canonical identity projection from ArcFace (512-D) to ECAPA space (192-D)
-        torch.manual_seed(42)
-        _w = torch.randn(512, 192)
-        _q, _ = torch.linalg.qr(_w)
-        self.id_proj_q = _q.to(self.device)
-        self._last_e_id = None
-
-        # 3. Load CVAE / Mapper (face_dim=192: CFVN-produced ECAPA-space embedding)
-        self.cvae = CVAE(face_dim=192, speaker_dim=192, latent_dim=128).to(self.device)
-        if os.path.exists(cvae_checkpoint):
-            ckpt = torch.load(cvae_checkpoint, weights_only=False, map_location=self.device)
-            state_dict = ckpt["model_state_dict"] if "model_state_dict" in ckpt else ckpt
-            self.cvae.load_state_dict(state_dict, strict=False)
+        # 3. Load CVAE / Mapper.  Architecture comes from the checkpoint
+        # metadata, not from a hardcoded serving assumption, so a retrained
+        # latent size or face dimension cannot be silently misloaded.
+        if not os.path.exists(self.cvae_checkpoint):
+            raise FileNotFoundError(
+                f"[VoixPipeline] CVAE checkpoint not found: {self.cvae_checkpoint}\n"
+                f"Run trainer_cvae_v3_diversity.py to generate it."
+            )
+        try:
+            ckpt = torch.load(self.cvae_checkpoint, weights_only=True, map_location=self.device)
+        except Exception:
+            ckpt = torch.load(self.cvae_checkpoint, weights_only=False, map_location=self.device)
+        state_dict = ckpt["model_state_dict"] if "model_state_dict" in ckpt else ckpt
+        cvae_face_dim = int(ckpt.get("face_dim", 192))
+        cvae_speaker_dim = int(ckpt.get("speaker_dim", 192))
+        cvae_latent_dim = int(ckpt.get("latent_dim", 128))
+        self.cvae = CVAE(
+            face_dim=cvae_face_dim,
+            speaker_dim=cvae_speaker_dim,
+            latent_dim=cvae_latent_dim,
+        ).to(self.device)
+        try:
+            self.cvae.load_state_dict(state_dict, strict=True)
+        except RuntimeError as exc:
+            raise RuntimeError(
+                f"[VoixPipeline] CVAE checkpoint is incompatible with the "
+                f"serving architecture: {self.cvae_checkpoint}\n{exc}"
+            ) from exc
         self.cvae.eval()
 
         # 3b. Load ContrastiveFaceVoiceNet (560-D fused face -> 192-D ECAPA space)
-        self.cfvn = ContrastiveFaceVoiceNet.from_checkpoint(
-            "D:/voix/results/checkpoints/D_joint_infonce_best.pt",
-            device=str(self.device),
-        ).to(self.device)
+        if not os.path.exists(self.cfvn_checkpoint):
+            raise FileNotFoundError(
+                f"[VoixPipeline] CFVN checkpoint not found: {self.cfvn_checkpoint}"
+            )
+        try:
+            self.cfvn = ContrastiveFaceVoiceNet.from_checkpoint(
+                self.cfvn_checkpoint,
+                device=str(self.device),
+            ).to(self.device)
+        except Exception as e:
+            raise RuntimeError(f"[VoixPipeline] Failed to load CFVN from {self.cfvn_checkpoint}: {e}") from e
         self.cfvn.eval()
+        if self.cvae.face_dim != self.cfvn.out_dim:
+            raise RuntimeError(
+                f"[VoixPipeline] CVAE expects {self.cvae.face_dim}-D CFVN "
+                f"embeddings but the CFVN produces {self.cfvn.out_dim}-D; "
+                f"retrain them as a matching pair."
+            )
 
-        # 4. Load StyleAdapter
-        self.adapter = StyleAdapter(in_dim=192, hidden_dim=256, out_dim=256).to(self.device)
-        if os.path.exists(adapter_checkpoint):
-            a_ckpt = torch.load(adapter_checkpoint, weights_only=False, map_location=self.device)
-            a_state = a_ckpt["model_state_dict"] if "model_state_dict" in a_ckpt else a_ckpt
-            self.adapter.load_state_dict(a_state, strict=False)
+        # 4. Load StyleAdapter using the architecture recorded at training time.
+        if not os.path.exists(self.adapter_checkpoint):
+            raise FileNotFoundError(
+                f"[VoixPipeline] StyleAdapter checkpoint not found: {self.adapter_checkpoint}"
+            )
+        try:
+            a_ckpt = torch.load(self.adapter_checkpoint, weights_only=True, map_location=self.device)
+        except Exception:
+            a_ckpt = torch.load(self.adapter_checkpoint, weights_only=False, map_location=self.device)
+        a_state = a_ckpt["model_state_dict"] if "model_state_dict" in a_ckpt else a_ckpt
+        hparams = a_ckpt.get("hparams", {})
+        self.adapter = StyleAdapter(
+            in_dim=int(hparams.get("in_dim", self.cfvn.out_dim)),
+            hidden_dim=int(hparams.get("hidden_dim", 256)),
+            out_dim=int(hparams.get("out_dim", 256)),
+            dropout=float(hparams.get("dropout", 0.0)),
+        ).to(self.device)
+        try:
+            self.adapter.load_state_dict(a_state, strict=True)
+        except RuntimeError as exc:
+            raise RuntimeError(
+                f"[VoixPipeline] StyleAdapter checkpoint is incompatible with "
+                f"the serving architecture: {self.adapter_checkpoint}\n{exc}"
+            ) from exc
         self.adapter.eval()
 
         # 5. Load Synthesis Backend (Adaptive via Hardware Auto-Configuration)
-        self.tts = StyleTTS2Backend(device=tts_device)
+        self.tts = StyleTTS2Backend(
+            device=tts_device,
+            use_neural=tts_use_neural,
+            allow_fallback=tts_allow_fallback,
+        )
 
-        # 6. Load Watermarker
-        self.watermarker = AudioSealWatermarker(sample_rate=24000, device=str(self.device))
+        # 6. Watermarker is lazy: constructing AudioSeal is expensive and must
+        # never happen when watermarking is disabled.
+        self.watermarker = None
+        if self.enable_watermarking:
+            self._ensure_watermarker()
 
-        # 7. Load inference config & pre-load anchors
+        # 7. Load inference config
         from voix.utils.config import load_config
         _cfg = load_config()
         self._inf_cfg = _cfg.get("inference", {})
-        self.tts.load_anchors_from_config(_cfg)
 
-        # 8. Lazy extractors for raw face image input
-        self._arcface = None
-        self._facemesh = None
-        self._demog = None
-        self._fusion = None
+        # 8. Structured provenance: every synthesis result records the exact
+        # representation schema, checkpoint hashes, and runtime backend.
+        self.provenance = checkpoint_provenance(
+            {
+                "face_scaler": self.scaler_path,
+                "cfvn": self.cfvn_checkpoint,
+                "cvae": self.cvae_checkpoint,
+                "style_adapter": self.adapter_checkpoint,
+            },
+            device=str(self.device),
+            backend=self.tts.backend_name,
+            schema_version=SCHEMA_VERSION,
+        )
+        logger.info(
+            "VOIX pipeline ready: schema=%s device=%s backend=%s",
+            SCHEMA_VERSION,
+            self.device,
+            self.tts.backend_name,
+        )
 
-        # Pre-compute mean ECAPA from a diverse set of face images for deviation amplification
-        self.mean_ecapa = None
-        self._compute_mean_ecapa()
+    def _ensure_watermarker(self) -> AudioSealWatermarker:
+        """Lazily construct the AudioSeal watermarker only when requested."""
+        if self.watermarker is None:
+            self.watermarker = AudioSealWatermarker(
+                sample_rate=24000,
+                device=str(self.device),
+            )
+        return self.watermarker
 
-    def _compute_mean_ecapa(self):
-        """Compute mean ECAPA embedding from a diverse set of face images.
-        
-        Used as reference for amplifying face-specific deviations in ECAPA space.
-        This helps differentiate voices for same-gender faces whose ECAPA embeddings
-        are naturally very similar (cosine similarity > 0.99).
-        """
-        # Diverse face images for computing mean ECAPA
-        mean_ecapa_faces = [
-            f"D:/voix/data/test_subjects/{f}"
-            for f in [
-                "C1_01_young_female_Zendaya.jpg",
-                "C1_04_adult_male_George_Clooney.jpg",
-                "C2_08_south_asian_female_Priyanka_Chopra.jpg",
-                "C2_11_black_male_Barack_Obama.jpg",
-                "C2_15_latino_male_Pedro_Pascal.jpg",
-                "C3_17_prominent_jaw_Arnold_Schwarzenegger.jpg",
-                "SD_07_rhotacism_Barbara_Walters.jpg",
-            ]
-        ]
-        # Filter to existing files
-        existing = [p for p in mean_ecapa_faces if os.path.exists(p)]
-        if len(existing) < 2:
-            # Not enough face images, use zero mean (no amplification)
-            self.mean_ecapa = torch.zeros(192, device=self.device)
-            return
-        
-        # Extract ECAPA embeddings from all faces
-        embs = []
-        with torch.no_grad():
-            for f_path in existing:
-                try:
-                    e_f, _, _, _ = self.extract_face_features(f_path)
-                    e_f_voice = self.cfvn(e_f, normalize=True)  # (1, 192)
-                    embs.append(e_f_voice.squeeze(0))
-                except Exception:
-                    pass
-        
-        if len(embs) > 0:
-            self.mean_ecapa = torch.stack(embs).mean(dim=0)  # (192,)
-        else:
-            self.mean_ecapa = torch.zeros(192, device=self.device)
+    def _emotion_residual(self, emotion: str) -> Optional[torch.Tensor]:
+        """Return the validated E1 prosody residual for an emotion, if available."""
+        path = project_path("checkpoints", "emotion_residuals", "class_mean.pt")
+        if not os.path.exists(path):
+            return None
+        if self._emotion_residual_payload is None:
+            self._emotion_residual_payload = load_artifact(path)
+        try:
+            return residual_from_artifact(
+                self._emotion_residual_payload, emotion, variant="prosody_only"
+            )
+        except KeyError:
+            return None
+
+    def _accent_residual(self, accent: str) -> Optional[torch.Tensor]:
+        """Return the A3 class-contrast residual for an accent, if available."""
+        path = project_path("checkpoints", "accent_residuals", "class_mean.pt")
+        if not os.path.exists(path):
+            return None
+        if self._accent_residual_payload is None:
+            payload = torch.load(path, map_location="cpu", weights_only=False)
+            if not isinstance(payload, dict) or not isinstance(
+                payload.get("residuals"), dict
+            ):
+                raise ValueError(f"invalid accent residual artifact: {path}")
+            self._accent_residual_payload = payload
+        raw = self._accent_residual_payload["residuals"].get(accent)
+        if raw is None:
+            return None
+        return torch.as_tensor(raw).float().reshape(-1)
+
+    def _ensure_feature_builder(self) -> FaceFeatureBuilder:
+        """Lazily construct the canonical FaceFeatureV2 builder."""
+        if self._feature_builder is None:
+            self._feature_builder = FaceFeatureBuilder(device=self.device)
+        return self._feature_builder
+
+    def normalize_face(self, raw: torch.Tensor) -> torch.Tensor:
+        """Apply the canonical FaceFeatureV2 z-score normalization."""
+        return canonicalize(raw, self.face_mean, self.face_std)
 
     def extract_face_features(
         self,
         image_input: Union[str, Path, np.ndarray],
-        craniofacial_sliders: Optional[Dict[str, float]] = None,
     ) -> tuple:
         """Extract and fuse facial features (ArcFace 512 + FaceMesh 32 + Demographics 16 -> 560-D) from an image.
 
@@ -198,10 +336,13 @@ class VoixPipeline:
                 e_geo: Craniofacial morphology vector of shape (32,).
         """
         import cv2
-        from voix.data.face_extractor import ArcFaceExtractor, FaceMeshExtractor
+        from voix.data.face_extractor import (
+            ArcFaceExtractor,
+            FaceMeshExtractor,
+            crop_face_bbox,
+        )
         from voix.data.morphology import compute_craniofacial_ratios
         from voix.data.demographics import SoftDemographicEstimator
-        from voix.models.fusion import FaceFusionLayer
 
         if self._arcface is None:
             # Use CPUExecutionProvider for ArcFace on budget GPUs to preserve VRAM for vocoder
@@ -211,17 +352,15 @@ class VoixPipeline:
             )
             self._arcface = ArcFaceExtractor(
                 device_id=0 if use_gpu_arc else -1,
-                cache_dir="D:/voix/checkpoints",
+                cache_dir=str(project_path("checkpoints")),
             )
         if self._facemesh is None:
-            task_path = "D:/voix/checkpoints/mediapipe/face_landmarker.task"
+            task_path = str(project_path("checkpoints", "mediapipe", "face_landmarker.task"))
             self._facemesh = FaceMeshExtractor(
                 model_path=task_path if os.path.exists(task_path) else None,
             )
         if self._demog is None:
             self._demog = SoftDemographicEstimator()
-        if self._fusion is None:
-            self._fusion = FaceFusionLayer().to(self.device)
 
         if isinstance(image_input, (str, Path)):
             img_bgr = cv2.imread(str(image_input))
@@ -233,32 +372,39 @@ class VoixPipeline:
             raise TypeError("image_input must be a file path or numpy array")
 
         # 1. ArcFace 512-D identity and demographic posteriors
-        e_id, gender, age = self._arcface.extract_full(img_bgr)
+        e_id, gender, age, bbox = self._arcface.extract_full_with_bbox(img_bgr)
         if e_id is None:
             raise ValueError(f"No face detected in image: {image_input}")
-        self._last_e_id = e_id
 
-        # 2. FaceMesh 32-D morphology
-        img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+        # 2. FaceMesh 32-D morphology on the same bbox crop as the corpus
+        # extractor. Running the mesh on the full frame can pick a different
+        # person when the image contains more than one face.
+        face_crop = crop_face_bbox(img_bgr, bbox) if bbox is not None else img_bgr
+        img_rgb = cv2.cvtColor(face_crop, cv2.COLOR_BGR2RGB)
         landmarks = self._facemesh.extract(img_rgb)
         if landmarks is not None:
             e_geo = compute_craniofacial_ratios(landmarks)
         else:
             e_geo = np.zeros(32, dtype=np.float32)
 
-        if craniofacial_sliders:
-            from voix.data.morphology import apply_craniofacial_sliders
-            e_geo = apply_craniofacial_sliders(e_geo, craniofacial_sliders)
+        # 3. Soft Demographics 16-D with real age & gender posteriors.
+        # The corpus extractor uses the selected face bbox aspect ratio; use the
+        # same value here so image and HDF5 inputs share one contract.
+        from voix.data.demographics import aspect_ratio_from_bbox
 
-        # 3. Soft Demographics 16-D with real age & gender posteriors
-        e_demo = self._demog.estimate(e_id, gender=gender, age=age)
+        aspect_ratio = (
+            aspect_ratio_from_bbox(bbox) if bbox is not None else 1.35
+        )
+        e_demo = self._demog.estimate(
+            e_id,
+            gender=gender,
+            age=age,
+            aspect_ratio=aspect_ratio,
+        )
 
-        # 4. Fusion 560-D
-        with torch.no_grad():
-            e_id_t = torch.from_numpy(e_id).unsqueeze(0).to(self.device)
-            e_geo_t = torch.from_numpy(e_geo).unsqueeze(0).to(self.device)
-            e_demo_t = torch.from_numpy(e_demo).unsqueeze(0).to(self.device)
-            e_f = self._fusion(e_id_t, e_geo_t, e_demo_t)
+        # 4. Canonical FaceFeatureV2 fusion — identical to the HDF5 corpus path.
+        builder = self._ensure_feature_builder()
+        e_f = builder.fuse(e_id, e_geo, e_demo)
 
         return e_f, int(gender) if gender is not None else 1, float(age) if age is not None else 30.0, e_geo
 
@@ -272,106 +418,106 @@ class VoixPipeline:
         watermark: Optional[bool] = None,
         gender: Optional[int] = None,
         age: Optional[float] = None,
-        craniofacial_sliders: Optional[Dict[str, float]] = None,
-        speech_difference: Optional[str] = None,
-        speech_severity: float = 0.5,
         accent: Optional[str] = None,
-        accent_strength: float = 0.5,
+        accent_strength: float = 1.0,
         emotion: Optional[str] = None,
-        emotion_intensity: float = 0.5,
-        language: str = "en",
+        emotion_intensity: float = 1.0,
         speaker_embedding: Optional[torch.Tensor] = None,
         seed: Optional[int] = None,
+        face_input_is_normalized: bool = False,
+        selection: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         """Generate K diverse candidate voice waveforms for a single face representation.
 
         Args:
-            face_input: 560-D face vector (torch.Tensor, np.ndarray) or path to face image.
+            face_input: 560-D *raw fused* face vector (torch.Tensor, np.ndarray),
+                a face image path, or a demographic preset ID.
+            face_input_is_normalized: Set True only when the tensor/array has
+                already been normalized with the canonical FaceFeatureV2 scaler.
             text: Text prompt to synthesize.
             num_voices: Number of diverse voice candidates to generate (K).
             temperature: Sampling diversity temperature.
             watermark: Explicit flag to enable/disable AudioSeal watermarking.
+            accent: One of ``us``, ``england``, ``indian_english``,
+                ``australian`` (legacy aliases are accepted).
+            accent_strength: Accent intensity in [0, 1].  Applied to the
+                conservative G2P rule set and the A3 style residual.
+            emotion: ``neutral``, ``happy``, ``sad``, or ``angry``.
+            emotion_intensity: Emotion intensity in [0, 1].  Scales the E1
+                prosody residual and the bounded duration/energy shaping.
+            selection: Optional candidate-selection strategy.  ``"diverse"``
+                samples a larger pool and returns one central mode plus the
+                most dissimilar alternatives; ``None`` keeps the historical
+                independent sampling.
 
         Returns:
             List of dicts containing voice waveforms, speaker embeddings, and metadata.
         """
+        if selection not in (None, "diverse"):
+            raise ValueError(
+                f"selection must be None or 'diverse', got {selection!r}"
+            )
         if watermark is None:
             watermark = self.enable_watermarking
+
+        accent_id = normalize_accent(accent) if accent else None
+        emotion_id = normalize_emotion(emotion)
+        accent_strength = float(np.clip(accent_strength, 0.0, 1.0))
+        emotion_intensity = float(np.clip(emotion_intensity, 0.0, 1.0))
 
         # Det gender/age defaults (set when face features are extracted)
         _det_gender = None
         _det_age = None
-        e_geo = None
 
-        # Process face input into 560-D normalized tensor
+        # Process face input into the canonical 560-D normalized tensor.
+        # All tensors/arrays are interpreted as *raw fused* FaceFeatureV2 vectors
+        # unless the caller explicitly marks them as already normalized.
+        raw_face: torch.Tensor
         if isinstance(face_input, (str, Path)):
             str_path = str(face_input)
             if not os.path.exists(str_path) and not Path(str_path).is_file():
-                # Check if string corresponds to a demographic preset ID
+                # String corresponds to a demographic preset ID.
                 try:
                     preset = self.get_demographic_preset(str_path)
-                    e_f = preset.embedding.to(self.device)
-                    if gender is None: gender = preset.gender
-                    if age is None: age = preset.age
-                    if self.scaler is not None:
-                        e_f = (e_f - self.face_mean) / self.face_std
-                except KeyError:
-                    raise FileNotFoundError(f"Image file or preset not found: {str_path}")
-                e_geo = None  # Presets don't have craniofacial data
+                except KeyError as exc:
+                    raise FileNotFoundError(f"Image file or preset not found: {str_path}") from exc
+                raw_face = preset.embedding.to(self.device).float()
+                if gender is None: gender = preset.gender
+                if age is None: age = preset.age
             else:
-                e_f, _det_gender, _det_age, e_geo = self.extract_face_features(
-                    str_path,
-                    craniofacial_sliders=craniofacial_sliders,
+                raw_face, _det_gender, _det_age, _ = self.extract_face_features(
+                    str_path
                 )
                 if gender is None: gender = _det_gender
                 if age is None: age = _det_age
-                if self.scaler is not None:
-                    e_f = (e_f - self.face_mean) / self.face_std
-        elif isinstance(face_input, np.ndarray):
-            if face_input.ndim == 3:  # HxWx3 image
-                e_f, _det_gender, _det_age, e_geo = self.extract_face_features(
-                    face_input,
-                    craniofacial_sliders=craniofacial_sliders,
+            face_input_is_normalized = False
+        elif isinstance(face_input, np.ndarray) and face_input.ndim == 3:
+            raw_face, _det_gender, _det_age, _ = self.extract_face_features(
+                face_input
+            )
+            if gender is None: gender = _det_gender
+            if age is None: age = _det_age
+            face_input_is_normalized = False
+        elif isinstance(face_input, (np.ndarray, torch.Tensor)):
+            raw_face = torch.as_tensor(face_input, dtype=torch.float32, device=self.device)
+            if raw_face.dim() == 1:
+                raw_face = raw_face.unsqueeze(0)
+            if raw_face.ndim != 2 or raw_face.shape[-1] != FACE_DIM:
+                raise ValueError(
+                    f"face_input must have shape (B, {FACE_DIM}) or be an image path; "
+                    f"got {tuple(raw_face.shape)}"
                 )
-                if gender is None: gender = _det_gender
-                if age is None: age = _det_age
-                if self.scaler is not None:
-                    e_f = (e_f - self.face_mean) / self.face_std
-            else:
-                e_f = torch.from_numpy(face_input).float()
-                if e_f.dim() == 1:
-                    e_f = e_f.unsqueeze(0)
-                e_f = e_f.to(self.device)
-                e_geo = None
-        elif isinstance(face_input, torch.Tensor):
-            e_f = face_input.float()
-            if e_f.dim() == 1:
-                e_f = e_f.unsqueeze(0)
-            e_f = e_f.to(self.device)
-            if self.scaler is not None and e_f.abs().mean() > 1.5:
-                e_f = (e_f - self.face_mean) / self.face_std
-            if e_f.shape[-1] >= 544:
-                e_geo_base = e_f[:, 512:544]
-                if craniofacial_sliders:
-                    from voix.data.morphology import apply_craniofacial_sliders
-                    base_np = e_geo_base.detach().cpu().numpy().squeeze()
-                    mod_np = apply_craniofacial_sliders(base_np, craniofacial_sliders)
-                    e_geo = torch.from_numpy(mod_np).float().to(self.device)
-                else:
-                    e_geo = e_geo_base
-            else:
-                e_geo = None
         else:
-            raise TypeError("face_input must be an image path, 560-D tensor, or numpy array")
+            raise TypeError("face_input must be an image path, preset ID, 560-D tensor, or numpy array")
+
+        if face_input_is_normalized:
+            e_f = raw_face.to(self.device)
+        else:
+            e_f = self.normalize_face(raw_face.to(self.device))
 
         # Map 560-D fused face -> 192-D ECAPA-space embedding via CFVN
         with torch.no_grad():
             e_f_voice = self.cfvn(e_f, normalize=True)  # (1, 192)
-
-        # Extract ArcFace visual identity projection for consistency
-        e_id_val = getattr(self, "_last_e_id", None)
-        if e_id_val is None and e_f.shape[-1] >= 512:
-            e_id_val = e_f[:, :512]
 
         if speaker_embedding is not None:
             # Use explicit fixed speaker embedding (e.g. Primary candidate identity)
@@ -385,38 +531,37 @@ class VoixPipeline:
             # Deterministic mode: prior mean mode without stochastic noise
             mu_prior, _ = self.cvae.prior_net(e_f_voice)
             e_s_base = self.cvae.decoder(mu_prior)
-            if e_id_val is not None:
-                if isinstance(e_id_val, np.ndarray):
-                    eid_t = torch.from_numpy(e_id_val).float().to(self.device)
-                else:
-                    eid_t = e_id_val.float().to(self.device)
-                if eid_t.dim() == 1:
-                    eid_t = eid_t.unsqueeze(0)
-                id_delta = F.normalize(eid_t @ self.id_proj_q, dim=-1)
-                e_s_candidates_norm = F.normalize(0.55 * e_s_base + 0.45 * id_delta, dim=-1)
-            else:
-                e_s_candidates_norm = F.normalize(e_s_base, dim=-1)
+            e_s_candidates_norm = F.normalize(e_s_base, dim=-1)
             if e_s_candidates_norm.shape[0] < num_voices:
                 e_s_candidates_norm = e_s_candidates_norm.repeat(num_voices, 1)
         else:
             if seed is not None:
                 torch.manual_seed(seed)
-            e_s_candidates = self.cvae.sample_voices(
-                e_f_voice,
-                num_samples=num_voices,
-                temperature=temperature,
-            )
-            if e_id_val is not None:
-                if isinstance(e_id_val, np.ndarray):
-                    eid_t = torch.from_numpy(e_id_val).float().to(self.device)
-                else:
-                    eid_t = e_id_val.float().to(self.device)
-                if eid_t.dim() == 1:
-                    eid_t = eid_t.unsqueeze(0)
-                id_delta = F.normalize(eid_t @ self.id_proj_q, dim=-1)
-                e_s_candidates_norm = F.normalize(0.55 * e_s_candidates + 0.45 * id_delta, dim=-1)
+            if selection == "diverse":
+                # Sample a wider pool, then keep the central mode plus the
+                # most dissimilar alternatives.  Independent K-sample draws
+                # can collapse to near-duplicates (ECAPA cosine 0.939 in the
+                # 15-asset demo), which defeats one-to-many generation.
+                pool_size = max(num_voices * 3, 8)
+                pool = self.cvae.sample_voices(
+                    e_f_voice,
+                    num_samples=pool_size,
+                    temperature=temperature,
+                )
+                mu_prior, _ = self.cvae.prior_net(e_f_voice)
+                primary_mode = self.cvae.decoder(mu_prior)
+                e_s_candidates = select_diverse_embeddings(
+                    pool,
+                    num_voices,
+                    reference=primary_mode,
+                )
             else:
-                e_s_candidates_norm = F.normalize(e_s_candidates, dim=-1)
+                e_s_candidates = self.cvae.sample_voices(
+                    e_f_voice,
+                    num_samples=num_voices,
+                    temperature=temperature,
+                )
+            e_s_candidates_norm = F.normalize(e_s_candidates, dim=-1)
 
         e_s_candidates_raw = e_s_candidates_norm
 
@@ -430,37 +575,26 @@ class VoixPipeline:
             self._fusion = None
             free_memory(self.device)
 
-        # 2. Text preprocessing: Cross-lingual adaptation, Accent, Speech Difference, and Emotion modulation
-        lang_mods = {"duration_scale": 1.0, "pitch_dynamics_factor": 1.0}
-        text_lang = text
-        if language and language.lower() != "en":
-            text_lang, lang_mods = MultilingualPhoneticAdapter.transform(text, language=language)
-
-        text_accented = text_lang
+        # 2. Text preprocessing: accent prosody, emotion, and duration/energy shaping.
+        text_accented = text
         accent_mods = {"duration_mult": 1.0, "pitch_mult": 1.0, "prosody_mult": 1.0}
-        if accent:
+        if accent_id:
             text_accented, accent_mods = AccentTransformer.transform(
-                text=text_lang,
-                accent=accent,
+                text=text,
+                accent=accent_id,
                 strength=accent_strength,
             )
 
-        duration_mult = 1.0
         synth_text = text_accented
-        if speech_difference and speech_severity > 0.001:
-            synth_text, duration_mult = SpeechSimulator.process_text(
-                text=text_accented,
-                difference_type=speech_difference,
-                severity=speech_severity,
-            )
-
         emotion_mods = EmotionModulator.get_acoustic_modifiers(
-            emotion=emotion,
+            emotion=emotion_id,
             intensity=emotion_intensity,
         )
         # 3. For each candidate voice, project style and synthesize speech
         _inf = self._inf_cfg
-        diffusion_steps = _inf.get("diffusion_steps", self.hardware.diffusion_steps)
+        # null/absent -> the detected hardware profile decides; a fixed YAML
+        # value previously overrode the CPU and budget-GPU profiles.
+        diffusion_steps = _inf.get("diffusion_steps") or self.hardware.diffusion_steps
 
         for k in range(num_voices):
             if self.hardware.torch_empty_cache_per_sample:
@@ -472,76 +606,113 @@ class VoixPipeline:
             # Dual-Head Style Adapter projection (192-D -> 256-D [timbre | prosody])
             s_hat_k = self.adapter(e_s_raw_k.unsqueeze(0))
 
-            # Apply craniofacial morphology modulation to style vector (oral/nasal resonance)
-            if e_geo is not None:
-                from voix.models.craniofacial_style import apply_craniofacial_to_style
-                s_hat_k = apply_craniofacial_to_style(
-                    s_hat_k,
-                    e_geo,
-                    strength=1.0,
-                )
+            # Apply the A3 class-contrast accent residual.  Accent identity is
+            # carried mostly by prosody, so the timbre half is down-weighted to
+            # protect the face-derived speaker identity.
+            if accent_id:
+                accent_residual = self._accent_residual(accent_id)
+                if accent_residual is not None:
+                    s_hat_k = apply_accent_residual(
+                        s_hat_k,
+                        accent_residual,
+                        scale=ACCENT_RESIDUAL_SCALE * accent_strength,
+                        timbre_weight=ACCENT_TIMBRE_WEIGHT,
+                    )
 
-            # Apply style-space accent delta to prosody half of s_hat_k
-            if accent and accent != "general_american":
-                from voix.models.accent_control import apply_accent_style_delta
-                s_hat_k = apply_accent_style_delta(
-                    ref_s=s_hat_k,
-                    accent_id=accent,
+            # Apply the E1 prosody-only emotion residual.  Emotion intensity
+            # scales the validated 0.28 residual; neutral is an exact no-op.
+            if emotion_id and emotion_id != "neutral":
+                emotion_residual = self._emotion_residual(emotion_id)
+                if emotion_residual is not None:
+                    s_hat_k = apply_style_residual(
+                        s_hat_k,
+                        emotion_residual,
+                        intensity=emotion_intensity,
+                        scale=EMOTION_RESIDUAL_SCALE,
+                    )
+
+            _gender = gender if gender is not None else 1
+            _age = float(age) if age is not None else 30.0
+
+            # Anchor-free: no reference-file blending is exposed or reported.
+            base_dur = _inf.get("duration_scale", 1.0)
+            final_duration = (
+                base_dur
+                * accent_mods["duration_mult"]
+                * emotion_mods["duration_scale"]
+            )
+            base_beta = _inf.get("beta", 0.22)
+            final_beta = float(
+                np.clip(
+                    base_beta
+                    * accent_mods["prosody_mult"]
+                    * emotion_mods["beta_mult"],
+                    0.10,
+                    0.90,
+                )
+            )
+            eff_alpha = _inf.get("alpha", 0.18)
+
+            # Emotion/accent pitch multipliers are realised as a real
+            # post-synthesis pitch shift.  Pitch *variance* is controlled by
+            # StyleTTS2's beta (prosody transfer), not a fake output parameter.
+            eff_f0_scale = float(emotion_mods.get("pitch_factor", 1.0)) * float(
+                accent_mods.get("pitch_mult", 1.0)
+            )
+
+            # Accent phonemization is applied only on the neural backend.  The
+            # fallback backend has no phoneme stage and would silently ignore it.
+            phonemizer_ctx = nullcontext()
+            if accent_id and self.tts.backend_name == "neural":
+                from voix.models.accent_g2p import use_accent_phonemizer
+
+                phonemizer_ctx = use_accent_phonemizer(
+                    self.tts,
+                    accent_id,
                     strength=accent_strength,
                 )
 
-            # Apply style-space emotion delta to prosody half of s_hat_k
-            if emotion and emotion != "neutral":
-                from voix.models.emotion_control import apply_emotion_style_delta
-                s_hat_k = apply_emotion_style_delta(
-                    ref_s=s_hat_k,
-                    emotion_id=emotion,
-                    intensity=emotion_intensity,
+            with phonemizer_ctx:
+                waveform = self.tts.synthesize(
+                    text=synth_text,
+                    style=s_hat_k,
+                    gender=_gender,
+                    age=_age,
+                    beta=final_beta,
+                    alpha=eff_alpha,
+                    duration_scale=final_duration,
+                    diffusion_steps=diffusion_steps,
+                    f0_scale=eff_f0_scale,
                 )
 
-            _gender = gender if gender is not None else 1
-
-            base_dur = _inf.get("duration_scale", 1.0)
-            final_duration = base_dur * duration_mult * accent_mods["duration_mult"] * emotion_mods["duration_scale"] * lang_mods["duration_scale"]
-            base_beta = _inf.get("beta", 0.80)
-            final_beta = float(np.clip(base_beta * accent_mods["prosody_mult"] * emotion_mods["beta_mult"] * lang_mods["pitch_dynamics_factor"], 0.55, 0.95))
-            eff_alpha = _inf.get("alpha", 0.30)
-            waveform = self.tts.synthesize(
-                text=synth_text,
-                style=s_hat_k,
-                gender=_gender,
-                blend_weight=0.0,
-                beta=final_beta,
-                alpha=eff_alpha,
-                duration_scale=final_duration,
-                diffusion_steps=diffusion_steps,
-                anchor_path=None,
-            )
-
-            # Apply post-synthesis acoustic filters for speech differences
-            if speech_difference and speech_severity > 0.001:
-                waveform = SpeechSimulator.process_waveform(
-                    waveform=waveform,
-                    sample_rate=self.tts.sample_rate,
-                    difference_type=speech_difference,
-                    severity=speech_severity,
+            # Emotion energy is a real post-synthesis gain, applied after the
+            # backend's LUFS normalization so it is not normalized away.  Use a
+            # true-peak limiter instead of a hard clamp: clamping would distort
+            # loud emotions and add harmonics that look like noise.
+            energy_scale = float(emotion_mods.get("energy_scale", 1.0))
+            if abs(energy_scale - 1.0) > 1e-4:
+                wav_np = waveform.detach().cpu().numpy().squeeze() * energy_scale
+                waveform = (
+                    torch.from_numpy(limit_true_peak(wav_np))
+                    .unsqueeze(0)
+                    .to(waveform.device)
                 )
 
-            # Apply post-synthesis acoustic filters for emotion
-            if emotion and emotion_intensity > 0.01:
-                waveform = EmotionModulator.apply_acoustic_filter(
-                    waveform=waveform,
-                    sample_rate=self.tts.sample_rate,
-                    emotion=emotion,
-                    intensity=emotion_intensity,
-                )
+            # Emotion is steered natively in style/prosody space (no post-hoc DSP filtering)
             is_wm = False
+            wm_status = "disabled"
             if watermark:
+                wm = self._ensure_watermarker()
                 try:
-                    waveform = self.watermarker.embed(waveform)
-                    is_wm = True
-                except Exception:
-                    is_wm = False
+                    waveform = wm.embed(waveform)
+                except Exception as exc:
+                    raise RuntimeError(
+                        "[VoixPipeline] Watermarking was requested but failed. "
+                        "Refusing to return an unwatermarked waveform while "
+                        f"reporting success. Original error: {type(exc).__name__}: {exc}"
+                    ) from exc
+                is_wm = True
+                wm_status = "embedded"
 
             results.append({
                 "voice_index": k + 1,
@@ -550,8 +721,18 @@ class VoixPipeline:
                 "speaker_embedding": e_s_raw_k.cpu(),
                 "style_embedding": s_hat_k.squeeze(0).cpu(),
                 "is_watermarked": is_wm,
+                "watermark_status": wm_status,
+                "backend": self.tts.backend_name,
+                "provenance": self.provenance,
             })
 
+        self.provenance["runtime"]["backend"] = self.tts.backend_name
+        logger.info(
+            "synthesized %d candidate(s): backend=%s schema=%s",
+            len(results),
+            self.tts.backend_name,
+            SCHEMA_VERSION,
+        )
         return results
 
     def list_demographic_presets(self) -> List[Dict[str, Any]]:
@@ -571,14 +752,10 @@ class VoixPipeline:
         num_voices: int = 3,
         temperature: float = 1.0,
         watermark: Optional[bool] = None,
-        craniofacial_sliders: Optional[Dict[str, float]] = None,
-        speech_difference: Optional[str] = None,
-        speech_severity: float = 0.0,
         accent: Optional[str] = None,
-        accent_strength: float = 0.5,
+        accent_strength: float = 1.0,
         emotion: Optional[str] = None,
-        emotion_intensity: float = 0.5,
-        language: str = "en",
+        emotion_intensity: float = 1.0,
     ) -> List[Dict[str, Any]]:
         """Synthesize candidate voices directly from a demographic preset ID."""
         preset = self.get_demographic_preset(preset_id)
@@ -590,25 +767,16 @@ class VoixPipeline:
             watermark=watermark,
             gender=preset.gender,
             age=preset.age,
-            craniofacial_sliders=craniofacial_sliders,
-            speech_difference=speech_difference,
-            speech_severity=speech_severity,
             accent=accent,
             accent_strength=accent_strength,
             emotion=emotion,
             emotion_intensity=emotion_intensity,
-            language=language,
         )
-
-    def list_supported_speech_differences(self) -> List[Dict[str, Any]]:
-        """Return list of supported speech difference simulation modes."""
-        from voix.models.speech_simulation import SpeechSimulator
-        return SpeechSimulator.list_supported_differences()
 
     def save_audio(
         self,
         results: List[Dict[str, Any]],
-        output_dir: str = "D:/voix/artifacts/samples",
+        output_dir: str = str(project_path("artifacts", "samples")),
         prefix: str = "voice",
     ) -> List[str]:
         """Save generated candidate waveforms to disk as 24 kHz WAV files."""
@@ -616,7 +784,11 @@ class VoixPipeline:
         saved_paths = []
         for item in results:
             idx = item["voice_index"]
-            wav = item["waveform"].squeeze().numpy()
+            waveform = item["waveform"]
+            if isinstance(waveform, torch.Tensor):
+                wav = waveform.detach().cpu().squeeze().numpy()
+            else:
+                wav = np.asarray(waveform).squeeze()
             sr = item["sample_rate"]
             path = os.path.join(output_dir, f"{prefix}_{idx}.wav")
             sf.write(path, wav, sr)
@@ -630,7 +802,3 @@ class VoixPipeline:
     def list_emotions(self) -> List[Dict[str, Any]]:
         """Return list of available emotional tone profiles."""
         return list_available_emotions()
-
-    def list_languages(self) -> List[Dict[str, Any]]:
-        """Return list of supported languages for cross-lingual transfer."""
-        return list_supported_languages()

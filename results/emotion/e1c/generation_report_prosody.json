@@ -1,0 +1,166 @@
+{
+  "schema_version": "voix.crema_generation.v3",
+  "generated_at": "2026-10-30 13:30:44 UTC",
+  "level": "exploratory",
+  "condition": "class_mean_prosody",
+  "scope": "Identity-conditioned CREMA-D evaluation. No face, CFVN, CVAE, or canonical face-to-voice style adapter is used. The identity base is the frozen StyleTTS2 style/predictor encoder applied to one real neutral clip per actor. The style residual is class_mean_prosody.",
+  "manifest": "D:\\voix\\data\\processed\\crema_d_paired_eval_val.csv",
+  "manifest_sha256": "b782e6a5a9d3d5b88f669e5836803182573fac4df42bddc892fb8e42da6b6912",
+  "index": "results\\emotion\\e1c\\generation_index_prosody.csv",
+  "index_sha256": "45f169746b37cc17d92526c04e2b362ab2038f9812f098d5cf6e6f40d23578fb",
+  "identity_style_source": "styletts2_style_encoder",
+  "residual_artifact": "D:\\voix\\checkpoints\\emotion_residuals\\class_mean.pt",
+  "residual_artifact_sha256": "6bb4f17ff4bfaf4a9fe4b69514ba3b2e83f4dfe4c8a80f8706c9172cf4bb4408",
+  "residual_variant": "prosody_only",
+  "residual_scale": 0.28,
+  "match_fixed_norm": true,
+  "adapter": null,
+  "fixed_delta_norms": {
+    "happy": 1.5636495351791382,
+    "sad": 1.655294418334961,
+    "angry": 1.7691807746887207
+  },
+  "mean_fixed_delta_norm": 1.6627082427342732,
+  "device": "cuda",
+  "seeds": [
+    0
+  ],
+  "diffusion_steps": 10,
+  "alpha": 0.18,
+  "beta": 0.22,
+  "duration_scale": 1.0,
+  "scalar_modifiers": "neutral",
+  "sample_rate": 24000,
+  "backend": "neural",
+  "emotions_requested": [
+    "happy",
+    "sad",
+    "angry"
+  ],
+  "emotions_generated": [
+    "happy",
+    "sad",
+    "angry"
+  ],
+  "emotions_unavailable": {},
+  "identity_styles": {
+    "1010": {
+      "clip_id": "1010_IWL_NEU_XX",
+      "path": "data\\raw\\crema_d\\AudioWAV\\1010_IWL_NEU_XX.wav",
+      "sha256": "2896ec8b9a4e5e7cabc7acd6483ad95076a76e0b36079e94940ab096488998de",
+      "norm": 3.579190731048584,
+      "source": "styletts2_style_encoder"
+    },
+    "1026": {
+      "clip_id": "1026_TIE_NEU_XX",
+      "path": "data\\raw\\crema_d\\AudioWAV\\1026_TIE_NEU_XX.wav",
+      "sha256": "14750cab716f1e44fa5fc6c84b1dbd33c3536856581e65e82cc595bedc4105df",
+      "norm": 3.71612286567688,
+      "source": "styletts2_style_encoder"
+    },
+    "1028": {
+      "clip_id": "1028_ITH_NEU_XX",
+      "path": "data\\raw\\crema_d\\AudioWAV\\1028_ITH_NEU_XX.wav",
+      "sha256": "6c579af9bc662b3448467a7c972cb04ace46aadd3de23c9c5f44fa2d94766458",
+      "norm": 3.5947728157043457,
+      "source": "styletts2_style_encoder"
+    },
+    "1037": {
+      "clip_id": "1037_MTI_NEU_XX",
+      "path": "data\\raw\\crema_d\\AudioWAV\\1037_MTI_NEU_XX.wav",
+      "sha256": "12453d7f179a17577aff0102b605186cd311e520e04e13649b0b3ba66b2a18c8",
+      "norm": 3.0766077041625977,
+      "source": "styletts2_style_encoder"
+    },
+    "1074": {
+      "clip_id": "1074_TIE_NEU_XX",
+      "path": "data\\raw\\crema_d\\AudioWAV\\1074_TIE_NEU_XX.wav",
+      "sha256": "25cd6c0232f3a7d4f96f54205c378501f9dd9ffd4b36bfc2c15294e2380dca47",
+      "norm": 3.515108108520508,
+      "source": "styletts2_style_encoder"
+    },
+    "1075": {
+      "clip_id": "1075_DFA_NEU_XX",
+      "path": "data\\raw\\crema_d\\AudioWAV\\1075_DFA_NEU_XX.wav",
+      "sha256": "069dcfc3e5f6695c0cac74d856c6d0010bcfe7b5684b5adef8cb4b861375a183",
+      "norm": 3.614285469055176,
+      "source": "styletts2_style_encoder"
+    },
+    "1078": {
+      "clip_id": "1078_TIE_NEU_XX",
+      "path": "data\\raw\\crema_d\\AudioWAV\\1078_TIE_NEU_XX.wav",
+      "sha256": "d05167c1aa2816f50b466ab50509850d5ee845bb0b4054c5c044b1b4eff1349c",
+      "norm": 3.4652504920959473,
+      "source": "styletts2_style_encoder"
+    },
+    "1083": {
+      "clip_id": "1083_TIE_NEU_XX",
+      "path": "data\\raw\\crema_d\\AudioWAV\\1083_TIE_NEU_XX.wav",
+      "sha256": "d8d23788b9be15ab7e96f10bafba380d2845b8b21ace0ec5c113150d675a85a2",
+      "norm": 3.349716901779175,
+      "source": "styletts2_style_encoder"
+    },
+    "1084": {
+      "clip_id": "1084_TIE_NEU_XX",
+      "path": "data\\raw\\crema_d\\AudioWAV\\1084_TIE_NEU_XX.wav",
+      "sha256": "28bb84f6d98d7160e8681a5333ed0f7f339e145964090e1ade72c0a3b949c273",
+      "norm": 3.2891578674316406,
+      "source": "styletts2_style_encoder"
+    }
+  },
+  "counts": {
+    "class_mean_prosody:angry": {
+      "rows": 108,
+      "actors": 9,
+      "pairs": 108,
+      "audio_seconds": 225.97500000000002,
+      "mean_style_delta_l2": 0.4953706098927392,
+      "mean_generation_seconds": 0.3824166666666667
+    },
+    "class_mean_prosody:happy": {
+      "rows": 108,
+      "actors": 9,
+      "pairs": 108,
+      "audio_seconds": 225.92500000000004,
+      "mean_style_delta_l2": 0.4378218717045254,
+      "mean_generation_seconds": 0.3771666666666667
+    },
+    "class_mean_prosody:sad": {
+      "rows": 108,
+      "actors": 9,
+      "pairs": 108,
+      "audio_seconds": 236.99999999999997,
+      "mean_style_delta_l2": 0.4634824362066057,
+      "mean_generation_seconds": 0.38952777777777775
+    },
+    "neutral:neutral": {
+      "rows": 108,
+      "actors": 9,
+      "pairs": 108,
+      "audio_seconds": 231.85,
+      "mean_style_delta_l2": null,
+      "mean_generation_seconds": 0.4247870370370369
+    }
+  },
+  "neutral_zero": {
+    "max_abs_error": 0.0,
+    "tolerance": 1e-07,
+    "passed": true,
+    "failures": []
+  },
+  "failures": [],
+  "elapsed_seconds": 172.06,
+  "notes": [
+    "Neutral is generated once per (actor, sentence, seed) and shared by emotion rows.",
+    "The class-mean condition applies a speaker-balanced mean style residual estimated from real CREMA-D train actors.",
+    "Class-mean residuals are rescaled to the fixed-delta norm for matched strength.",
+    "Fear and disgust are available in the class-mean artifact.",
+    "Fear/disgust use the neutral post-synthesis scalar profile; the class-mean style residual carries the emotion. The index records scalar_modifier_source for every row.",
+    "No human MOS is claimed; perceptual quality is unmeasured.",
+    "Controlled scalar condition: every emotion uses the neutral post-synthesis profile, so pitch, duration, and energy do not carry the emotion label."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings were collected for this generation run"
+  }
+}

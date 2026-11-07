@@ -21,8 +21,6 @@ class TestEmotionRegistry:
             "happy",
             "sad",
             "angry",
-            "whispered",
-            "surprised",
         ]
         for em in expected:
             assert em in EMOTION_REGISTRY
@@ -33,10 +31,10 @@ class TestEmotionRegistry:
 
     def test_list_available_emotions(self):
         emotions = list_available_emotions()
-        assert len(emotions) >= 6
+        assert len(emotions) == 4
         ids = [e["emotion_id"] for e in emotions]
-        assert "happy" in ids
-        assert "whispered" in ids
+        assert set(ids) == {"neutral", "happy", "sad", "angry"}
+        assert "whispered" not in ids
 
 
 class TestEmotionModulator:
@@ -64,7 +62,7 @@ class TestEmotionModulator:
         filtered = EmotionModulator.apply_acoustic_filter(
             dummy_wav,
             sample_rate=24000,
-            emotion="whispered",
+            emotion="happy",
             intensity=0.8,
         )
         assert filtered.shape == dummy_wav.shape
@@ -78,8 +76,12 @@ class TestEmotionModulator:
 
 class TestPipelineEmotionIntegration:
     @pytest.fixture
-    def pipeline(self):
-        return VoixPipeline(device="cpu", enable_watermarking=False)
+    def pipeline(self, v2_artifacts):
+        return VoixPipeline(
+            device="cpu",
+            enable_watermarking=False,
+            tts_use_neural=False,
+        )
 
     def test_pipeline_generate_with_emotion(self, pipeline):
         res = pipeline.generate(
@@ -95,4 +97,4 @@ class TestPipelineEmotionIntegration:
 
     def test_pipeline_list_emotions(self, pipeline):
         ems = pipeline.list_emotions()
-        assert len(ems) >= 6
+        assert len(ems) == 4

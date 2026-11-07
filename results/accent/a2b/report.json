@@ -1,0 +1,850 @@
+{
+  "schema_version": "voix.research_report.v1",
+  "track": "accent",
+  "level": "exploratory",
+  "run_id": "a2_g2p_comparison",
+  "git_commit": "3bbf21d35dbccd15c0548f6e0c86291c32f01900",
+  "config_sha256": "not_applicable",
+  "manifest_sha256": "2a1c462dfd033a949ec6f6f2783b156bb2433b49b7b50c7f739c5278a9339460",
+  "seeds": [
+    0
+  ],
+  "metrics": {
+    "wer": {
+      "status": "computed",
+      "value": {
+        "australian": {
+          "g2p": 0.09941077441077441,
+          "regex": 0.013888888888888888
+        },
+        "canadian": {
+          "g2p": 0.10311447811447812,
+          "regex": 0.013888888888888888
+        },
+        "england": {
+          "g2p": 0.08148148148148147,
+          "regex": 0.013888888888888888
+        },
+        "india_south_asia": {
+          "g2p": 0.2331529581529581,
+          "regex": 0.013888888888888888
+        },
+        "irish": {
+          "g2p": 0.15226070226070226,
+          "regex": 0.013888888888888888
+        },
+        "us": {
+          "g2p": 0.05092592592592592,
+          "regex": 0.013888888888888888
+        }
+      }
+    },
+    "accent_classifier_accuracy": {
+      "status": "computed",
+      "value": {
+        "g2p": 0.13333333333333333,
+        "regex": 0.2
+      }
+    },
+    "accent_classifier_domain_shift_ratio": {
+      "status": "computed",
+      "value": 0.8800733391940674,
+      "threshold": 3.0,
+      "valid": true,
+      "standardized_centroid_distance": 12.910198859189038,
+      "real_val_spread": 14.669457969277461
+    },
+    "identity_regex_vs_g2p": {
+      "status": "computed",
+      "value": {
+        "australian": {
+          "n_pairs": 6,
+          "mean_ecapa_regex_g2p": 0.8672821621100107,
+          "min_ecapa_regex_g2p": 0.804837703704834,
+          "max_ecapa_regex_g2p": 0.9168853759765625
+        },
+        "canadian": {
+          "n_pairs": 6,
+          "mean_ecapa_regex_g2p": 0.8698102136452993,
+          "min_ecapa_regex_g2p": 0.7930974960327148,
+          "max_ecapa_regex_g2p": 0.9201682209968567
+        },
+        "england": {
+          "n_pairs": 6,
+          "mean_ecapa_regex_g2p": 0.847740630308787,
+          "min_ecapa_regex_g2p": 0.7005966901779175,
+          "max_ecapa_regex_g2p": 0.9261277914047241
+        },
+        "india_south_asia": {
+          "n_pairs": 6,
+          "mean_ecapa_regex_g2p": 0.8106185098489126,
+          "min_ecapa_regex_g2p": 0.7229689955711365,
+          "max_ecapa_regex_g2p": 0.8921560645103455
+        },
+        "irish": {
+          "n_pairs": 6,
+          "mean_ecapa_regex_g2p": 0.7906671265761057,
+          "min_ecapa_regex_g2p": 0.6815198659896851,
+          "max_ecapa_regex_g2p": 0.8553773760795593
+        },
+        "us": {
+          "n_pairs": 6,
+          "mean_ecapa_regex_g2p": 0.8621902962525686,
+          "min_ecapa_regex_g2p": 0.7163122892379761,
+          "max_ecapa_regex_g2p": 0.9201682209968567
+        }
+      }
+    },
+    "identity_to_real_donor": {
+      "status": "computed",
+      "value": {
+        "status": "computed",
+        "clip_id": "common_voice_en_17993335",
+        "mean_ecapa_to_donor": 0.44701874256134033,
+        "by_condition": {
+          "g2p": 0.4265463054180145,
+          "regex": 0.46749114990234375
+        },
+        "note": "Absolute similarity is low because generated and real speech are different domains."
+      }
+    },
+    "prosody": {
+      "status": "computed",
+      "value": {
+        "australian:g2p": {
+          "duration_mean": 2.9360971450805664,
+          "f0_mean_hz": 157.17735290527344,
+          "f0_std_hz": 102.90817260742188
+        },
+        "australian:regex": {
+          "duration_mean": 3.3777778148651123,
+          "f0_mean_hz": 151.83103942871094,
+          "f0_std_hz": 103.36117553710938
+        },
+        "canadian:g2p": {
+          "duration_mean": 3.1137638092041016,
+          "f0_mean_hz": 152.7774200439453,
+          "f0_std_hz": 103.02859497070312
+        },
+        "canadian:regex": {
+          "duration_mean": 3.3777778148651123,
+          "f0_mean_hz": 151.83103942871094,
+          "f0_std_hz": 103.36117553710938
+        },
+        "england:g2p": {
+          "duration_mean": 3.0474026203155518,
+          "f0_mean_hz": 152.3800506591797,
+          "f0_std_hz": 97.93013763427734
+        },
+        "england:regex": {
+          "duration_mean": 3.3777778148651123,
+          "f0_mean_hz": 151.83103942871094,
+          "f0_std_hz": 103.36117553710938
+        },
+        "india_south_asia:g2p": {
+          "duration_mean": 3.33608341217041,
+          "f0_mean_hz": 152.22183227539062,
+          "f0_std_hz": 101.65753936767578
+        },
+        "india_south_asia:regex": {
+          "duration_mean": 3.3777778148651123,
+          "f0_mean_hz": 151.83103942871094,
+          "f0_std_hz": 103.36117553710938
+        },
+        "irish:g2p": {
+          "duration_mean": 3.066638946533203,
+          "f0_mean_hz": 156.3791961669922,
+          "f0_std_hz": 98.21170043945312
+        },
+        "irish:regex": {
+          "duration_mean": 3.3777778148651123,
+          "f0_mean_hz": 151.83103942871094,
+          "f0_std_hz": 103.36117553710938
+        },
+        "us:g2p": {
+          "duration_mean": 2.9013335704803467,
+          "f0_mean_hz": 154.57186889648438,
+          "f0_std_hz": 98.7278823852539
+        },
+        "us:regex": {
+          "duration_mean": 3.3777778148651123,
+          "f0_mean_hz": 151.83103942871094,
+          "f0_std_hz": 103.36117553710938
+        }
+      }
+    },
+    "phoneme_changes": {
+      "status": "computed",
+      "value": {
+        "us": 6,
+        "england": 6,
+        "australian": 6,
+        "canadian": 6,
+        "india_south_asia": 6,
+        "irish": 6
+      },
+      "total_prompts": 6
+    }
+  },
+  "gates": {
+    "a2_g2p": {
+      "status": "computed",
+      "wer_within_budget": false,
+      "classifier_valid": true,
+      "accuracy_gain": {
+        "status": "computed",
+        "regex_accuracy": 0.2,
+        "g2p_accuracy": 0.13333333333333333,
+        "gain": -0.06666666666666668,
+        "passes_5_points": false
+      },
+      "passed": false,
+      "checks": {
+        "australian": {
+          "status": "computed",
+          "wer_delta": 0.08552188552188551,
+          "wer_ci_low": 0.03181818181818182,
+          "wer_ci_high": 0.14444444444444443,
+          "wer_within_budget": true
+        },
+        "canadian": {
+          "status": "computed",
+          "wer_delta": 0.08922558922558922,
+          "wer_ci_low": 0.0,
+          "wer_ci_high": 0.23737373737373738,
+          "wer_within_budget": true
+        },
+        "england": {
+          "status": "computed",
+          "wer_delta": 0.06759259259259259,
+          "wer_ci_low": 0.013888888888888888,
+          "wer_ci_high": 0.14166666666666664,
+          "wer_within_budget": true
+        },
+        "india_south_asia": {
+          "status": "computed",
+          "wer_delta": 0.21926406926406924,
+          "wer_ci_low": 0.1714285714285714,
+          "wer_ci_high": 0.2732323232323232,
+          "wer_within_budget": false
+        },
+        "irish": {
+          "status": "computed",
+          "wer_delta": 0.13837181337181337,
+          "wer_ci_low": 0.07142857142857142,
+          "wer_ci_high": 0.19485329485329483,
+          "wer_within_budget": false
+        },
+        "us": {
+          "status": "computed",
+          "wer_delta": 0.037037037037037035,
+          "wer_ci_low": 0.0,
+          "wer_ci_high": 0.1111111111111111,
+          "wer_within_budget": true
+        }
+      },
+      "reason": "WER budget failed or the accent classifier proxy is invalid; A2 cannot claim an accent improvement"
+    }
+  },
+  "status": "completed",
+  "limitations": [
+    "Six prompts are a diagnostic, not a confirmatory accent study.",
+    "The accent classifier is trained on real read speech and is only a proxy for generated audio.",
+    "Absolute ECAPA similarity to the real donor is low because generated and real audio are different domains.",
+    "Irish is evaluation-only and has no classifier class.",
+    "No human accent-identification or MOS study was run."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings were collected for this run"
+  },
+  "per_class": {
+    "classifier": {
+      "g2p": {
+        "n": 36,
+        "prediction_counts": {
+          "us": 1,
+          "england": 17,
+          "australian": 16,
+          "canadian": 2,
+          "india_south_asia": 0
+        },
+        "mean_max_probability": 0.6989614680414356,
+        "trainable_accuracy": 0.13333333333333333,
+        "per_class_recall": {
+          "us": 0.0,
+          "england": 0.5,
+          "australian": 0.16666666666666666,
+          "canadian": 0.0,
+          "india_south_asia": 0.0
+        }
+      },
+      "regex": {
+        "n": 36,
+        "prediction_counts": {
+          "us": 6,
+          "england": 24,
+          "australian": 6,
+          "canadian": 0,
+          "india_south_asia": 0
+        },
+        "mean_max_probability": 0.7734582691796997,
+        "trainable_accuracy": 0.2,
+        "per_class_recall": {
+          "us": 0.16666666666666666,
+          "england": 0.6666666666666666,
+          "australian": 0.16666666666666666,
+          "canadian": 0.0,
+          "india_south_asia": 0.0
+        }
+      }
+    },
+    "irish_classifier": {
+      "status": "evaluated",
+      "n": 12,
+      "prediction_counts": {
+        "us": 2,
+        "england": 7,
+        "australian": 3,
+        "canadian": 0,
+        "india_south_asia": 0
+      },
+      "note": "Irish is evaluation-only; the model has no Irish class."
+    }
+  },
+  "artifacts": {
+    "generation_report": "results\\accent\\a2b\\generation_report.json",
+    "index_sha256": "2a1c462dfd033a949ec6f6f2783b156bb2433b49b7b50c7f739c5278a9339460"
+  },
+  "experiment": "A2",
+  "generation": {
+    "identity": {
+      "clip_id": "common_voice_en_17993335",
+      "path": "D:\\voix\\data\\processed\\globe_audio\\val\\us\\common_voice_en_17993335.wav",
+      "speaker_id": "4c5a31cad74697cd01562a7e345a826d40dd6cf87bf5ce8e9bca2e8efd0c6189b482292c88863a14304c6b5f5b3370c30cb1beabcadebfde97afaba0b0ae8aa4",
+      "accent_class": "us",
+      "style_sha256": "287d85ca0ec422183d280601c89ffda21913fcc86cb5d4102375a2b2a2e39566",
+      "norm": 3.5405263900756836,
+      "note": "One frozen style vector for every clip; accent is carried only by phonemes."
+    },
+    "conditions": [
+      "regex",
+      "g2p"
+    ],
+    "prompts": [
+      "The bath was better than the dance in the car.",
+      "I think this is the right time to tune the new voice.",
+      "Last night the fast train passed the path by the water.",
+      "Both of us can start the task after the film.",
+      "The human voice reflects a personal identity.",
+      "Please ask the staff about the chance of rain."
+    ],
+    "rows": 72
+  },
+  "classifier_predictions": [
+    {
+      "clip_id": "a2_us_00_regex_s0",
+      "accent_class": "us",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.8153639749002003
+    },
+    {
+      "clip_id": "a2_us_00_g2p_s0",
+      "accent_class": "us",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.6941383423942765
+    },
+    {
+      "clip_id": "a2_us_01_regex_s0",
+      "accent_class": "us",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.9782585301228383
+    },
+    {
+      "clip_id": "a2_us_01_g2p_s0",
+      "accent_class": "us",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.8290774114029305
+    },
+    {
+      "clip_id": "a2_us_02_regex_s0",
+      "accent_class": "us",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.8792475282558369
+    },
+    {
+      "clip_id": "a2_us_02_g2p_s0",
+      "accent_class": "us",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.8744221251936021
+    },
+    {
+      "clip_id": "a2_us_03_regex_s0",
+      "accent_class": "us",
+      "condition": "regex",
+      "predicted_accent": "us",
+      "max_probability": 0.4716971922547049
+    },
+    {
+      "clip_id": "a2_us_03_g2p_s0",
+      "accent_class": "us",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.5667696240347948
+    },
+    {
+      "clip_id": "a2_us_04_regex_s0",
+      "accent_class": "us",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.963609467254187
+    },
+    {
+      "clip_id": "a2_us_04_g2p_s0",
+      "accent_class": "us",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.955017768874009
+    },
+    {
+      "clip_id": "a2_us_05_regex_s0",
+      "accent_class": "us",
+      "condition": "regex",
+      "predicted_accent": "australian",
+      "max_probability": 0.5325729222904304
+    },
+    {
+      "clip_id": "a2_us_05_g2p_s0",
+      "accent_class": "us",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.4668084647788083
+    },
+    {
+      "clip_id": "a2_england_00_regex_s0",
+      "accent_class": "england",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.8153639749002003
+    },
+    {
+      "clip_id": "a2_england_00_g2p_s0",
+      "accent_class": "england",
+      "condition": "g2p",
+      "predicted_accent": "canadian",
+      "max_probability": 0.42458203765693525
+    },
+    {
+      "clip_id": "a2_england_01_regex_s0",
+      "accent_class": "england",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.9782585301228383
+    },
+    {
+      "clip_id": "a2_england_01_g2p_s0",
+      "accent_class": "england",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.9771965456036932
+    },
+    {
+      "clip_id": "a2_england_02_regex_s0",
+      "accent_class": "england",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.8792475282558369
+    },
+    {
+      "clip_id": "a2_england_02_g2p_s0",
+      "accent_class": "england",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.8407824912067668
+    },
+    {
+      "clip_id": "a2_england_03_regex_s0",
+      "accent_class": "england",
+      "condition": "regex",
+      "predicted_accent": "us",
+      "max_probability": 0.4716971922547049
+    },
+    {
+      "clip_id": "a2_england_03_g2p_s0",
+      "accent_class": "england",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.6693463081324992
+    },
+    {
+      "clip_id": "a2_england_04_regex_s0",
+      "accent_class": "england",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.963609467254187
+    },
+    {
+      "clip_id": "a2_england_04_g2p_s0",
+      "accent_class": "england",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.9163034095503618
+    },
+    {
+      "clip_id": "a2_england_05_regex_s0",
+      "accent_class": "england",
+      "condition": "regex",
+      "predicted_accent": "australian",
+      "max_probability": 0.5325729222904304
+    },
+    {
+      "clip_id": "a2_england_05_g2p_s0",
+      "accent_class": "england",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.47931807399593596
+    },
+    {
+      "clip_id": "a2_australian_00_regex_s0",
+      "accent_class": "australian",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.8153639749002003
+    },
+    {
+      "clip_id": "a2_australian_00_g2p_s0",
+      "accent_class": "australian",
+      "condition": "g2p",
+      "predicted_accent": "canadian",
+      "max_probability": 0.327238065309941
+    },
+    {
+      "clip_id": "a2_australian_01_regex_s0",
+      "accent_class": "australian",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.9782585301228383
+    },
+    {
+      "clip_id": "a2_australian_01_g2p_s0",
+      "accent_class": "australian",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.8290774114029305
+    },
+    {
+      "clip_id": "a2_australian_02_regex_s0",
+      "accent_class": "australian",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.8792475282558369
+    },
+    {
+      "clip_id": "a2_australian_02_g2p_s0",
+      "accent_class": "australian",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.787817844889424
+    },
+    {
+      "clip_id": "a2_australian_03_regex_s0",
+      "accent_class": "australian",
+      "condition": "regex",
+      "predicted_accent": "us",
+      "max_probability": 0.4716971922547049
+    },
+    {
+      "clip_id": "a2_australian_03_g2p_s0",
+      "accent_class": "australian",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.6491638396535234
+    },
+    {
+      "clip_id": "a2_australian_04_regex_s0",
+      "accent_class": "australian",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.963609467254187
+    },
+    {
+      "clip_id": "a2_australian_04_g2p_s0",
+      "accent_class": "australian",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.9163034095503618
+    },
+    {
+      "clip_id": "a2_australian_05_regex_s0",
+      "accent_class": "australian",
+      "condition": "regex",
+      "predicted_accent": "australian",
+      "max_probability": 0.5325729222904304
+    },
+    {
+      "clip_id": "a2_australian_05_g2p_s0",
+      "accent_class": "australian",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.6816345150906122
+    },
+    {
+      "clip_id": "a2_canadian_00_regex_s0",
+      "accent_class": "canadian",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.8153639749002003
+    },
+    {
+      "clip_id": "a2_canadian_00_g2p_s0",
+      "accent_class": "canadian",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.6941383423942765
+    },
+    {
+      "clip_id": "a2_canadian_01_regex_s0",
+      "accent_class": "canadian",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.9782585301228383
+    },
+    {
+      "clip_id": "a2_canadian_01_g2p_s0",
+      "accent_class": "canadian",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.8876483406693396
+    },
+    {
+      "clip_id": "a2_canadian_02_regex_s0",
+      "accent_class": "canadian",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.8792475282558369
+    },
+    {
+      "clip_id": "a2_canadian_02_g2p_s0",
+      "accent_class": "canadian",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.9098060953762929
+    },
+    {
+      "clip_id": "a2_canadian_03_regex_s0",
+      "accent_class": "canadian",
+      "condition": "regex",
+      "predicted_accent": "us",
+      "max_probability": 0.4716971922547049
+    },
+    {
+      "clip_id": "a2_canadian_03_g2p_s0",
+      "accent_class": "canadian",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.5667696240347948
+    },
+    {
+      "clip_id": "a2_canadian_04_regex_s0",
+      "accent_class": "canadian",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.963609467254187
+    },
+    {
+      "clip_id": "a2_canadian_04_g2p_s0",
+      "accent_class": "canadian",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.955017768874009
+    },
+    {
+      "clip_id": "a2_canadian_05_regex_s0",
+      "accent_class": "canadian",
+      "condition": "regex",
+      "predicted_accent": "australian",
+      "max_probability": 0.5325729222904304
+    },
+    {
+      "clip_id": "a2_canadian_05_g2p_s0",
+      "accent_class": "canadian",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.5680761754388994
+    },
+    {
+      "clip_id": "a2_india_south_asia_00_regex_s0",
+      "accent_class": "india_south_asia",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.8153639749002003
+    },
+    {
+      "clip_id": "a2_india_south_asia_00_g2p_s0",
+      "accent_class": "india_south_asia",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.48657602288230806
+    },
+    {
+      "clip_id": "a2_india_south_asia_01_regex_s0",
+      "accent_class": "india_south_asia",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.9782585301228383
+    },
+    {
+      "clip_id": "a2_india_south_asia_01_g2p_s0",
+      "accent_class": "india_south_asia",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.9706618495526207
+    },
+    {
+      "clip_id": "a2_india_south_asia_02_regex_s0",
+      "accent_class": "india_south_asia",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.8792475282558369
+    },
+    {
+      "clip_id": "a2_india_south_asia_02_g2p_s0",
+      "accent_class": "india_south_asia",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.9490341455463271
+    },
+    {
+      "clip_id": "a2_india_south_asia_03_regex_s0",
+      "accent_class": "india_south_asia",
+      "condition": "regex",
+      "predicted_accent": "us",
+      "max_probability": 0.4716971922547049
+    },
+    {
+      "clip_id": "a2_india_south_asia_03_g2p_s0",
+      "accent_class": "india_south_asia",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.40418890621638803
+    },
+    {
+      "clip_id": "a2_india_south_asia_04_regex_s0",
+      "accent_class": "india_south_asia",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.963609467254187
+    },
+    {
+      "clip_id": "a2_india_south_asia_04_g2p_s0",
+      "accent_class": "india_south_asia",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.815862910768409
+    },
+    {
+      "clip_id": "a2_india_south_asia_05_regex_s0",
+      "accent_class": "india_south_asia",
+      "condition": "regex",
+      "predicted_accent": "australian",
+      "max_probability": 0.5325729222904304
+    },
+    {
+      "clip_id": "a2_india_south_asia_05_g2p_s0",
+      "accent_class": "india_south_asia",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.47350219678506744
+    },
+    {
+      "clip_id": "a2_irish_00_regex_s0",
+      "accent_class": "irish",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.8153639749002003
+    },
+    {
+      "clip_id": "a2_irish_00_g2p_s0",
+      "accent_class": "irish",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.5490675515283573
+    },
+    {
+      "clip_id": "a2_irish_01_regex_s0",
+      "accent_class": "irish",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.9782585301228383
+    },
+    {
+      "clip_id": "a2_irish_01_g2p_s0",
+      "accent_class": "irish",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.7843171062103373
+    },
+    {
+      "clip_id": "a2_irish_02_regex_s0",
+      "accent_class": "irish",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.8792475282558369
+    },
+    {
+      "clip_id": "a2_irish_02_g2p_s0",
+      "accent_class": "irish",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.6779835807749713
+    },
+    {
+      "clip_id": "a2_irish_03_regex_s0",
+      "accent_class": "irish",
+      "condition": "regex",
+      "predicted_accent": "us",
+      "max_probability": 0.4716971922547049
+    },
+    {
+      "clip_id": "a2_irish_03_g2p_s0",
+      "accent_class": "irish",
+      "condition": "g2p",
+      "predicted_accent": "us",
+      "max_probability": 0.4006794580021204
+    },
+    {
+      "clip_id": "a2_irish_04_regex_s0",
+      "accent_class": "irish",
+      "condition": "regex",
+      "predicted_accent": "england",
+      "max_probability": 0.963609467254187
+    },
+    {
+      "clip_id": "a2_irish_04_g2p_s0",
+      "accent_class": "irish",
+      "condition": "g2p",
+      "predicted_accent": "england",
+      "max_probability": 0.6630243478776887
+    },
+    {
+      "clip_id": "a2_irish_05_regex_s0",
+      "accent_class": "irish",
+      "condition": "regex",
+      "predicted_accent": "australian",
+      "max_probability": 0.5325729222904304
+    },
+    {
+      "clip_id": "a2_irish_05_g2p_s0",
+      "accent_class": "irish",
+      "condition": "g2p",
+      "predicted_accent": "australian",
+      "max_probability": 0.5212607378380674
+    }
+  ]
+}

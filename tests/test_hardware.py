@@ -1,6 +1,7 @@
 """Unit tests for Dynamic Cross-Platform Hardware Auto-Configuration."""
 
 import os
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 import pytest
 import torch
@@ -11,6 +12,9 @@ from voix.utils.hardware import (
     free_memory,
     get_system_ram_gb,
 )
+
+ROOT = Path(__file__).resolve().parent.parent
+HARDWARE_CONFIG = ROOT / "configs" / "hardware.yaml"
 
 
 class TestHardwareAutoDetection:
@@ -37,7 +41,7 @@ class TestHardwareAutoDetection:
         assert profile.tier_id == "tier_1_budget_gpu"
         assert profile.pipeline_mode == "staged_memory_isolated"
         assert profile.tts_device == "cuda"
-        assert profile.diffusion_steps == 10
+        assert profile.diffusion_steps == 5
         assert profile.batch_voices is False
 
     @patch("torch.cuda.is_available", return_value=True)
@@ -52,7 +56,7 @@ class TestHardwareAutoDetection:
         assert profile.tier_id == "tier_2_mid_gpu"
         assert profile.pipeline_mode == "concurrent_gpu"
         assert profile.tts_device == "cuda"
-        assert profile.diffusion_steps == 15
+        assert profile.diffusion_steps == 5
         assert profile.batch_voices is True
 
     @patch("torch.cuda.is_available", return_value=True)
@@ -67,7 +71,7 @@ class TestHardwareAutoDetection:
         assert profile.tier_id == "tier_3_high_gpu"
         assert profile.pipeline_mode == "batched_gpu"
         assert profile.batch_voices is True
-        assert profile.diffusion_steps == 20
+        assert profile.diffusion_steps == 5
 
     @patch("torch.cuda.is_available", return_value=False)
     @patch("torch.backends.mps.is_available", return_value=True)
@@ -80,8 +84,19 @@ class TestHardwareAutoDetection:
         assert profile.tier_id == "tier_apple_silicon"
         assert profile.tts_device == "mps"
         assert profile.precision == "fp32"
-        assert profile.diffusion_steps == 12
+        assert profile.diffusion_steps == 5
         assert profile.batch_voices is False
+
+    @patch("torch.cuda.is_available", return_value=True)
+    @patch("torch.cuda.get_device_properties")
+    def test_yaml_profile_overrides_fallback_defaults(self, mock_props, mock_cuda):
+        """A supplied hardware.yaml must win over the 5-step fallback defaults."""
+        mock_props.return_value = MagicMock(total_memory=4.0 * 1e9)
+
+        profile = detect_hardware(HARDWARE_CONFIG)
+
+        assert profile.tier_id == "tier_1_budget_gpu"
+        assert profile.diffusion_steps == 10
 
     @patch("torch.cuda.is_available", return_value=False)
     @patch("torch.backends.mps.is_available", return_value=False)
@@ -93,7 +108,7 @@ class TestHardwareAutoDetection:
         assert profile.accelerator == "cpu"
         assert profile.tier_id == "tier_cpu_only"
         assert profile.tts_device == "cpu"
-        assert profile.diffusion_steps == 8
+        assert profile.diffusion_steps == 5
         assert profile.batch_voices is False
 
     def test_free_memory_callable(self):

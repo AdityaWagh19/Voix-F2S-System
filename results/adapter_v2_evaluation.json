@@ -1,0 +1,123 @@
+{
+  "artifacts": {
+    "features": "D:\\voix\\data\\processed\\voxceleb2_v2\\features_v2.h5",
+    "index": "D:\\voix\\data\\processed\\voxceleb2_v2\\index.csv",
+    "scaler": "D:\\voix\\data\\processed\\voxceleb2_v2\\face_scaler_v2.pt",
+    "cfvn": "D:\\voix\\results\\checkpoints\\cfvn_v2_best.pt",
+    "cvae": "D:\\voix\\checkpoints\\cvae_cfvn_face192_latent128_diversity.pt",
+    "adapter": "checkpoints\\style_adapter_cfvn_best.pt",
+    "style_targets": "D:\\voix\\data\\processed\\style_targets_voxceleb2_5clip.pt"
+  },
+  "adapter_epoch": 18,
+  "adapter_hparams": {
+    "in_dim": 192,
+    "hidden_dim": 256,
+    "out_dim": 256,
+    "dropout": 0.0
+  },
+  "adapter_training": {
+    "adapter_input": "cvae",
+    "val_input": "cvae_prior_mean",
+    "samples_per_clip": 4,
+    "lambda_div": 1.0,
+    "lambda_norm": 1.0,
+    "lambda_var": 0.01,
+    "val_loss": 0.17443285047098483,
+    "val_output_across_cosine": 0.8536888360977173,
+    "val_output_centered_across_cosine": 0.0027757647912949324,
+    "target_center_norm": 2.7230327129364014,
+    "target_centered_norm": 1.3137972354888916
+  },
+  "style_targets": {
+    "style_target_speakers": 6111.0,
+    "style_target_clips": 35892.0,
+    "style_target_missing_speakers": 0.0,
+    "style_target_across_cosine": 0.8128116130828857,
+    "style_target_centered_cosine": 0.0013315810356289148,
+    "style_target_mean_norm": 2.7196850776672363,
+    "style_target_centered_norm_mean": 1.3040822744369507,
+    "style_target_per_dim_std": 0.07572036981582642,
+    "style_target_norm_mean": 3.019930839538574,
+    "style_target_mean_clips": 4.839797087219767,
+    "style_target_clips_per_speaker": 5.0
+  },
+  "target_center_norm": 2.7230327129364014,
+  "splits": {
+    "val": {
+      "clips": 3539,
+      "speakers": 601,
+      "prior_mean": {
+        "n": 3539,
+        "raw_within_cosine": 0.9559162855148315,
+        "raw_across_cosine": 0.8536888360977173,
+        "raw_identity_margin": 0.10222744941711426,
+        "centered_within_cosine": 0.6828182935714722,
+        "centered_across_cosine": 0.0027757645584642887,
+        "centered_identity_margin": 0.6800425290130079,
+        "per_dim_std": 0.020373333245515823,
+        "norm_mean": 3.0198006629943848,
+        "centered_norm_mean": 1.376247525215149,
+        "mse": 0.01074979454278946,
+        "target_cosine": 0.8793734312057495,
+        "target_cosine_timbre": 0.9416255950927734,
+        "target_cosine_prosody": 0.9054410457611084,
+        "target_mean_cosine": 0.9012511968612671
+      },
+      "cvae_samples": {
+        "n": 14156,
+        "raw_within_cosine": 0.9504445195198059,
+        "raw_across_cosine": 0.8491001725196838,
+        "raw_identity_margin": 0.10134434700012207,
+        "centered_within_cosine": 0.6476228833198547,
+        "centered_across_cosine": 0.0038737196009606123,
+        "centered_identity_margin": 0.6437491637188941,
+        "per_dim_std": 0.020645026117563248,
+        "norm_mean": 2.9059083461761475,
+        "centered_norm_mean": 1.3758347034454346,
+        "mse": 0.011185006238520145,
+        "target_cosine": 0.8732671737670898,
+        "target_cosine_timbre": 0.9410457015037537,
+        "target_cosine_prosody": 0.9044898152351379,
+        "target_mean_cosine": 0.9012513160705566
+      }
+    },
+    "test": {
+      "clips": 604,
+      "speakers": 118,
+      "prior_mean": {
+        "n": 604,
+        "raw_within_cosine": 0.9724153876304626,
+        "raw_across_cosine": 0.8494186401367188,
+        "raw_identity_margin": 0.1229967474937439,
+        "centered_within_cosine": 0.7504939436912537,
+        "centered_across_cosine": 0.012354852631688118,
+        "centered_identity_margin": 0.7381390910595655,
+        "per_dim_std": 0.020357225090265274,
+        "norm_mean": 3.088961362838745,
+        "centered_norm_mean": 1.3750087022781372,
+        "mse": 0.010188031010329723,
+        "target_cosine": 0.880405843257904,
+        "target_cosine_timbre": 0.9431889057159424,
+        "target_cosine_prosody": 0.9088601469993591,
+        "target_mean_cosine": 0.8980387449264526
+      },
+      "cvae_samples": {
+        "n": 2416,
+        "raw_within_cosine": 0.9661226868629456,
+        "raw_across_cosine": 0.8433980941772461,
+        "raw_identity_margin": 0.12272459268569946,
+        "centered_within_cosine": 0.7047870755195618,
+        "centered_across_cosine": -0.0023760502226650715,
+        "centered_identity_margin": 0.7071631257422268,
+        "per_dim_std": 0.02075096406042576,
+        "norm_mean": 2.944108724594116,
+        "centered_norm_mean": 1.3735270500183105,
+        "mse": 0.010560461319983006,
+        "target_cosine": 0.8738102912902832,
+        "target_cosine_timbre": 0.9425309300422668,
+        "target_cosine_prosody": 0.9075185060501099,
+        "target_mean_cosine": 0.8980388641357422
+      }
+    }
+  }
+}

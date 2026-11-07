@@ -1,0 +1,37 @@
+{
+  "schema_version": "voix.globe_accent_style_cache.v1",
+  "track": "accent",
+  "level": "exploratory",
+  "manifest": "data\\processed\\globe_accent_style_subset.csv",
+  "manifest_sha256": "a247122892fc23449d270aad6503a4899d0ff296b614578ee9fdab465cbdd30a",
+  "audio_root": "D:\\voix\\data\\processed\\globe_audio",
+  "cache": "data\\processed\\globe_accent_style_subset_cache.npz",
+  "cache_sha256": "a2d31a1efa3decc5a78e6abebd11c35c0ac9dfb6c8e331c372fdb4f91972e22b",
+  "classes": [
+    "us",
+    "england",
+    "australian",
+    "canadian",
+    "india_south_asia"
+  ],
+  "splits": [
+    "train"
+  ],
+  "clips": 1765,
+  "style_dim": 256,
+  "failures": [],
+  "counts": {
+    "train": {
+      "us": 479,
+      "england": 400,
+      "australian": 280,
+      "canadian": 260,
+      "india_south_asia": 346
+    }
+  },
+  "notes": [
+    "Style vectors come from the frozen StyleTTS2 style/predictor encoder.",
+    "This cache is for accent residuals only; it is not face identity data.",
+    "Irish, if included, is evaluation-only."
+  ]
+}

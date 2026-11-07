@@ -8,6 +8,8 @@ Implements:
 
 from __future__ import annotations
 
+import threading
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -144,6 +146,7 @@ class CVAELoss(nn.Module):
         self.beta_max     = beta_max
         self.warmup_steps = warmup_steps
         self._step        = 0   # internal step counter (call .step() each train step)
+        self._lock        = threading.Lock()
 
     def beta(self, step: int | None = None) -> float:
         """Compute current beta value (linear warmup from 0 to beta_max)."""
@@ -151,8 +154,9 @@ class CVAELoss(nn.Module):
         return self.beta_max * min(1.0, t / max(1, self.warmup_steps))
 
     def step(self) -> None:
-        """Advance the internal step counter by 1."""
-        self._step += 1
+        """Advance the internal step counter by 1 in a thread-safe manner."""
+        with self._lock:
+            self._step += 1
 
     def forward(
         self,
@@ -194,6 +198,7 @@ class CVAELoss(nn.Module):
             "loss_kl":      l_kl.item(),
             "beta":         beta_val,
             "active_units": au,
+            "au_ratio":     round(au / max(1, mu.shape[-1]), 4),
         }
 
         return total, metrics

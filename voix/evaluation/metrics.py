@@ -14,7 +14,6 @@ All functions degrade gracefully when optional dependencies are missing.
 from __future__ import annotations
 
 import logging
-import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
@@ -22,15 +21,74 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
+from voix.utils.paths import project_path
+
 logger = logging.getLogger("voix.evaluation")
+
+# Canonical evaluation artifacts.  Every path is project-relative so a clean
+# checkout evaluates the same models it trained instead of a workstation path.
+DEFAULT_CFVN = project_path("results", "checkpoints", "cfvn_v2_best.pt")
+DEFAULT_SCALER = project_path(
+    "data", "processed", "voxceleb2_v2", "face_scaler_v2.pt"
+)
+# The raw-ArcFace diagnostic CFVN consumes 512-D features and therefore needs
+# the separately fit ArcFace scaler.  Using the canonical 560-D scaler here
+# would fail dimension checks (or, worse, silently mis-normalize if the
+# dimension happened to match).
+DEFAULT_SCALER_ARCFACE = project_path(
+    "data", "processed", "voxceleb2_v2", "face_scaler_arcface_v2.pt"
+)
+DEFAULT_CHECKPOINT_DIR = project_path("checkpoints")
+DEFAULT_ECAPA_SAVEDIR = project_path("checkpoints", "speechbrain", "spkrec-ecapa")
 
 
 # ---------------------------------------------------------------------------
 # Audio loading helper
 # ---------------------------------------------------------------------------
 
-def _load_wav(path: Union[str, Path, np.ndarray, torch.Tensor], target_sr: int = 24000) -> tuple[np.ndarray, int]:
-    """Load a WAV file, numpy array, or torch Tensor to a 1-D float32 numpy array."""
+def _resample(wav: np.ndarray, sr: int, target_sr: int) -> np.ndarray:
+    """Resample a mono float32 waveform, with dependency-free fallback.
+
+    Previously a missing ``resampy`` silently skipped resampling while the
+    caller still assumed ``target_sr``.  That mislabelled every 24 kHz
+    synthesis sample as 16 kHz and corrupted both F0 and ECAPA features.  The
+    fallbacks below guarantee the returned array really is at ``target_sr``.
+    """
+    if sr == target_sr:
+        return wav.astype(np.float32, copy=False)
+    try:
+        import resampy
+        return resampy.resample(wav, sr, target_sr).astype(np.float32)
+    except ImportError:
+        pass
+    try:
+        import torchaudio
+        tensor = torch.from_numpy(np.ascontiguousarray(wav)).unsqueeze(0)
+        tensor = torchaudio.functional.resample(tensor, sr, target_sr)
+        return tensor.squeeze(0).numpy().astype(np.float32)
+    except Exception:
+        pass
+    try:
+        import librosa
+        return librosa.resample(
+            wav, orig_sr=sr, target_sr=target_sr, res_type="soxr_hq"
+        ).astype(np.float32)
+    except Exception:
+        pass
+    # Last resort: linear interpolation.  Lower quality than polyphase, but it
+    # preserves the correct duration/sample-rate contract instead of lying.
+    duration = len(wav) / float(sr)
+    target_len = max(1, int(round(duration * target_sr)))
+    x_old = np.linspace(0.0, 1.0, num=len(wav), endpoint=False)
+    x_new = np.linspace(0.0, 1.0, num=target_len, endpoint=False)
+    return np.interp(x_new, x_old, wav).astype(np.float32)
+
+
+def _load_wav(
+    path: Union[str, Path, np.ndarray, torch.Tensor],
+    target_sr: int = 24000,
+) -> tuple[np.ndarray, int]:
+    """Load a WAV file, numpy array, or torch Tensor to 1-D float32 at target_sr."""
     if isinstance(path, torch.Tensor):
         wav = path.detach().cpu().squeeze().numpy().astype(np.float32)
         if wav.ndim > 1:
@@ -47,14 +105,55 @@ def _load_wav(path: Union[str, Path, np.ndarray, torch.Tensor], target_sr: int =
         if wav.ndim > 1:
             wav = wav.mean(axis=1)
         if sr != target_sr:
-            try:
-                import resampy
-                wav = resampy.resample(wav, sr, target_sr)
-            except ImportError:
-                logger.warning("resampy not installed; skipping resampling")
+            wav = _resample(wav, sr, target_sr)
         return wav, target_sr
     except Exception as e:
         raise RuntimeError(f"Failed to load audio {path}: {e}") from e
+
+
+_ECAPA_CACHE: Dict[tuple[str, str], Any] = {}
+_CFVN_CACHE: Dict[tuple[str, str], Any] = {}
+
+
+def _get_cfvn(cfvn_path: Union[str, Path], device: str):
+    """Return a cached ContrastiveFaceVoiceNet for repeated evaluations."""
+    from voix.models.contrastive_net import ContrastiveFaceVoiceNet
+
+    resolved = str(Path(cfvn_path).resolve())
+    key = (resolved, str(device))
+    if key not in _CFVN_CACHE:
+        _CFVN_CACHE[key] = ContrastiveFaceVoiceNet.from_checkpoint(
+            resolved, device=device
+        )
+    return _CFVN_CACHE[key]
+
+
+def _get_ecapa(device: str, savedir: Union[str, Path] = DEFAULT_ECAPA_SAVEDIR):
+    """Return a cached SpeechBrain ECAPA extractor."""
+    from voix.data.speaker_extractor import ECAPAExtractor
+
+    key = (str(device), str(savedir))
+    if key not in _ECAPA_CACHE:
+        _ECAPA_CACHE[key] = ECAPAExtractor(
+            device=device,
+            cache_dir=str(project_path("checkpoints", "speechbrain")),
+            savedir=str(savedir),
+        )
+    return _ECAPA_CACHE[key]
+
+
+def _embed_wav_16k(
+    path: Union[str, Path, np.ndarray, torch.Tensor],
+    device: str,
+) -> Optional[torch.Tensor]:
+    """Embed an utterance with ECAPA at its required 16 kHz sample rate."""
+    try:
+        wav, _ = _load_wav(path, 16000)
+        waveform = torch.from_numpy(np.ascontiguousarray(wav)).unsqueeze(0)
+        return _get_ecapa(device).extract(waveform).squeeze(0)
+    except Exception as e:
+        logger.warning("ECAPA embedding unavailable for %s: %s", path, e)
+        return None
 
 
 # ---------------------------------------------------------------------------
@@ -128,125 +227,199 @@ def speaker_similarity(
     wav_path_a: Union[str, Path],
     wav_path_b: Union[str, Path],
     device: str = "cpu",
-) -> float:
+) -> Optional[float]:
     """Compute ECAPA-TDNN cosine similarity between two utterances.
 
-    Returns a value in [-1, 1]; >0.5 suggests same speaker.
-    Returns 0.0 if speechbrain is not available.
+    Returns a value in [-1, 1]; >0.5 suggests same speaker.  Returns ``None``
+    when the extractor or audio is unavailable -- a failed measurement must not
+    be reported as a real similarity of 0.0.
     """
-    try:
-        from speechbrain.pretrained import EncoderClassifier
-        savedir = "D:/voix/checkpoints/speechbrain/spkrec-ecapa"
-        model = EncoderClassifier.from_hparams(
-            source="speechbrain/spkrec-ecapa-voxceleb",
-            savedir=savedir,
-            run_opts={"device": device},
-        )
-        import torchaudio
-        def embed(path):
-            sig, sr = torchaudio.load(str(path))
-            if sr != 16000:
-                sig = torchaudio.functional.resample(sig, sr, 16000)
-            if sig.dim() > 1:
-                sig = sig.mean(0, keepdim=True)
-            return model.encode_batch(sig).squeeze()
-
-        e_a = embed(wav_path_a)
-        e_b = embed(wav_path_b)
-        sim = F.cosine_similarity(e_a.unsqueeze(0), e_b.unsqueeze(0)).item()
-        return round(sim, 4)
-    except Exception as e:
-        logger.debug(f"speaker_similarity unavailable: {e}")
-        return 0.0
+    e_a = _embed_wav_16k(wav_path_a, device)
+    e_b = _embed_wav_16k(wav_path_b, device)
+    if e_a is None or e_b is None:
+        return None
+    sim = F.cosine_similarity(e_a.unsqueeze(0), e_b.unsqueeze(0)).item()
+    return round(sim, 4)
 
 
 # ---------------------------------------------------------------------------
 # 3. Face-voice consistency
 # ---------------------------------------------------------------------------
 
+def _face_embedding_for_cfvn(
+    image_path: Union[str, Path],
+    net,
+    scaler_path: Union[str, Path],
+    device: str,
+    pipeline=None,
+) -> Optional[torch.Tensor]:
+    """Build the exact CFVN input for one image (normalized, correct schema)."""
+    import cv2
+
+    from voix.data.feature_contract import (
+        FaceFeatureBuilder,
+        load_scaler_payload,
+    )
+
+    face_dim = int(getattr(net, "face_dim", 0))
+    if face_dim not in (512, 560):
+        logger.warning(
+            "Unsupported CFVN face_dim=%s (expected 512 or 560)", face_dim
+        )
+        return None
+    is_arcface = face_dim == 512
+
+    # The pipeline shortcut returns the fused 560-D representation.  It cannot
+    # serve the 512-D diagnostic model, which must consume raw ArcFace.
+    if (
+        not is_arcface
+        and pipeline is not None
+        and hasattr(pipeline, "extract_face_features")
+    ):
+        raw, _, _, _ = pipeline.extract_face_features(str(image_path))
+        raw = raw.to(device).float()
+    else:
+        from voix.data.demographics import (
+            SoftDemographicEstimator,
+            aspect_ratio_from_bbox,
+        )
+        from voix.data.face_extractor import (
+            ArcFaceExtractor,
+            FaceMeshExtractor,
+            crop_face_bbox,
+        )
+        from voix.data.morphology import compute_craniofacial_ratios
+
+        img = cv2.imread(str(image_path))
+        if img is None:
+            logger.warning("Could not read face image: %s", image_path)
+            return None
+
+        arcface = ArcFaceExtractor(
+            device_id=-1, cache_dir=str(DEFAULT_CHECKPOINT_DIR)
+        )
+        e_id, gender, age, bbox = arcface.extract_full_with_bbox(img)
+        if e_id is None:
+            logger.warning("No face detected in image: %s", image_path)
+            return None
+
+        if is_arcface:
+            # Diagnostic CFVN trained on raw ArcFace only.
+            raw = torch.from_numpy(np.asarray(e_id, dtype=np.float32)).unsqueeze(0)
+        else:
+            task_path = project_path(
+                "checkpoints", "mediapipe", "face_landmarker.task"
+            )
+            facemesh = FaceMeshExtractor(
+                model_path=str(task_path) if task_path.exists() else None
+            )
+            face_crop = crop_face_bbox(img, bbox) if bbox is not None else img
+            landmarks = facemesh.extract(
+                cv2.cvtColor(face_crop, cv2.COLOR_BGR2RGB)
+            )
+            e_geo = (
+                compute_craniofacial_ratios(landmarks)
+                if landmarks is not None
+                else np.zeros(32, dtype=np.float32)
+            )
+            demog = SoftDemographicEstimator()
+            e_demo = demog.estimate(
+                e_id,
+                gender=gender,
+                age=age,
+                aspect_ratio=(
+                    aspect_ratio_from_bbox(bbox) if bbox is not None else 1.35
+                ),
+            )
+            builder = FaceFeatureBuilder(device=device)
+            raw = builder.fuse(e_id, e_geo, e_demo).cpu()
+
+    # Match the scaler to the representation the CFVN was trained on.  If the
+    # caller left the default 560-D path in place, switch to the ArcFace scaler
+    # rather than failing on a dimension mismatch.
+    resolved_scaler = Path(scaler_path)
+    if (
+        is_arcface
+        and resolved_scaler.resolve() == Path(DEFAULT_SCALER).resolve()
+    ):
+        resolved_scaler = Path(DEFAULT_SCALER_ARCFACE)
+    try:
+        scaler = load_scaler_payload(
+            resolved_scaler,
+            expected_dim=face_dim,
+            face_key="arcface" if is_arcface else "face_features",
+        )
+    except (FileNotFoundError, ValueError) as exc:
+        logger.warning("CFVN face scaler unavailable: %s", exc)
+        return None
+
+    # The pipeline may return the fused face vector on CUDA while the scaler
+    # payload is loaded on CPU.  Move the scaler to the face tensor's device
+    # before arithmetic instead of assuming both are co-located.
+    target_device = raw.device
+    mean = scaler["face_mean"].to(target_device)
+    std = torch.clamp(scaler["face_std"].to(target_device), min=1e-6)
+    return ((raw - mean) / std).to(device)
+
+
 def face_voice_consistency(
     image_path: Union[str, Path],
     wav_path: Union[str, Path],
     pipeline=None,
     device: str = "cpu",
-) -> float:
-    """Compute ContrastiveFaceVoiceNet similarity between a face image and synthesized voice.
+    cfvn_path: Union[str, Path] = DEFAULT_CFVN,
+    scaler_path: Union[str, Path] = DEFAULT_SCALER,
+) -> Optional[float]:
+    """Compute ContrastiveFaceVoiceNet similarity between a face image and voice.
 
     Measures whether the generated voice is acoustically consistent with the
     face biometrics -- the core quality metric for face-to-voice synthesis.
 
+    The face path is the canonical FaceFeatureV2 contract: ArcFace + FaceMesh +
+    demographics fused by ``FaceFeatureBuilder``, z-scored with the train-split
+    scaler, then mapped by the retrained CFVN.  The old implementation used the
+    stale V1 fusion, the old collapsed checkpoint, and a module path that no
+    longer existed.
+
     Args:
         image_path: Path to the subject's face image.
         wav_path:   Path to the synthesized voice WAV file.
-        pipeline:   Optional VoixPipeline instance (reuses face extractor if loaded).
+        pipeline:   Optional VoixPipeline instance (reuses its extractors).
         device:     Computation device.
+        cfvn_path:  CFVN checkpoint (defaults to the V2 checkpoint).
+        scaler_path: FaceFeatureV2 scaler checkpoint.
 
     Returns:
-        Cosine similarity in [-1, 1]. Higher = more face-voice consistent.
-        Returns 0.0 if dependencies unavailable.
+        Cosine similarity in [-1, 1], or ``None`` when the measurement cannot
+        be made.  ``None`` is deliberate: silently returning 0.0 made missing
+        dependencies look like poor face-voice consistency.
     """
     try:
-        import sys
-        sys.path.insert(0, "D:/voix")
-        from voix.models.contrastive_net import ContrastiveFaceVoiceNet
-        from voix.data.face_extractor import ArcFaceExtractor
-        from voix.data.demographics import SoftDemographicEstimator
-        from voix.data.morphology import compute_craniofacial_ratios
-        import cv2
-
-        # Load contrastive model
-        cfvn_path = "D:/voix/results/checkpoints/D_joint_infonce_best.pt"
-        if not os.path.exists(cfvn_path):
-            return 0.0
-        net = ContrastiveFaceVoiceNet.from_checkpoint(cfvn_path, device=device)
+        cfvn_path = Path(cfvn_path)
+        if not cfvn_path.exists():
+            logger.warning("CFVN checkpoint not found: %s", cfvn_path)
+            return None
+        net = _get_cfvn(cfvn_path, device)
         net.eval()
 
-        # Extract face embedding
-        img = cv2.imread(str(image_path))
-        if img is None:
-            return 0.0
-        arcface = ArcFaceExtractor(device_id=-1, cache_dir="D:/voix/checkpoints")
-        e_id, gender, age = arcface.extract_full(img)
-        if e_id is None:
-            return 0.0
+        face = _face_embedding_for_cfvn(
+            image_path, net, scaler_path, device, pipeline=pipeline
+        )
+        if face is None:
+            return None
 
-        # Build 560-D fused face vector (simplified: use ArcFace 512 + zero padding)
-        # For a full fused vector use pipeline.extract_face_features()
-        e_f_tensor = torch.tensor(e_id, dtype=torch.float32)
-        # Pad to 560-D (ArcFace 512 + craniofacial 32 + demog 16)
-        e_f_padded = torch.cat([e_f_tensor, torch.zeros(48)])[:560].unsqueeze(0)
+        voice = _embed_wav_16k(wav_path, device)
+        if voice is None:
+            return None
+        voice = F.normalize(voice.unsqueeze(0), dim=-1).to(device)
 
-        # Extract predicted speaker embedding from face
         with torch.no_grad():
-            e_face = net(e_f_padded.to(device))   # (1, 192)
-
-        # Extract voice embedding
-        try:
-            from speechbrain.pretrained import EncoderClassifier
-            import torchaudio
-            savedir = "D:/voix/checkpoints/speechbrain/spkrec-ecapa"
-            enc = EncoderClassifier.from_hparams(
-                source="speechbrain/spkrec-ecapa-voxceleb",
-                savedir=savedir,
-                run_opts={"device": device},
-            )
-            sig, sr = torchaudio.load(str(wav_path))
-            if sr != 16000:
-                sig = torchaudio.functional.resample(sig, sr, 16000)
-            if sig.dim() > 1:
-                sig = sig.mean(0, keepdim=True)
-            with torch.no_grad():
-                e_voice = enc.encode_batch(sig).squeeze()  # (192,)
-            e_voice = F.normalize(e_voice.unsqueeze(0), dim=-1)
-
-            sim = F.cosine_similarity(e_face, e_voice.to(device)).item()
-            return round(sim, 4)
-        except Exception as e:
-            logger.debug(f"voice embed failed: {e}")
-            return 0.0
+            e_face = F.normalize(net(face), dim=-1)  # (1, 192)
+            sim = F.cosine_similarity(e_face, voice).item()
+        return round(sim, 4)
     except Exception as e:
-        logger.debug(f"face_voice_consistency unavailable: {e}")
-        return 0.0
+        logger.warning("face_voice_consistency unavailable: %s", e)
+        return None
 
 
 # ---------------------------------------------------------------------------
@@ -312,6 +485,9 @@ def evaluate_synthesis(
     device: str = "cpu",
     run_utmos: bool = False,
     run_dnsmos: bool = False,
+    pipeline=None,
+    cfvn_path: Union[str, Path] = DEFAULT_CFVN,
+    scaler_path: Union[str, Path] = DEFAULT_SCALER,
 ) -> Dict[str, Any]:
     """Compute all available quality metrics for a synthesized voice.
 
@@ -340,7 +516,14 @@ def evaluate_synthesis(
 
     # Face-voice consistency
     if image_path is not None:
-        results["face_voice_consistency"] = face_voice_consistency(image_path, wav_path, device=device)
+        results["face_voice_consistency"] = face_voice_consistency(
+            image_path,
+            wav_path,
+            pipeline=pipeline,
+            device=device,
+            cfvn_path=cfvn_path,
+            scaler_path=scaler_path,
+        )
 
     # Neural MOS
     if run_utmos:

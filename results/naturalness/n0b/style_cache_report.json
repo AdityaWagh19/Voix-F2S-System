@@ -1,0 +1,133 @@
+{
+  "schema_version": "voix.ami_style_cache.v1",
+  "track": "naturalness",
+  "level": "exploratory",
+  "manifest": "D:\\voix\\data\\processed\\ami_naturalness\\manifest.csv",
+  "manifest_sha256": "aac0e0e1d5b15b21f9746ea4bb427c24fe21b3cfd5eb8edd71621c74fa893abe",
+  "cache": "D:\\voix\\data\\processed\\ami_style_cache.npz",
+  "cache_sha256": "3b321c51c70def28e924c6fcecabd6b29042ded500adf81762123d58a7f0d2f8",
+  "splits": [
+    "train",
+    "val",
+    "test"
+  ],
+  "clips": 536,
+  "speakers": 16,
+  "style_dim": 256,
+  "counts": {
+    "train": 315,
+    "val": 105,
+    "test": 116
+  },
+  "speakers_by_split": {
+    "train": [
+      "FEE005",
+      "FIE081",
+      "MEE006",
+      "MEE007",
+      "MEE008",
+      "MIO016",
+      "MIO050",
+      "MIO082"
+    ],
+    "val": [
+      "MEE009",
+      "MEE010",
+      "MEE011",
+      "MEE012"
+    ],
+    "test": [
+      "FEE055",
+      "MEE053",
+      "MEE054",
+      "MEE056"
+    ]
+  },
+  "metrics_by_split": {
+    "train": {
+      "duration_s": 3.5671111111111107,
+      "speech_duration_s": 2.911079365079365,
+      "word_count": 10.631746031746031,
+      "words_per_second": 3.6547040761235063,
+      "f0_median_hz": 132.19752960503828,
+      "f0_std_st": 2.6519830251993723,
+      "f0_range_st": 8.11832268370607,
+      "f0_voiced_ratio": 0.54508961206124,
+      "energy_std_db": 7.741325435184297,
+      "pause_count": 0.9555555555555556,
+      "pause_ratio": 0.11175100595267694,
+      "spectral_tilt_db_per_khz": -4.315218027511956
+    },
+    "val": {
+      "duration_s": 4.666380952380953,
+      "speech_duration_s": 3.669714285714285,
+      "word_count": 14.038095238095238,
+      "words_per_second": 3.7692912115415824,
+      "f0_median_hz": 112.40277729291475,
+      "f0_std_st": 2.8563921420062917,
+      "f0_range_st": 8.600096153846152,
+      "f0_voiced_ratio": 0.4905971115915739,
+      "energy_std_db": 7.694241600944882,
+      "pause_count": 1.4095238095238096,
+      "pause_ratio": 0.1492982020396844,
+      "spectral_tilt_db_per_khz": -5.510257592542715
+    },
+    "test": {
+      "duration_s": 3.792586206896551,
+      "speech_duration_s": 2.9261839080459766,
+      "word_count": 10.681034482758621,
+      "words_per_second": 3.5789054209166182,
+      "f0_median_hz": 130.22468588767322,
+      "f0_std_st": 2.7658317018623446,
+      "f0_range_st": 8.30695652173913,
+      "f0_voiced_ratio": 0.4724854366637502,
+      "energy_std_db": 7.614415158485544,
+      "pause_count": 1.1637931034482758,
+      "pause_ratio": 0.14587162067479797,
+      "spectral_tilt_db_per_khz": -3.0403731308049893
+    }
+  },
+  "failures": [
+    {
+      "clip_id": "ES2002a_FEE005_0039",
+      "error": "RuntimeError: Calculated padded input size per channel: (5 x 4). Kernel size: (5 x 5). Kernel size can't be greater than actual input size"
+    },
+    {
+      "clip_id": "ES2002a_MEE006_0005",
+      "error": "RuntimeError: Calculated padded input size per channel: (5 x 4). Kernel size: (5 x 5). Kernel size can't be greater than actual input size"
+    },
+    {
+      "clip_id": "ES2002a_MEE008_0005",
+      "error": "RuntimeError: Calculated padded input size per channel: (5 x 4). Kernel size: (5 x 5). Kernel size can't be greater than actual input size"
+    },
+    {
+      "clip_id": "ES2002a_MEE008_0034",
+      "error": "RuntimeError: Calculated padded input size per channel: (5 x 4). Kernel size: (5 x 5). Kernel size can't be greater than actual input size"
+    },
+    {
+      "clip_id": "ES2003a_MEE009_0003",
+      "error": "RuntimeError: Calculated padded input size per channel: (5 x 4). Kernel size: (5 x 5). Kernel size can't be greater than actual input size"
+    },
+    {
+      "clip_id": "ES2003a_MEE009_0024",
+      "error": "RuntimeError: Calculated padded input size per channel: (5 x 4). Kernel size: (5 x 5). Kernel size can't be greater than actual input size"
+    },
+    {
+      "clip_id": "ES2014a_MEE053_0023",
+      "error": "RuntimeError: Calculated padded input size per channel: (5 x 3). Kernel size: (5 x 5). Kernel size can't be greater than actual input size"
+    },
+    {
+      "clip_id": "IS1000a_MIO016_0020",
+      "error": "RuntimeError: Calculated padded input size per channel: (5 x 4). Kernel size: (5 x 5). Kernel size can't be greater than actual input size"
+    }
+  ],
+  "notes": [
+    "Style vectors come from the frozen StyleTTS2 style/predictor encoder.",
+    "AMI is used only for naturalness; no identity or expression artifact is trained here.",
+    "The N0b prototype uses train only; val/test are held-out references."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings collected"
+  }
+}

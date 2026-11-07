@@ -1,0 +1,82 @@
+{
+  "schema_version": "voix.globe_accent_ssl_features.v1",
+  "generated_at": "2026-10-30 13:33:12 UTC",
+  "level": "exploratory",
+  "track": "accent",
+  "base_cache": "D:\\voix\\data\\processed\\globe_accent_features.npz",
+  "base_cache_sha256": "a3fe9569b64bee32304c1b8549559dd57dd9ca7f5a65181cea96dcbcb95e6d31",
+  "output": "data\\processed\\globe_accent_ssl_smoke.npz",
+  "output_sha256": "6f94a7d40f6d5e70173a970d736171c755dd2930e94735646d278ebbc894994a",
+  "clips": 8,
+  "speakers": 1,
+  "classes": [
+    "australian"
+  ],
+  "splits": [
+    "test"
+  ],
+  "base_dim": 222,
+  "ssl_dim": 768,
+  "combined_dim": 990,
+  "ssl_config": {
+    "bundle": "WAV2VEC2_BASE",
+    "num_layers": 8,
+    "sample_rate": 16000,
+    "max_seconds": 12.0,
+    "l2_normalize": true,
+    "pooling": "mean",
+    "feature_dim": 768
+  },
+  "failures": [
+    {
+      "clip_id": "common_voice_en_24974941",
+      "path": "D:\\voix\\data\\processed\\globe_audio\\test\\australian\\common_voice_en_24974941.wav",
+      "error": "RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu! (when checking argument for argument attn_bias in method wrapper_CUDA___scaled_dot_product_efficient_attention)"
+    },
+    {
+      "clip_id": "common_voice_en_24975001",
+      "path": "D:\\voix\\data\\processed\\globe_audio\\test\\australian\\common_voice_en_24975001.wav",
+      "error": "RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu! (when checking argument for argument attn_bias in method wrapper_CUDA___scaled_dot_product_efficient_attention)"
+    },
+    {
+      "clip_id": "common_voice_en_24975012",
+      "path": "D:\\voix\\data\\processed\\globe_audio\\test\\australian\\common_voice_en_24975012.wav",
+      "error": "RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu! (when checking argument for argument attn_bias in method wrapper_CUDA___scaled_dot_product_efficient_attention)"
+    },
+    {
+      "clip_id": "common_voice_en_24975039",
+      "path": "D:\\voix\\data\\processed\\globe_audio\\test\\australian\\common_voice_en_24975039.wav",
+      "error": "RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu! (when checking argument for argument attn_bias in method wrapper_CUDA___scaled_dot_product_efficient_attention)"
+    },
+    {
+      "clip_id": "common_voice_en_24975086",
+      "path": "D:\\voix\\data\\processed\\globe_audio\\test\\australian\\common_voice_en_24975086.wav",
+      "error": "RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu! (when checking argument for argument attn_bias in method wrapper_CUDA___scaled_dot_product_efficient_attention)"
+    },
+    {
+      "clip_id": "common_voice_en_24975113",
+      "path": "D:\\voix\\data\\processed\\globe_audio\\test\\australian\\common_voice_en_24975113.wav",
+      "error": "RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu! (when checking argument for argument attn_bias in method wrapper_CUDA___scaled_dot_product_efficient_attention)"
+    },
+    {
+      "clip_id": "common_voice_en_24975132",
+      "path": "D:\\voix\\data\\processed\\globe_audio\\test\\australian\\common_voice_en_24975132.wav",
+      "error": "RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu! (when checking argument for argument attn_bias in method wrapper_CUDA___scaled_dot_product_efficient_attention)"
+    },
+    {
+      "clip_id": "common_voice_en_24975218",
+      "path": "D:\\voix\\data\\processed\\globe_audio\\test\\australian\\common_voice_en_24975218.wav",
+      "error": "RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu! (when checking argument for argument attn_bias in method wrapper_CUDA___scaled_dot_product_efficient_attention)"
+    }
+  ],
+  "notes": [
+    "The Wav2Vec2 model is frozen; no fine-tuning was performed.",
+    "Mean pooling over layer-8 hidden states, L2-normalized per clip.",
+    "The combined cache is base features followed by SSL features.",
+    "Irish remains evaluation-only and is not a training class."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings collected"
+  }
+}

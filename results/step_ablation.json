@@ -1,0 +1,1123 @@
+{
+  "schema_version": "voix.step_ablation.v1",
+  "notes": [
+    "This is a noise/loudness proxy ablation, not MOS or a perceptual naturalness claim.",
+    "Each row holds the face, speaker embedding, text, and seed fixed within that run.",
+    "The saved metrics use the current writer: no peak normalization, only -1 dBTP true-peak safety.",
+    "Do not choose the tier-1 default from one seed or one prompt."
+  ],
+  "seeds": [
+    42,
+    123,
+    2026
+  ],
+  "prompts": {
+    "formal": "The human voice reflects both physical anatomy and lived culture, carrying the unique cadence of personal identity.",
+    "conversational": "Hey, so I tried that new place down the street, and honestly? The coffee was better than I expected."
+  },
+  "steps": [
+    5,
+    10,
+    20
+  ],
+  "emotion": "whispered",
+  "by_condition": {
+    "neutral_dsp_control": {
+      "n": 6,
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": {
+        "n": 6,
+        "mean": 27.1867,
+        "std": 2.1369,
+        "min": 24.07,
+        "max": 29.82
+      },
+      "raw_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -45.33,
+        "std": 2.1619,
+        "min": -48.09,
+        "max": -42.19
+      },
+      "raw_peak": {
+        "n": 6,
+        "mean": 0.533,
+        "std": 0.0746,
+        "min": 0.447,
+        "max": 0.6541
+      },
+      "saved_lufs": {
+        "n": 6,
+        "mean": -23.0,
+        "std": 0.0,
+        "min": -23.0,
+        "max": -23.0
+      },
+      "saved_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -45.33,
+        "std": 2.1619,
+        "min": -48.09,
+        "max": -42.19
+      }
+    },
+    "neutral_dsp_pitch116_time092": {
+      "n": 6,
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "pitch+time_stretch",
+      "raw_snr_proxy_db": {
+        "n": 6,
+        "mean": 21.5417,
+        "std": 1.8576,
+        "min": 18.11,
+        "max": 23.91
+      },
+      "raw_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -40.465,
+        "std": 1.6967,
+        "min": -42.92,
+        "max": -37.61
+      },
+      "raw_peak": {
+        "n": 6,
+        "mean": 0.5069,
+        "std": 0.031,
+        "min": 0.4415,
+        "max": 0.5307
+      },
+      "saved_lufs": {
+        "n": 6,
+        "mean": -23.0,
+        "std": 0.0,
+        "min": -23.0,
+        "max": -23.0
+      },
+      "saved_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -40.465,
+        "std": 1.6967,
+        "min": -42.92,
+        "max": -37.61
+      }
+    },
+    "neutral_steps10": {
+      "n": 6,
+      "diffusion_steps": 10,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": {
+        "n": 6,
+        "mean": 27.705,
+        "std": 1.6246,
+        "min": 24.59,
+        "max": 29.23
+      },
+      "raw_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -45.8133,
+        "std": 1.5058,
+        "min": -47.43,
+        "max": -43.32
+      },
+      "raw_peak": {
+        "n": 6,
+        "mean": 0.5328,
+        "std": 0.0656,
+        "min": 0.4527,
+        "max": 0.6249
+      },
+      "saved_lufs": {
+        "n": 6,
+        "mean": -23.0,
+        "std": 0.0,
+        "min": -23.0,
+        "max": -23.0
+      },
+      "saved_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -45.8133,
+        "std": 1.5058,
+        "min": -47.43,
+        "max": -43.32
+      }
+    },
+    "neutral_steps20": {
+      "n": 6,
+      "diffusion_steps": 20,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": {
+        "n": 6,
+        "mean": 26.985,
+        "std": 2.1277,
+        "min": 24.09,
+        "max": 29.77
+      },
+      "raw_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -45.0467,
+        "std": 2.055,
+        "min": -47.94,
+        "max": -42.38
+      },
+      "raw_peak": {
+        "n": 6,
+        "mean": 0.4972,
+        "std": 0.0519,
+        "min": 0.4345,
+        "max": 0.5815
+      },
+      "saved_lufs": {
+        "n": 6,
+        "mean": -23.0,
+        "std": 0.0,
+        "min": -23.0,
+        "max": -23.0
+      },
+      "saved_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -45.0467,
+        "std": 2.055,
+        "min": -47.94,
+        "max": -42.38
+      }
+    },
+    "neutral_steps5": {
+      "n": 6,
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": {
+        "n": 6,
+        "mean": 27.0583,
+        "std": 1.1592,
+        "min": 25.11,
+        "max": 28.67
+      },
+      "raw_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -45.0783,
+        "std": 1.0622,
+        "min": -46.42,
+        "max": -43.39
+      },
+      "raw_peak": {
+        "n": 6,
+        "mean": 0.5144,
+        "std": 0.0713,
+        "min": 0.4265,
+        "max": 0.6419
+      },
+      "saved_lufs": {
+        "n": 6,
+        "mean": -23.0,
+        "std": 0.0,
+        "min": -23.0,
+        "max": -23.0
+      },
+      "saved_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -45.0783,
+        "std": 1.0622,
+        "min": -46.42,
+        "max": -43.39
+      }
+    },
+    "whispered_steps10": {
+      "n": 6,
+      "diffusion_steps": 10,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": {
+        "n": 6,
+        "mean": 21.7917,
+        "std": 0.61,
+        "min": 20.66,
+        "max": 22.5
+      },
+      "raw_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -43.1667,
+        "std": 0.6388,
+        "min": -43.86,
+        "max": -42.06
+      },
+      "raw_peak": {
+        "n": 6,
+        "mean": 0.3628,
+        "std": 0.0312,
+        "min": 0.3206,
+        "max": 0.423
+      },
+      "saved_lufs": {
+        "n": 6,
+        "mean": -25.73,
+        "std": 0.0,
+        "min": -25.73,
+        "max": -25.73
+      },
+      "saved_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -43.1667,
+        "std": 0.6388,
+        "min": -43.86,
+        "max": -42.06
+      }
+    },
+    "whispered_steps20": {
+      "n": 6,
+      "diffusion_steps": 20,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": {
+        "n": 6,
+        "mean": 19.8117,
+        "std": 1.4744,
+        "min": 17.81,
+        "max": 22.34
+      },
+      "raw_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -41.225,
+        "std": 1.2394,
+        "min": -43.34,
+        "max": -39.3
+      },
+      "raw_peak": {
+        "n": 6,
+        "mean": 0.3755,
+        "std": 0.0483,
+        "min": 0.3123,
+        "max": 0.4385
+      },
+      "saved_lufs": {
+        "n": 6,
+        "mean": -25.73,
+        "std": 0.0,
+        "min": -25.73,
+        "max": -25.73
+      },
+      "saved_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -41.225,
+        "std": 1.2394,
+        "min": -43.34,
+        "max": -39.3
+      }
+    },
+    "whispered_steps5": {
+      "n": 6,
+      "diffusion_steps": 5,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": {
+        "n": 6,
+        "mean": 21.81,
+        "std": 0.7642,
+        "min": 20.51,
+        "max": 22.81
+      },
+      "raw_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -43.2433,
+        "std": 0.8075,
+        "min": -44.01,
+        "max": -41.66
+      },
+      "raw_peak": {
+        "n": 6,
+        "mean": 0.3943,
+        "std": 0.0678,
+        "min": 0.329,
+        "max": 0.4962
+      },
+      "saved_lufs": {
+        "n": 6,
+        "mean": -25.73,
+        "std": 0.0,
+        "min": -25.73,
+        "max": -25.73
+      },
+      "saved_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -43.2433,
+        "std": 0.8075,
+        "min": -44.01,
+        "max": -41.66
+      }
+    }
+  },
+  "by_step": {
+    "5": {
+      "n": 6,
+      "neutral_snr_proxy_db": {
+        "n": 6,
+        "mean": 27.0583,
+        "std": 1.1592,
+        "min": 25.11,
+        "max": 28.67
+      },
+      "neutral_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -45.0783,
+        "std": 1.0622,
+        "min": -46.42,
+        "max": -43.39
+      },
+      "whispered_snr_proxy_db": {
+        "n": 6,
+        "mean": 21.81,
+        "std": 0.7642,
+        "min": 20.51,
+        "max": 22.81
+      },
+      "whispered_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -43.2433,
+        "std": 0.8075,
+        "min": -44.01,
+        "max": -41.66
+      }
+    },
+    "10": {
+      "n": 6,
+      "neutral_snr_proxy_db": {
+        "n": 6,
+        "mean": 27.705,
+        "std": 1.6246,
+        "min": 24.59,
+        "max": 29.23
+      },
+      "neutral_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -45.8133,
+        "std": 1.5058,
+        "min": -47.43,
+        "max": -43.32
+      },
+      "whispered_snr_proxy_db": {
+        "n": 6,
+        "mean": 21.7917,
+        "std": 0.61,
+        "min": 20.66,
+        "max": 22.5
+      },
+      "whispered_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -43.1667,
+        "std": 0.6388,
+        "min": -43.86,
+        "max": -42.06
+      }
+    },
+    "20": {
+      "n": 6,
+      "neutral_snr_proxy_db": {
+        "n": 6,
+        "mean": 26.985,
+        "std": 2.1277,
+        "min": 24.09,
+        "max": 29.77
+      },
+      "neutral_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -45.0467,
+        "std": 2.055,
+        "min": -47.94,
+        "max": -42.38
+      },
+      "whispered_snr_proxy_db": {
+        "n": 6,
+        "mean": 19.8117,
+        "std": 1.4744,
+        "min": 17.81,
+        "max": 22.34
+      },
+      "whispered_noise_floor_dbfs": {
+        "n": 6,
+        "mean": -41.225,
+        "std": 1.2394,
+        "min": -43.34,
+        "max": -39.3
+      }
+    }
+  },
+  "rows": [
+    {
+      "seed": 42,
+      "prompt": "formal",
+      "condition": "neutral_steps5",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 27.42,
+      "raw_noise_floor_dbfs": -45.7,
+      "raw_peak": 0.64185,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -45.7
+    },
+    {
+      "seed": 42,
+      "prompt": "formal",
+      "condition": "whispered_steps5",
+      "diffusion_steps": 5,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 22.14,
+      "raw_noise_floor_dbfs": -43.99,
+      "raw_peak": 0.49621,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -43.99
+    },
+    {
+      "seed": 42,
+      "prompt": "formal",
+      "condition": "neutral_steps10",
+      "diffusion_steps": 10,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 29.0,
+      "raw_noise_floor_dbfs": -47.43,
+      "raw_peak": 0.62486,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -47.43
+    },
+    {
+      "seed": 42,
+      "prompt": "formal",
+      "condition": "whispered_steps10",
+      "diffusion_steps": 10,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 21.73,
+      "raw_noise_floor_dbfs": -43.26,
+      "raw_peak": 0.42305,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -43.26
+    },
+    {
+      "seed": 42,
+      "prompt": "formal",
+      "condition": "neutral_steps20",
+      "diffusion_steps": 20,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 28.51,
+      "raw_noise_floor_dbfs": -46.89,
+      "raw_peak": 0.58152,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -46.89
+    },
+    {
+      "seed": 42,
+      "prompt": "formal",
+      "condition": "whispered_steps20",
+      "diffusion_steps": 20,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 18.88,
+      "raw_noise_floor_dbfs": -40.58,
+      "raw_peak": 0.43854,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -40.58
+    },
+    {
+      "seed": 42,
+      "prompt": "formal",
+      "condition": "neutral_dsp_control",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 29.53,
+      "raw_noise_floor_dbfs": -48.09,
+      "raw_peak": 0.65408,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -48.09
+    },
+    {
+      "seed": 42,
+      "prompt": "formal",
+      "condition": "neutral_dsp_pitch116_time092",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "pitch+time_stretch",
+      "raw_snr_proxy_db": 23.91,
+      "raw_noise_floor_dbfs": -42.92,
+      "raw_peak": 0.53072,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -42.92
+    },
+    {
+      "seed": 42,
+      "prompt": "conversational",
+      "condition": "neutral_steps5",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 27.73,
+      "raw_noise_floor_dbfs": -45.53,
+      "raw_peak": 0.44878,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -45.53
+    },
+    {
+      "seed": 42,
+      "prompt": "conversational",
+      "condition": "whispered_steps5",
+      "diffusion_steps": 5,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 22.47,
+      "raw_noise_floor_dbfs": -43.59,
+      "raw_peak": 0.38537,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -43.59
+    },
+    {
+      "seed": 42,
+      "prompt": "conversational",
+      "condition": "neutral_steps10",
+      "diffusion_steps": 10,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 28.11,
+      "raw_noise_floor_dbfs": -45.86,
+      "raw_peak": 0.45366,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -45.86
+    },
+    {
+      "seed": 42,
+      "prompt": "conversational",
+      "condition": "whispered_steps10",
+      "diffusion_steps": 10,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 22.24,
+      "raw_noise_floor_dbfs": -43.71,
+      "raw_peak": 0.34301,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -43.71
+    },
+    {
+      "seed": 42,
+      "prompt": "conversational",
+      "condition": "neutral_steps20",
+      "diffusion_steps": 20,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 26.66,
+      "raw_noise_floor_dbfs": -44.3,
+      "raw_peak": 0.43596,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -44.3
+    },
+    {
+      "seed": 42,
+      "prompt": "conversational",
+      "condition": "whispered_steps20",
+      "diffusion_steps": 20,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 22.34,
+      "raw_noise_floor_dbfs": -43.34,
+      "raw_peak": 0.43377,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -43.34
+    },
+    {
+      "seed": 42,
+      "prompt": "conversational",
+      "condition": "neutral_dsp_control",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 27.25,
+      "raw_noise_floor_dbfs": -45.15,
+      "raw_peak": 0.46917,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -45.15
+    },
+    {
+      "seed": 42,
+      "prompt": "conversational",
+      "condition": "neutral_dsp_pitch116_time092",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "pitch+time_stretch",
+      "raw_snr_proxy_db": 21.67,
+      "raw_noise_floor_dbfs": -40.45,
+      "raw_peak": 0.51362,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -40.45
+    },
+    {
+      "seed": 123,
+      "prompt": "formal",
+      "condition": "neutral_steps5",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 25.11,
+      "raw_noise_floor_dbfs": -43.39,
+      "raw_peak": 0.49162,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -43.39
+    },
+    {
+      "seed": 123,
+      "prompt": "formal",
+      "condition": "whispered_steps5",
+      "diffusion_steps": 5,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 20.51,
+      "raw_noise_floor_dbfs": -41.66,
+      "raw_peak": 0.47662,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -41.66
+    },
+    {
+      "seed": 123,
+      "prompt": "formal",
+      "condition": "neutral_steps10",
+      "diffusion_steps": 10,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 24.59,
+      "raw_noise_floor_dbfs": -43.32,
+      "raw_peak": 0.58667,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -43.32
+    },
+    {
+      "seed": 123,
+      "prompt": "formal",
+      "condition": "whispered_steps10",
+      "diffusion_steps": 10,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 20.66,
+      "raw_noise_floor_dbfs": -42.06,
+      "raw_peak": 0.36083,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -42.06
+    },
+    {
+      "seed": 123,
+      "prompt": "formal",
+      "condition": "neutral_steps20",
+      "diffusion_steps": 20,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 24.09,
+      "raw_noise_floor_dbfs": -42.8,
+      "raw_peak": 0.48723,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -42.8
+    },
+    {
+      "seed": 123,
+      "prompt": "formal",
+      "condition": "whispered_steps20",
+      "diffusion_steps": 20,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 19.12,
+      "raw_noise_floor_dbfs": -41.23,
+      "raw_peak": 0.37953,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -41.23
+    },
+    {
+      "seed": 123,
+      "prompt": "formal",
+      "condition": "neutral_dsp_control",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 24.92,
+      "raw_noise_floor_dbfs": -43.31,
+      "raw_peak": 0.49391,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -43.31
+    },
+    {
+      "seed": 123,
+      "prompt": "formal",
+      "condition": "neutral_dsp_pitch116_time092",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "pitch+time_stretch",
+      "raw_snr_proxy_db": 18.11,
+      "raw_noise_floor_dbfs": -37.61,
+      "raw_peak": 0.52485,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -37.61
+    },
+    {
+      "seed": 123,
+      "prompt": "conversational",
+      "condition": "neutral_steps5",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 26.06,
+      "raw_noise_floor_dbfs": -43.92,
+      "raw_peak": 0.52211,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -43.92
+    },
+    {
+      "seed": 123,
+      "prompt": "conversational",
+      "condition": "whispered_steps5",
+      "diffusion_steps": 5,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 21.34,
+      "raw_noise_floor_dbfs": -42.88,
+      "raw_peak": 0.329,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -42.88
+    },
+    {
+      "seed": 123,
+      "prompt": "conversational",
+      "condition": "neutral_steps10",
+      "diffusion_steps": 10,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 26.66,
+      "raw_noise_floor_dbfs": -44.35,
+      "raw_peak": 0.51052,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -44.35
+    },
+    {
+      "seed": 123,
+      "prompt": "conversational",
+      "condition": "whispered_steps10",
+      "diffusion_steps": 10,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 22.5,
+      "raw_noise_floor_dbfs": -43.86,
+      "raw_peak": 0.32063,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -43.86
+    },
+    {
+      "seed": 123,
+      "prompt": "conversational",
+      "condition": "neutral_steps20",
+      "diffusion_steps": 20,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 24.44,
+      "raw_noise_floor_dbfs": -42.38,
+      "raw_peak": 0.52654,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -42.38
+    },
+    {
+      "seed": 123,
+      "prompt": "conversational",
+      "condition": "whispered_steps20",
+      "diffusion_steps": 20,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 19.77,
+      "raw_noise_floor_dbfs": -40.94,
+      "raw_peak": 0.31227,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -40.94
+    },
+    {
+      "seed": 123,
+      "prompt": "conversational",
+      "condition": "neutral_dsp_control",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 24.07,
+      "raw_noise_floor_dbfs": -42.19,
+      "raw_peak": 0.52547,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -42.19
+    },
+    {
+      "seed": 123,
+      "prompt": "conversational",
+      "condition": "neutral_dsp_pitch116_time092",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "pitch+time_stretch",
+      "raw_snr_proxy_db": 20.47,
+      "raw_noise_floor_dbfs": -39.25,
+      "raw_peak": 0.50051,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -39.25
+    },
+    {
+      "seed": 2026,
+      "prompt": "formal",
+      "condition": "neutral_steps5",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 27.36,
+      "raw_noise_floor_dbfs": -45.51,
+      "raw_peak": 0.55529,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -45.51
+    },
+    {
+      "seed": 2026,
+      "prompt": "formal",
+      "condition": "whispered_steps5",
+      "diffusion_steps": 5,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 22.81,
+      "raw_noise_floor_dbfs": -44.01,
+      "raw_peak": 0.33513,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -44.01
+    },
+    {
+      "seed": 2026,
+      "prompt": "formal",
+      "condition": "neutral_steps10",
+      "diffusion_steps": 10,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 28.64,
+      "raw_noise_floor_dbfs": -46.93,
+      "raw_peak": 0.5684,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -46.93
+    },
+    {
+      "seed": 2026,
+      "prompt": "formal",
+      "condition": "whispered_steps10",
+      "diffusion_steps": 10,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 22.16,
+      "raw_noise_floor_dbfs": -43.51,
+      "raw_peak": 0.36753,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -43.51
+    },
+    {
+      "seed": 2026,
+      "prompt": "formal",
+      "condition": "neutral_steps20",
+      "diffusion_steps": 20,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 29.77,
+      "raw_noise_floor_dbfs": -47.94,
+      "raw_peak": 0.51759,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -47.94
+    },
+    {
+      "seed": 2026,
+      "prompt": "formal",
+      "condition": "whispered_steps20",
+      "diffusion_steps": 20,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 17.81,
+      "raw_noise_floor_dbfs": -39.3,
+      "raw_peak": 0.32577,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -39.3
+    },
+    {
+      "seed": 2026,
+      "prompt": "formal",
+      "condition": "neutral_dsp_control",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 29.82,
+      "raw_noise_floor_dbfs": -47.87,
+      "raw_peak": 0.60846,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -47.87
+    },
+    {
+      "seed": 2026,
+      "prompt": "formal",
+      "condition": "neutral_dsp_pitch116_time092",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "pitch+time_stretch",
+      "raw_snr_proxy_db": 22.81,
+      "raw_noise_floor_dbfs": -41.66,
+      "raw_peak": 0.52996,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -41.66
+    },
+    {
+      "seed": 2026,
+      "prompt": "conversational",
+      "condition": "neutral_steps5",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 28.67,
+      "raw_noise_floor_dbfs": -46.42,
+      "raw_peak": 0.42653,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -46.42
+    },
+    {
+      "seed": 2026,
+      "prompt": "conversational",
+      "condition": "whispered_steps5",
+      "diffusion_steps": 5,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 21.59,
+      "raw_noise_floor_dbfs": -43.33,
+      "raw_peak": 0.34365,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -43.33
+    },
+    {
+      "seed": 2026,
+      "prompt": "conversational",
+      "condition": "neutral_steps10",
+      "diffusion_steps": 10,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 29.23,
+      "raw_noise_floor_dbfs": -46.99,
+      "raw_peak": 0.45269,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -46.99
+    },
+    {
+      "seed": 2026,
+      "prompt": "conversational",
+      "condition": "whispered_steps10",
+      "diffusion_steps": 10,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 21.46,
+      "raw_noise_floor_dbfs": -42.6,
+      "raw_peak": 0.36204,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -42.6
+    },
+    {
+      "seed": 2026,
+      "prompt": "conversational",
+      "condition": "neutral_steps20",
+      "diffusion_steps": 20,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 28.44,
+      "raw_noise_floor_dbfs": -45.97,
+      "raw_peak": 0.4345,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -45.97
+    },
+    {
+      "seed": 2026,
+      "prompt": "conversational",
+      "condition": "whispered_steps20",
+      "diffusion_steps": 20,
+      "emotion": "whispered",
+      "dsp": "pitch+time_stretch+energy",
+      "raw_snr_proxy_db": 20.95,
+      "raw_noise_floor_dbfs": -41.96,
+      "raw_peak": 0.36293,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -25.73,
+      "saved_noise_floor_dbfs": -41.96
+    },
+    {
+      "seed": 2026,
+      "prompt": "conversational",
+      "condition": "neutral_dsp_control",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "none",
+      "raw_snr_proxy_db": 27.53,
+      "raw_noise_floor_dbfs": -45.37,
+      "raw_peak": 0.44702,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -45.37
+    },
+    {
+      "seed": 2026,
+      "prompt": "conversational",
+      "condition": "neutral_dsp_pitch116_time092",
+      "diffusion_steps": 5,
+      "emotion": null,
+      "dsp": "pitch+time_stretch",
+      "raw_snr_proxy_db": 22.28,
+      "raw_noise_floor_dbfs": -40.9,
+      "raw_peak": 0.4415,
+      "raw_clipping_fraction": 0.0,
+      "saved_lufs": -23.0,
+      "saved_noise_floor_dbfs": -40.9
+    }
+  ]
+}

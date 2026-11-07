@@ -1,0 +1,486 @@
+{
+  "comparisons": {
+    "mean": {
+      "alpha_0.25": {
+        "f0_median_hz": {
+          "mean_change": -14.963921400624548,
+          "mean_pair_change": -14.96392140062455,
+          "ci_low": -16.488174108974263,
+          "ci_high": -13.687062299736724,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "f0_range_st": {
+          "mean_change": 0.3183333333333339,
+          "mean_pair_change": 0.318333333333334,
+          "ci_low": -0.691273437499998,
+          "ci_high": 1.3338541666666672,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "words_per_second": {
+          "mean_change": 0.06264555399566088,
+          "mean_pair_change": 0.06264555399566087,
+          "ci_low": 0.023368501139396352,
+          "ci_high": 0.105532034391995,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "energy_std_db": {
+          "mean_change": -0.1170020898183187,
+          "mean_pair_change": -0.11700208981831867,
+          "ci_low": -0.28865329871575035,
+          "ci_high": 0.05400656114021931,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "pause_ratio": {
+          "mean_change": 0.0103021234466684,
+          "mean_pair_change": 0.0103021234466684,
+          "ci_low": 0.0031428485238039336,
+          "ci_high": 0.018284150708822056,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "spectral_tilt_db_per_khz": {
+          "mean_change": -0.02337853655897935,
+          "mean_pair_change": -0.02337853655897935,
+          "ci_low": -0.05355388103222117,
+          "ci_high": 0.0043057143038880315,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        }
+      },
+      "alpha_0.50": {
+        "f0_median_hz": {
+          "mean_change": -31.229968249107166,
+          "mean_pair_change": -31.22996824910717,
+          "ci_low": -33.09501908718072,
+          "ci_high": -29.84255734984776,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "f0_range_st": {
+          "mean_change": 0.8502083333333337,
+          "mean_pair_change": 0.8502083333333338,
+          "ci_low": 0.025434895833334904,
+          "ci_high": 1.6286458333333331,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "words_per_second": {
+          "mean_change": 0.13137681440302484,
+          "mean_pair_change": 0.13137681440302484,
+          "ci_low": 0.052408534632539513,
+          "ci_high": 0.2157520284785779,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "energy_std_db": {
+          "mean_change": 0.0013890465100606653,
+          "mean_pair_change": 0.0013890465100606282,
+          "ci_low": -0.3168939426541322,
+          "ci_high": 0.32232399781545,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "pause_ratio": {
+          "mean_change": 0.03474189390679784,
+          "mean_pair_change": 0.034741893906797834,
+          "ci_low": 0.022511785789391402,
+          "ci_high": 0.04763402035574233,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "spectral_tilt_db_per_khz": {
+          "mean_change": -0.05131003608540269,
+          "mean_pair_change": -0.05131003608540269,
+          "ci_low": -0.10367207055422485,
+          "ci_high": -0.009844324394166605,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        }
+      }
+    },
+    "speaker_centered": {
+      "alpha_0.25": {
+        "f0_median_hz": {
+          "mean_change": -6.191332170289335,
+          "mean_pair_change": -6.191332170289335,
+          "ci_low": -8.528841943859488,
+          "ci_high": -4.452851721549355,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "f0_range_st": {
+          "mean_change": -0.1930208333333318,
+          "mean_pair_change": -0.19302083333333173,
+          "ci_low": -3.3034374999999976,
+          "ci_high": 2.679684895833332,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "words_per_second": {
+          "mean_change": 0.04132638230033851,
+          "mean_pair_change": 0.04132638230033852,
+          "ci_low": 0.007896701632210667,
+          "ci_high": 0.07072807562873007,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "energy_std_db": {
+          "mean_change": -0.23735941449801123,
+          "mean_pair_change": -0.23735941449801126,
+          "ci_low": -0.4397985244790712,
+          "ci_high": -0.027555238455534096,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "pause_ratio": {
+          "mean_change": 0.006096169546788073,
+          "mean_pair_change": 0.0060961695467880725,
+          "ci_low": 0.0012564108699116812,
+          "ci_high": 0.011298159057751467,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "spectral_tilt_db_per_khz": {
+          "mean_change": -0.035873905413969176,
+          "mean_pair_change": -0.035873905413969176,
+          "ci_low": -0.08094724875778153,
+          "ci_high": 0.009221347872501505,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        }
+      },
+      "alpha_0.50": {
+        "f0_median_hz": {
+          "mean_change": -14.888703422335459,
+          "mean_pair_change": -14.888703422335459,
+          "ci_low": -17.949367503646524,
+          "ci_high": -12.29815815907153,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "f0_range_st": {
+          "mean_change": 0.9307291666666668,
+          "mean_pair_change": 0.9307291666666669,
+          "ci_low": -1.8341223958333315,
+          "ci_high": 3.599955729166663,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "words_per_second": {
+          "mean_change": 0.14262118526130413,
+          "mean_pair_change": 0.14262118526130413,
+          "ci_low": 0.09847480546493731,
+          "ci_high": 0.1851161103453997,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "energy_std_db": {
+          "mean_change": -0.16196442643801373,
+          "mean_pair_change": -0.1619644264380137,
+          "ci_low": -0.5249272386233012,
+          "ci_high": 0.14751650889714557,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "pause_ratio": {
+          "mean_change": 0.010365115061458314,
+          "mean_pair_change": 0.010365115061458314,
+          "ci_low": 0.0041093797672589385,
+          "ci_high": 0.016465340233455646,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        },
+        "spectral_tilt_db_per_khz": {
+          "mean_change": -0.05925998938283133,
+          "mean_pair_change": -0.05925998938283133,
+          "ci_low": -0.1388319337069742,
+          "ci_high": 0.010360903099972377,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "n_resamples": 10000,
+          "confidence": 0.95
+        }
+      }
+    }
+  },
+  "toward_ami": {
+    "mean": {
+      "alpha_0.25": {
+        "f0_median_hz": {
+          "mean_abs_error_change": -14.292595346800585,
+          "mean_pair_abs_error_change": -14.292595346800583,
+          "ci_low": -15.104810492865743,
+          "ci_high": -13.498951595310238,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": true
+        },
+        "f0_range_st": {
+          "mean_abs_error_change": 0.4560416897137961,
+          "mean_pair_abs_error_change": 0.45604168971379605,
+          "ci_low": -0.08347396816809907,
+          "ci_high": 1.0685599430600796,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": false
+        },
+        "words_per_second": {
+          "mean_abs_error_change": -0.017075872189550145,
+          "mean_pair_abs_error_change": -0.017075872189550145,
+          "ci_low": -0.06624108816472575,
+          "ci_high": 0.04039612140053176,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": false
+        },
+        "energy_std_db": {
+          "mean_abs_error_change": 0.18123877048492432,
+          "mean_pair_abs_error_change": 0.18123877048492432,
+          "ci_low": -0.005513171354929675,
+          "ci_high": 0.37025070190429693,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": false
+        },
+        "pause_ratio": {
+          "mean_abs_error_change": -0.008480412232691997,
+          "mean_pair_abs_error_change": -0.008480412232691999,
+          "ci_low": -0.01736404512686453,
+          "ci_high": -0.0005228659155902176,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": true
+        },
+        "spectral_tilt_db_per_khz": {
+          "mean_abs_error_change": -0.027556998866217507,
+          "mean_pair_abs_error_change": -0.027556998866217503,
+          "ci_low": -0.05584238354187945,
+          "ci_high": -0.0008864113056912623,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": true
+        }
+      },
+      "alpha_0.50": {
+        "f0_median_hz": {
+          "mean_abs_error_change": -26.566441526106033,
+          "mean_pair_abs_error_change": -26.566441526106033,
+          "ci_low": -30.99576850672617,
+          "ci_high": -18.67930974192482,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": true
+        },
+        "f0_range_st": {
+          "mean_abs_error_change": 0.44479165951410937,
+          "mean_pair_abs_error_change": 0.44479165951410926,
+          "ci_low": -0.2953125150998426,
+          "ci_high": 1.1430442936619114,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": false
+        },
+        "words_per_second": {
+          "mean_abs_error_change": -0.05807474327263651,
+          "mean_pair_abs_error_change": -0.05807474327263651,
+          "ci_low": -0.16123450663639827,
+          "ci_high": 0.05332796729456471,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": false
+        },
+        "energy_std_db": {
+          "mean_abs_error_change": 0.1576318144798279,
+          "mean_pair_abs_error_change": 0.15763181447982788,
+          "ci_low": -0.18433177471160894,
+          "ci_high": 0.4776334961255392,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": false
+        },
+        "pause_ratio": {
+          "mean_abs_error_change": -0.0252481135956066,
+          "mean_pair_abs_error_change": -0.025248113595606598,
+          "ci_low": -0.04498341170357269,
+          "ci_high": -0.003647237360767499,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": true
+        },
+        "spectral_tilt_db_per_khz": {
+          "mean_abs_error_change": -0.03182751581933391,
+          "mean_pair_abs_error_change": -0.03182751581933391,
+          "ci_low": -0.08985262518033055,
+          "ci_high": 0.013547230731273452,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": false
+        }
+      }
+    },
+    "speaker_centered": {
+      "alpha_0.25": {
+        "f0_median_hz": {
+          "mean_abs_error_change": -6.118219544242177,
+          "mean_pair_abs_error_change": -6.118219544242177,
+          "ci_low": -8.309895838416708,
+          "ci_high": -4.452851721549355,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": true
+        },
+        "f0_range_st": {
+          "mean_abs_error_change": -1.2398958476384485,
+          "mean_pair_abs_error_change": -1.2398958476384487,
+          "ci_low": -3.1504479079643852,
+          "ci_high": 0.33223694990078495,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": false
+        },
+        "words_per_second": {
+          "mean_abs_error_change": -0.027846191415628704,
+          "mean_pair_abs_error_change": -0.027846191415628708,
+          "ci_low": -0.06469065408362981,
+          "ci_high": 0.010764914994982966,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": false
+        },
+        "energy_std_db": {
+          "mean_abs_error_change": 0.2668162484963735,
+          "mean_pair_abs_error_change": 0.2668162484963735,
+          "ci_low": 0.09897601778308548,
+          "ci_high": 0.4089745978514354,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": false
+        },
+        "pause_ratio": {
+          "mean_abs_error_change": -0.006096169546788074,
+          "mean_pair_abs_error_change": -0.006096169546788074,
+          "ci_low": -0.011298159057751472,
+          "ci_high": -0.001256410869911682,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": true
+        },
+        "spectral_tilt_db_per_khz": {
+          "mean_abs_error_change": -0.012309477079179638,
+          "mean_pair_abs_error_change": -0.01230947707917964,
+          "ci_low": -0.06300295185936242,
+          "ci_high": 0.03252062600375228,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": false
+        }
+      },
+      "alpha_0.50": {
+        "f0_median_hz": {
+          "mean_abs_error_change": -13.524414467305022,
+          "mean_pair_abs_error_change": -13.524414467305023,
+          "ci_low": -15.201678938582688,
+          "ci_high": -11.859611962709993,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": true
+        },
+        "f0_range_st": {
+          "mean_abs_error_change": -1.6298958118756615,
+          "mean_pair_abs_error_change": -1.6298958118756612,
+          "ci_low": -3.1553124841054268,
+          "ci_high": -0.11031246741612824,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": true
+        },
+        "words_per_second": {
+          "mean_abs_error_change": -0.10099541696355183,
+          "mean_pair_abs_error_change": -0.10099541696355184,
+          "ci_low": -0.17183843778486965,
+          "ci_high": -0.009163702087237437,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": true
+        },
+        "energy_std_db": {
+          "mean_abs_error_change": 0.13835160930951437,
+          "mean_pair_abs_error_change": 0.13835160930951437,
+          "ci_low": -0.014576387902100776,
+          "ci_high": 0.2653783063093821,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": false
+        },
+        "pause_ratio": {
+          "mean_abs_error_change": -0.010365115061458312,
+          "mean_pair_abs_error_change": -0.010365115061458314,
+          "ci_low": -0.016465340233455656,
+          "ci_high": -0.00410937976725894,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": true
+        },
+        "spectral_tilt_db_per_khz": {
+          "mean_abs_error_change": -0.01759664290505955,
+          "mean_pair_abs_error_change": -0.01759664290505955,
+          "ci_low": -0.10752779840530528,
+          "ci_high": 0.05280034650058764,
+          "n_pairs": 48,
+          "n_speakers": 8,
+          "improved": false
+        }
+      }
+    }
+  }
+}

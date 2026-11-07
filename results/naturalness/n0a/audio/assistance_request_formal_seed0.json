@@ -1,0 +1,14 @@
+{
+  "audio_id": "assistance_request_formal_seed0",
+  "prompt_pair_id": "assistance_request",
+  "register": "formal",
+  "seed": 0,
+  "text": "I would appreciate your assistance with this task.",
+  "sample_rate": 24000,
+  "backend": "neural",
+  "watermark": false,
+  "style_embedding_sha256": "aea96d1d0f5ce81125a71c1f0f7b9a98dad05a5b4898031f650ba9d619030d66",
+  "speaker_embedding_sha256": "c0daa8666d5c9c585494776df005fa2b608c419450a94af7c9aaf2b3b62a8068",
+  "diffusion_steps": 10,
+  "temperature": 0.85
+}

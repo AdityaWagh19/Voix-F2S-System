@@ -1,0 +1,88 @@
+{
+  "schema_version": "voix.crema_e0_generation.v1",
+  "generated_at": "2026-10-29 08:35:31 UTC",
+  "level": "exploratory",
+  "scope": "Identity-conditioned fixed-delta CREMA-D evaluation. No face, CFVN, or CVAE is used. The canonical face-to-voice artifacts are untouched.",
+  "manifest": "D:\\voix\\data\\processed\\crema_d_paired_eval_val.csv",
+  "manifest_sha256": "b782e6a5a9d3d5b88f669e5836803182573fac4df42bddc892fb8e42da6b6912",
+  "index": "results\\emotion\\e0_smoke\\generation_index.csv",
+  "index_sha256": "9caef8ebdba85b3246937c41e5079577ac7207d35f98052cb1e3fafc2cec511c",
+  "adapter": "D:\\voix\\checkpoints\\style_adapter_cfvn_best.pt",
+  "adapter_sha256": "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c",
+  "device": "cuda",
+  "seeds": [
+    0
+  ],
+  "diffusion_steps": 10,
+  "alpha": 0.18,
+  "beta": 0.22,
+  "duration_scale": 1.0,
+  "sample_rate": 24000,
+  "backend": "neural",
+  "emotions_requested": [
+    "happy",
+    "sad",
+    "angry"
+  ],
+  "emotions_generated": [
+    "happy",
+    "sad",
+    "angry"
+  ],
+  "emotions_unavailable": {},
+  "identity_embeddings": {
+    "1010": {
+      "clip_id": "1010_IWL_NEU_XX",
+      "path": "data\\raw\\crema_d\\AudioWAV\\1010_IWL_NEU_XX.wav",
+      "sha256": "4b668cd67cecc60c093a6bae7ff1f307e8ab505775857a1aaafeea5b5e76586b"
+    }
+  },
+  "counts": {
+    "fixed_delta:angry": {
+      "rows": 2,
+      "actors": 1,
+      "pairs": 2,
+      "audio_seconds": 2.658333333333333,
+      "mean_generation_seconds": 0.4225
+    },
+    "fixed_delta:happy": {
+      "rows": 2,
+      "actors": 1,
+      "pairs": 2,
+      "audio_seconds": 2.7561666666666667,
+      "mean_generation_seconds": 2.3834999999999997
+    },
+    "fixed_delta:sad": {
+      "rows": 2,
+      "actors": 1,
+      "pairs": 2,
+      "audio_seconds": 3.75725,
+      "mean_generation_seconds": 0.55
+    },
+    "neutral:neutral": {
+      "rows": 2,
+      "actors": 1,
+      "pairs": 2,
+      "audio_seconds": 3.0708333333333333,
+      "mean_generation_seconds": 1.037
+    }
+  },
+  "neutral_zero": {
+    "max_abs_error": 0.0,
+    "tolerance": 1e-07,
+    "passed": true,
+    "failures": []
+  },
+  "failures": [],
+  "elapsed_seconds": 8.85,
+  "notes": [
+    "Neutral is generated once per (actor, sentence, seed) and shared by emotion rows.",
+    "The fixed-delta condition uses the current EmotionModulator style delta and scalar modifiers.",
+    "Fear and disgust are unavailable because this checkout has no fixed-delta artifact for them.",
+    "No human MOS is claimed; perceptual quality is unmeasured."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings were collected for this generation run"
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "schema_version": "voix.cfvn_structure_comparison.v1",
+  "generated_at": "2026-10-28 09:57:58 UTC",
+  "runs": [
+    {
+      "checkpoint": "results\\checkpoints\\cfvn_struct_s0.pt",
+      "eval": "D:\\voix\\results\\checkpoints\\cfvn_struct_s0.eval.json",
+      "best_epoch": 20,
+      "validation": {
+        "val_r1": 0.046666666865348816,
+        "val_r10": 0.2133333384990692,
+        "val_chance_r1": 0.0016666666666666668,
+        "val_gender_controlled_r1": 0.05333333333333334,
+        "cfvn_face_face_r1": 0.8316666483879089,
+        "raw_face_face_r1": 0.878333330154419,
+        "selection_score": 0.18316666632890702
+      },
+      "test": {
+        "val_r1": 0.09322033822536469,
+        "val_r5": 0.26271185278892517,
+        "val_r10": 0.4067796468734741,
+        "val_chance_r1": 0.00847457627118644,
+        "val_gender_controlled_r1": 0.09322033898305085,
+        "cfvn_face_face_r1": 0.8474576473236084,
+        "raw_face_face_r1": 0.9152542352676392
+      }
+    },
+    {
+      "checkpoint": "results\\checkpoints\\cfvn_struct_s1.pt",
+      "eval": "D:\\voix\\results\\checkpoints\\cfvn_struct_s1.eval.json",
+      "best_epoch": 17,
+      "validation": {
+        "val_r1": 0.021666666492819786,
+        "val_r10": 0.18333333730697632,
+        "val_chance_r1": 0.0016666666666666668,
+        "val_gender_controlled_r1": 0.02666666666666667,
+        "cfvn_face_face_r1": 0.8766666650772095,
+        "raw_face_face_r1": 0.878333330154419,
+        "selection_score": 0.15516666732728482
+      },
+      "test": {
+        "val_r1": 0.05932203307747841,
+        "val_r5": 0.2542372941970825,
+        "val_r10": 0.38983049988746643,
+        "val_chance_r1": 0.00847457627118644,
+        "val_gender_controlled_r1": 0.059322033898305086,
+        "cfvn_face_face_r1": 0.8898305296897888,
+        "raw_face_face_r1": 0.9152542352676392
+      }
+    },
+    {
+      "checkpoint": "results\\checkpoints\\cfvn_struct_s2.pt",
+      "eval": "D:\\voix\\results\\checkpoints\\cfvn_struct_s2.eval.json",
+      "best_epoch": 23,
+      "validation": {
+        "val_r1": 0.021666666492819786,
+        "val_r10": 0.1550000011920929,
+        "val_chance_r1": 0.0016666666666666668,
+        "val_gender_controlled_r1": 0.021666666666666667,
+        "cfvn_face_face_r1": 0.875,
+        "raw_face_face_r1": 0.878333330154419,
+        "selection_score": 0.14791666679084303
+      },
+      "test": {
+        "val_r1": 0.05932203307747841,
+        "val_r5": 0.2118644118309021,
+        "val_r10": 0.33898305892944336,
+        "val_chance_r1": 0.00847457627118644,
+        "val_gender_controlled_r1": 0.059322033898305086,
+        "cfvn_face_face_r1": 0.9067796468734741,
+        "raw_face_face_r1": 0.9152542352676392
+      }
+    },
+    {
+      "checkpoint": "results\\checkpoints\\cfvn_struct_s3.pt",
+      "eval": "D:\\voix\\results\\checkpoints\\cfvn_struct_s3.eval.json",
+      "best_epoch": 11,
+      "validation": {
+        "val_r1": 0.023333333432674408,
+        "val_r10": 0.16833333671092987,
+        "val_chance_r1": 0.0016666666666666668,
+        "val_gender_controlled_r1": 0.02666666666666667,
+        "cfvn_face_face_r1": 0.8866666555404663,
+        "raw_face_face_r1": 0.878333330154419,
+        "selection_score": 0.50874999538064
+      },
+      "test": {
+        "val_r1": 0.09322033822536469,
+        "val_r5": 0.22033898532390594,
+        "val_r10": 0.33898305892944336,
+        "val_chance_r1": 0.00847457627118644,
+        "val_gender_controlled_r1": 0.09322033898305085,
+        "cfvn_face_face_r1": 0.9152542352676392,
+        "raw_face_face_r1": 0.9152542352676392
+      }
+    },
+    {
+      "checkpoint": "results\\checkpoints\\cfvn_struct_s3_seed43.pt",
+      "eval": "D:\\voix\\results\\checkpoints\\cfvn_struct_s3_seed43.eval.json",
+      "best_epoch": 10,
+      "validation": {
+        "val_r1": 0.02666666731238365,
+        "val_r10": 0.16333332657814026,
+        "val_chance_r1": 0.0016666666666666668,
+        "val_gender_controlled_r1": 0.028333333333333332,
+        "cfvn_face_face_r1": 0.8899999856948853,
+        "raw_face_face_r1": 0.878333330154419,
+        "selection_score": 0.5124999918043613
+      },
+      "test": {
+        "val_r1": 0.06779661029577255,
+        "val_r5": 0.23728813230991364,
+        "val_r10": 0.37288135290145874,
+        "val_chance_r1": 0.00847457627118644,
+        "val_gender_controlled_r1": 0.06779661016949153,
+        "cfvn_face_face_r1": 0.8813559412956238,
+        "raw_face_face_r1": 0.9152542352676392
+      }
+    },
+    {
+      "checkpoint": "results\\checkpoints\\cfvn_struct_s3_seed44.pt",
+      "eval": "D:\\voix\\results\\checkpoints\\cfvn_struct_s3_seed44.eval.json",
+      "best_epoch": 13,
+      "validation": {
+        "val_r1": 0.03333333507180214,
+        "val_r10": 0.17166666686534882,
+        "val_chance_r1": 0.0016666666666666668,
+        "val_gender_controlled_r1": 0.03833333333333333,
+        "cfvn_face_face_r1": 0.8933333158493042,
+        "raw_face_face_r1": 0.878333330154419,
+        "selection_score": 0.5229166597127914
+      },
+      "test": {
+        "val_r1": 0.06779661029577255,
+        "val_r5": 0.23728813230991364,
+        "val_r10": 0.35593220591545105,
+        "val_chance_r1": 0.00847457627118644,
+        "val_gender_controlled_r1": 0.06779661016949153,
+        "cfvn_face_face_r1": 0.8983050584793091,
+        "raw_face_face_r1": 0.9152542352676392
+      }
+    },
+    {
+      "checkpoint": "results\\checkpoints\\cfvn_struct_f1.pt",
+      "eval": "D:\\voix\\results\\checkpoints\\cfvn_struct_f1.eval.json",
+      "best_epoch": 9,
+      "validation": {
+        "val_r1": 0.02500000037252903,
+        "val_r10": 0.16500000655651093,
+        "val_chance_r1": 0.0016666666666666668,
+        "val_gender_controlled_r1": 0.03,
+        "cfvn_face_face_r1": 0.8650000095367432,
+        "raw_face_face_r1": 0.878333330154419,
+        "selection_score": 0.49875000678002834
+      },
+      "test": {
+        "val_r1": 0.06779661029577255,
+        "val_r5": 0.2542372941970825,
+        "val_r10": 0.33898305892944336,
+        "val_chance_r1": 0.00847457627118644,
+        "val_gender_controlled_r1": 0.06779661016949153,
+        "cfvn_face_face_r1": 0.8813559412956238,
+        "raw_face_face_r1": 0.9152542352676392
+      }
+    },
+    {
+      "checkpoint": "results\\checkpoints\\cfvn_struct_f2.pt",
+      "eval": "D:\\voix\\results\\checkpoints\\cfvn_struct_f2.eval.json",
+      "best_epoch": 13,
+      "validation": {
+        "val_r1": 0.021666666492819786,
+        "val_r10": 0.1483333259820938,
+        "val_chance_r1": 0.0016666666666666668,
+        "val_gender_controlled_r1": 0.025,
+        "cfvn_face_face_r1": 0.8700000047683716,
+        "raw_face_face_r1": 0.878333330154419,
+        "selection_score": 0.49375000037252903
+      },
+      "test": {
+        "val_r1": 0.050847455859184265,
+        "val_r5": 0.2118644118309021,
+        "val_r10": 0.3305084705352783,
+        "val_chance_r1": 0.00847457627118644,
+        "val_gender_controlled_r1": 0.05084745762711865,
+        "cfvn_face_face_r1": 0.8898305296897888,
+        "raw_face_face_r1": 0.9152542352676392
+      }
+    }
+  ],
+  "decision": {
+    "identity_gate": true,
+    "selection_split": "validation",
+    "selection_rule": "require cfvn_face_face_r1 >= raw_face_face_r1 on validation; then maximize val_r1 + 0.25 * val_r10",
+    "winner": "results\\checkpoints\\cfvn_struct_s3_seed44.pt",
+    "winner_best_epoch": 13,
+    "eligible": [
+      "results\\checkpoints\\cfvn_struct_s3.pt",
+      "results\\checkpoints\\cfvn_struct_s3_seed43.pt",
+      "results\\checkpoints\\cfvn_struct_s3_seed44.pt"
+    ],
+    "test_identity_gate_winner": false,
+    "validation_eligible_runs": 3,
+    "test_identity_pass_runs": 1,
+    "test_identity_pass": [
+      "results\\checkpoints\\cfvn_struct_s3.pt"
+    ]
+  },
+  "notes": [
+    "The winner is chosen on validation; test is reported for every run but never used for selection.",
+    "The original cfvn_v2_best.pt is not replaced by this experiment.",
+    "A single seed is not evidence of a general improvement; check validation_eligible_runs vs test_identity_pass_runs."
+  ]
+}

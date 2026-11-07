@@ -1,0 +1,205 @@
+{
+  "conditions": {
+    "e1_emotion_scalars": {
+      "path": "results/emotion/e1/report_prosody.json",
+      "run_id": "e1_class_mean_prosody",
+      "scalar_modifiers": null,
+      "emotions_generated": null,
+      "direction_checks_passed": 6,
+      "direction_checks_total": 6,
+      "neutral_zero": true,
+      "identity_gate": false,
+      "classifier_status": "unavailable",
+      "rows": {
+        "happy": {
+          "identity": {
+            "cosine_to_generated_neutral": 0.27880064867160936,
+            "drop": 0.7211993513283906
+          },
+          "f0_mean_hz": {
+            "mean_delta": 23.365833333333335,
+            "ci_low": 1.4497615740740748,
+            "ci_high": 42.51207638888889,
+            "passed": true
+          },
+          "duration_seconds": {
+            "mean_delta": -0.25475000000000003,
+            "ci_low": -0.27027777777777784,
+            "ci_high": -0.24124907407407417,
+            "passed": true
+          }
+        },
+        "sad": {
+          "identity": {
+            "cosine_to_generated_neutral": 0.21149887520543956,
+            "drop": 0.7885011247945605
+          },
+          "f0_mean_hz": {
+            "mean_delta": -37.70564814814815,
+            "ci_low": -49.08306249999999,
+            "ci_high": -27.568784722222226,
+            "passed": true
+          },
+          "duration_seconds": {
+            "mean_delta": 0.39901851851851844,
+            "ci_low": 0.3859997685185185,
+            "ci_high": 0.4127685185185185,
+            "passed": true
+          }
+        },
+        "angry": {
+          "identity": {
+            "cosine_to_generated_neutral": 0.3260491982240368,
+            "drop": 0.6739508017759632
+          },
+          "f0_mean_hz": {
+            "mean_delta": 25.135833333333334,
+            "ci_low": 4.373946759259261,
+            "ci_high": 45.51836342592592,
+            "passed": true
+          },
+          "duration_seconds": {
+            "mean_delta": -0.32406481481481475,
+            "ci_low": -0.33936226851851864,
+            "ci_high": -0.3101847222222222,
+            "passed": true
+          }
+        }
+      }
+    },
+    "e2_main_emotion_scalars": {
+      "path": "results/emotion/e2/report_main.json",
+      "run_id": "e2_learned_main",
+      "scalar_modifiers": null,
+      "emotions_generated": null,
+      "direction_checks_passed": 5,
+      "direction_checks_total": 6,
+      "neutral_zero": true,
+      "identity_gate": false,
+      "classifier_status": "unavailable",
+      "rows": {
+        "happy": {
+          "identity": {
+            "cosine_to_generated_neutral": 0.2617587657231424,
+            "drop": 0.7382412342768576
+          },
+          "f0_mean_hz": {
+            "mean_delta": 20.36333333333333,
+            "ci_low": -1.268888888888888,
+            "ci_high": 39.17874305555555,
+            "passed": false
+          },
+          "duration_seconds": {
+            "mean_delta": -0.23920370370370378,
+            "ci_low": -0.2650560185185186,
+            "ci_high": -0.2160185185185186,
+            "passed": true
+          }
+        },
+        "sad": {
+          "identity": {
+            "cosine_to_generated_neutral": 0.20439611368433194,
+            "drop": 0.795603886315668
+          },
+          "f0_mean_hz": {
+            "mean_delta": -31.36592592592593,
+            "ci_low": -41.78857407407407,
+            "ci_high": -21.48872916666667,
+            "passed": true
+          },
+          "duration_seconds": {
+            "mean_delta": 0.36314814814814816,
+            "ci_low": 0.3376111111111111,
+            "ci_high": 0.3887131944444444,
+            "passed": true
+          }
+        },
+        "angry": {
+          "identity": {
+            "cosine_to_generated_neutral": 0.311113812857204,
+            "drop": 0.688886187142796
+          },
+          "f0_mean_hz": {
+            "mean_delta": 32.97907407407408,
+            "ci_low": 12.30925462962964,
+            "ci_high": 51.56396990740739,
+            "passed": true
+          },
+          "duration_seconds": {
+            "mean_delta": -0.299212962962963,
+            "ci_low": -0.32102777777777775,
+            "ci_high": -0.2794719907407408,
+            "passed": true
+          }
+        }
+      }
+    },
+    "e2_shuffled_emotion_scalars": {
+      "path": "results/emotion/e2/report_shuffled.json",
+      "run_id": "e2_learned_shuffled",
+      "scalar_modifiers": null,
+      "emotions_generated": null,
+      "direction_checks_passed": 6,
+      "direction_checks_total": 6,
+      "neutral_zero": true,
+      "identity_gate": false,
+      "classifier_status": "unavailable",
+      "rows": {
+        "happy": {
+          "identity": {
+            "cosine_to_generated_neutral": 0.2741745439944444,
+            "drop": 0.7258254560055556
+          },
+          "f0_mean_hz": {
+            "mean_delta": 30.94333333333333,
+            "ci_low": 9.842592592592595,
+            "ci_high": 48.60416203703702,
+            "passed": true
+          },
+          "duration_seconds": {
+            "mean_delta": -0.23664814814814822,
+            "ci_low": -0.2449814814814815,
+            "ci_high": -0.22832337962962967,
+            "passed": true
+          }
+        },
+        "sad": {
+          "identity": {
+            "cosine_to_generated_neutral": 0.20279353084387602,
+            "drop": 0.797206469156124
+          },
+          "f0_mean_hz": {
+            "mean_delta": -39.80861111111112,
+            "ci_low": -56.36290046296296,
+            "ci_high": -26.260949074074095,
+            "passed": true
+          },
+          "duration_seconds": {
+            "mean_delta": 0.40351851851851855,
+            "ci_low": 0.3699409722222223,
+            "ci_high": 0.4375013888888889,
+            "passed": true
+          }
+        },
+        "angry": {
+          "identity": {
+            "cosine_to_generated_neutral": 0.31116839670748625,
+            "drop": 0.6888316032925137
+          },
+          "f0_mean_hz": {
+            "mean_delta": 32.44203703703703,
+            "ci_low": 20.37106018518519,
+            "ci_high": 42.74996759259259,
+            "passed": true
+          },
+          "duration_seconds": {
+            "mean_delta": -0.30165740740740743,
+            "ci_low": -0.3102870370370371,
+            "ci_high": -0.29294444444444456,
+            "passed": true
+          }
+        }
+      }
+    }
+  }
+}

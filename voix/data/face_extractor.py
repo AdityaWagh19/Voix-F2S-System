@@ -16,6 +16,31 @@ from typing import Optional
 import numpy as np
 
 
+def crop_face_bbox(
+    image_bgr: np.ndarray,
+    bbox: np.ndarray | list[float] | tuple[float, ...],
+    margin: float = 0.20,
+) -> np.ndarray:
+    """Crop a face with a relative margin, clamped to the image.
+
+    Both the corpus extractor and image inference use this helper so
+    MediaPipe sees the same face context in both paths.
+    """
+    height, width = image_bgr.shape[:2]
+    values = np.asarray(bbox, dtype=np.float64).reshape(-1)
+    if values.size < 4:
+        raise ValueError(f"bbox must have four coordinates, got {values.size}")
+    x1, y1, x2, y2 = (float(v) for v in values[:4])
+    box_w, box_h = max(1.0, x2 - x1), max(1.0, y2 - y1)
+    x1 = int(max(0, np.floor(x1 - margin * box_w)))
+    y1 = int(max(0, np.floor(y1 - margin * box_h)))
+    x2 = int(min(width, np.ceil(x2 + margin * box_w)))
+    y2 = int(min(height, np.ceil(y2 + margin * box_h)))
+    if x2 <= x1 or y2 <= y1:
+        return image_bgr
+    return image_bgr[y1:y2, x1:x2]
+
+
 class ArcFaceExtractor:
     """Frozen ArcFace ResNet-50 identity embedding extractor.
 
@@ -58,24 +83,26 @@ class ArcFaceExtractor:
         self._app.prepare(ctx_id=self.device_id, det_size=(640, 640))
         self._loaded = True
 
-    def extract_full(
+    def extract_full_with_bbox(
         self,
         image_bgr: np.ndarray,
-    ) -> tuple[Optional[np.ndarray], Optional[int], Optional[float]]:
-        """Extract 512-D embedding, gender (0=F, 1=M), and age (years) from a BGR image.
+    ) -> tuple[
+        Optional[np.ndarray],
+        Optional[int],
+        Optional[float],
+        Optional[np.ndarray],
+    ]:
+        """Extract embedding, gender, age, and the detected face bbox.
 
-        Args:
-            image_bgr: HxWx3 uint8 BGR numpy array.
-
-        Returns:
-            Tuple of (embedding, gender, age) or (None, None, None) if no face detected.
+        The bbox is needed to reproduce the corpus demographics contract: the
+        build-proxy dimensions are derived from the face height/width ratio.
         """
         if not self._loaded:
             self._load()
 
         faces = self._app.get(image_bgr)
         if not faces:
-            return None, None, None
+            return None, None, None, None
 
         face = max(faces, key=lambda f: (f.bbox[2] - f.bbox[0]) * (f.bbox[3] - f.bbox[1]))
         embedding = face.normed_embedding.astype(np.float32)
@@ -96,6 +123,21 @@ class ArcFaceExtractor:
         if age is None:
             age = float(face.age) if hasattr(face, "age") else None
 
+        return embedding, gender, age, np.asarray(face.bbox, dtype=np.float32)
+
+    def extract_full(
+        self,
+        image_bgr: np.ndarray,
+    ) -> tuple[Optional[np.ndarray], Optional[int], Optional[float]]:
+        """Extract 512-D embedding, gender (0=F, 1=M), and age (years) from a BGR image.
+
+        Args:
+            image_bgr: HxWx3 uint8 BGR numpy array.
+
+        Returns:
+            Tuple of (embedding, gender, age) or (None, None, None) if no face detected.
+        """
+        embedding, gender, age, _ = self.extract_full_with_bbox(image_bgr)
         return embedding, gender, age
 
     def extract(self, image_bgr: np.ndarray) -> Optional[np.ndarray]:

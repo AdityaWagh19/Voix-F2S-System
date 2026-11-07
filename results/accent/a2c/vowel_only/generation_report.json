@@ -1,0 +1,117 @@
+{
+  "schema_version": "voix.accent_g2p_generation.v1",
+  "generated_at": "2026-11-07 07:09:10 UTC",
+  "track": "accent",
+  "experiment": "A2",
+  "level": "exploratory",
+  "manifest": "D:\\voix\\data\\processed\\globe_accent_manifest.csv",
+  "manifest_sha256": "eb02cccebb7ff716216d5f80f8756d355fbfab323046e612b76533592630bba0",
+  "index": "results\\accent\\a2c\\vowel_only\\generation_index.csv",
+  "index_sha256": "a894a93a4a7aad599065b7eee68a208f224f32dfb4a740bf15b37b99c5a4755b",
+  "output_dir": "results\\accent\\a2c\\vowel_only\\audio",
+  "accents": [
+    "indian_english"
+  ],
+  "trainable_accents": [
+    "indian_english"
+  ],
+  "eval_only_accents": [],
+  "conditions": [
+    "regex",
+    "g2p"
+  ],
+  "prompts": [
+    "The bath was better than the dance in the car.",
+    "I think this is the right time to tune the new voice.",
+    "Last night the fast train passed the path by the water.",
+    "Both of us can start the task after the film.",
+    "The human voice reflects a personal identity.",
+    "Please ask the staff about the chance of rain."
+  ],
+  "prompt_count": 6,
+  "seeds": [
+    0
+  ],
+  "diffusion_steps": 10,
+  "alpha": 0.18,
+  "beta": 0.22,
+  "disabled_rules": [
+    "india_theta_stop",
+    "india_eth_stop"
+  ],
+  "prosody_bias_strength": 0.0,
+  "identity": {
+    "clip_id": "common_voice_en_17993335",
+    "path": "D:\\voix\\data\\processed\\globe_audio\\val\\us\\common_voice_en_17993335.wav",
+    "speaker_id": "4c5a31cad74697cd01562a7e345a826d40dd6cf87bf5ce8e9bca2e8efd0c6189b482292c88863a14304c6b5f5b3370c30cb1beabcadebfde97afaba0b0ae8aa4",
+    "accent_class": "us",
+    "style_sha256": "287d85ca0ec422183d280601c89ffda21913fcc86cb5d4102375a2b2a2e39566",
+    "norm": 3.5405263900756836,
+    "note": "One frozen style vector for every clip; accent is carried only by phonemes."
+  },
+  "rows": 12,
+  "expected_rows": 12,
+  "failures": [],
+  "phoneme_changes": [
+    {
+      "accent": "indian_english",
+      "prompt_id": 0,
+      "base_phonemes": "\u00f0\u0259 b\u02c8\u00e6\u03b8 w\u0259z b\u02c8\u025bt\u025a \u00f0\u0259n \u00f0\u0259 d\u02c8\u00e6ns \u02c8\u026an \u00f0\u0259 k\u02c8\u0251\u0279 \u2016",
+      "g2p_phonemes": "\u00f0\u0259 b\u02c8\u00e6\u03b8 w\u0259z b\u02c8\u025bt\u025a \u00f0\u0259n \u00f0\u0259 d\u02c8\u00e6ns \u02c8\u026an \u00f0\u0259 k\u02c8\u0251\u0279",
+      "changed": true
+    },
+    {
+      "accent": "indian_english",
+      "prompt_id": 1,
+      "base_phonemes": "\u02c8a\u026a \u03b8\u02c8\u026a\u014bk \u00f0\u02c8\u026as \u02c8\u026az \u00f0\u0259 \u0279\u02c8a\u026at t\u02c8a\u026am t\u0259 t\u02c8un \u00f0\u0259 nj\u02c8u v\u02c8\u0254\u026as \u2016",
+      "g2p_phonemes": "\u02c8a\u026a \u03b8\u02c8\u026a\u014bk \u00f0\u02c8\u026as \u02c8\u026az \u00f0\u0259 \u0279\u02c8a\u026at t\u02c8a\u026am t\u0259 t\u02c8un \u00f0\u0259 nj\u02c8u v\u02c8\u0254\u026as",
+      "changed": true
+    },
+    {
+      "accent": "indian_english",
+      "prompt_id": 2,
+      "base_phonemes": "l\u02c8\u00e6st n\u02c8a\u026at \u00f0\u0259 f\u02c8\u00e6st t\u0279\u02c8e\u026an p\u02c8\u00e6st \u00f0\u0259 p\u02c8\u00e6\u03b8 b\u02c8a\u026a \u00f0\u0259 w\u02c8\u0254t\u025a \u2016",
+      "g2p_phonemes": "l\u02c8\u00e6st n\u02c8a\u026at \u00f0\u0259 f\u02c8\u00e6st t\u0279\u02c8e\u02d0n p\u02c8\u00e6st \u00f0\u0259 p\u02c8\u00e6\u03b8 b\u02c8a\u026a \u00f0\u0259 w\u02c8\u0254t\u025a",
+      "changed": true
+    },
+    {
+      "accent": "indian_english",
+      "prompt_id": 3,
+      "base_phonemes": "b\u02c8o\u028a\u03b8 \u0259v \u02c8\u028cs k\u0259n st\u02c8\u0251\u0279t \u00f0\u0259 t\u02c8\u00e6sk \u02c8\u00e6ft\u025a \u00f0\u0259 f\u02c8\u026alm \u2016",
+      "g2p_phonemes": "b\u02c8o\u02d0\u03b8 \u0259v \u02c8\u028cs k\u0259n st\u02c8\u0251\u0279t \u00f0\u0259 t\u02c8\u00e6sk \u02c8\u00e6ft\u025a \u00f0\u0259 f\u02c8\u026alm",
+      "changed": true
+    },
+    {
+      "accent": "indian_english",
+      "prompt_id": 4,
+      "base_phonemes": "\u00f0\u0259 hj\u02c8um\u0259n v\u02c8\u0254\u026as \u0279\u026afl\u02c8\u025bkts \u0259 p\u02c8\u025as\u0259n\u0259l a\u026ad\u02c8\u025bnt\u026ati \u2016",
+      "g2p_phonemes": "\u00f0\u0259 hj\u02c8um\u0259n v\u02c8\u0254\u026as \u0279\u026afl\u02c8\u025bkts \u0259 p\u02c8\u025as\u0259n\u0259l a\u026ad\u02c8\u025bnt\u026ati",
+      "changed": true
+    },
+    {
+      "accent": "indian_english",
+      "prompt_id": 5,
+      "base_phonemes": "pl\u02c8iz \u02c8\u00e6sk \u00f0\u0259 st\u02c8\u00e6f \u0259b\u02c8a\u028at \u00f0\u0259 t\u0361\u0283\u02c8\u00e6ns \u0259v \u0279\u02c8e\u026an \u2016",
+      "g2p_phonemes": "pl\u02c8iz \u02c8\u00e6sk \u00f0\u0259 st\u02c8\u00e6f \u0259b\u02c8a\u028at \u00f0\u0259 \u02a7\u02c8\u00e6ns \u0259v \u0279\u02c8e\u02d0n",
+      "changed": true
+    }
+  ],
+  "changed_prompts_by_accent": {
+    "indian_english": 6
+  },
+  "notes": [
+    "regex is the canonical gruut phonemizer; g2p is the IPA accent rule path.",
+    "The identity style vector is frozen across every clip.",
+    "Gender/age prosody bias is disabled so phonemes are the only accent variable.",
+    "Irish is evaluation-only and is never a training class."
+  ],
+  "limitations": [
+    "The accent rules are hand-written, not learned G2P.",
+    "Six prompts are enough for a diagnostic, not a confirmatory study.",
+    "No human accent-identification or MOS study was run."
+  ],
+  "mos": {
+    "status": "unavailable",
+    "reason": "no human ratings collected"
+  }
+}

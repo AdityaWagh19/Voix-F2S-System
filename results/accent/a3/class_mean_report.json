@@ -1,0 +1,66 @@
+{
+  "schema_version": "voix.accent_class_mean.v2",
+  "track": "accent",
+  "level": "exploratory",
+  "role": "a3_baseline_not_serving",
+  "residual_kind": "class_contrast",
+  "style_cache": "data\\processed\\globe_accent_style_subset_cache.npz",
+  "style_cache_sha256": "a2d31a1efa3decc5a78e6abebd11c35c0ac9dfb6c8e331c372fdb4f91972e22b",
+  "manifest": "data\\processed\\globe_accent_style_subset.csv",
+  "manifest_sha256": "a247122892fc23449d270aad6503a4899d0ff296b614578ee9fdab465cbdd30a",
+  "split": "train",
+  "classes": [
+    "us",
+    "england",
+    "australian",
+    "canadian",
+    "india_south_asia"
+  ],
+  "style_dim": 256,
+  "speaker_centered": false,
+  "centering": "class_contrast_global_mean",
+  "min_clips_per_speaker": 2,
+  "speaker_counts": {
+    "us": 168,
+    "england": 137,
+    "australian": 94,
+    "canadian": 87,
+    "india_south_asia": 121
+  },
+  "clip_counts": {
+    "us": 479,
+    "england": 400,
+    "australian": 280,
+    "canadian": 260,
+    "india_south_asia": 346
+  },
+  "raw_norms": {
+    "us": 0.2511744797229767,
+    "england": 0.36683890223503113,
+    "australian": 0.19196443259716034,
+    "canadian": 0.3154783546924591,
+    "india_south_asia": 0.46336519718170166
+  },
+  "class_mean_norms": {
+    "us": 2.344576358795166,
+    "england": 2.331845283508301,
+    "australian": 2.3322393894195557,
+    "canadian": 2.369649887084961,
+    "india_south_asia": 2.4303271770477295
+  },
+  "global_mean_norm": 2.3386693000793457,
+  "between_class_variance": 0.1097487211227417,
+  "within_class_variance": 3.248404884338379,
+  "separation_ratio": 0.03378541931514638,
+  "n_speakers": 607,
+  "n_clips": 1765,
+  "notes": [
+    "Class-contrast baseline; this is not a learned adapter.",
+    "Per-speaker centering is not used: with one accent per GLOBE speaker, every speaker's centered mean and therefore every class mean is exactly zero.",
+    "Each speaker's mean style is averaged into its accent class with speakers weighted equally, then the unweighted class-mean average is subtracted.",
+    "Accent and speaker identity are confounded because GLOBE has no within-speaker cross-accent pairs; the timbre half is down-weighted and identity drift is measured.",
+    "Trained on speaker_split=train only; val/test are not used."
+  ],
+  "artifact": "checkpoints\\accent_residuals\\class_mean.pt",
+  "artifact_sha256": "4781e800d756242ce82a0058291fbcaf7ba5a46e55aeaaef95a332ed2838de32"
+}
