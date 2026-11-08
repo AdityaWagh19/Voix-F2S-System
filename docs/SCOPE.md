@@ -9,7 +9,14 @@ older demo and MVP claims where they conflict. It describes a **research/demo
 system**, not a production or commercial deployment. No result in this document
 is a production-readiness claim.
 
-> **2026-11-05 update:** the current research demo is the v2 21-clip surface at
+> **2026-11-08 update:** the current research demo is the 24-clip v3 surface at
+> `results/demo/research_v3/`: three voices × eight conditions (neutral, happy,
+> sad, angry, and US, England, Indian English, Australian), generated at
+> serving scales. External panels remain at chance on generated emotion and
+> accent conditions, and no human perceptual study exists. Current evidence and
+> non-claims are in `docs/MASTER.md`.
+
+> **2026-11-05 update (historical):** the v2 demo was the 21-clip surface at
 > `results/demo/research_v2/`: three voices, three emotions (happy, sad, angry),
 > and three accents (US, England, Australian). The 15-asset measurements in §4
 > are the v1 baseline and are retained for comparison. Audited v2 results and
@@ -106,28 +113,36 @@ claim that every class is trainable.
 
 ### 5.1 Emotion inventory
 
-Current demo: neutral, happy, sad, angry, whispered, surprised.
+Current control surface: **neutral, happy, sad, angry** — four explicit
+selections with no default. The v1 demo also exposed whispered and surprised;
+those remain historical assets outside the current surface and are not
+advertised.
 
-Assessment: this is not the standard basic-emotion set. Standard expressive-TTS
-inventories use anger, disgust, fear, happiness, sadness, and surprise, usually
-with neutral added. Whispered is a phonation/voice-quality style, not an
-emotion.
+Assessment: the four controls are not the full standard basic-emotion set.
+Standard expressive-TTS inventories use anger, disgust, fear, happiness,
+sadness, and surprise, usually with neutral added. Whispered is a
+phonation/voice-quality style, not an emotion. The four current controls are
+class-mean prosody residuals, not learned classifiers, and the external panel
+does not identify them above chance.
 
 Recommended training inventory: **neutral, happy, sad, angry, fear, disgust**
 (the six CREMA-D classes). Add **surprised** only when a commercially usable
 surprise corpus with enough speakers exists (RAVDESS commercial license or
 MSP-Podcast agreement). Move **whispered** to a separate voice-quality control,
-or remove it; do not evaluate it as an emotion.
+or remove it; do not evaluate it as an emotion. Until a learned inventory clears
+the gates, only the four current controls are exposed.
 
 ### 5.2 Accent inventory
 
-Current demo: General American, British RP, Australian, Indian English, Irish,
-Scottish.
+Current control surface: **US English, England English, Australian English,
+Indian English** — four explicit selections with no default. The v1 demo also
+exposed Irish and Scottish; those remain historical assets outside the current
+surface.
 
-Assessment: these are recognizable and market-relevant, but not balanced.
-“British RP” is a specific prestige variety while the available corpus label is
-“England English”; Scottish is thin in GLOBE_V3; Canadian is missing despite
-strong coverage.
+Assessment: the four labels are recognizable and market-relevant, but the
+classifier is imbalanced and biased toward England. “British RP” is a specific
+prestige variety while the available corpus label is “England English”;
+Scottish is thin in GLOBE_V3; Canadian is missing despite strong coverage.
 
 Recommended training inventory, subject to speaker-count verification:
 **US English (General American), British English (England English; do not call

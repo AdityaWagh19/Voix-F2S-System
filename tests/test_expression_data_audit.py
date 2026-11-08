@@ -62,7 +62,7 @@ class TestDatasetInventory:
     def test_schema_and_unique_ids(self):
         result = audit.build_audit()
         assert result["schema_version"] == audit.AUDIT_SCHEMA
-        assert result["scope_document"] == "SCOPE.md"
+        assert result["scope_document"] == "docs/SCOPE.md"
         ids = [dataset["id"] for dataset in result["datasets"]]
         assert len(ids) == len(set(ids)) == 13
         assert result["generated_at"].endswith("UTC")

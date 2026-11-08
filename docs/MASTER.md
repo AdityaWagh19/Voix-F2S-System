@@ -784,9 +784,9 @@ silently use random weights.
 ```
 README.md                     entry point and quickstart
 docs/MASTER.md                this research record
+docs/SCOPE.md                 scope contract
+docs/AUDIT_REPORT.md          historical code audit
 docs/voix_banner.jpg          banner asset
-SCOPE.md                      scope contract
-AUDIT_REPORT.md               historical code audit
 configs/                      environment, hardware, training configs
 data/processed/               local corpora, manifests, caches, scalers
 checkpoints/                  canonical and experimental weights
@@ -815,6 +815,7 @@ voix/
   evaluation/                 metrics, gates, expression metrics
   inference/                  pipeline, service, CLI, IO
 tests/                        unit, artifact, and neural integration tests
+Initial Docs/                 original literature survey and outline
 ```
 
 ---

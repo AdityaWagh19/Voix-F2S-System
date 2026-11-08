@@ -994,7 +994,7 @@ Human MOS remains `awaiting_human_ratings` until ratings are supplied.
 
 ### 10.8 Scope, demo surface, and expression-control measurement
 
-The active product scope is recorded in `SCOPE.md`: candidate generation is
+The active product scope is recorded in `docs/SCOPE.md`: candidate generation is
 the core, emotions are the first production-grade expression control, and
 accents are the second. Cross-lingual synthesis, speech-difference simulation,
 and craniofacial sliders are permanently out of scope. Out-of-scope code and

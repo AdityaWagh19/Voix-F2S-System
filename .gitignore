@@ -75,3 +75,11 @@ inde.jpeg
 # Stress test assets and local evaluation artifacts
 artifacts/stress_test/
 data/test_subjects/
+
+# Local checkpoint metadata (weights are already ignored above)
+checkpoints/*.joblib
+checkpoints/*.history.json
+
+# Local processed datasets and feature caches
+data/processed/*
+!data/processed/.gitkeep

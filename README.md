@@ -14,12 +14,12 @@ deployment, or commercial use.
 > `results/evaluation/panel_v3/`. The v3 external panel is at chance on
 > generated emotion and accent conditions, and no human perceptual study exists. This
 > README does not assert unverified numbers. The full audit is in
-> [`AUDIT_REPORT.md`](AUDIT_REPORT.md); the consolidated research record is in
+> [`docs/AUDIT_REPORT.md`](docs/AUDIT_REPORT.md); the consolidated research record is in
 > [`docs/MASTER.md`](docs/MASTER.md).
 
 ### Current scope
 
-The active scope is defined in [`SCOPE.md`](SCOPE.md):
+The active scope is defined in [`docs/SCOPE.md`](docs/SCOPE.md):
 
 - **In scope:** candidate generation (core), four emotions (`neutral`, `happy`,
   `sad`, `angry`), and four accents (`us`, `england`, `indian_english`,
@@ -31,7 +31,7 @@ The active scope is defined in [`SCOPE.md`](SCOPE.md):
 
 Architecture, data access, measured evidence, rejected options, reproduction,
 and non-claims are consolidated in [`docs/MASTER.md`](docs/MASTER.md). The
-top-level `AUDIT_REPORT.md` is the historical code audit.
+historical code audit is in [`docs/AUDIT_REPORT.md`](docs/AUDIT_REPORT.md).
 
 ---
 
@@ -389,7 +389,7 @@ for both conditions, 10 diffusion steps) does **not** show a naturalness win:
 The only paired change that survives Holm correction across the ten metrics is
 a small decrease in energy standard deviation (0.04572 → 0.04457), which is a
 signal-statistics change, not evidence of better naturalness. The full
-ten-metric table is in `AUDIT_REPORT.md` §10.10; raw rows and training history
+ten-metric table is in `docs/AUDIT_REPORT.md` §10.10; raw rows and training history
 are under `results/checkpoints/styletts2_lora_prosody*`. Human MOS is
 unavailable. The adapter is experimental and is **not** wired into
 `StyleTTS2Backend`; the canonical CFVN and style adapter are unchanged. A
@@ -463,7 +463,7 @@ fails test (0.8814/0.8983 vs 0.9153). The validation-selected winner is seed 44,
 whose `test_identity_gate_winner` is **false**. This is a negative result, not a
 fix. `results/checkpoints/cfvn_v2_best.pt` remains canonical, and its downstream
 CVAE/adapter were not retrained. Details are in
-`results/cfvn_structure_comparison.json` and `AUDIT_REPORT.md`.
+`results/cfvn_structure_comparison.json` and `docs/AUDIT_REPORT.md`.
 
 Measure the HDF5-to-serving gap on the official test split:
 
@@ -741,7 +741,7 @@ Supported synthesis controls:
 
 **Out of scope:** `speech_difference`/`speech_severity` and `language` remain in
 legacy code paths for reproducibility, but they are not supported product
-controls. Craniofacial sliders are also out of scope. See [`SCOPE.md`](SCOPE.md).
+controls. Craniofacial sliders are also out of scope. See [`docs/SCOPE.md`](docs/SCOPE.md).
 
 `blend_weight`, `anchor_path`, `f0_variance_scale`, and LibriSpeech anchor
 blending were removed because they were not implemented on the neural path.
@@ -767,6 +767,8 @@ data/processed/styletts2_lora/
   manifest.csv            # 432-clip speaker-disjoint LoRA pilot
 docs/
   MASTER.md               # consolidated research record
+  SCOPE.md                # active scope contract
+  AUDIT_REPORT.md         # historical code audit
   voix_banner.jpg
 results/
   checkpoints/            # CFVN and experimental checkpoints
@@ -793,7 +795,7 @@ voix/
   evaluation/             # retrieval, gates, and expression metrics
   inference/              # pipeline, service, CLI, IO
 tests/
-legacy/                   # obsolete V1 scripts/assets kept for provenance
+Initial Docs/             # original literature survey and outline
 ```
 
 ---

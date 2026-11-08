@@ -831,7 +831,7 @@ def build_audit() -> Dict[str, Any]:
         "schema_version": AUDIT_SCHEMA,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
         "accessed": ACCESSED,
-        "scope_document": "SCOPE.md",
+        "scope_document": "docs/SCOPE.md",
         "purpose": (
             "Decide which emotion and accent corpora can legally support a "
             "production-grade learned control, and record what is missing locally."
