@@ -6,10 +6,13 @@ Provides an enterprise-grade, decoupled abstraction between the external interfa
 
 from __future__ import annotations
 
+import gc
+import importlib.util
 import os
+import platform
 import time
 import uuid
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
 
@@ -18,7 +21,70 @@ import soundfile as sf
 import torch
 
 from voix.inference.pipeline import VoixPipeline
+from voix.utils.artifacts import load_manifest
 from voix.utils.config import get_hardware_profile
+from voix.utils.model_cache import (
+    audioseal_cache_dir,
+    cache_file_count,
+    cache_has_files,
+    styletts2_cache_dir,
+)
+from voix.utils.paths import project_path
+
+
+def _is_cuda_oom(exc: BaseException) -> bool:
+    """Return True when an exception is a CUDA out-of-memory condition."""
+    oom_type = getattr(torch.cuda, "OutOfMemoryError", RuntimeError)
+    if isinstance(exc, oom_type):
+        return True
+    message = str(exc).lower()
+    return (
+        "out of memory" in message
+        or "cuda error: out of memory" in message
+        or "allocation on device" in message
+    )
+
+
+def validate_output_destination(
+    destination: Union[str, Path, None],
+    num_voices: int,
+) -> None:
+    """Validate and prepare an output destination *before* neural synthesis.
+
+    This duplicates only the path-shape checks in ``SynthesisResponse.save_all``.
+    Doing them up front means a multi-voice request cannot spend minutes
+    synthesizing and then fail because it targeted ``output.wav``.
+    """
+    if destination is None or str(destination).strip() == "":
+        return
+
+    dest = Path(destination)
+    is_wav = dest.suffix.lower() == ".wav"
+
+    if num_voices > 1:
+        if is_wav:
+            raise ValueError(
+                f"Cannot save {num_voices} candidates to the single file path "
+                f"'{dest}'. Pass a directory instead."
+            )
+        if dest.exists() and not dest.is_dir():
+            raise NotADirectoryError(
+                f"Destination exists and is not a directory: {dest}"
+            )
+        dest.mkdir(parents=True, exist_ok=True)
+        return
+
+    if is_wav:
+        if dest.exists() and dest.is_dir():
+            raise IsADirectoryError(f"Destination is a directory: {dest}")
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        return
+
+    if dest.exists() and not dest.is_dir():
+        raise NotADirectoryError(
+            f"Destination exists and is not a directory: {dest}"
+        )
+    dest.mkdir(parents=True, exist_ok=True)
 
 
 def _compute_quick_metrics(wav: np.ndarray, sample_rate: int = 24000) -> Dict[str, float]:
@@ -96,6 +162,11 @@ class SynthesisRequest:
             raise ValueError("accent_strength must be between 0.0 and 1.0")
         if not 0.0 <= float(self.emotion_intensity) <= 1.0:
             raise ValueError("emotion_intensity must be between 0.0 and 1.0")
+        if self.gender is not None and int(self.gender) not in (0, 1):
+            raise ValueError(f"gender must be 0 (female) or 1 (male), got {self.gender}")
+        if self.age is not None and not 0.0 <= float(self.age) <= 120.0:
+            raise ValueError(f"age must be between 0 and 120, got {self.age}")
+        validate_output_destination(self.output_path, self.num_voices)
 
 
 @dataclass
@@ -153,6 +224,8 @@ class SynthesisResponse:
     candidates: List[VoiceCandidate] = field(default_factory=list)
     latency_seconds: float = 0.0
     saved_files: List[str] = field(default_factory=list)
+    execution_device: str = ""
+    fallback_reason: Optional[str] = None
 
     def save_all(self, destination: Union[str, Path]) -> List[Path]:
         """Save all generated candidates to a file or directory.
@@ -205,6 +278,8 @@ class SynthesisResponse:
             "text": self.text,
             "latency_seconds": round(self.latency_seconds, 3),
             "candidates_count": len(self.candidates),
+            "execution_device": self.execution_device,
+            "fallback_reason": self.fallback_reason,
             "candidates": [c.to_dict() for c in self.candidates],
             "saved_files": self.saved_files,
         }
@@ -218,6 +293,7 @@ class VoixService:
     def __init__(self, device: Optional[str] = None) -> None:
         self.device = device
         self._pipeline: Optional[VoixPipeline] = None
+        self._fallback_reason: Optional[str] = None
 
     @property
     def pipeline(self) -> VoixPipeline:
@@ -226,10 +302,176 @@ class VoixService:
             self._pipeline = VoixPipeline(device=self.device)
         return self._pipeline
 
-    def synthesize(self, request: SynthesisRequest) -> SynthesisResponse:
-        """Execute single-request voice synthesis."""
-        request.validate()
+    def _configured_device(self) -> str:
+        if self.device is not None:
+            return str(self.device)
+        return str(get_hardware_profile().device)
 
+    def preflight(self, request: Optional[SynthesisRequest] = None) -> Dict[str, Any]:
+        """Check artifacts, caches, device, and output paths before synthesis.
+
+        This is intentionally model-free: it reads paths and package metadata so
+        it is cheap enough to run on every CLI invocation and before a live demo.
+        """
+        errors: List[str] = []
+        warnings: List[str] = []
+        checks: List[Dict[str, Any]] = []
+
+        def check_artifact(
+            name: str,
+            rel_path: str,
+            *,
+            required: bool = True,
+            role: str = "serving",
+        ) -> bool:
+            path = project_path(rel_path)
+            exists = path.is_file()
+            size_mb = round(path.stat().st_size / (1024 * 1024), 2) if exists else 0.0
+            checks.append(
+                {
+                    "name": name,
+                    "path": str(path),
+                    "exists": exists,
+                    "size_mb": size_mb,
+                    "required": required,
+                    "role": role,
+                }
+            )
+            if required and not exists:
+                errors.append(f"Missing required {role} artifact: {name} ({path})")
+            elif not required and not exists:
+                warnings.append(f"Optional {role} artifact missing: {name} ({path})")
+            return exists
+
+        try:
+            artifact_specs = load_manifest().artifacts
+        except Exception as exc:  # noqa: BLE001 - report, do not crash
+            artifact_specs = []
+            errors.append(f"Artifact manifest is unavailable or invalid: {exc}")
+
+        for spec in artifact_specs:
+            check_artifact(
+                spec.name,
+                spec.path,
+                required=spec.required,
+                role=spec.role,
+            )
+
+        # Package and cache checks.  A missing cache is a warning during normal
+        # operation and an error when offline mode is requested.
+        offline = any(
+            os.environ.get(key, "").strip().lower() in {"1", "true", "yes"}
+            for key in ("HF_HUB_OFFLINE", "TRANSFORMERS_OFFLINE", "VOIX_OFFLINE")
+        )
+        tts_installed = importlib.util.find_spec("styletts2") is not None
+        tts_cache = styletts2_cache_dir()
+        tts_cached = cache_has_files(tts_cache, minimum=6)
+        checks.append(
+            {
+                "name": "StyleTTS2 neural backend",
+                "path": str(tts_cache),
+                "exists": tts_installed,
+                "size_mb": 0.0,
+                "required": True,
+                "role": "tts",
+                "cached": tts_cached,
+            }
+        )
+        if not tts_installed:
+            errors.append(
+                "StyleTTS2 is not installed. Install the serving extra: "
+                "pip install -e '.[serving]'"
+            )
+        elif not tts_cached:
+            message = (
+                "StyleTTS2 checkpoints are not cached at "
+                f"{tts_cache}; the first neural synthesis will download them."
+            )
+            if offline:
+                errors.append(message + " Offline mode is enabled.")
+            else:
+                warnings.append(message)
+
+        watermark_requested = bool(request is not None and request.watermark)
+        audioseal_installed = importlib.util.find_spec("audioseal") is not None
+        audioseal_cache = audioseal_cache_dir()
+        audioseal_cached = cache_has_files(audioseal_cache, minimum=2)
+        checks.append(
+            {
+                "name": "AudioSeal watermarker",
+                "path": str(audioseal_cache),
+                "exists": audioseal_installed,
+                "size_mb": 0.0,
+                "required": watermark_requested,
+                "role": "watermark",
+                "cached": audioseal_cached,
+            }
+        )
+        if watermark_requested:
+            if not audioseal_installed:
+                errors.append(
+                    "Watermarking was requested but AudioSeal is not installed. "
+                    "Install the serving extra or pass --no-watermark."
+                )
+            elif not audioseal_cached:
+                message = (
+                    "Watermarking was requested but the AudioSeal cache at "
+                    f"{audioseal_cache} is incomplete; the first run will download it."
+                )
+                if offline:
+                    errors.append(message + " Offline mode is enabled.")
+                else:
+                    warnings.append(message)
+
+        # Device and memory checks.
+        configured = self._configured_device()
+        cuda_available = torch.cuda.is_available()
+        if configured.startswith("cuda") and not cuda_available:
+            errors.append(
+                f"Device '{configured}' was requested but CUDA is not available. "
+                "Use --device cpu."
+            )
+        if configured.startswith("mps"):
+            mps = getattr(torch.backends, "mps", None)
+            if mps is None or not mps.is_available():
+                errors.append(
+                    "Device 'mps' was requested but the MPS backend is not available."
+                )
+        if configured.startswith("cuda") and cuda_available:
+            try:
+                vram_gb = torch.cuda.get_device_properties(0).total_memory / 1e9
+            except Exception:
+                vram_gb = 0.0
+            if 0.0 < vram_gb < 5.0:
+                warnings.append(
+                    f"GPU has {vram_gb:.2f} GB VRAM. Multi-voice synthesis or "
+                    "watermarking may exhaust it; the service will retry on CPU "
+                    "if CUDA runs out of memory."
+                )
+
+        # Request-level validation, including the output destination.
+        if request is not None:
+            try:
+                request.validate()
+            except Exception as exc:  # noqa: BLE001 - report, do not crash
+                errors.append(f"Invalid request: {exc}")
+
+        return {
+            "ok": not errors,
+            "errors": errors,
+            "warnings": warnings,
+            "checks": checks,
+            "device": configured,
+            "cuda_available": cuda_available,
+            "offline": offline,
+            "fallback_available": configured.startswith("cuda"),
+        }
+
+    def _synthesize_once(
+        self,
+        request: SynthesisRequest,
+        progress_callback: Optional[Callable[[str], None]] = None,
+    ) -> SynthesisResponse:
         if request.seed is not None:
             torch.manual_seed(request.seed)
             np.random.seed(request.seed)
@@ -247,6 +489,7 @@ class VoixService:
             emotion=request.emotion,
             emotion_intensity=request.emotion_intensity,
             watermark=request.watermark,
+            progress_callback=progress_callback,
         )
         latency = time.time() - t0
 
@@ -279,12 +522,55 @@ class VoixService:
             text=request.text,
             candidates=candidates,
             latency_seconds=latency,
+            execution_device=str(self.pipeline.device),
+            fallback_reason=self._fallback_reason,
         )
 
         if request.output_path:
             response.save_all(request.output_path)
 
         return response
+
+    def synthesize(
+        self,
+        request: SynthesisRequest,
+        progress_callback: Optional[Callable[[str], None]] = None,
+    ) -> SynthesisResponse:
+        """Execute single-request voice synthesis with a CPU OOM fallback."""
+        request.validate()
+        self._fallback_reason = None
+
+        try:
+            return self._synthesize_once(request, progress_callback)
+        except RuntimeError as exc:
+            if not _is_cuda_oom(exc):
+                raise
+            configured = self._configured_device()
+            if not configured.startswith("cuda"):
+                raise
+
+            if progress_callback:
+                try:
+                    progress_callback(
+                        "CUDA ran out of memory; retrying the same request on CPU."
+                    )
+                except Exception:
+                    pass
+
+            # Drop every CUDA-backed object before rebuilding the pipeline on CPU.
+            self._pipeline = None
+            self._fallback_reason = f"CUDA OOM: {exc}"
+            try:
+                from voix.models.tts_backend import StyleTTS2Backend
+
+                StyleTTS2Backend.reset_shared_model()
+            except Exception:
+                pass
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+            self.device = "cpu"
+            return self._synthesize_once(request, progress_callback)
 
     def synthesize_batch(
         self,
@@ -318,37 +604,71 @@ class VoixService:
         }
 
     def get_diagnostics(self) -> Dict[str, Any]:
-        """Return structured hardware and checkpoint status."""
+        """Return structured hardware, artifact, and cache status."""
         profile = get_hardware_profile()
-        root_dir = Path(__file__).resolve().parent.parent
+
+        try:
+            artifact_specs = load_manifest().artifacts
+            manifest_error = None
+        except Exception as exc:  # noqa: BLE001 - diagnostics must not crash
+            artifact_specs = []
+            manifest_error = str(exc)
 
         checkpoints = [
-            ("ArcFace (InsightFace)", "checkpoints/models/buffalo_l/w600k_r50.onnx"),
-            ("MediaPipe FaceLandmarker", "checkpoints/mediapipe/face_landmarker.task"),
-            ("ECAPA-TDNN (SpeechBrain)", "checkpoints/speechbrain/spkrec-ecapa/embedding_model.ckpt"),
-            ("ContrastiveFaceVoiceNet", "results/checkpoints/D_joint_infonce_best.pt"),
-            ("CVAE Diversity Model", "checkpoints/cvae_cfvn_face192_latent128_diversity.pt"),
-            ("StyleAdapter Checkpoint", "checkpoints/style_adapter_cfvn_best.pt"),
-            ("Environment Config", "configs/environment.yaml"),
+            (spec.name, spec.path, spec.required, spec.role)
+            for spec in artifact_specs
         ]
+        checkpoints.append(("Environment Config", "configs/environment.yaml", True, "config"))
 
         verified_ckpts = []
-        for name, rel_path in checkpoints:
-            p = root_dir / rel_path
-            verified_ckpts.append({
-                "component": name,
-                "relative_path": rel_path,
-                "exists": p.exists(),
-                "size_mb": round(p.stat().st_size / (1024 * 1024), 2) if p.exists() else 0.0,
-            })
+        for name, rel_path, required, role in checkpoints:
+            path = project_path(rel_path)
+            exists = path.is_file()
+            verified_ckpts.append(
+                {
+                    "component": name,
+                    "relative_path": rel_path,
+                    "exists": exists,
+                    "size_mb": round(path.stat().st_size / (1024 * 1024), 2)
+                    if exists
+                    else 0.0,
+                    "required": required,
+                    "role": role,
+                }
+            )
+
+        tts_cache = styletts2_cache_dir()
+        audioseal_cache = audioseal_cache_dir()
+        offline = any(
+            os.environ.get(key, "").strip().lower() in {"1", "true", "yes"}
+            for key in ("HF_HUB_OFFLINE", "TRANSFORMERS_OFFLINE", "VOIX_OFFLINE")
+        )
 
         return {
             "pytorch_version": torch.__version__,
+            "python_version": platform.python_version(),
+            "platform": platform.platform(),
             "hardware_profile": profile.name,
             "accelerator": profile.accelerator,
             "device": str(profile.device),
+            "device_requested": self.device,
+            "cuda_available": torch.cuda.is_available(),
             "memory_budget_gb": round(profile.total_memory_gb, 2),
             "precision": profile.precision,
             "pipeline_mode": profile.pipeline_mode,
+            "offline": offline,
             "checkpoints": verified_ckpts,
+            "artifact_manifest_error": manifest_error,
+            "caches": {
+                "styletts2": {
+                    "path": str(tts_cache),
+                    "exists": tts_cache.is_dir(),
+                    "files": cache_file_count(tts_cache),
+                },
+                "audioseal": {
+                    "path": str(audioseal_cache),
+                    "exists": audioseal_cache.is_dir(),
+                    "files": cache_file_count(audioseal_cache),
+                },
+            },
         }

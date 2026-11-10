@@ -200,6 +200,23 @@ class StyleTTS2Backend(nn.Module):
         """Human-readable reason for the most recent neural load/synthesis error."""
         return self._last_error
 
+    @classmethod
+    def reset_shared_model(cls) -> None:
+        """Drop the process-wide StyleTTS 2 model.
+
+        Used by the service when a CUDA synthesis runs out of memory and the
+        request is retried on CPU.  Without this, the CPU backend would reuse
+        the CUDA-resident shared model.
+        """
+        cls._SHARED_MODEL = None
+        try:
+            import torch as _torch
+
+            if _torch.cuda.is_available():
+                _torch.cuda.empty_cache()
+        except Exception:
+            pass
+
     def load(self) -> None:
         """Load pretrained StyleTTS 2 checkpoint and freeze all parameters."""
         if self._loaded:
@@ -212,8 +229,14 @@ class StyleTTS2Backend(nn.Module):
 
         try:
             if StyleTTS2Backend._SHARED_MODEL is not None:
-                self._model = StyleTTS2Backend._SHARED_MODEL
-            else:
+                shared = StyleTTS2Backend._SHARED_MODEL
+                shared_device = getattr(shared, "device", None)
+                if self.device.type == "cpu" and shared_device not in (None, "cpu"):
+                    # A previous CUDA load left a GPU-resident shared model.
+                    StyleTTS2Backend.reset_shared_model()
+                else:
+                    self._model = shared
+            if self._model is None:
                 from styletts2 import tts
                 if self.device.type == "cpu":
                     orig_is_avail = torch.cuda.is_available

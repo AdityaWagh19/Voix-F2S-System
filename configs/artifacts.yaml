@@ -1,0 +1,158 @@
+# VOIX artifact manifest.
+#
+# Model weights and processed data are intentionally excluded from git by
+# .gitignore.  This file is the single source of truth for what a checkout
+# needs, and it is consumed by:
+#   - voix/service.py preflight and info diagnostics
+#   - scripts/setup/verify_artifacts.py
+#
+# Paths are project-relative.  SHA-256 values pin the audited artifacts so a
+# restore cannot silently substitute a different checkpoint.  Licenses are
+# recorded per artifact because the repository's MIT code license does not
+# relicense third-party weights or dataset-derived residuals.
+schema_version: 1
+description: "Serving and evaluation artifacts for the VOIX V2/V3 research stack"
+
+artifacts:
+  - id: cfvn_v2
+    name: "ContrastiveFaceVoiceNet (CFVN) V2"
+    path: "results/checkpoints/cfvn_v2_best.pt"
+    role: "identity"
+    required: true
+    size_bytes: 2971901
+    sha256: "0253bbbf96def21ca9a3a9df3a4466c1e1538ef36986d9eb9fe86bfabd7b2f6b"
+    license: "Research-only; VoxCeleb2-derived"
+    source: "Trained in-repo; see docs/MASTER.md"
+    notes: "Canonical frozen face-to-voice identity model."
+
+  - id: cvae_diversity
+    name: "CVAE Diversity Model"
+    path: "checkpoints/cvae_cfvn_face192_latent128_diversity.pt"
+    role: "identity"
+    required: true
+    size_bytes: 5766056
+    sha256: "bb7ad29b7b5cebb2141073892b9d5736d2e996c0bd3e81acc4c671c1ea66656b"
+    license: "Research-only; VoxCeleb2-derived"
+    source: "Trained in-repo; see docs/MASTER.md"
+    notes: "Canonical face-to-latent diversity model."
+
+  - id: style_adapter
+    name: "StyleAdapter"
+    path: "checkpoints/style_adapter_cfvn_best.pt"
+    role: "identity"
+    required: true
+    size_bytes: 735522
+    sha256: "97750ee84e50f9878e3d98de6b2e3dc0ca6829f448f2a5e4a31185adafc0a69c"
+    license: "Research-only; VoxCeleb2-derived"
+    source: "Trained in-repo; see docs/MASTER.md"
+    notes: "Maps CVAE latents to the frozen StyleTTS2 style space."
+
+  - id: face_scaler_v2
+    name: "FaceFeatureV2 scaler"
+    path: "data/processed/voxceleb2_v2/face_scaler_v2.pt"
+    role: "face features"
+    required: true
+    size_bytes: 6146
+    sha256: "2656d9b3cf2886c721acdd07a2289538be28c3ed65a033ffa3462671e85d9e87"
+    license: "Research-only; VoxCeleb2-derived"
+    source: "Trained in-repo on the speaker-disjoint V2 train split"
+    notes: "560-D train-split z-score scaler required by FaceFeatureV2."
+
+  - id: mediapipe_landmarker
+    name: "MediaPipe FaceLandmarker"
+    path: "checkpoints/mediapipe/face_landmarker.task"
+    role: "face features"
+    required: true
+    size_bytes: 3758596
+    sha256: "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff"
+    license: "Apache-2.0 (MediaPipe upstream)"
+    source: "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task"
+    notes: "478-point face landmark model; 468 canonical points are used."
+
+  - id: arcface_detector
+    name: "ArcFace buffalo_l detector (det_10g)"
+    path: "checkpoints/models/buffalo_l/det_10g.onnx"
+    role: "face features"
+    required: true
+    size_bytes: 16923827
+    sha256: "5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91"
+    license: "InsightFace model terms; non-commercial research"
+    source: "https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip"
+    notes: "RetinaFace detector loaded by InsightFace FaceAnalysis."
+
+  - id: arcface_landmark_2d
+    name: "ArcFace buffalo_l 2D landmarks (2d106det)"
+    path: "checkpoints/models/buffalo_l/2d106det.onnx"
+    role: "face features"
+    required: true
+    size_bytes: 5030888
+    sha256: "f001b856447c413801ef5c42091ed0cd516fcd21f2d6b79635b1e733a7109dbf"
+    license: "InsightFace model terms; non-commercial research"
+    source: "https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip"
+    notes: "106-point 2D landmark model in the buffalo_l pack."
+
+  - id: arcface_landmark_3d
+    name: "ArcFace buffalo_l 3D landmarks (1k3d68)"
+    path: "checkpoints/models/buffalo_l/1k3d68.onnx"
+    role: "face features"
+    required: true
+    size_bytes: 143607619
+    sha256: "df5c06b8a0c12e422b2ed8947b8869faa4105387f199c477af038aa01f9a45cc"
+    license: "InsightFace model terms; non-commercial research"
+    source: "https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip"
+    notes: "68-point 3D landmark model in the buffalo_l pack."
+
+  - id: arcface_genderage
+    name: "ArcFace buffalo_l gender/age (genderage)"
+    path: "checkpoints/models/buffalo_l/genderage.onnx"
+    role: "face features"
+    required: true
+    size_bytes: 1322532
+    sha256: "4fde69b1c810857b88c64a335084f1c3fe8f01246c9a191b48c7bb756d6652fb"
+    license: "InsightFace model terms; non-commercial research"
+    source: "https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip"
+    notes: "Fallback gender/age attributes when the ViT age estimator is unavailable."
+
+  - id: arcface_recognition
+    name: "ArcFace buffalo_l recognition (w600k_r50)"
+    path: "checkpoints/models/buffalo_l/w600k_r50.onnx"
+    role: "face features"
+    required: true
+    size_bytes: 174383860
+    sha256: "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43"
+    license: "InsightFace model terms; non-commercial research"
+    source: "https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip"
+    notes: "512-D ArcFace R50 identity embedding model."
+
+  - id: emotion_residual_e1
+    name: "E1 emotion residual"
+    path: "checkpoints/emotion_residuals/class_mean.pt"
+    role: "emotion control"
+    required: false
+    size_bytes: 16226
+    sha256: "6bb4f17ff4bfaf4a9fe4b69514ba3b2e83f4dfe4c8a80f8706c9172cf4bb4408"
+    license: "Research-only; MSP-Podcast-derived (institutional terms)"
+    source: "E1 class-mean residual; see docs/MASTER.md"
+    notes: "Exploratory prosody-only emotion control; external panel is at chance."
+
+  - id: accent_residual_a3
+    name: "A3 accent residual"
+    path: "checkpoints/accent_residuals/class_mean.pt"
+    role: "accent control"
+    required: false
+    size_bytes: 10789
+    sha256: "4781e800d756242ce82a0058291fbcaf7ba5a46e55aeaaef95a332ed2838de32"
+    license: "Research-only; GLOBE-derived"
+    source: "A3 class-contrast residual; see docs/MASTER.md"
+    notes: "Exploratory accent control; external panel is at chance."
+
+  - id: ecapa_evaluation
+    name: "ECAPA-TDNN (evaluation only)"
+    path: "checkpoints/speechbrain/spkrec-ecapa/embedding_model.ckpt"
+    role: "evaluation"
+    required: false
+    size_bytes: 83316686
+    sha256: "0575cb64845e6b9a10db9bcb74d5ac32b326b8dc90352671d345e2ee3d0126a2"
+    license: "Apache-2.0 (SpeechBrain upstream)"
+    source: "https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb"
+    notes: "Evaluation recognizer only; never used to synthesize audio."

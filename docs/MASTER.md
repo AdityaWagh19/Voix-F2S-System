@@ -642,12 +642,22 @@ not a human similarity judgment.
 
 ### 7.1 Environment
 
+The P0 setup path is documented in [`SETUP.md`](SETUP.md). The short version:
+
 ```powershell
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-pip install -e .
+python scripts/setup/bootstrap_env.py --recreate
+.venv\Scripts\Activate.ps1
+python scripts/setup/verify_artifacts.py --restore-from <artifact-mirror>
+python scripts/setup/prefetch_models.py
+python -m voix preflight --json
 ```
+
+The bootstrap creates an isolated venv (`include-system-site-packages = false`),
+installs the pinned PyTorch CUDA 12.1 wheels, installs `-e ".[serving]"` under
+[`constraints/serving-py312-cu121.txt`](../constraints/serving-py312-cu121.txt),
+and runs `pip check`. `configs/artifacts.yaml` records the serving/evaluation
+files, sizes, SHA-256 digests, licenses, and sources; `voix preflight` and
+`scripts/setup/verify_artifacts.py` read that manifest.
 
 `ffmpeg` must be on `PATH`. The repository config is checkout-relative;
 `configs/environment.yaml` contains no absolute `D:/voix` paths.
@@ -660,8 +670,9 @@ Measured environment: Python 3.12.1, `torch==2.4.1+cu121`, `numpy==1.26.4`,
 
 The local TensorFlow install is broken (`module 'tensorflow' has no attribute
 'Tensor'`). Set `USE_TF=0` and `TRANSFORMERS_NO_TF=1`; the TTS backend also
-primes einops to the torch backend before TensorFlow can be selected. This
-workaround is covered by `tests/test_tts_backend.py`.
+primes einops to the torch backend before TensorFlow can be selected. A clean
+venv does not install TensorFlow, so this is mainly a dirty-workstation note.
+This workaround is covered by `tests/test_tts_backend.py`.
 
 ### 7.2 Corpus and training
 
@@ -785,9 +796,11 @@ silently use random weights.
 README.md                     entry point and quickstart
 docs/MASTER.md                this research record
 docs/SCOPE.md                 scope contract
+docs/SETUP.md                 clean env, artifacts, caches, offline/OOM
 docs/AUDIT_REPORT.md          historical code audit
 docs/voix_banner.jpg          banner asset
-configs/                      environment, hardware, training configs
+configs/                      environment, hardware, artifact manifest, training configs
+constraints/                  validated dependency pins
 data/processed/               local corpora, manifests, caches, scalers
 checkpoints/                  canonical and experimental weights
 results/
@@ -808,6 +821,7 @@ scripts/
   demo/                       research demo and C1 generators
   audit/                      audio, style, and data-firewall audits
   maintenance/                cleanup and manifest utilities
+  setup/                      bootstrap, artifact verification, cache prefetch
 voix/
   data/                       face features, demographics, presets
   models/                     CFVN, CVAE, adapter, TTS backend, controls
@@ -822,9 +836,17 @@ Initial Docs/                 original literature survey and outline
 
 ## 9. Known issues and dependency notes
 
-- `requirements.txt` is a freeze that does not match the installed environment.
-  `styletts2 0.1.6` declares `huggingface-hub<0.20` but hub 0.36.2 is installed.
-  The environment works; the lockfile is not authoritative.
+- P0 resolved the old dependency record: `requirements.txt` was a UTF-16
+  `pip freeze` of the polluted user site (it pinned `numpy==2.5.2`,
+  `scipy==1.18.1`, omitted `styletts2`, `audioseal`, `pyloudnorm`, and `funasr`,
+  and contained a self-referential VCS install). It is now a UTF-8 serving
+  installer backed by `constraints/serving-py312-cu121.txt`,
+  `configs/artifacts.yaml`, and `scripts/setup/`. The validated environment
+  still uses `huggingface-hub==0.36.2` with `styletts2==0.1.6`; that combination
+  passed the full suite and the CPU synthesis smoke test.
+- P0 also removed unused `torchvision` from core dependencies, moved
+  `soundfile` into core, and made preflight check all five `buffalo_l` ONNX
+  files instead of only the recognition model.
 - TensorFlow is broken. Use the torch/einops priming described in section 7.1.
 - emotion2vec+ uses the FunASR model license (`other`, not OSI-approved).
   Review redistribution terms before shipping model files.

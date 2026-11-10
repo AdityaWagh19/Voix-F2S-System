@@ -92,19 +92,45 @@ Do not use this project or its artifacts to impersonate a real person.
 
 ## 3. Installation
 
+VOIX model weights are not committed. A clean checkout needs an isolated
+environment, the artifact manifest restored, and the runtime caches prefetched.
+The full operations guide is [`docs/SETUP.md`](docs/SETUP.md).
+
+### Recommended: bootstrap
+
+```powershell
+python scripts/setup/bootstrap_env.py --recreate
+.venv\Scripts\Activate.ps1
+python scripts/setup/verify_artifacts.py --restore-from E:\voix-artifacts
+python scripts/setup/prefetch_models.py
+python -m voix preflight --json
+```
+
+On Linux/macOS activate with `source .venv/bin/activate`; for a CPU-only host
+use `python scripts/setup/bootstrap_env.py --recreate --device cpu --no-lock`.
+The bootstrap creates an isolated venv and installs the `serving` extra under
+[`constraints/serving-py312-cu121.txt`](constraints/serving-py312-cu121.txt).
+
+### Manual
+
 ```bash
 python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# Linux/macOS
-source .venv/bin/activate
-
-pip install -r requirements.txt
-pip install -e .
+# Windows: .venv\Scripts\activate
+# Linux/macOS: source .venv/bin/activate
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install torch==2.4.1 torchaudio==2.4.1 \
+  --index-url https://download.pytorch.org/whl/cu121
+python -m pip install -r requirements.txt -c constraints/serving-py312-cu121.txt
 ```
+
+The old `requirements.txt` was a UTF-16 `pip freeze` of a polluted user site; it
+has been replaced with a serving installer plus a validated constraints file.
+`torchvision` is intentionally absent: no serving-path module imports it.
 
 `ffmpeg` must be on `PATH` for video/audio extraction. The project config is
 checkout-relative; `configs/environment.yaml` contains no `D:/voix` paths.
+Artifacts are declared in [`configs/artifacts.yaml`](configs/artifacts.yaml) with
+sizes and SHA-256 digests; `voix preflight` reads the same manifest.
 
 ---
 
@@ -712,6 +738,28 @@ for result in results:
     )
 ```
 
+### CLI demo path
+
+```powershell
+# Validate artifacts, caches, device, and output without synthesizing
+python -m voix preflight -f face.jpg -o output.wav -v 1 --json
+
+# One voice; watermarking is opt-in and off by default
+python -m voix synth -f face.jpg -t "Hello from VOIX." -o output.wav
+
+# Bounded candidates; multiple voices require a directory
+python -m voix synth -f face.jpg -v 3 -o candidates/
+
+# CPU smoke test; omit --device to use the configured accelerator
+python -m voix synth -f face.jpg -t "Hello." -o output.wav --device cpu --seed 42
+```
+
+Progress goes to stderr, so `--json` keeps stdout machine-readable. Output
+destinations and numeric bounds are checked before model loading. `voix info`
+reports the manifest-backed checkpoint list, both model caches, and the resolved
+device. See [`docs/SETUP.md`](docs/SETUP.md) for OOM/offline/troubleshooting
+details.
+
 A 560-D raw fused vector can be passed instead of an image. If it is already
 z-scored with the canonical scaler, set `face_input_is_normalized=True`.
 
@@ -754,6 +802,9 @@ blending were removed because they were not implemented on the neural path.
 configs/
   environment.yaml        # checkout-relative paths, V2 artifacts, inference defaults
   hardware.yaml           # hardware auto-detection profiles
+  artifacts.yaml          # checksummed serving/evaluation artifact manifest
+constraints/
+  serving-py312-cu121.txt  # validated serving dependency pins
 checkpoints/
   cvae_cfvn_face192_latent128_diversity.pt
   style_adapter_cfvn_best.pt
@@ -768,6 +819,7 @@ data/processed/styletts2_lora/
 docs/
   MASTER.md               # consolidated research record
   SCOPE.md                # active scope contract
+  SETUP.md                # clean env, artifacts, caches, offline/OOM guidance
   AUDIT_REPORT.md         # historical code audit
   voix_banner.jpg
 results/
@@ -788,6 +840,7 @@ scripts/
   demo/                   # research demos and C1 generator
   audit/                  # audio, style, and data-firewall audits
   maintenance/            # cleanup and manifest utilities
+  setup/                  # bootstrap, artifact verification, cache prefetch
 voix/
   data/                   # face features, demographics, presets
   models/                 # CFVN, CVAE, adapter, TTS backend, controls
@@ -803,12 +856,22 @@ Initial Docs/             # original literature survey and outline
 ## 9. Tests
 
 ```bash
+# Fast CLI and manifest contracts
+python -m pytest tests/test_cli.py tests/test_artifacts.py -q
+
+# Full suite
 python -m pytest -q
+
+# Setup gates
+python scripts/setup/verify_artifacts.py --strict --json
+python scripts/setup/prefetch_models.py --check --json
 ```
 
 Artifact-dependent tests skip cleanly when the V2 checkpoints are absent; they
 do not silently fall back to random weights. Once the artifacts exist, run the
-full suite and the CI gate.
+full suite and the CI gate. A green CI gate means the identity path is
+structurally non-collapsed, not that identity, accent, or emotion is accurate.
+See [`docs/SETUP.md`](docs/SETUP.md) for the complete setup verification path.
 
 ---
 

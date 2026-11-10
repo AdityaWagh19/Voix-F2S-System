@@ -16,7 +16,7 @@ import logging
 import os
 from contextlib import nullcontext
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 
 import numpy as np
 import soundfile as sf
@@ -66,6 +66,19 @@ logger = logging.getLogger("voix.pipeline")
 EMOTION_RESIDUAL_SCALE = 0.28
 ACCENT_RESIDUAL_SCALE = 0.3
 ACCENT_TIMBRE_WEIGHT = 0.25
+
+
+def _notify(
+    callback: Optional[Callable[[str], None]],
+    message: str,
+) -> None:
+    """Send a progress message without letting a printer break synthesis."""
+    if callback is None:
+        return
+    try:
+        callback(message)
+    except Exception:  # pragma: no cover - defensive
+        logger.debug("progress callback failed", exc_info=True)
 
 
 class VoixPipeline:
@@ -426,6 +439,7 @@ class VoixPipeline:
         seed: Optional[int] = None,
         face_input_is_normalized: bool = False,
         selection: Optional[str] = None,
+        progress_callback: Optional[Callable[[str], None]] = None,
     ) -> List[Dict[str, Any]]:
         """Generate K diverse candidate voice waveforms for a single face representation.
 
@@ -459,6 +473,8 @@ class VoixPipeline:
             )
         if watermark is None:
             watermark = self.enable_watermarking
+
+        _notify(progress_callback, "Preparing face representation...")
 
         accent_id = normalize_accent(accent) if accent else None
         emotion_id = normalize_emotion(emotion)
@@ -518,6 +534,8 @@ class VoixPipeline:
         # Map 560-D fused face -> 192-D ECAPA-space embedding via CFVN
         with torch.no_grad():
             e_f_voice = self.cfvn(e_f, normalize=True)  # (1, 192)
+
+        _notify(progress_callback, "Face identity mapped to voice embedding.")
 
         if speaker_embedding is not None:
             # Use explicit fixed speaker embedding (e.g. Primary candidate identity)
@@ -599,6 +617,11 @@ class VoixPipeline:
         for k in range(num_voices):
             if self.hardware.torch_empty_cache_per_sample:
                 free_memory(self.device)
+
+            _notify(
+                progress_callback,
+                f"Synthesizing candidate {k + 1}/{num_voices}...",
+            )
 
             e_s_k = e_s_candidates_norm[k].unsqueeze(0)
             e_s_raw_k = e_s_candidates_raw[k]
@@ -699,9 +722,18 @@ class VoixPipeline:
                 )
 
             # Emotion is steered natively in style/prosody space (no post-hoc DSP filtering)
+            _notify(
+                progress_callback,
+                f"Candidate {k + 1}/{num_voices} synthesized.",
+            )
             is_wm = False
             wm_status = "disabled"
             if watermark:
+                _notify(
+                    progress_callback,
+                    f"Embedding AudioSeal watermark for candidate "
+                    f"{k + 1}/{num_voices}...",
+                )
                 wm = self._ensure_watermarker()
                 try:
                     waveform = wm.embed(waveform)
@@ -727,6 +759,7 @@ class VoixPipeline:
             })
 
         self.provenance["runtime"]["backend"] = self.tts.backend_name
+        _notify(progress_callback, "Synthesis complete.")
         logger.info(
             "synthesized %d candidate(s): backend=%s schema=%s",
             len(results),
