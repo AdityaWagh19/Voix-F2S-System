@@ -1,6 +1,6 @@
 # VOIX Master Research Record
 
-**Status:** research/demo record, last updated 2026-11-07.
+**Status:** research/demo record, last updated 2026-11-12.
 **Scope:** face-to-voice identity plus four explicit emotion and four explicit
 accent controls. This is not a production system, an identity-verification
 system, or an impersonation tool.
@@ -249,6 +249,44 @@ The frozen-diversity report stores both `style_vector` (the retired
 post-craniofacial-modulation style) and `style_without_geo_vector` (the canonical
 pre-modulation style). Reproduction checks compare against
 `style_without_geo_vector` / `style_without_geo_sha256`.
+
+The demo's mean-only style calibration is one collapse mechanism, not the only
+one: uncalibrated demo styles reconstruct the serving `e_s` at cosine 0.92, but
+the translation adds a common identity offset. More importantly, the canonical
+adapter already maps distinct same-gender faces to nearly identical raw styles
+(cosine `0.948-0.988`; validation centered different-speaker p90 `0.902` vs
+`0.423` for real targets, with 34.0% of pairs above 0.5 vs 5.4%). Refitting the
+calibration on 11 disjoint faces rules out evaluation leakage: canonical gain 1
+still reaches max ECAPA `0.9486` on eight held-out faces (audio 8/8), and gain 2
+reaches `0.8939` but degenerates `C2_08` (audio 7/8). Candidate A reaches
+`0.7914` and misses one SNR floor. A controlled probe with real AMI styles
+shows the renderer can produce distinct voices (style cosine `<0.5` yields
+ECAPA mean `0.301`, min `0.144`; style
+`>=0.8` yields mean `0.601`), so the adapter's style collapse is the primary
+bottleneck. Candidate B, trained with a pairwise structure objective, cuts the
+validation centered pair p90 from `0.902` to `0.527` (test `0.920` to `0.593`)
+and the held-out identity max to `0.6415`, but still fails both gates: three-face
+audio misses `C2_12`, and held-out audio misses `C1_01`, `C2_08`, and `C2_13`.
+Its two worst centered pairs are at the ridge linear ceiling for the same `e_s`
+input. The demo is unchanged and no candidate is promoted. See
+`docs/IDENTITY_CALIBRATION_AUDIT.md` and
+`docs/ADAPTER_MANIFOLD_RETRAINING.md`.
+
+The Phase 1 encoder screen (`docs/IDENTITY_NEXT_PHASE.md`) fit train-only,
+speaker-level ridge maps from `e_s`, raw ArcFace, fused 560-D, and their
+concatenations to the style targets. The input selected by validation residual
+cosine was `cfvn_es_arcface` (validation `0.4440`, test `0.4507`, lambda
+`1000` at the grid edge), but it fails L1/L2 (gains `+0.0177` / `+0.0259`
+against a `0.05` gate), L3/L4, and L5; it also fails the demo gate
+(`C1_04/C2_15` `0.8281`, gate-face max `0.8981`). Raw ArcFace is the only input
+that substantially improves the centered pair tail (validation p90 `0.6041`,
+test `0.6597`, against `0.8520` / `0.8516` for `e_s`; test `frac_gt_0.8`
+`0.0285`) and it passes L3-L6, but its residual cosine is below the baseline,
+so it fails L1/L2. Concatenations improve the tail to p90 `0.732-0.787` but do
+not recover residual fidelity. The report's selection-sensitivity block marks
+all eight inputs NO-GO. The screen therefore does not authorize another
+objective on the same `e_s`; the next step is paired face/voice data. No
+canonical artifact, demo calibration, or fixed gate changed.
 
 ### 4.2 Naturalness and audio quality
 
@@ -847,6 +885,25 @@ Initial Docs/                 original literature survey and outline
 - P0 also removed unused `torchvision` from core dependencies, moved
   `soundfile` into core, and made preflight check all five `buffalo_l` ONNX
   files instead of only the recognition model.
+- The demo's face-specific identity remains unresolved. The mean-only style
+  calibration passes naturalness but collapses neutral-pair identity; removing
+  it preserves linear identity information but leaves some styles off the TTS
+  manifold. Disjoint-calibration held-out tests rule out leakage: canonical
+  gain 1 reaches max ECAPA `0.9486`, gain 2 `0.8939` (and degenerates `C2_08`),
+  and Candidate A `0.7914` with one missed SNR floor. Candidate B (pairwise
+  structure objective) cuts the centered pair p90 from `0.902` to `0.527` and
+  the held-out identity max to `0.6415`, but still fails both gates (three-face
+  audio `C2_12`; held-out audio `C1_01`, `C2_08`, `C2_13`). Its two worst pairs
+  are at the ridge linear ceiling for the same `e_s`, so the next lever is
+  paired face/voice data or a stronger face encoder, not another scalar sweep.
+  The Phase 1 encoder screen reached NO-GO: no input cleared the pre-registered
+  linear gate, and all eight inputs are NO-GO in the selection-sensitivity
+  block. Raw ArcFace improved the centered pair tail but lost target fidelity;
+  the report is `results/audit/face_encoder_ceiling/report.json`. Phase 2 was
+  not entered; Phase 3 (paired face/voice data) is next.
+  See `docs/IDENTITY_CALIBRATION_AUDIT.md`,
+  `docs/ADAPTER_MANIFOLD_RETRAINING.md`, and
+  `docs/IDENTITY_NEXT_PHASE.md`.
 - TensorFlow is broken. Use the torch/einops priming described in section 7.1.
 - emotion2vec+ uses the FunASR model license (`other`, not OSI-approved).
   Review redistribution terms before shipping model files.

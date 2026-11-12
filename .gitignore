@@ -41,6 +41,7 @@ artifacts/*.jpg
 artifacts/samples/
 artifacts/reproducibility_audit.json
 wandb/
+results/audit/face_encoder_ceiling/demo_face_features.json
 
 # System
 .DS_Store

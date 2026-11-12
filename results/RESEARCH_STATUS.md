@@ -1,6 +1,6 @@
 # VOIX research status
 
-**As of 2026-11-07.** This page is a short index, not the authoritative record.
+**As of 2026-11-12.** This page is a short index, not the authoritative record.
 The consolidated methods, evidence tables, gates, rejected options, and
 limitations are in [`docs/MASTER.md`](../docs/MASTER.md). Per-track
 `FINDINGS.md` files remain authoritative for their own experiments.
@@ -10,7 +10,19 @@ limitations are in [`docs/MASTER.md`](../docs/MASTER.md). Per-track
 - **Identity:** the canonical frozen path passes its V2 gate. CFVN R@1 is
   `0.0932` against `0.0085` chance; the shuffled and constant controls are at
   chance. The adapter output/target cosine is `0.8736`, slightly below the
-  `0.8980` target-mean baseline.
+  `0.8980` target-mean baseline. The demo's face-specific neutral identity is
+  still unresolved: with disjoint calibration, max held-out ECAPA is `0.9486`
+  canonical, `0.7914` Candidate A, and `0.6415` Candidate B (pairwise structure
+  objective), all above the `0.4379` gate; Candidate B also misses three audio
+  floors. The Phase 1 encoder screen
+  (`docs/IDENTITY_NEXT_PHASE.md`) is **NO-GO**: no input cleared the
+  pre-registered linear gate, and all eight screened inputs are NO-GO in the
+  selection-sensitivity block. The selected `cfvn_es_arcface` failed L1-L5 and
+  the demo gate; raw ArcFace improved the centered pair tail (test p90
+  `0.6597` vs `0.8516`) but its residual cosine fell below baseline. The next
+  step is paired face/voice data, not another VoxCeleb2-only objective on the
+  same `e_s`. Report:
+  `results/audit/face_encoder_ceiling/report.json`.
 - **Emotion:** E1 (speaker-balanced class-mean, prosody-only, serving scale
   `0.28`) passes `6/6` pre-registered direction checks on held-out CREMA-D
   actors. E2 (learned residual) is negative at `4/6` (sad fails) and is
